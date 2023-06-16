@@ -53,4 +53,7 @@
   * [Format Azure PowerShell cmdlet output](pages/azure-powershell/format-azure-powershell-cmdlet-output.md)
   * [Conversion to other data formats](pages/azure-powershell/conversion-to-other-data-formats.md)
   * [AKS example](pages/azure-powershell/aks-example.md)
-* [AZ-CLI](pages/az-cli.md)
+* [AZ-CLI](pages/az-cli/README.md)
+  * [Querying dictionary results](pages/az-cli/querying-dictionary-results/README.md)
+    * [Advanced use of az-cli in bash](pages/az-cli/querying-dictionary-results/advanced-use-of-az-cli-in-bash.md)
+  * [Available Azure CLI extensions](pages/az-cli/available-azure-cli-extensions.md)
