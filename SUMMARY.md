@@ -1,6 +1,6 @@
 # Table of contents
 
-* [👋 Welcome!](README.md)
+* [Welcome!](README.md)
 
 ## Pages
 
@@ -57,3 +57,12 @@
   * [Querying dictionary results](pages/az-cli/querying-dictionary-results/README.md)
     * [Advanced use of az-cli in bash](pages/az-cli/querying-dictionary-results/advanced-use-of-az-cli-in-bash.md)
   * [Available Azure CLI extensions](pages/az-cli/available-azure-cli-extensions.md)
+* [Azure DevOps](pages/azure-devops/README.md)
+  * [Pipelines](pages/azure-devops/pipelines/README.md)
+    * [Create work item on failure](pages/azure-devops/pipelines/create-work-item-on-failure.md)
+* [Containers](pages/containers/README.md)
+  * [Docker](pages/containers/docker/README.md)
+    * [Terraform](pages/containers/docker/terraform.md)
+    * [Bicep](pages/containers/docker/bicep.md)
+    * [Docker-compose](pages/containers/docker/docker-compose.md)
+    * [Dockerfile](pages/containers/docker/dockerfile.md)
