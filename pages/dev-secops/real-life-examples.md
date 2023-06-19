@@ -44,4 +44,4 @@ New-AzPolicyDefinition -Name "Require MFA for Users" -Description "Requires mult
 }'
 ```
 
-These are just a few examples of Azure SecOps practices and tools that can be used to enhance the security of Azure resources. By leveraging these tools and practices, organizations can ensure the security and compliance of their Azure resources, reducing the risk of security breaches and other security threats.
+These are just a few examples of Azure Dev SecOps practices and tools that can be used to enhance the security of Azure resources. By leveraging these tools and practices, organizations can ensure the security and compliance of their Azure resources, reducing the risk of security breaches and other security threats.
