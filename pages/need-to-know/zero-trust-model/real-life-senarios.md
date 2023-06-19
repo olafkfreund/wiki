@@ -45,6 +45,24 @@ The possible responses for the company’s areas of concern and requirements for
 
 In this section, you will be given a company scenario and asked to complete several tasks to meet the requirements of adhering to regulatory, data residency, and privacy requirements.
 
-Company ABC has concerns across its Azure, on-premises, and SaaS applications architecture. They have come to you for assistance in addressing their regulatory and privacy concerns. They want you to provide suggestions on how they can use the standards and regulatory compliance and privacy capabilities within Microsoft and Azure to govern data residency and data privacy across the company’s technology infrastructure.
+Company BigMoney has concerns across its Azure, on-premises, and SaaS applications architecture. They have come to you for assistance in addressing their regulatory and privacy concerns. They want you to provide suggestions on how they can use the standards and regulatory compliance and privacy capabilities within Microsoft and Azure to govern data residency and data privacy across the company’s technology infrastructure.
 
 The possible responses for the company’s areas of concern and requirements include the following:
+
+* The company has recently begun to handle credit card transactions and they need to audit compliance with PCI-DSS:
+  * In the Microsoft 365 Purview compliance portal, the PCI-DSS assessment template can be run in the Compliance Score area to determine SaaS and Azure SQL Database compliance with PCI-DSS.
+  * In Azure, Microsoft Defender for Cloud can be used when turning on the Defender Plans. The PCI-DSS policy initiative can be enabled from within the Standards and Compliance menu. Resources will be assessed and audited for compliance and remediation actions will be provided as guidance.
+* The company has expanded outside of the United States and is now doing business in Germany. They need to make sure that they are adhering to the standards for data residency within Germany:
+  * Azure Policy has built-in initiatives that can be enabled for various geographically specific regulatory requirements.
+  * As a cybersecurity architect, you should be familiar with the residency requirements in certain countries. Germany is particularly stringent in their requirements, and the first recommendation that you should have is to create a segmented Azure Resource Group for the German region for proper governance.
+* The company is concerned that data is not properly classified, and sensitive data may be exposed. They need a recommendation to identify any sensitive data and classify it:
+  * Microsoft Purview Compliance can be used for the identification and classification of sensitive data within Microsoft 365, Azure Storage, Azure SQL Database, and multi-cloud storage resources, such as AWS S3
+  * Sensitive data that is identified can be governed by sensitivity labels and policies to avoid the exposure of this data
+  * Data Loss Prevention policies can be used to avoid oversharing data
+* With PCI-DSS, they need to make sure that encryption keys are not being managed by the individual Azure services, such as Azure Storage and SQL Database. They need a recommendation to better manage keys:
+  * Azure Key Vault provides the separation of duties and allows the company to manage the keys. They need additional configuration to change the encryption in Azure Storage and Azure SQL Database from Microsoft-managed to customer-managed keys.
+* The company needs to audit current resources for PCI-DSS compliance and verify that all virtual machines are encrypted:
+  * Azure Policy can be enabled to address the need to audit resources for Azure Disk Encryption to be enabled on virtual machines that are monitored with Azure Monitor or Azure Arc
+  * Additional improvement recommendations and auditing for compliance can be accessed within Microsoft Defender for Cloud
+* Users that are accessing intranet applications must not be allowed to use a public internet connection. How would you recommend securing this communication?
+  * Point-to-site VPN connections through a VPN Gateway should be designed to secure the communication channels of users accessing applications. Private endpoints can be created between applications and data within storage accounts and databases.
