@@ -4,6 +4,7 @@
 
 ## Pages
 
+* [About me](pages/about-me.md)
 * [Need to know](pages/need-to-know/README.md)
   * [SOW](pages/need-to-know/sow.md)
   * [Testing](pages/need-to-know/testing/README.md)
@@ -14,8 +15,10 @@
     * [Kubernetes components](pages/need-to-know/kubernetes/kubernetes-components.md)
   * [DevOps Lifecycle Management](pages/need-to-know/devops-lifecycle-management.md)
   * [The 12 Factor App](pages/need-to-know/the-12-factor-app.md)
-  * [Zero Trust Model](pages/need-to-know/zero-trust-model.md)
+  * [Zero Trust Model](pages/need-to-know/zero-trust-model/README.md)
+    * [Real life senarios](pages/need-to-know/zero-trust-model/real-life-senarios.md)
   * [MCRA](pages/need-to-know/mcra.md)
+  * [SIEM and SOAR](pages/need-to-know/siem-and-soar.md)
 * [Should Learn](pages/should-learn/README.md)
   * [Python](pages/should-learn/python.md)
   * [Terraform](pages/should-learn/terraform/README.md)
