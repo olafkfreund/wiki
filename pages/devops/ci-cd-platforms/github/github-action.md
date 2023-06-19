@@ -1,5 +1,9 @@
 # GitHub Action
 
+
+
+You can find a omprehensive list of actions here: [https://github.com/marketplace?type=actions\&query=Azure](https://github.com/marketplace?type=actions\&query=Azure)
+
 GitHub Actions is a platform that allows developers to automate workflows and tasks directly from their GitHub repositories. It provides a wide range of pre-built actions and allows developers to create custom actions to automate their build, test, and deployment processes.
 
 One of the many services that GitHub Actions can integrate with is Azure. With GitHub Actions and Azure, developers can automate workflows and deploy code directly from their GitHub repositories to their Azure environments.
