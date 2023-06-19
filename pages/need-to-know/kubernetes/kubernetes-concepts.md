@@ -22,7 +22,7 @@ The control plane of Kubernetes consists of several components, such as an API s
 
 A pod is the unit of work in Kubernetes. Each pod contains one or more containers (so you can think of it as a container container). A pod is scheduled as an atomic unit (all its containers run on the same machine). All the containers in a pod have the same IP address and port space; they can communicate with each other using localhost or standard inter-process communication. In addition, all the containers in a pod can have access to shared local storage on the node hosting the pod. Containers don’t get access to local storage or any other storage by default. Volumes of storage must be mounted into each container inside the pod explicitly.
 
-Pods are an important feature of Kubernetes. It is possible to run multiple applications inside a single container by having something like supervisord as the main process that runs multiple processes, but this practice is often frowned upon for the following reasons:
+Pods are an important feature of Kubernetes. It is possible to run multiple applications inside a single container by having something like supervisor as the main process that runs multiple processes, but this practice is often frowned upon for the following reasons:
 
 * **Transparency**: Making the containers within the pod visible to the infrastructure enables the infrastructure to provide services to those containers, such as process management and resource monitoring. This facilitates a number of conveniences for users.
 * **Decoupling software dependencies**: The individual containers may be versioned, rebuilt, and redeployed independently. Kubernetes may even support live updates of individual containers someday.
