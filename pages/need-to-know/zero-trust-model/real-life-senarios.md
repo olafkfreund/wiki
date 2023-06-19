@@ -2,7 +2,7 @@
 
 ### Designing a zero-trust architecture <a href="#_idparadest-165" id="_idparadest-165"></a>
 
-Company BigMoney has concerns across its Azure, on-premises, and SaaS applications’ architecture. They have come to you for assistance in addressing their security concerns. They want you to provide suggestions on how they can use the security capabilities within Azure, Azure AD, and Microsoft 365 to enforce zero-trust methodologies across the company’s technology infrastructure.
+_Company BigMoney has concerns across its Azure, on-premises, and SaaS applications’ architecture. They have come to you for assistance in addressing their security concerns. They want you to provide suggestions on how they can use the security capabilities within Azure, Azure AD, and Microsoft 365 to enforce zero-trust methodologies across the company’s technology infrastructure._
 
 The possible responses for the company’s areas of concern and requirements for enforcing Zero-trust include the following:
 
@@ -43,16 +43,14 @@ The possible responses for the company’s areas of concern and requirements for
 
 ### Designing for regulatory compliance <a href="#_idparadest-166" id="_idparadest-166"></a>
 
-In this section, you will be given a company scenario and asked to complete several tasks to meet the requirements of adhering to regulatory, data residency, and privacy requirements.
-
-Company BigMoney has concerns across its Azure, on-premises, and SaaS applications architecture. They have come to you for assistance in addressing their regulatory and privacy concerns. They want you to provide suggestions on how they can use the standards and regulatory compliance and privacy capabilities within Microsoft and Azure to govern data residency and data privacy across the company’s technology infrastructure.
+_Company BigMoney has concerns across its Azure, on-premises, and SaaS applications architecture. They have come to you for assistance in addressing their regulatory and privacy concerns. They want you to provide suggestions on how they can use the standards and regulatory compliance and privacy capabilities within Microsoft and Azure to govern data residency and data privacy across the company’s technology infrastructure._
 
 The possible responses for the company’s areas of concern and requirements include the following:
 
 * The company has recently begun to handle credit card transactions and they need to audit compliance with PCI-DSS:
   * In the Microsoft 365 Purview compliance portal, the PCI-DSS assessment template can be run in the Compliance Score area to determine SaaS and Azure SQL Database compliance with PCI-DSS.
   * In Azure, Microsoft Defender for Cloud can be used when turning on the Defender Plans. The PCI-DSS policy initiative can be enabled from within the Standards and Compliance menu. Resources will be assessed and audited for compliance and remediation actions will be provided as guidance.
-* The company has expanded outside of the United States and is now doing business in Germany. They need to make sure that they are adhering to the standards for data residency within Germany:
+* The company has expanded outside of the UK and is now doing business in Germany. They need to make sure that they are adhering to the standards for data residency within Germany:
   * Azure Policy has built-in initiatives that can be enabled for various geographically specific regulatory requirements.
   * As a cybersecurity architect, you should be familiar with the residency requirements in certain countries. Germany is particularly stringent in their requirements, and the first recommendation that you should have is to create a segmented Azure Resource Group for the German region for proper governance.
 * The company is concerned that data is not properly classified, and sensitive data may be exposed. They need a recommendation to identify any sensitive data and classify it:
