@@ -1,5 +1,14 @@
 # Kubernetes provider
 
+You will need the following environment variables to be set:
+
+* `ARM_SUBSCRIPTION_ID`
+* `ARM_TENANT_ID`
+* `ARM_CLIENT_ID`
+* `ARM_CLIENT_SECRET`
+
+Ensure that `KUBE_CONFIG_FILE` and `KUBE_CONFIG_FILES` environment variables are NOT set, as they will interfere with the cluster build.
+
 ```hcl
 terraform {
   required_providers {
