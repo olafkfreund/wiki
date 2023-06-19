@@ -114,3 +114,6 @@
         * [Kustomize](pages/azure/containers/kubernetes/k8s-tools/kustomize.md)
         * [K9s](pages/azure/containers/kubernetes/k8s-tools/k9s.md)
     * [OpenShift](pages/azure/containers/openshift.md)
+  * [Azure landing zone](pages/azure/azure-landing-zone/README.md)
+    * [Terraform](pages/azure/azure-landing-zone/terraform.md)
+    * [Bicep](pages/azure/azure-landing-zone/bicep.md)
