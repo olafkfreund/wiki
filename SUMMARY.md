@@ -15,6 +15,7 @@
   * [DevOps Lifecycle Management](pages/need-to-know/devops-lifecycle-management.md)
   * [The 12 Factor App](pages/need-to-know/the-12-factor-app.md)
   * [Zero Trust Model](pages/need-to-know/zero-trust-model.md)
+  * [MCRA](pages/need-to-know/mcra.md)
 * [Should Learn](pages/should-learn/README.md)
   * [Python](pages/should-learn/python.md)
   * [Terraform](pages/should-learn/terraform/README.md)
