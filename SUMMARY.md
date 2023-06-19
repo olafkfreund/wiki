@@ -4,6 +4,11 @@
 
 ## Pages
 
+* [Need to know](pages/need-to-know/README.md)
+  * [SOW](pages/need-to-know/sow.md)
+  * [Testing](pages/need-to-know/testing/README.md)
+    * [End to end testing](pages/need-to-know/testing/end-to-end-testing.md)
+    * [Unit testing](pages/need-to-know/testing/unit-testing.md)
 * [DevOps tools](pages/devops-tools/README.md)
   * [Visual Studio Code](pages/devops-tools/visual-studio-code.md)
   * [PowerShell](pages/devops-tools/powershell/README.md)
@@ -77,7 +82,11 @@
     * [Bicep](pages/containers/docker/bicep.md)
     * [Docker-compose](pages/containers/docker/docker-compose.md)
     * [Dockerfile](pages/containers/docker/dockerfile.md)
-  * [Kubernetes](pages/containers/kubernetes.md)
+  * [Kubernetes](pages/containers/kubernetes/README.md)
+    * [Kubens](pages/containers/kubernetes/kubens.md)
+    * [Kubectx](pages/containers/kubernetes/kubectx.md)
+    * [Kubectl](pages/containers/kubernetes/kubectl.md)
+    * [Kustomize](pages/containers/kubernetes/kustomize.md)
   * [OpenShift](pages/containers/openshift.md)
 * [Azure](pages/azure/README.md)
   * [Azure Databricks](pages/azure/azure-databricks/README.md)
@@ -85,3 +94,5 @@
       * [Workspace](pages/azure/azure-databricks/bicep/workspace.md)
     * [Terraform](pages/azure/azure-databricks/terraform/README.md)
       * [Manage Databricks workspaces](pages/azure/azure-databricks/terraform/manage-databricks-workspaces.md)
+  * [Security Best Practise](pages/azure/security-best-practise.md)
+* [Python](pages/python.md)
