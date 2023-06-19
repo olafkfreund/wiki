@@ -1,0 +1,9 @@
+# PCI DSS
+
+### PCI DSS overview <a href="#pci-dss-overview" id="pci-dss-overview"></a>
+
+The Payment Card Industry (PCI) Data Security Standards (DSS) is a global information security standard designed to prevent fraud through increased control of credit card data. The [PCI Security Standards Council](https://www.pcisecuritystandards.org/) (PCI SSC) is a global forum that brings together payments industry stakeholders to develop and drive adoption of data security standards, including [PCI DSS](https://www.pcisecuritystandards.org/document\_library).
+
+Compliance with PCI DSS is required for any organization that stores, processes, or transmits cardholder data, which, at a minimum, consists of the full primary account number (PAN) – a unique payment card number that identifies the issuer and the particular cardholder account. Cardholder data may also appear in the form of a full PAN plus additional information such as cardholder name, expiration date, and service codes. Sensitive authentication data that may be transmitted or processed (but not stored) as part of a payment transaction contains additional data elements that must also be protected, including track data from card chip or magnetic stripe, PINs, PIN blocks, and so on. For more information, see [PCI DSS glossary](https://www.pcisecuritystandards.org/pci\_security/glossary).
+
+The PCI DSS designates four levels of compliance based on transaction volume, with Service Provider Level 1 corresponding to the highest volume of transactions at more than 6 million a year. The assessment results in an Attestation of Compliance (AoC), which is available to customers and Report on Compliance (RoC) issued by an approved Qualified Security Assessor (QSA). The effective period for compliance begins upon passing the audit and receiving the AoC from the QSA and ends one year from the date the AoC is signed.
