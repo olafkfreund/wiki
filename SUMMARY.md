@@ -111,3 +111,5 @@
     * [Security Best Practise](pages/azure/best-practise/security-best-practise.md)
     * [Azure naming standards](pages/azure/best-practise/azure-naming-standards.md)
     * [Azure Tags](pages/azure/best-practise/azure-tags.md)
+* [SecOps](pages/secops/README.md)
+  * [Real life examples](pages/secops/real-life-examples.md)
