@@ -1,6 +1,6 @@
 # Steps
 
-ipeline with steps and one implicit job.
+pipeline with steps and one implicit job.
 
 ```yaml
 steps: [ task | script | powershell | pwsh | bash | checkout | download | downloadBuild | getPackage | publish | template | reviewApp ] # Required. A list of steps to run in this job.
