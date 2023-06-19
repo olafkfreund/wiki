@@ -4,6 +4,17 @@ description: Setting up and using bicep for Azure Deployments
 
 # Bicep
 
+Microsoft Bicep is a domain-specific language (DSL) for deploying Azure resources. It is an open-source project that provides a more concise and user-friendly way to write Azure Resource Manager (ARM) templates. ARM templates are JSON files that describe the resources and configurations required for deploying an application in Azure. These templates can become complex and difficult to manage, especially as the number of resources and configurations grows. Bicep simplifies this process by providing a more streamlined and intuitive way to write ARM templates.
+
+Bicep offers several benefits over traditional ARM templates:
+
+1. Simplicity: Bicep simplifies the process of writing ARM templates by using a more concise syntax that is easier to read and maintain.
+2. Reusability: Bicep enables the creation of modular templates, which can be reused across projects, reducing the need for duplicative code.
+3. Type Safety: Bicep provides type safety, which helps catch errors early in the development process and reduces the risk of issues during deployment.
+4. IntelliSense: Bicep offers IntelliSense, which provides auto-completion and code navigation, further simplifying the development process.
+
+Bicep can be used for deploying any Azure resource, including virtual machines, storage accounts, and web applications. It is compatible with all Azure services and can be used in conjunction with other Azure tools, such as Azure DevOps and Azure CLI.
+
 A Bicep file has the following elements.
 
 ```bicep
