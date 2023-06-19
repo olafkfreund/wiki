@@ -1,7 +1,7 @@
 ---
 description: >-
-  This is a page DevOps tools, scripts and examples that I have used and use in
-  my daily work life.
+  This is my attempt to describe DevOps for Azure Platform Engineers and a
+  knowledge base for my self.
 cover: .gitbook/assets/itl.cat_4k-wallpaper-for-windows_910235.png
 coverY: 0
 ---
