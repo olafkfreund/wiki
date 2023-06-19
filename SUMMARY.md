@@ -32,6 +32,7 @@
       * [End-to-End (E2E) Testing](pages/should-learn/terraform/testing/end-to-end-e2e-testing.md)
       * [Terratest](pages/should-learn/terraform/testing/terratest.md)
       * [Static Code testing](pages/should-learn/terraform/testing/static-code-testing.md)
+    * [Kubernetes provider](pages/should-learn/terraform/kubernetes-provider.md)
   * [Bicep](pages/should-learn/bicep/README.md)
     * [Template Spec for bicep](pages/should-learn/bicep/template-spec-for-bicep.md)
     * [Integrate Bicep with Azure Pipelines](pages/should-learn/bicep/integrate-bicep-with-azure-pipelines.md)
