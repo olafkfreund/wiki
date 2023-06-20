@@ -27,10 +27,18 @@ Description: The _join()_ function joins multiple strings into a single string u
 Use case: Combining strings with separators is commonly used when constructing file paths, generating configuration strings, or creating command-line arguments.
 
 ```hcl
-resource "aws_instance" "example" {
- count = 3
-instance_type = "t3.micro"
- name = join("-", ["web", "app", count.index + 1, var.environment])
+resource "azurerm_storage_account" "example" {
+  count = 3
+  name                     = join("-", [ azurerm_resource_group.example.location, "sa", count.index + 1, var.environment])
+  resource_group_name      = azurerm_resource_group.example.name
+  location                 = azurerm_resource_group.example.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  network_rules {
+    default_action = "Deny"
+    ip_rules       = ["23.45.1.0/30"]
+  }
 }
 ```
 
@@ -65,9 +73,16 @@ Description: The _format()_ function is used to format a string based on a given
 Use case: Formatting strings is useful when you need to generate dynamic resource names or construct complex output strings.
 
 ```hcl
-resource "aws_s3_bucket" "example" {
-  count = 3
-  bucket = format("my-bucket-%02d", count.index + 1)
+resource "azurerm_linux_web_app" "webapp" {
+  count = 2
+  name                  = format("webapp-linux-%02d", count.index + 1)
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  service_plan_id       = azurerm_service_plan.appserviceplan.id
+  https_only            = true
+  site_config { 
+    minimum_tls_version = "1.2"
+  }
 }
 ```
 
@@ -82,7 +97,7 @@ Use case: Accessing a specific element in a list is useful when you want to sele
 
 ```hcl
 locals {
- regions = ["us-west-1", "us-east-1", "eu-west-1"]
+ regions = ["uksouth", "ukwest" ]
  primary_region = element(local.regions, 1)
 }
 ```
