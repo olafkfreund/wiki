@@ -156,3 +156,6 @@
         * [Workspace](pages/azure/services/azure-databricks/bicep/workspace.md)
       * [Terraform](pages/azure/services/azure-databricks/terraform/README.md)
         * [Manage Databricks workspaces](pages/azure/services/azure-databricks/terraform/manage-databricks-workspaces.md)
+  * [Monitoring](pages/azure/monitoring/README.md)
+    * [OpenTelemetry](pages/azure/monitoring/opentelemetry/README.md)
+      * [.Net](pages/azure/monitoring/opentelemetry/.net.md)
