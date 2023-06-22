@@ -6,7 +6,7 @@
 
 </div>
 
-Hello, my name is Olaf Krasicki-Freund, and I am a DevOps Engineer with more than 20 years of experience in designing, implementing, and managing DevOps processes and infrastructure. In this presentation.
+Hello, my name is Olaf Krasicki-Freund, and I am a DevOps Engineer with more than 20 years of experience in designing, implementing, and managing DevOps processes and infrastructure.
 
 ## Skills and Experience
 
