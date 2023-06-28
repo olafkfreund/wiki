@@ -115,6 +115,7 @@
       * [GitHub Action](pages/devops/ci-cd-platforms/github/github-action.md)
       * [GitHub SecOps](pages/devops/ci-cd-platforms/github/github-secops.md)
     * [GitHub Enterprise](pages/devops/ci-cd-platforms/github-enterprise.md)
+    * [Argo CD](pages/devops/ci-cd-platforms/argo-cd.md)
 * [Dev SecOps](pages/dev-secops/README.md)
   * [Real life examples](pages/dev-secops/real-life-examples.md)
 * [Azure](pages/azure/README.md)
