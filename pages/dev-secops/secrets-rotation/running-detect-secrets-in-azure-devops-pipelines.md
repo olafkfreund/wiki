@@ -22,7 +22,7 @@ Proposed Azure DevOps Pipeline contains multiple steps described below:
 >
 > NOTE: Windows example does not use the latest version of detect-secrets. It is related to the bug in the detect-secret tool (see more in [Issue#452](https://github.com/Yelp/detect-secrets/issues/452)). It is highly recommended to monitor the fix for the issue and use the latest version if possible by removing version tag `==1.0.3` in the pip install command.
 
-```
+```yaml
 trigger:
   - none
 
