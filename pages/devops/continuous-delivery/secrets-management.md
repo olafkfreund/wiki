@@ -44,7 +44,7 @@ These techniques make the loading of secrets transparent to the developer.
 
 Use the [`file`](https://learn.microsoft.com/en-us/dotnet/framework/configure-apps/file-schema/appsettings/appsettings-element-for-configuration) attribute of the appSettings element to load secrets from a local file.
 
-```
+```json
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <appSettings file="..\..\secrets.config">
@@ -59,7 +59,7 @@ Use the [`file`](https://learn.microsoft.com/en-us/dotnet/framework/configure-ap
 
 Access secrets:
 
-```
+```json
 static void Main(string[] args)
 {
     String mySecret = System.Configuration.ConfigurationManager.AppSettings["mySecret"];
@@ -72,14 +72,14 @@ When running in Azure, ConfigurationManager will load these settings from the pr
 
 Store secrets in environment variables or in a `.env` file
 
-```
+```bash
 $ cat .env
 MY_SECRET=mySecret
 ```
 
 Use the [dotenv](https://www.npmjs.com/package/dotenv) package to load and access environment variables
 
-```
+```json
 require('dotenv').config()
 let mySecret = process.env("MY_SECRET")
 ```
@@ -88,14 +88,14 @@ let mySecret = process.env("MY_SECRET")
 
 Store secrets in environment variables or in a `.env` file
 
-```
+```bash
 $ cat .env
 MY_SECRET=mySecret
 ```
 
 Use the [dotenv](https://pypi.org/project/python-dotenv/) package to load and access environment variables
 
-```
+```csharp
 import os
 from dotenv import load_dotenv
 

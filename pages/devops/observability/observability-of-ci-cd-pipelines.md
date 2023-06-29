@@ -1,11 +1,11 @@
 # Observability of CI/CD Pipelines
 
-With increasing complexity to delivery pipelines, it is very important to consider Observability in the context of build and release of applications.
+With increasing complexity to delivery pipelines, it is especially important to consider Observability in the context of build and release of applications.
 
 ### Benefits <a href="#benefits" id="benefits"></a>
 
 * Having proper instrumentation during build time helps gain insights into the various stages of the build and release process.
-* Helps developers understand where the pipeline performance bottlenecks are, based on the data collected. This helps in having data-driven conversations around identifying latency between jobs, performance issues, artifact upload/download times providing valuable insights into agents availability and capacity.
+* Helps developers understand where the pipeline performance bottlenecks are, based on the data collected. This helps in having data-driven conversations around identifying latency between jobs, performance issues, artifact upload/download times providing valuable insights into agent's availability and capacity.
 * Helps to identify trends in failures, thus allowing developers to quickly do root cause analysis.
 * Helps to provide an organization-wide view of pipeline health to easily identify trends.
 

@@ -32,7 +32,7 @@ Items of concern to some may include:
 
 #### When should I use metrics instead of logs? <a href="#when-should-i-use-metrics-instead-of-logs" id="when-should-i-use-metrics-instead-of-logs"></a>
 
-[Logs vs Metrics vs Traces](https://microsoft.github.io/code-with-engineering-playbook/observability/log-vs-metric-vs-trace/) covers some high level guidance on when to utilize metric data and when to use log data. Both have a valuable part to play in creating observable systems.
+Logs vs Metrics vs Traces covers some high-level guidance on when to utilize metric data and when to use log data. Both have a valuable part to play in creating observable systems.
 
 #### What should be tracked? <a href="#what-should-be-tracked" id="what-should-be-tracked"></a>
 

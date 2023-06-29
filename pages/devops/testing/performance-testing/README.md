@@ -30,7 +30,7 @@ Performance testing is a broad topic. There are many areas where you can perform
 
 There are several categories of tests as well:
 
-#### [Load Testing](https://microsoft.github.io/code-with-engineering-playbook/automated-testing/performance-testing/load-testing/) <a href="#load-testing" id="load-testing"></a>
+#### Load Testing <a href="#load-testing" id="load-testing"></a>
 
 This is the subcategory of performance testing that focuses on validating the performance characteristics of a system, when the system faces the load volumes which are expected during production operation. An **Endurance Test** or a **Soak Test** is a load test carried over a long duration ranging from several hours to days.
 

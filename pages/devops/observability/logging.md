@@ -15,11 +15,11 @@ Directly written log events are handled in-process of the particular component, 
 
 The potential trade-offs of this approach:
 
-* Potentially higher memory usage if the particular library is using a memory backed buffer.
+* Potentially higher memory usage if the library is using a memory backed buffer.
 * In the event of an extended service outage, log data may get dropped or truncated due to buffer constraints.
 * Multiple component process logging will manage & emit logs individually, which can be more complex to manage for the outbound load.
 
-Agent-based log collection relies on an external process running on the host machine, with the particular component emitting log data stdout or file. Writing log data to stdout is the preferred practice when running applications within a container environment like Kubernetes. The container runtime redirects the output to files, which can then be processed by an agent. [Azure Monitor](https://azure.microsoft.com/en-us/services/monitor), [Grafana Loki](https://github.com/grafana/loki) [Elastic's Logstash](https://www.elastic.co/logstash) and [Fluent Bit](https://fluentbit.io/) are examples of log shipping agents.
+Agent-based log collection relies on an external process running on the host machine, with the component emitting log data stdout or file. Writing log data to stdout is the preferred practice when running applications within a container environment like Kubernetes. The container runtime redirects the output to files, which can then be processed by an agent. [Azure Monitor](https://azure.microsoft.com/en-us/services/monitor), [Grafana Loki](https://github.com/grafana/loki) [Elastic's Logstash](https://www.elastic.co/logstash) and [Fluent Bit](https://fluentbit.io/) are examples of log shipping agents.
 
 There are several advantages when using an agent to collect & ship log files:
 

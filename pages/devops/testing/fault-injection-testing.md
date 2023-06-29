@@ -13,7 +13,7 @@ Fault injection methods are a way to increase coverage and validate software rob
 #### Applicable to <a href="#applicable-to" id="applicable-to"></a>
 
 * **Software** - Error handling code paths, in-process memory management.
-  * _Example tests:_ Edge-case unit/integration tests and/or [load tests](https://microsoft.github.io/code-with-engineering-playbook/automated-testing/performance-testing/load-testing/) (i.e. stress and soak).
+  * _Example tests:_ Edge-case unit/integration tests and/or load tests (i.e. stress and soak).
 * **Protocol** - Vulnerabilities in communication interfaces such as command line parameters or APIs.
   * _Example tests:_ [Fuzzing](https://owasp.org/www-community/Fuzzing) provides invalid, unexpected, or random data as input we can assess the level of protocol stability of a component.
 * **Infrastructure** - Outages, networking issues, hardware failures.
@@ -28,11 +28,11 @@ Fault injection methods are a way to increase coverage and validate software rob
 * **Fault** - The adjudged or hypothesized cause of an error.
 * **Error** - That part of the system state that may cause a subsequent failure.
 * **Failure** - An event that occurs when the delivered service deviates from correct state.
-* **Fault-Error-Failure cycle** - A key mechanism in [dependability](https://en.wikipedia.org/wiki/Dependability): A fault may cause an error. An error may cause further errors within the system boundary; therefore each new error acts as a fault. When error states are observed at the system boundary, they are termed failures. (Modeled by [Laprie/Avizienis](https://www.nasa.gov/pdf/636745main\_day\_3-algirdas\_avizienis.pdf))
+* **Fault-Error-Failure cycle** - A key mechanism in dependability: A fault may cause an error. An error may cause further errors within the system boundary; therefore each new error acts as a fault. When error states are observed at the system boundary, they are termed failures. (Modeled by [Laprie/Avizienis](https://www.nasa.gov/pdf/636745main\_day\_3-algirdas\_avizienis.pdf))
 
 **Fault Injection Testing Basics**
 
-Fault injection is an advanced form of testing where the system is subjected to different [failure modes](https://en.wikipedia.org/wiki/Failure\_mode\_and\_effects\_analysis), and where the testing engineer may know in advance what is the expected outcome, as in the case of release validation tests, or in an exploration to find potential issues in the product, which should be mitigated.
+Fault injection is an advanced form of testing where the system is subjected to different failure modes, and where the testing engineer may know in advance what is the expected outcome, as in the case of release validation tests, or in an exploration to find potential issues in the product, which should be mitigated.
 
 **Fault Injection and Chaos Engineering**
 
@@ -53,7 +53,7 @@ Automated fault injection coverage in a CI pipeline promotes a [Shift-Left](http
 
 **Fault injection testing in the release cycle**
 
-Much like [Synthetic Monitoring Tests](https://microsoft.github.io/code-with-engineering-playbook/automated-testing/synthetic-monitoring-tests/), fault injection testing in the release cycle is a part of [Shift-Right testing](https://learn.microsoft.com/en-us/devops/deliver/shift-right-test-production) approach, which uses safe methods to perform tests in a production or pre-production environment. Given the nature of distributed, cloud-based applications, it is very difficult to simulate the real behavior of services outside their production environment. Testers are encouraged to run tests where it really matters, on a live system with customer traffic.
+Much like Synthetic Monitoring Tests, fault injection testing in the release cycle is a part of Shift-Right testing approach, which uses safe methods to perform tests in a production or pre-production environment. Given the nature of distributed, cloud-based applications, it is very difficult to simulate the real behavior of services outside their production environment. Testers are encouraged to run tests where it really matters, on a live system with customer traffic.
 
 Fault injection tests rely on metrics observability and are usually statistical; The following high-level steps provide a sample of practicing fault injection and chaos engineering:
 
@@ -81,7 +81,7 @@ With the advancement of kubernetes (k8s) as the infrastructure platform, fault i
 Experimenting in production has the benefit of running tests against a live system with real user traffic, ensuring its health, or building confidence in its ability to handle errors gracefully. However, it has the potential to cause unnecessary customer pain. A test can either succeed or fail. In the event of failure, there will likely be some impact on the production environment. Thinking about the **Blast Radius** of the effect, should the test fail, is a crucial step to conduct beforehand. The following practices may help minimize such risk:
 
 * Run tests in a non-production environment first. Understand how the system behaves in a safe environment, using synthetic workload, before introducing potential risk to customer traffic.
-* Use fault injection as gates in different stages through the CD pipeline.
+* Use fault injection as gates in various stages through the CD pipeline.
 * Deploy and test on Blue/Green and Canary deployments. Use methods such as traffic shadowing (a.k.a. [Dark Traffic](https://cloud.google.com/blog/products/gcp/cre-life-lessons-what-is-a-dark-launch-and-what-does-it-do-for-me)) to get customer traffic to the staging slot.
 * Strive to achieve a balance between collecting actual result data while affecting as few production users as possible.
 * Use defensive design principles such as circuit breaking and the bulkhead patterns.

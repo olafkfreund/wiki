@@ -18,22 +18,18 @@ Our peer code reviews are structured around best practices, to find specific kin
 
 ### PRs are too large; how can we fix this? <a href="#prs-are-too-large-how-can-we-fix-this" id="prs-are-too-large-how-can-we-fix-this"></a>
 
-Make sure you size the work items into small clear chunks, so the reviewer will be able to understand the code on their own. The team is instructed to commit early, before the full product backlog item / user story is complete, but when an individual item is done. If the work would result in an incomplete feature, make sure it can be turned off, until the full feature is delivered. More information can be found in [Pull Requests - Size Guidance](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/pull-requests/#size-guidance).
+Make sure you size the work items into small clear chunks, so the reviewer will be able to understand the code on their own. The team is instructed to commit early, before the full product backlog item / user story is complete, but when an individual item is done. If the work would result in an incomplete feature, make sure it can be turned off, until the full feature is delivered. More information can be found in Pull Requests - Size Guidance.
 
 ### How can we expedite code reviews? <a href="#how-can-we-expedite-code-reviews" id="how-can-we-expedite-code-reviews"></a>
 
 Slow code reviews might cause delays in delivering features and cause frustration amongst team members.
 
-#### Possible actions you can take <a href="#possible-actions-you-can-take" id="possible-actions-you-can-take"></a>
+#### Actions you can take <a href="#possible-actions-you-can-take" id="possible-actions-you-can-take"></a>
 
 * Add a rule for PR turnaround time to your work agreement.
 * Set up a slot after the standup to go through pending PRs and assign the ones that are inactive.
 * Dedicate a PR review manager who will be responsible to keep things flowing by assigning or notifying people when PR got stale.
 * Use tools to better indicate stale reviews - [Customize ADO - Task Boards](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/tools/#task-boards).
-
-### Which tools can I use to review a complex PR? <a href="#which-tools-can-i-use-to-review-a-complex-pr" id="which-tools-can-i-use-to-review-a-complex-pr"></a>
-
-Checkout the [Tools](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/tools/) for help on how to perform reviews out of Visual Studio or Visual Studio Code.
 
 ### How can we enforce code review policies? <a href="#how-can-we-enforce-code-review-policies" id="how-can-we-enforce-code-review-policies"></a>
 
