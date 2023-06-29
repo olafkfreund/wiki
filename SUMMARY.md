@@ -168,3 +168,5 @@
   * [Monitoring](pages/azure/monitoring/README.md)
     * [OpenTelemetry](pages/azure/monitoring/opentelemetry/README.md)
       * [.Net](pages/azure/monitoring/opentelemetry/.net.md)
+* [Testing](pages/testing/README.md)
+  * [E2E Testing](pages/testing/e2e-testing.md)
