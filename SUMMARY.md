@@ -172,6 +172,7 @@
   * [Credential Scanning](pages/dev-secops/credential-scanning.md)
   * [Secrets Rotation](pages/dev-secops/secrets-rotation/README.md)
     * [Running detect-secrets in Azure DevOps Pipelines](pages/dev-secops/secrets-rotation/running-detect-secrets-in-azure-devops-pipelines.md)
+    * [Automate the rotation of a secret for resources that have two sets of authentication credentials](pages/dev-secops/secrets-rotation/automate-the-rotation-of-a-secret-for-resources-that-have-two-sets-of-authentication-credentials.md)
   * [Static Code Analysis](pages/dev-secops/static-code-analysis.md)
 * [Azure](pages/azure/README.md)
   * [Best Practise](pages/azure/best-practise/README.md)
