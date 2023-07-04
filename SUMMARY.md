@@ -98,6 +98,7 @@
       * [Linux](pages/devops/tools-to-install/kubernetes/linux.md)
       * [Windows](pages/devops/tools-to-install/kubernetes/windows.md)
       * [Minikube](pages/devops/tools-to-install/kubernetes/minikube.md)
+    * [Klone](pages/devops/tools-to-install/klone.md)
   * [GitOps](pages/devops/gitops/README.md)
     * [Flux](pages/devops/gitops/flux/README.md)
       * [Use GitOps with Flux, GitHub, and AKS to implement CI/CD](pages/devops/gitops/flux/use-gitops-with-flux-github-and-aks-to-implement-ci-cd.md)
