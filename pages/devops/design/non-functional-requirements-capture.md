@@ -6,7 +6,7 @@ In software engineering projects, important characteristics of the system provid
 
 To support the process of capturing a project's _comprehensive_ non-functional requirements, this document offers a taxonomy for non-functional requirements and provides a framework for their identification, exploration, assignment of customer stakeholders, and eventual codification into formal engineering requirements as input to subsequent solution design.
 
-***
+
 
 ### Areas of Investigation <a href="#areas-of-investigation" id="areas-of-investigation"></a>
 
@@ -120,7 +120,7 @@ To support the process of capturing a project's _comprehensive_ non-functional r
 
 #### Other areas/topics not addressed above (requires customer input to comprehensively enumerate) <a href="#other-areastopics-not-addressed-above-requires-customer-input-to-comprehensively-enumerate" id="other-areastopics-not-addressed-above-requires-customer-input-to-comprehensively-enumerate"></a>
 
-***
+
 
 ### Investigation Process <a href="#investigation-process" id="investigation-process"></a>
 
@@ -134,7 +134,7 @@ To support the process of capturing a project's _comprehensive_ non-functional r
    * Categorize each requirement as affecting immediate/near-term milestone(s) or as applicable instead to the longer-term road map/subsequent milestones
 6. Adapt plans for current/near-term milestone(s) to accommodate immediate/near-term-categorized requirements
 
-***
+
 
 ### Structure of Outline/Assignment of Responsible Stakeholder <a href="#structure-of-outlineassignment-of-responsible-stakeholder" id="structure-of-outlineassignment-of-responsible-stakeholder"></a>
 
