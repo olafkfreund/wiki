@@ -48,3 +48,12 @@ users:
     client-certificate: C:\Users\xxxx\.minikube\profiles\minikube\client.crt
     client-key: C:\Users\xxxx\.minikube\profiles\minikube\client.key
 ```
+
+<pre class="language-powershell"><code class="lang-powershell">docker context update<a data-footnote-ref href="#user-content-fn-1"> </a>wsl --docker "host=tcp://XXX.XXX.XXX.XxX:2376"
+</code></pre>
+
+```powershell
+docker context use wsl
+```
+
+[^1]: 
