@@ -1,4 +1,4 @@
-# Tmux
+# Tmux terminal
 
 ## _What is_ tmux? <a href="#d777" id="d777"></a>
 

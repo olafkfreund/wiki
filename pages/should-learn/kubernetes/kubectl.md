@@ -1,4 +1,4 @@
-# Kubernetes kubectl
+# kubectl
 
 **Kubectl** is the command line configuration tool to interact with Kubernetes clusters using Kubernetes API server. kubectl allows users to create, inspect, update, and delete Kubernetes objects.
 
