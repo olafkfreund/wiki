@@ -94,6 +94,8 @@
       * [K8s Troubleshooting — Pod in Container Creating Status](pages/should-learn/kubernetes/tips/k8s-troubleshooting-pod-in-container-creating-status.md)
       * [Kubernetes: Resources for Pods and Containers](pages/should-learn/kubernetes/tips/kubernetes-resources-for-pods-and-containers.md)
   * [YAML](pages/should-learn/yaml.md)
+  * [Java](pages/should-learn/java.md)
+  * [Rust](pages/should-learn/rust.md)
 * [DevOps](pages/devops/README.md)
   * [Tools to install](pages/devops/tools-to-install/README.md)
     * [Visual Studio Code](pages/devops/tools-to-install/visual-studio-code.md)
