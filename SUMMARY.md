@@ -253,4 +253,6 @@
   * [Bash Shortcuts Every Linux User Needs to Know](pages/linux/bash-shortcuts-every-linux-user-needs-to-know.md)
   * [Linux Permissions](pages/linux/linux-permissions.md)
   * [Linux  Tuning](pages/linux/linux-tuning.md)
-  * [How to Use SSH Config](pages/linux/how-to-use-ssh-config.md)
+  * [Ssh](pages/linux/ssh/README.md)
+    * [How to Use SSH Config](pages/linux/ssh/how-to-use-ssh-config.md)
+    * [Port Forwarding and Proxying Using OpenSsh](pages/linux/ssh/port-forwarding-and-proxying-using-openssh.md)
