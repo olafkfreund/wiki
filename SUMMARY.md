@@ -258,3 +258,6 @@
   * [Monitoring](pages/azure/monitoring/README.md)
     * [OpenTelemetry](pages/azure/monitoring/opentelemetry/README.md)
       * [.Net](pages/azure/monitoring/opentelemetry/.net.md)
+* [SRE](pages/sre/README.md)
+  * [Toil](pages/sre/toil.md)
+  * [Simplicity](pages/sre/simplicity.md)
