@@ -91,3 +91,7 @@ k8sgpt analyse --explain
 ```
 
 Congratulations! you have successfully created a local kubernetes cluster, deployed a "broken Pod" and analyzed it using `k8sgpt`.
+
+
+
+More info: [https://docs.k8sgpt.ai/reference/cli/](https://docs.k8sgpt.ai/reference/cli/)

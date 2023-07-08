@@ -246,3 +246,6 @@
   * [Monitoring](pages/azure/monitoring/README.md)
     * [OpenTelemetry](pages/azure/monitoring/opentelemetry/README.md)
       * [.Net](pages/azure/monitoring/opentelemetry/.net.md)
+* [Linux](pages/linux/README.md)
+  * [How to avoid multiple sudo commands in one-liners](pages/linux/how-to-avoid-multiple-sudo-commands-in-one-liners.md)
+  * [Tmux](pages/linux/tmux.md)
