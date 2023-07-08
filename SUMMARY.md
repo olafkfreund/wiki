@@ -252,3 +252,4 @@
   * [Linux File system hierarchy](pages/linux/linux-file-system-hierarchy.md)
   * [Bash Shortcuts Every Linux User Needs to Know](pages/linux/bash-shortcuts-every-linux-user-needs-to-know.md)
   * [Linux Permissions](pages/linux/linux-permissions.md)
+  * [Linux  Tuning](pages/linux/linux-tuning.md)
