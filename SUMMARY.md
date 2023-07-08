@@ -255,4 +255,4 @@
   * [Linux  Tuning](pages/linux/linux-tuning.md)
   * [Ssh](pages/linux/ssh/README.md)
     * [How to Use SSH Config](pages/linux/ssh/how-to-use-ssh-config.md)
-    * [Port Forwarding and Proxying Using OpenSsh](pages/linux/ssh/port-forwarding-and-proxying-using-openssh.md)
+    * [Port Forwarding and Proxying Using OpenSSH](pages/linux/ssh/port-forwarding-and-proxying-using-openssh.md)
