@@ -249,3 +249,4 @@
 * [Linux](pages/linux/README.md)
   * [How to avoid multiple sudo commands in one-liners](pages/linux/how-to-avoid-multiple-sudo-commands-in-one-liners.md)
   * [Tmux](pages/linux/tmux.md)
+  * [Linux File system hierarchy](pages/linux/linux-file-system-hierarchy.md)
