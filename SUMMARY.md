@@ -60,6 +60,8 @@
     * [Use inline scripts](pages/should-learn/bicep/use-inline-scripts.md)
     * [Load script file](pages/should-learn/bicep/load-script-file.md)
     * [Kubernetes provider](pages/should-learn/bicep/kubernetes-provider.md)
+    * [Modules](pages/should-learn/bicep/modules/README.md)
+      * [Creating Azure Bicep modules 💪](pages/should-learn/bicep/modules/creating-azure-bicep-modules.md)
   * [Ansible](pages/should-learn/ansible.md)
   * [Puppet](pages/should-learn/puppet.md)
   * [AZ-CLI](pages/should-learn/az-cli/README.md)
