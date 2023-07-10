@@ -145,6 +145,8 @@
       * [GitHub SecOps](pages/devops/ci-cd-platforms/github/github-secops.md)
     * [GitHub Enterprise](pages/devops/ci-cd-platforms/github-enterprise.md)
     * [Argo CD](pages/devops/ci-cd-platforms/argo-cd.md)
+    * [Tekton](pages/devops/ci-cd-platforms/tekton/README.md)
+      * [Build and push an image with Tekton](pages/devops/ci-cd-platforms/tekton/build-and-push-an-image-with-tekton.md)
   * [Agile Development](pages/devops/agile-development/README.md)
     * [Team Agreements](pages/devops/agile-development/team-agreements/README.md)
       * [Definition of Done](pages/devops/agile-development/team-agreements/definition-of-done.md)
