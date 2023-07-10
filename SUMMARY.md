@@ -51,6 +51,8 @@
       * [AzAPI provider](pages/should-learn/terraform/azure/azapi-provider.md)
       * [Terraform with GitHub Actions](pages/should-learn/terraform/azure/terraform-with-github-actions.md)
     * [Functions](pages/should-learn/terraform/functions.md)
+    * [Modules](pages/should-learn/terraform/modules/README.md)
+      * [Create a Custom Terraform Module](pages/should-learn/terraform/modules/create-a-custom-terraform-module.md)
   * [Bicep](pages/should-learn/bicep/README.md)
     * [Template Spec for bicep](pages/should-learn/bicep/template-spec-for-bicep.md)
     * [Integrate Bicep with Azure Pipelines](pages/should-learn/bicep/integrate-bicep-with-azure-pipelines.md)
