@@ -289,3 +289,4 @@
         * [.Net](pages/public-clouds/azure/monitoring/opentelemetry/.net.md)
   * [Google Cloud](pages/public-clouds/google-cloud.md)
   * [AWS](pages/public-clouds/aws.md)
+* [Private Cloud](pages/private-cloud.md)
