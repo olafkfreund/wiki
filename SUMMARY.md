@@ -108,6 +108,7 @@
   * [YAML](pages/should-learn/yaml.md)
   * [Java](pages/should-learn/java.md)
   * [Rust](pages/should-learn/rust.md)
+  * [Helm](pages/should-learn/helm.md)
 * [DevOps](pages/devops/README.md)
   * [Tools to install](pages/devops/tools-to-install/README.md)
     * [Visual Studio Code](pages/devops/tools-to-install/visual-studio-code.md)
