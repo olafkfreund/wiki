@@ -130,7 +130,7 @@
       * [Minikube](pages/devops/tools-to-install/kubernetes/minikube/README.md)
         * [Expose minikube to windows from wsl2](pages/devops/tools-to-install/kubernetes/minikube/expose-minikube-to-windows-from-wsl2.md)
       * [K8sgpt](pages/devops/tools-to-install/kubernetes/k8sgpt.md)
-    * [Klone](pages/devops/tools-to-install/klone.md)
+      * [Klone](pages/devops/tools-to-install/kubernetes/klone.md)
     * [WSL2](pages/devops/tools-to-install/wsl2/README.md)
       * [RHEL in WSL2](pages/devops/tools-to-install/wsl2/rhel-in-wsl2.md)
       * [Fedora XX in WSL2](pages/devops/tools-to-install/wsl2/fedora-xx-in-wsl2.md)
