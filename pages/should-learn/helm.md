@@ -22,7 +22,7 @@ This is where Helm charts come in. Helm charts are a package of Kubernetes YAML 
 
 Below is a typical tree structure of the Helm Chart repository:
 
-```
+```sh
 nginx/
 ├── charts
 ├── Chart.yaml
@@ -53,13 +53,13 @@ To gain practical experience with creating Helm charts, we will create an Nginx 
 
 We can start by using the following command to generate the chart. This will create a chart named `nginx-demo` with the default files and folders.
 
-```
+```sh
 helm create nginx-demo
 ```
 
 This will create the following files and directories:
 
-```
+```sh
 nginx-demo/
 ├── charts
 ├── Chart.yaml
@@ -84,7 +84,7 @@ Now let’s customize the necessary file.
 
 `Chart.yaml` is a YAML file that contains metadata about the Helm chart. This file is located in the root directory of the chart and is required for every chart.
 
-```
+```yaml
 apiVersion: v2
 name: nginx-demo
 description: My First Helm Chart
@@ -113,7 +113,7 @@ We will delete all the default files in the `templates` directory by using the c
 
 To improve comprehension, we will convert our nginx YAML files into templates. To do so, start by creating a `deployment.yaml` file and then paste the following content into it.
 
-```
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -167,7 +167,7 @@ By using the release name and chart object, we can ensure unique deployment name
 
 The final result should look like this :
 
-```
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -196,7 +196,7 @@ spec:
 
 Below is the YAML content for the `service.yaml` file that we need to create in the same way as the `deployment.yaml`
 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -217,7 +217,7 @@ In the below step, we will spice up the flavor of our nginx server by replacing 
 
 To take it a step further, we will use a template directive to replace the environment name in the HTML file. So, let’s create a `configmap.yaml` file and add the following contents to give our nginx a personal touch!
 
-```
+```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -242,7 +242,7 @@ By examining the values.yaml file below, we can see that we have nested reposito
 
 The final `values.yaml` should be like this:
 
-```
+```yaml
 replicaCount: 2
 
 image:
@@ -262,7 +262,7 @@ env:
 
 The Nginx helm chart is now complete, and the final structure of the chart appears as follows:
 
-```
+```sh
 nginx-demo
 ├── Chart.yaml
 ├── charts
@@ -277,19 +277,19 @@ nginx-demo
 
 To confirm that our chart is valid and that all the indentations are correct, we can run the following command while inside the chart directory.
 
-```
+```sh
 helm lint .
 ```
 
 To ensure that the values are correctly substituted in the templates, we can use the following command to render the templated YAML files with the values. This will generate and display all the manifest files with the substituted values.
 
-```
+```sh
 helm template .
 ```
 
 Using the `--dry-run` is also a helpful way to check for errors before actually installing the chart on the cluster. It simulates the installation process and can catch any issues that may arise.
 
-```
+```sh
 helm install --dry-run my-nginx-release nginx-demo
 ```
 
@@ -303,19 +303,19 @@ At this point, we are set to proceed with installing the chart. To do so, enter 
 
 This will install the nginx-demo within the default namespace.
 
-```
+```sh
 helm install helm-demo nginx-demo
 ```
 
 Now we can check the release list by using this command:
 
-```
+```sh
 helm list
 ```
 
 Run the kubectl commands to check the deployment, services, and pods.
 
-```
+```sh
 kubectl get deployment
 kubectl get services
 kubectl get configmap
@@ -326,7 +326,7 @@ We discussed how a single helm chart can be used for multiple environments using
 
 To overwrite the default values file and install a helm chart with external `values.yaml` file, we can use the following command with the `--values` flag and path of the values file.
 
-```
+```sh
 helm install helm-demo nginx-demo --values env/prod-values.yaml
 ```
 
@@ -342,7 +342,7 @@ For instance, if we have decreased the number of replicas from 2 to 1, we will o
 
 In case we wish to undo the changes made earlier and redeploy the previous version, we can employ the rollback command:
 
-```
+```sh
 helm rollback helm-demo
 ```
 
@@ -352,13 +352,13 @@ Following the rollback process, two pods should be active again. It is important
 
 If we intend to rollback to a specific version, you can include the revision number as shown below:
 
-```
+```sh
 helm rollback <release-name> <revision-number>
 ```
 
 As an example, to rollback the _**“helm-demo**_” release to revision number`2` , we can use the following command:
 
-```
+```sh
 helm rollback helm-demo 2
 ```
 
@@ -366,13 +366,13 @@ Uninstall the Helm release
 
 We can use the _**“uninstall”**_ command, which will eliminate all resources connected with the last chart release:
 
-```
+```shell
 helm uninstall frontend
 ```
 
 Additionally, we can create a package of the chart and deploy it to various platforms such as Github or S3 by executing the following command:
 
-```
+```sh
 helm package frontend
 ```
 
