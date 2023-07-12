@@ -111,6 +111,8 @@
     * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md)
       * [Istio](pages/should-learn/kubernetes/service-mesh/istio.md)
       * [Linkerd](pages/should-learn/kubernetes/service-mesh/linkerd.md)
+    * [Ingress controllers](pages/should-learn/kubernetes/ingress-controllers/README.md)
+      * [Traefik](pages/should-learn/kubernetes/ingress-controllers/traefik.md)
   * [YAML](pages/should-learn/yaml.md)
   * [Java](pages/should-learn/java.md)
   * [Rust](pages/should-learn/rust.md)
