@@ -93,3 +93,5 @@ Alternatively, you can spin up a pod and connect from the pod itself.
 You should now see the databases in the logs of the Pod.
 
 Throughout the article we have hardcoded the names, we also have an option to filter the resources using tags. But for some reason, my resources were not being filtered even after tagging them. If you were able to filter them using the tags please feel free to paste the solution in the comments section.
+
+Source: [https://medium.com/nerd-for-tech/introduction-to-crossplane-2f873ae0f9f3](https://medium.com/nerd-for-tech/introduction-to-crossplane-2f873ae0f9f3)
