@@ -116,6 +116,7 @@
       * [Nginx](pages/should-learn/kubernetes/ingress-controllers/nginx.md)
       * [Contour](pages/should-learn/kubernetes/ingress-controllers/contour.md)
       * [Gloo Edge](pages/should-learn/kubernetes/ingress-controllers/gloo-edge.md)
+      * [Kong](pages/should-learn/kubernetes/ingress-controllers/kong.md)
   * [YAML](pages/should-learn/yaml.md)
   * [Java](pages/should-learn/java.md)
   * [Rust](pages/should-learn/rust.md)
