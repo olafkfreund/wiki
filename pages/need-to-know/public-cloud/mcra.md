@@ -8,7 +8,7 @@ The MCRA and the various diagrams and templates can be found at this link: [http
 
 The MCRA are a set of diagrams, templates, and links that assist in the understanding and planning of a cybersecurity architecture that is integrated primarily with Microsoft. Even though the architecture diagrams focus on Microsoft solutions, they are helpful to the overall understanding of a complete cybersecurity architecture.
 
-<figure><img src="../../.gitbook/assets/Figure_2.01_B18608.jpg" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Figure_2.01_B18608.jpg" alt=""><figcaption></figcaption></figure>
 
 The MCRA are focused on the areas of resources, capabilities, controls, access, and operations:
 
