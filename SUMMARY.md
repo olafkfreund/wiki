@@ -161,6 +161,8 @@
       * [ArgoCD reallife test](pages/devops/ci-cd-platforms/argo-cd/argocd-reallife-test.md)
     * [Tekton](pages/devops/ci-cd-platforms/tekton/README.md)
       * [Build and push an image with Tekton](pages/devops/ci-cd-platforms/tekton/build-and-push-an-image-with-tekton.md)
+    * [Crossplane](pages/devops/ci-cd-platforms/crossplane/README.md)
+      * [Intro](pages/devops/ci-cd-platforms/crossplane/intro.md)
   * [Agile Development](pages/devops/agile-development/README.md)
     * [Team Agreements](pages/devops/agile-development/team-agreements/README.md)
       * [Definition of Done](pages/devops/agile-development/team-agreements/definition-of-done.md)
