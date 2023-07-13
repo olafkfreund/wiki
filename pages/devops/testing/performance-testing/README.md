@@ -1,5 +1,7 @@
 # Performance Testing
 
+<figure><img src="https://dw1.s81c.com/IMWUC/MessageImages/f91523daef884cb1b92d3e2252ef03fa.png" alt=""><figcaption></figcaption></figure>
+
 Performance Testing is an overloaded term that is used to refer to several subcategories of performance related testing, each of which has different purpose.
 
 A good description of overall performance testing is as follows:

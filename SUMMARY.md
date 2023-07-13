@@ -30,6 +30,7 @@
     * [AWS SRA](pages/need-to-know/public-cloud-security-frameworks/aws-sra.md)
     * [MCRA](pages/need-to-know/public-cloud-security-frameworks/mcra.md)
     * [Google Cloud Architecture Framework: Security](pages/need-to-know/public-cloud-security-frameworks/google-cloud-architecture-framework-security.md)
+  * [Design for self healing](pages/need-to-know/design-for-self-healing.md)
 * [Should Learn](pages/should-learn/README.md)
   * [Python](pages/should-learn/python.md)
   * [Terraform](pages/should-learn/terraform/README.md)
