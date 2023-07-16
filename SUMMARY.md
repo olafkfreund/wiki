@@ -313,6 +313,7 @@
         * [Kubeval](pages/best-practises/containers/kubernetes/k8s-tools/kubeval.md)
         * [Kubeaudit](pages/best-practises/containers/kubernetes/k8s-tools/kubeaudit.md)
         * [Kubecfg](pages/best-practises/containers/kubernetes/k8s-tools/kubecfg.md)
+        * [k8spacket](pages/best-practises/containers/kubernetes/k8s-tools/k8spacket.md)
       * [Kubernetes Best Practices](pages/best-practises/containers/kubernetes/kubernetes-best-practices/README.md)
         * [Resource limits](pages/best-practises/containers/kubernetes/kubernetes-best-practices/resource-limits/README.md)
           * [JVM memory limits](pages/best-practises/containers/kubernetes/kubernetes-best-practices/resource-limits/jvm-memory-limits.md)
