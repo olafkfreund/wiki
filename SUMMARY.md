@@ -32,6 +32,7 @@
     * [Google Cloud Architecture Framework: Security](pages/need-to-know/public-cloud-security-frameworks/google-cloud-architecture-framework-security.md)
   * [Design for self healing](pages/need-to-know/design-for-self-healing.md)
   * [Guide to Blue-Green, Canary, and Rolling Deployments](pages/need-to-know/guide-to-blue-green-canary-and-rolling-deployments.md)
+  * [Understanding SLI,SLO and SLA](pages/need-to-know/understanding-sli-slo-and-sla.md)
 * [Should Learn](pages/should-learn/README.md)
   * [Python](pages/should-learn/python.md)
   * [Terraform](pages/should-learn/terraform/README.md)
