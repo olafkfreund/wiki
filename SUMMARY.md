@@ -224,6 +224,7 @@
     * [Dashboard](pages/devops/observability/dashboard.md)
     * [Logging](pages/devops/observability/logging/README.md)
       * [Collecting and visualizing Kubernetes events using Loki and Kubernetes Event Exporter for effective](pages/devops/observability/logging/collecting-and-visualizing-kubernetes-events-using-loki-and-kubernetes-event-exporter-for-effective.md)
+      * [Log Management and Distributed Tracing using Grafana Loki and Tempo](pages/devops/observability/logging/log-management-and-distributed-tracing-using-grafana-loki-and-tempo.md)
     * [Metrics](pages/devops/observability/metrics.md)
     * [Tracing](pages/devops/observability/tracing.md)
     * [Observability as Code](pages/devops/observability/observability-as-code.md)
