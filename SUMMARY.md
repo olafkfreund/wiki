@@ -214,6 +214,7 @@
     * [FAQ](pages/devops/code-reviews/faq.md)
   * [Continuous Delivery](pages/devops/continuous-delivery/README.md)
     * [Secrets Management](pages/devops/continuous-delivery/secrets-management.md)
+    * [Blue and Green Deployment in real-life](pages/devops/continuous-delivery/blue-and-green-deployment-in-real-life.md)
   * [Continuous Integration](pages/devops/continuous-integration.md)
   * [Documentation](pages/devops/documentation/README.md)
     * [Projects and Repositories](pages/devops/documentation/projects-and-repositories.md)
