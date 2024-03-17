@@ -11,7 +11,9 @@ Use the GetNF tool to install NF
 git clone https://github.com/getnf/getnf.git
 cd getnf
 ./install.sh
+```
 or with one command with
+```bash
 curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash -s -- --silent
 ```
 {% endcode %}
