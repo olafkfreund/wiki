@@ -29,7 +29,7 @@ You first create a user-defined variable that retrieves the secret value. Then, 
         </elementProp>
       </collectionProp>
     </Arguments>
-    ```
+    ```plaintext
 2.  Reference the user-defined variable in the test script.
 
     You can use the `${}` syntax to reference the variable in the script. In the following example, you use the `udv_appToken` variable to set an HTTP header.
@@ -45,7 +45,7 @@ You first create a user-defined variable that retrieves the secret value. Then, 
           </elementProp>
         </collectionProp>
       </HeaderManager>
-    ```
+    ```plaintext
 
 ### Configure load tests with environment variables <a href="#envvars" id="envvars"></a>
 
@@ -83,7 +83,7 @@ You first define a user-defined variable that reads the environment variable, an
         </elementProp>
       </collectionProp>
     </Arguments>
-    ```
+    ```plaintext
 2.  Reference the user-defined variable in the test script.
 
     You can use the `${}` syntax to reference the variable in the script. In the following example, you use the `udv_webapp` variable to configure the application endpoint URL.
@@ -92,4 +92,4 @@ You first define a user-defined variable that reads the environment variable, an
 
     ```xml
     <stringProp name="HTTPSampler.domain">${udv_webapp}</stringProp>
-    ```
+    ```plaintext

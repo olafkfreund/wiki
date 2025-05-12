@@ -49,14 +49,14 @@ This blog assumes that following components are already provisioned or installed
 
 ```sh
 kubectl create ns tracing
-```
+```plaintext
 
 2\. Now we will use grafana helm chart to install Grafana Temp and Grafana LOKI. Initialise Grafana Helm chart repository and update the repository
 
 ```shell
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
-```
+```plaintext
 
 3\. Deploy Grafana Tempo using helm chart
 
@@ -72,7 +72,7 @@ tempo:
        http:
        grpc:
 EOF
-```
+```plaintext
 
 \*\* — version will change in future please refer to the [link](https://github.com/grafana/helm-charts/tree/main/charts/tempo) to check the latest version.
 
@@ -93,7 +93,7 @@ prometheus:
    persistentVolume:
      enabled: false
 EOF
-```
+```plaintext
 
 Above you can include and exclude the persistent volume, promtail, fluent-bit, Prometheus by making True or false.
 
@@ -103,7 +103,7 @@ Above you can include and exclude the persistent volume, promtail, fluent-bit, P
 
 ```shell
 kubectl apply -n tracing -f https://raw.githubusercontent.com/antonioberben/examples/master/opentelemetry-collector/otel.yaml
-```
+```plaintext
 
 ```yaml
 kubectl apply -n tracing -f - << 'EOF'
@@ -129,7 +129,7 @@ data:
          receivers: [zipkin]
          exporters: [otlp]
 EOF
-```
+```plaintext
 
 6\. Deploy fluent-bit component. You will use this component to scrap the log traces from your cluster:
 
@@ -139,7 +139,7 @@ EOF
 helm repo add fluent https://fluent.github.io/helm-charts
 
 helm repo update
-```
+```plaintext
 
 ```sh
 helm install fluent-bit fluent/fluent-bit --version 0.16.1 -n tracing -f - << 'EOF'
@@ -179,7 +179,7 @@ config:
        Time_Key    time
        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
 EOF
-```
+```plaintext
 
 7\. This component is already configured to connect to Loki and Tempo:
 
@@ -223,7 +223,7 @@ service:
  type: LoadBalancer
 
 EOF
-```
+```plaintext
 
 In the above Grafana Helm Chart we are defining the both Data Source of grafana with the help of datasource.yaml i.e. Tempo and Loki
 

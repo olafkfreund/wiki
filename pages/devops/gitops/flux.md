@@ -10,14 +10,14 @@ This is taken from: [https://learn.microsoft.com/en-us/azure/azure-arc/kubernete
 az provider register --namespace Microsoft.Kubernetes
 az provider register --namespace Microsoft.ContainerService
 az provider register --namespace Microsoft.KubernetesConfiguration
-```
+```plaintext
 
 Install the latest `k8s-configuration` and `k8s-extension` CLI extension packages:
 
 ```bash
 az extension add -n k8s-configuration
 az extension add -n k8s-extension
-```
+```plaintext
 
 
 
@@ -46,7 +46,7 @@ az k8s-configuration flux create -g flux-demo-rg \
 --branch main  \
 --kustomization name=infra path=./infrastructure prune=true \
 --kustomization name=apps path=./apps/staging prune=true dependsOn=\["infra"\]
-```
+```plaintext
 
 The `microsoft.flux` extension will be installed on the cluster (if it hasn't already been installed due to a previous GitOps deployment).
 
@@ -54,13 +54,13 @@ When the flux configuration is first installed, the initial compliance state may
 
 ```bash
 az k8s-configuration flux show -g flux-demo-rg -c flux-demo-arc -n cluster-config -t connectedClusters
-```
+```plaintext
 
 To confirm that the deployment was successful, run the following command:
 
 ```bash
 az k8s-configuration flux show -g flux-demo-rg -c flux-demo-arc -n cluster-config -t connectedClusters
-```
+```plaintext
 
 With a successful deployment the following namespaces are created:
 
@@ -74,7 +74,7 @@ Azure CLICopy
 
 ```bash
 kubectl get namespaces
-```
+```plaintext
 
 The `flux-system` namespace contains the Flux extension objects:
 
@@ -93,7 +93,7 @@ helm-controller-59cc74dbc5-77772          1/1     Running   0          21m
 kustomize-controller-5fb7d7b9d5-cjdhx     1/1     Running   0          21m
 notification-controller-7d45678bc-fvlvr   1/1     Running   0          21m
 source-controller-df7dc97cd-4drh2         1/1     Running   0          21m
-```
+```plaintext
 
 The namespace `cluster-config` has the Flux configuration objects.
 
@@ -125,7 +125,7 @@ volumesnapshotclasses.snapshot.storage.k8s.io          2022-03-28T21:06:12Z
 volumesnapshotcontents.snapshot.storage.k8s.io         2022-03-28T21:06:12Z
 volumesnapshots.snapshot.storage.k8s.io                2022-03-28T21:06:12Z
 websites.extensions.example.com                        2022-03-30T23:42:32Z
-```
+```plaintext
 
 Confirm other details of the configuration by using the following commands.
 
@@ -135,7 +135,7 @@ kubectl get fluxconfigs -A
 
 NAMESPACE        NAME             SCOPE     URL                                                       PROVISION   AGE
 cluster-config   cluster-config   cluster   https://github.com/Azure/gitops-flux2-kustomize-helm-mt   Succeeded   44m
-```
+```plaintext
 {% endcode %}
 
 {% code overflow="wrap" lineNumbers="true" %}
@@ -144,7 +144,7 @@ kubectl get gitrepositories -A
 
 NAMESPACE        NAME             URL                                                       READY   STATUS                                                            AGE
 cluster-config   cluster-config   https://github.com/Azure/gitops-flux2-kustomize-helm-mt   True    Fetched revision: main/4f1bdad4d0a54b939a5e3d52c51464f67e474fcf   45m
-```
+```plaintext
 {% endcode %}
 
 ```bash
@@ -154,7 +154,7 @@ NAMESPACE        NAME      READY   STATUS                             AGE
 cluster-config   nginx     True    Release reconciliation succeeded   66m
 cluster-config   podinfo   True    Release reconciliation succeeded   66m
 cluster-config   redis     True    Release reconciliation succeeded   66m
-```
+```plaintext
 
 ```bash
 kubectl get kustomizations -A
@@ -163,7 +163,7 @@ kubectl get kustomizations -A
 NAMESPACE        NAME                   READY   STATUS                                                            AGE
 cluster-config   cluster-config-apps    True    Applied revision: main/4f1bdad4d0a54b939a5e3d52c51464f67e474fcf   65m
 cluster-config   cluster-config-infra   True    Applied revision: main/4f1bdad4d0a54b939a5e3d52c51464f67e474fcf   65m
-```
+```plaintext
 
 Workloads are deployed from manifests in the Git repository.
 
@@ -190,7 +190,7 @@ service/redis-master     ClusterIP   10.0.13.182   <none>        6379/TCP   68m
 
 NAME                            READY   AGE
 statefulset.apps/redis-master   1/1     68m
-```
+```plaintext
 
 **Create an image pull secret**
 
@@ -204,7 +204,7 @@ kubectl create secret docker-registry <secret-name> \
     --docker-server=<container-registry-name>.azurecr.io \
     --docker-username=<service-principal-ID> \
     --docker-password=<service-principal-password>
-```
+```plaintext
 
 To avoid having to set an imagePullSecret for every Pod, consider adding the imagePullSecret to the Service account in the `dev` and `stage` namespaces.&#x20;
 
@@ -240,7 +240,7 @@ The CI/CD workflow populates the manifest directory with extra manifests to depl
        --cluster-type connectedClusters \
        --branch master \
        --kustomization name=cluster-config prune=true path=arc-cicd-cluster/manifestsas
-    ```
+    ```plaintext
 
 ### Implement CI/CD with GitHub <a href="#implement-cicd-with-github" id="implement-cicd-with-github"></a>
 
@@ -285,6 +285,6 @@ The CI/CD workflow populates the manifest directory with extra manifests to depl
        --cluster-type connectedClusters \
        --branch master \
        --kustomization name=cluster-config prune=true path=arc-cicd-cluster/manifests
-    ```
+    ```plaintext
 2. Check the state of the deployment in Azure portal.
    * If successful, you'll see both `dev` and `stage` namespaces created in your cluster.

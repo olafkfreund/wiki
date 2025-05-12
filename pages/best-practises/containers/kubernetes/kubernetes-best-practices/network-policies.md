@@ -38,6 +38,6 @@ spec:
         - protocol: TCP
           port: 7777     
 CopyExplain
-```
+```plaintext
 
 \

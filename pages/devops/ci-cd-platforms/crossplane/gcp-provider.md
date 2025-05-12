@@ -13,7 +13,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-gcp:v0.28.0
 EOF
-```
+```plaintext
 
 The `kind: Provider` uses the Crossplane `Provider` _Custom Resource Definition_ to connect your Kubernetes cluster to your cloud provider.
 
@@ -23,7 +23,7 @@ Verify the provider installed with `kubectl get providers`.
 kubectl get providers
 NAME                   INSTALLED   HEALTHY   PACKAGE                                        AGE
 upbound-provider-gcp   True        True      xpkg.upbound.io/upbound/provider-gcp:v0.28.0   107s
-```
+```plaintext
 
 A provider installs their own Kubernetes _Custom Resource Definitions_ (CRDs). These CRDs allow you to create GCP resources directly inside Kubernetes.
 
@@ -52,7 +52,7 @@ kubectl create secret \
 generic gcp-secret \
 -n crossplane-system \
 --from-file=creds=./gcp-credentials.json
-```
+```plaintext
 
 View the secret with `kubectl describe secret`
 
@@ -68,7 +68,7 @@ Type:  Opaque
 Data
 ====
 creds:  2330 bytes
-```
+```plaintext
 
 ### Create a ProviderConfig  <a href="#create-a-providerconfig" id="create-a-providerconfig"></a>
 
@@ -91,7 +91,7 @@ spec:
       name: gcp-secret
       key: creds
 EOF
-```
+```plaintext
 
 This attaches the GCP credentials, saved as a Kubernetes secret, as a `secretRef` .
 

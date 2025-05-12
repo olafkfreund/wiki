@@ -34,21 +34,21 @@ Once you have `Helm` installed, you can add the repo as follows:
 
 ```shell
 $ helm repo add k8spacket https://k8spacket.github.io/k8spacket-helm-chart
-```
+```plaintext
 
 Install `k8spacket`:
 
 ```shell
 $ helm install k8spacket --namespace k8spacket k8spacket/k8spacket \
  --create-namespace
-```
+```plaintext
 
 If you have custom options or values you want to override:
 
 ```shell
 $ helm install k8spacket --namespace k8spacket -f my-k8spacket-values.yaml \
 k8spacket/k8spacket
-```
+```plaintext
 
 Then you can add the Node Graph API plugin and data source to your Grafana instance, you can do it manually or change the helm value of the Grafana Chart, for example:
 
@@ -86,13 +86,13 @@ grafana:
           typeName: "json-api-plugin"
           orgId: 1
           version: 1
-```
+```plaintext
 
 Then you can add dashboards `configmap` to Grafana stack:
 
 ```sh
 $ kubectl -n $GRAFANA_NS apply --recursive -f ./dashboards
-```
+```plaintext
 
 ## Usage Demo <a href="#effd" id="effd"></a>
 

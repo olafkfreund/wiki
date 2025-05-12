@@ -52,7 +52,7 @@ spec:
         image: myapp:v1
         ports:
         - containerPort: 8080
-```
+```plaintext
 
 Creating a Kubernetes Operator in Golang to automate the management of a custom resource in Kubernetes:
 
@@ -119,7 +119,7 @@ func main() {
                 os.Exit(1)
         }
 }
-```
+```plaintext
 
 Using Golang with Kubernetes API to create custom controllers that automate tasks in a Kubernetes cluster:
 
@@ -182,4 +182,4 @@ func main() {
 
         // Start the operator
         if err := mgr.Start(ctx);
-```
+```plaintext

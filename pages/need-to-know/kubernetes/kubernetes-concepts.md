@@ -44,7 +44,7 @@ Label selectors are used to select objects based on their labels. Equality-based
 ```yaml
 role = webserver
 CopyExplain
-```
+```plaintext
 
 This will select all objects that have that label key and value.
 
@@ -53,14 +53,14 @@ Label selectors can have multiple requirements separated by a comma. For example
 ```yaml
 role = webserver, application != foo
 CopyExplain
-```
+```plaintext
 
 Set-based selectors extend the capabilities and allow selection based on multiple values:
 
 ```yaml
 role in (webserver, backend)
 CopyExplain
-```
+```plaintext
 
 ### Annotation <a href="#_idparadest-29" id="_idparadest-29"></a>
 

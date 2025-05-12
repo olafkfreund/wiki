@@ -20,7 +20,7 @@ resources: # Containers and repositories used in the build.
   packages: [ package ] # List of package resources.
 variables: variables | [ variable ] # Variables for this pipeline.
 lockBehavior: string # Behavior lock requests from this stage should exhibit in relation to other exclusive lock requests.
-```
+```plaintext
 
 #### Examples <a href="#examples-1" id="examples-1"></a>
 
@@ -40,6 +40,6 @@ jobs:
   pool: windows-latest
   steps:
   - script: "Do post-work using a different hosted image"
-```
+```plaintext
 
 \

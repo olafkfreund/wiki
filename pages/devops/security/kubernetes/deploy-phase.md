@@ -18,24 +18,24 @@ Namespaces give you the ability to create logical partitions and enforce separat
 
 To set the namespace for a current request, use the --namespace flag. Refer to the following examples:
 
-```
+```plaintext
 kubectl run nginx --image=nginx --namespace=<insert-namespace-name-here>
 kubectl get pods --namespace=<insert-namespace-name-here>
-```
+```plaintext
 
 **Setting the namespace preference**[**¶**](https://cheatsheetseries.owasp.org/cheatsheets/Kubernetes\_Security\_Cheat\_Sheet.html#setting-the-namespace-preference)
 
 You can permanently save the namespace for all subsequent kubectl commands in that context.
 
-```
+```plaintext
 kubectl config set-context --current --namespace=<insert-namespace-name-here>
-```
+```plaintext
 
 Validate it with the following command.
 
-```
+```plaintext
 kubectl config view --minify | grep namespace:
-```
+```plaintext
 
 Learn more about namespaces at [https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces)
 
@@ -61,9 +61,9 @@ In case vulnerabilities are found in running containers, it is recommended to al
 
 Try to avoid direct updates to the running containers as this can break the image-container relationship.
 
-```
+```plaintext
 Example: apt-update  
-```
+```plaintext
 
 Upgrading containers is extremely easy with the Kubernetes rolling updates feature - this allows gradually updating a running application by upgrading its images to the latest version.
 
@@ -100,7 +100,7 @@ When designing your containers and pods, make sure that you configure the securi
 
 Here is an example for pod definition with security context parameters:
 
-```
+```plaintext
 apiVersion: v1  
 kind: Pod  
 metadata:  
@@ -114,7 +114,7 @@ spec:
   securityContext:  
     readOnlyRootFilesystem: true  
     runAsNonRoot: true
-```
+```plaintext
 
 For more information on security context for Pods, refer to the documentation at [https://kubernetes.io/docs/tasks/configure-pod-container/security-context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context)
 
@@ -199,7 +199,7 @@ The following is an example for namespace resource quota definition that will li
 
 compute-resources.yaml:
 
-```
+```plaintext
 apiVersion: v1  
 kind: ResourceQuota  
 metadata:  
@@ -211,13 +211,13 @@ spec:
     requests.memory: 1Gi  
     limits.cpu: "2"  
     limits.memory: 2Gi
-```
+```plaintext
 
 Assign a resource quota to namespace:
 
-```
+```plaintext
 kubectl create -f ./compute-resources.yaml --namespace=myspace
-```
+```plaintext
 
 For more information on configuring resource quotas, refer to the Kubernetes documentation at [https://kubernetes.io/docs/concepts/policy/resource-quotas/](https://kubernetes.io/docs/concepts/policy/resource-quotas/).
 
@@ -233,7 +233,7 @@ Users of Google Cloud Platform can benefit from automatic firewall rules, preven
 
 The following is an example of a network policy that controls the network for “backend” pods, only allowing inbound network access from “frontend” pods:
 
-```
+```plaintext
 POST /apis/net.alpha.kubernetes.io/v1alpha1/namespaces/tenant-a/networkpolicys  
 {  
   "kind": "NetworkPolicy",
@@ -255,7 +255,7 @@ POST /apis/net.alpha.kubernetes.io/v1alpha1/namespaces/tenant-a/networkpolicys
     }
   }
 }
-```
+```plaintext
 
 For more information on configuring network policies, refer to the Kubernetes documentation at [https://kubernetes.io/docs/concepts/services-networking/network-policies](https://kubernetes.io/docs/concepts/services-networking/network-policies).
 

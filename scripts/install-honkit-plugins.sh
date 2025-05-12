@@ -1,28 +1,26 @@
 #!/bin/bash
 
-# Script to install HonKit plugins that are compatible with your configuration
+# Script to install GitBook plugins that are compatible with HonKit
 
-echo "Installing HonKit plugins..."
+echo "Installing plugins for HonKit..."
 
 # Create node_modules directory if it doesn't exist
 mkdir -p ./node_modules
 
-# Install HonKit-compatible plugins
-npm install --save-dev honkit-plugin-expandable-chapters
-npm install --save-dev honkit-plugin-copy-code-button
-npm install --save-dev honkit-plugin-hints
-npm install --save-dev honkit-plugin-include-codeblock
-npm install --save-dev honkit-plugin-advanced-emoji
-npm install --save-dev honkit-plugin-anchors
-npm install --save-dev honkit-plugin-edit-link
-npm install --save-dev honkit-plugin-include
-npm install --save-dev honkit-plugin-search-pro
-npm install --save-dev honkit-plugin-tabs
-npm install --save-dev honkit-plugin-github
-npm install --save-dev honkit-plugin-theme-comscore
-
-# Note: Some plugins might not have direct HonKit equivalents
-# In that case, you might need to use GitBook plugins that are compatible with HonKit
+# Install plugins with original GitBook names
+npm install --save-dev gitbook-plugin-expandable-chapters
+npm install --save-dev gitbook-plugin-copy-code-button
+npm install --save-dev gitbook-plugin-hints
+npm install --save-dev gitbook-plugin-include-codeblock
+npm install --save-dev gitbook-plugin-advanced-emoji
+npm install --save-dev gitbook-plugin-anchors
+npm install --save-dev gitbook-plugin-edit-link
+npm install --save-dev gitbook-plugin-include
+npm install --save-dev gitbook-plugin-search-pro
+npm install --save-dev gitbook-plugin-tabs
+npm install --save-dev gitbook-plugin-github
+npm install --save-dev gitbook-plugin-theme-comscore
+npm install --save-dev gitbook-plugin-insert-logo
 
 # Create a package.json file if it doesn't exist
 if [ ! -f "./package.json" ]; then
@@ -41,4 +39,4 @@ if [ ! -f "./package.json" ]; then
 }' > ./package.json
 fi
 
-echo "HonKit plugins installation completed!"
+echo "Plugin installation completed!"

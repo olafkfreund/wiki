@@ -28,17 +28,17 @@ To install Tekton Pipelines on a Kubernetes cluster:
 
        ```bash
        kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
-       ```
+       ```plaintext
    *   **Nightly release:**
 
        ```bash
        kubectl apply --filename https://storage.googleapis.com/tekton-releases-nightly/pipeline/latest/release.yaml
-       ```
+       ```plaintext
    *   **Specific release:**
 
        ```bash
         kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/previous/<version_number>/release.yaml
-       ```
+       ```plaintext
 
        Replace `<version_number>` with the numbered version you want to install. For example, `v0.26.0`.
    *   **Untagged release:**
@@ -47,12 +47,12 @@ To install Tekton Pipelines on a Kubernetes cluster:
 
        ```bash
        kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.notags.yaml
-       ```
+       ```plaintext
 2.  Monitor the installation:
 
     ```bash
     kubectl get pods --namespace tekton-pipelines --watch
-    ```
+    ```plaintext
 
     When all components show `1/1` under the `READY` column, the installation is complete. Hit _Ctrl + C_ to stop monitoring.
 
@@ -72,7 +72,7 @@ Congratulations! You have successfully installed Tekton Pipelines on your Kubern
         https://storage.googleapis.com/tekton-releases/triggers/latest/release.yaml
         kubectl apply --filename \
         https://storage.googleapis.com/tekton-releases/triggers/latest/interceptors.yaml
-        ```
+        ```plaintext
 
 
 
@@ -117,7 +117,7 @@ data:
         emptyDir: {}
   default-max-matrix-combinations-count: "1024"
   default-resolver-type: "git"
-```
+```plaintext
 
 * the default service account from `default` to `tekton`.
 * the default timeout from 60 minutes to 20 minutes.
@@ -173,7 +173,7 @@ spec:
     env:
         - name: "TEST_TEKTON"
           value: "false"
-```
+```plaintext
 
 For example:
 
@@ -203,7 +203,7 @@ metadata:
     app.kubernetes.io/part-of: tekton-pipelines
 data:
   send-cloudevents-for-runs: true
-```
+```plaintext
 
 Additionally, CloudEvents for `Runs` require an extra configuration to be enabled. This setting exists to avoid collisions with CloudEvents that might be sent by custom task controllers:
 
@@ -218,7 +218,7 @@ metadata:
     app.kubernetes.io/part-of: tekton-pipelines
 data:
   default-cloud-events-sink: https://my-sink-url
-```
+```plaintext
 
 When configured so, Tekton can generate `CloudEvents` for `TaskRun`, `PipelineRun` and `Run`lifecycle events. The main configuration parameter is the URL of the sink. When not set, no notification is generated.
 

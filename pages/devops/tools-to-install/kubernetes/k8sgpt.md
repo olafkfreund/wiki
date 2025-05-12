@@ -7,7 +7,7 @@ Install K8sGPT on your machine with the following commands:
 ```bash
 brew tap k8sgpt-ai/k8sgpt
 brew install k8sgpt
-```
+```plaintext
 
 ### Other Installation Options <a href="#other-installation-options" id="other-installation-options"></a>
 
@@ -16,7 +16,7 @@ brew install k8sgpt
 ```bash
 curl -LO https://github.com/k8sgpt-ai/k8sgpt/releases/download/v0.2.1/k8sgpt_amd64.rpm
 sudo rpm -ivh -i k8sgpt_amd64.rpm
-```
+```plaintext
 
 ### Running K8sGPT through a container <a href="#running-k8sgpt-through-a-container" id="running-k8sgpt-through-a-container"></a>
 
@@ -33,7 +33,7 @@ services:
    image: ghcr.io/k8sgpt-ai/k8sgpt:dev-202304011623
    volumes:
      -  /home/$(whoami)/.k8sgpt.yaml:/home/root/.k8sgpt.yaml
-```
+```plaintext
 
 ### Installing the K8sGPT Operator Helm Chart <a href="#installing-the-k8sgpt-operator-helm-chart" id="installing-the-k8sgpt-operator-helm-chart"></a>
 
@@ -68,7 +68,7 @@ Flags:
       --kubecontext string   Kubernetes context to use. Only required if out-of-cluster.
 
 Use "k8sgpt [command] --help" for more information about a command.
-```
+```plaintext
 
 ### Authenticate with OpenAI <a href="#authenticate-with-openai" id="authenticate-with-openai"></a>
 
@@ -80,7 +80,7 @@ Next, generate a token from the backend:
 
 ```bash
 k8sgpt generate
-```
+```plaintext
 
 This will provide you with a URL to generate a token, follow the URL from the command line to your browser to then generate the token.
 
@@ -88,7 +88,7 @@ For a more engaging experience and a better understanding of the capabilities of
 
 ```bash
 k8sgpt analyse --explain
-```
+```plaintext
 
 Congratulations! you have successfully created a local kubernetes cluster, deployed a "broken Pod" and analyzed it using `k8sgpt`.
 

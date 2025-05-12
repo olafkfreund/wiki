@@ -6,7 +6,7 @@ The syntax of a conditional expression is as follows:
 
 ```hcl
 condition ? true_val : false_val
-```
+```plaintext
 
 A _conditional expression_ uses the value of a boolean expression to select one of two values. This expression evaluates to `true_val` if the value of `condition`is true, and otherwise, to `false_val`. This is the equivalent of an _If_-statement.
 
@@ -20,7 +20,7 @@ Note that Terraform does support traditional logical, equality, and comparison o
 
 ```hcl
 count = var.server == "UbuntuServer" ? 0 : 1
-```
+```plaintext
 
 ### Example 2
 
@@ -28,7 +28,7 @@ Another common use of conditional expressions is to define defaults to replace i
 
 ```hcl
 var.server != "" ? var.server : "MicrosoftWindowsServer"
-```
+```plaintext
 
 ### Example 3
 
@@ -36,7 +36,7 @@ When creating a conditional expression, the two result types can be of any type.
 
 ```hcl
 var.server ? 100 : "UbuntuServer"
-```
+```plaintext
 
 However, this can cause confusion as Terraform will attempt to find a type that they can both convert to and make those conversions automatically if so. In the above case, both can be converted to a String.
 
@@ -44,4 +44,4 @@ To avoid this, writing the condition with a specific conversion function is reco
 
 ```hcl
 var.server ? tostring(100) : "UbuntuServer"
-```
+```plaintext

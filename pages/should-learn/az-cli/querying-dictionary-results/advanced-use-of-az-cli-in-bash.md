@@ -8,7 +8,7 @@ if [ $resourceGroup != '' ]; then
 else
    resourceGroup="msdocs-learn-bash-$randomIdentifier"
 fi
-```
+```plaintext
 
 #### Using If Then to create or delete a resource group <a href="#using-if-then-to-create-or-delete-a-resource-group" id="using-if-then-to-create-or-delete-a-resource-group"></a>
 
@@ -18,7 +18,7 @@ if [ $(az group exists --name $resourceGroup) = false ]; then
 else
    echo $resourceGroup
 fi
-```
+```plaintext
 
 ```bash
 if [ $(az group exists --name $resourceGroup) = true ]; then 
@@ -26,14 +26,14 @@ if [ $(az group exists --name $resourceGroup) = true ]; then
 else
    echo The $resourceGroup resource group does not exist
 fi
-```
+```plaintext
 
 #### Using Grep to determine if a resource group exists, and create the resource group if it does not <a href="#using-grep-to-determine-if-a-resource-group-exists-and-create-the-resource-group-if-it-does-not" id="using-grep-to-determine-if-a-resource-group-exists-and-create-the-resource-group-if-it-does-not"></a>
 
 {% code fullWidth="true" %}
 ```bash
 az group list --output tsv | grep $resourceGroup -q || az group create --name $resourceGroup --location "$location"
-```
+```plaintext
 {% endcode %}
 
 #### Using CASE statement to determine if a resource group exists, and create the resource group if it does not <a href="#using-case-statement-to-determine-if-a-resource-group-exists-and-create-the-resource-group-if-it-doe" id="using-case-statement-to-determine-if-a-resource-group-exists-and-create-the-resource-group-if-it-doe"></a>
@@ -46,5 +46,5 @@ echo The $resourceGroup resource group already exists.;;
 *)
 az group create --name $resourceGroup --location "$location";;
 esac
-```
+```plaintext
 

@@ -35,7 +35,7 @@ resource "azurerm_storage_container" "test" {
   storage_account_name  = azurerm_storage_account.test.name
   container_access_type = "private"
 }
-```
+```plaintext
 
 2. Create a Terratest test file to deploy the Terraform configuration and validate the created Azure Storage account exists, along with testing that the container has the correct name and access type.
 
@@ -97,10 +97,10 @@ func TestAzureStorageAccountAndContainer(t *testing.T) {
 
  fmt.Printf("Container %s was created successfully\n", containerName)
 }
-```
+```plaintext
 
 3. Run the test by navigating to the directory where the go file is saved and run the following command.
 
 ```hcl
 go test -v
-```
+```plaintext

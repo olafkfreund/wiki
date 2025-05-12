@@ -20,7 +20,7 @@ Suppose you have a log file that contains information about requests to a web se
 
 ```bash
 awk '{print $1}' access.log
-```
+```plaintext
 
 This command prints the first field (which contains the IP address) of each line in the access.log file.
 
@@ -30,7 +30,7 @@ Suppose you have a configuration file that contains a list of servers that your 
 
 ```bash
 awk '/^servers/ {print $0", newserver.com"}' config.ini > newconfig.ini
-```
+```plaintext
 
 This command searches for lines that start with "servers" in the config.ini file. It then adds ", newserver.com" to the end of each matching line and writes the result to a new file called newconfig.ini.
 
@@ -40,7 +40,7 @@ Suppose you have a log file that contains information about the requests to your
 
 ```bash
 awk '{count[$1]++} END {for (ip in count) print ip, count[ip]}' access.log
-```
+```plaintext
 
 This command counts the number of requests that were made by each IP address in the access.log file. It then prints a report that shows the IP address and the number of requests.
 

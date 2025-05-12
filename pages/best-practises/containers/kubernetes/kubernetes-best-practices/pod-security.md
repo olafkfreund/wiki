@@ -25,7 +25,7 @@ spec:
     image: my-image
     securityContext:
       runAsUser: 1000
-```
+```plaintext
 
 In this example, the container is set to run as user ID 1000 instead of the default root user. This can help prevent privilege escalation attacks.
 
@@ -42,7 +42,7 @@ spec:
     image: my-image
     securityContext:
       readOnlyRootFilesystem: true
-```
+```plaintext
 
 In this example, the container is set to have a read-only file system, which can help prevent unauthorized modifications.
 
@@ -59,7 +59,7 @@ spec:
     image: my-image
     securityContext:
       hostNetwork: false
-```
+```plaintext
 
 In this example, the container is set to not use the host network, which can help prevent network attacks.
 

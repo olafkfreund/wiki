@@ -57,4 +57,4 @@ resource workspace 'Microsoft.Databricks/workspaces@2023-02-01' = {
     }
   }
 }
-```
+```plaintext

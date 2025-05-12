@@ -54,4 +54,4 @@ jobs:
           bugzilla-url: https://[your-bugzilla-url]
           bugzilla-user: [your-bugzilla-user]
           bugzilla-password: [your-bugzilla-password]
-```
+```plaintext

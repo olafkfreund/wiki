@@ -15,7 +15,7 @@ If you are already familiar with Tekton and just want to see the example, you ca
     ```bash
     kubectl apply --filename \
     https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
-    ```
+    ```plaintext
 
     See the [Pipelines installation documentation](https://tekton.dev/docs/pipelines/install/) for other installation options and vendor specific instructions.
 3. Install the [Tekton CLI, `tkn`](https://tekton.dev/docs/cli/), on your machine.
@@ -50,7 +50,7 @@ spec:
     params:
     - name: url
       value: $(params.repo-url)
-```
+```plaintext
 
 Then create the corresponding `pipelinerun.yaml` file:
 
@@ -77,7 +77,7 @@ spec:
   params:
   - name: repo-url
     value: https://github.com/google/docsy-example.git
-```
+```plaintext
 
 For this how-to we are using a public repository as an example. You can also [use _git clone_ with private repositories, using SSH authentication](https://tekton.dev/docs/how-to-guides/clone-repository/#git-authentication).
 
@@ -91,7 +91,7 @@ To build the image use the [Kaniko](https://hub.tekton.dev/tekton/task/kaniko) T
     params: 
     - name: image-reference
       type: string
-    ```
+    ```plaintext
 
     This parameter is used to add the tag corresponding the container registry where you are going to push the image.
 2.  Create the new `build-push` Task in the same `pipeline.yaml` file:
@@ -109,7 +109,7 @@ To build the image use the [Kaniko](https://hub.tekton.dev/tekton/task/kaniko) T
         params:
         - name: IMAGE
           value: $(params.image-reference)
-    ```
+    ```plaintext
 
     This new Task refers to `kaniko`, which is going to be installed from the [community hub](https://hub.tekton.dev/). A Task has its own set of `workspaces` and `params` passed down from the parameters and Workspaces defined at Pipeline level. In this case, the Workspace `source` and the value of `IMAGE`. Check the [kaniko Task documentation](https://hub.tekton.dev/tekton/task/kaniko) to see all the available options.
 3.  Instantiate the `build-push` Task. Add the value of `image-reference` to the `params` section in `pipelinerun.yaml`:
@@ -118,7 +118,7 @@ To build the image use the [Kaniko](https://hub.tekton.dev/tekton/task/kaniko) T
     params:
     - name: image-reference
       value: container.registry.com/sublocation/my_app:version
-    ```
+    ```plaintext
 
     Replace `container.registry.com/sublocation/my_app:version` with the actual tag for your registry. You can [set up a local registry](https://gist.github.com/trisberg/37c97b6cc53def9a3e38be6143786589) for testing purposes.
 
@@ -149,13 +149,13 @@ In most cases, to push the image to a container registry you must provide authen
       name: docker-credentials
     data:
       config.json: efuJAmF1...
-    ```
+    ```plaintext
 
     The value of `config.json` is the base64-encoded `~/.docker/config.json` file. You can get this data with the following command:
 
     ```bash
     cat ~/.docker/config.json | base64 -w0
-    ```
+    ```plaintext
 3.  Update `pipeline.yaml` and add a Workspace to mount the credentials directory:
 
     At the Pipeline level:
@@ -163,7 +163,7 @@ In most cases, to push the image to a container registry you must provide authen
     ```yaml
     workspaces:
     - name: docker-credentials
-    ```
+    ```plaintext
 
     And under the `build-push` Task:
 
@@ -171,14 +171,14 @@ In most cases, to push the image to a container registry you must provide authen
     workspaces:
     - name: dockerconfig
       workspace: docker-credentials
-    ```
+    ```plaintext
 4.  Instantiate the new `docker-credentials` Workspace in your `pipelinerun.yaml` file by adding a new entry under `workspaces`:
 
     ```yaml
     - name: docker-credentials
       secret:
         secretName: docker-credentials
-    ```
+    ```plaintext
 
 See the complete files in the [full code samples section](https://tekton.dev/docs/how-to-guides/kaniko-build-push/#full-code-samples).
 
@@ -191,37 +191,37 @@ You are ready to install the Tasks and run the pipeline.
     ```bash
     tkn hub install task git-clone
     tkn hub install task kaniko
-    ```
+    ```plaintext
 2.  Apply the Secret with your Docker credentials.
 
     ```bash
     kubectl apply -f docker-credentials.yaml
-    ```
+    ```plaintext
 3.  Apply the Pipeline:
 
     ```bash
     kubectl apply -f pipeline.yaml
-    ```
+    ```plaintext
 4.  Create the PipelineRun:
 
     ```bash
     kubectl create -f pipelinerun.yaml
-    ```
+    ```plaintext
 
     This creates a PipelineRun with a unique name each time:
 
-    ```
+    ```plaintext
     pipelinerun.tekton.dev/clone-build-push-run-4kgjr created
-    ```
+    ```plaintext
 5.  Use the PipelineRun name from the output of the previous step to monitor the Pipeline execution:
 
     ```bash
     tkn pipelinerun logs  clone-build-push-run-4kgjr -f
-    ```
+    ```plaintext
 
     After a few seconds, the output confirms that the image was built and pushed successfully:
 
-    ```
+    ```plaintext
     [fetch-source : clone] + '[' false '=' true ]
     [fetch-source : clone] + '[' false '=' true ]
     [fetch-source : clone] + '[' false '=' true ]
@@ -268,7 +268,7 @@ You are ready to install the Tasks and run the pipeline.
     [build-push : build-and-push] INFO[0029] Pushed image to 1 destinations               
 
     [build-push : write-url] us-east1-docker.pkg.dev/my-tekton-tests/tekton-samples/docsy:v1
-    ```
+    ```plaintext
 
 ### Full code samples <a href="#full-code-samples" id="full-code-samples"></a>
 
@@ -313,7 +313,7 @@ spec:
     params:
     - name: IMAGE
       value: $(params.image-reference)
-```
+```plaintext
 
 The PipelineRun:
 
@@ -345,7 +345,7 @@ spec:
     value: https://github.com/google/docsy-example.git
   - name: image-reference
     value: container.registry.com/sublocation/my_app:version 
-```
+```plaintext
 
 The Docker credentials Kubernetes Secret:
 
@@ -356,6 +356,6 @@ metadata:
   name: docker-credentials
 data:
   config.json: efuJAmF1...
-```
+```plaintext
 
 Use your credentials as the value of the `data` field. Check the [registry authentication section](https://tekton.dev/docs/how-to-guides/kaniko-build-push/#container-registry-authentication) for more information

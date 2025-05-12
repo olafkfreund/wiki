@@ -39,7 +39,7 @@ module <module-symbolic-name> '<path-to-file>' = {
 }
 
 output <output-name> <output-data-type> = <output-value>
-```
+```plaintext
 
 The following example shows an implementation of these elements.
 
@@ -75,4 +75,4 @@ module webModule './webApp.bicep' = {
     location: location
   }
 }
-```
+```plaintext

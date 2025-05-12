@@ -6,11 +6,11 @@ Install scoop with PowerShell:
 ```powershell
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
 irm get.scoop.sh | iex
-```
+```plaintext
 {% endcode %}
 
 Example use:
 
 ```powershell
 scoop bucket add nerd-fonts 
-```
+```plaintext

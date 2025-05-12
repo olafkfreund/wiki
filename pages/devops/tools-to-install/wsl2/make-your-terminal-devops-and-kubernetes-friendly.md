@@ -12,7 +12,7 @@ If you work with DevOps and Kubernetes, you know how important the command line 
 
 ```bash
 sh -c "$(curl -fsSL <https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh>)"
-```
+```plaintext
 
 ## zsh-syntax-highlighting <a href="#5597" id="5597"></a>
 
@@ -51,13 +51,13 @@ On Mac, you can install these tools as below:
 ```bash
 brew install warrensbox/tap/tfswitch
 brew install warrensbox/tap/tgswitch
-```
+```plaintext
 
 **NOTE:** For Terraform and Terragrunt installations to work with tfswitch and tgswitch on Mac with Zsh, you might need to add the below line to your .zshrc file.
 
 ```sh
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-```
+```plaintext
 
 ## Infracost <a href="#ce37" id="ce37"></a>
 
@@ -77,7 +77,7 @@ You can install it on Mac as below:
 
 ```shell
 brew install tfsec
-```
+```plaintext
 
 This is what I got running it for my project:
 
@@ -99,7 +99,7 @@ alias gc='git commit'
 alias gp='git push'
 alias gpl='git pull'
 alias gb='git branch'
-```
+```plaintext
 
 By defining these aliases in your shell configuration file (e.g., .bashrc or .zshrc), you can simply type the alias instead of the full Git command to execute common operations, saving you time and effort in your daily Git workflow.
 
@@ -125,7 +125,7 @@ Just like using aliases for Git commands, utilizing aliases for Kubernetes comma
 
 ```shell
 alias k='kubectl'
-```
+```plaintext
 
 ```sh
 # For switching context between different clusters
@@ -135,7 +135,7 @@ alias knode='kubectl get nodes'
 alias kdesp='kubectl describe pod'
 alias kdp='kubectl delete pod'
 alias kgd='kubectl get deployments'
-```
+```plaintext
 
 These are just a few examples, and you can customize aliases based on your frequently used Kubernetes commands. By adding these aliases to your shell configuration file (e.g., .bashrc or .zshrc), you can use these shortcuts to execute Kubernetes commands quickly and easily.
 
@@ -147,7 +147,7 @@ You can install it on Mac as follow:
 
 ```sh
 brew install kube-ps1
-```
+```plaintext
 
 If you work with Zsh, make sure to add the below to your .zshrc file:
 
@@ -155,11 +155,11 @@ If you work with Zsh, make sure to add the below to your .zshrc file:
 plugins=(
   kube-ps1
 )
-```
+```plaintext
 
 ```sh
 PROMPT='$(kube_ps1)'$PROMPT # or RPROMPT='$(kube_ps1)'
-```
+```plaintext
 
 This is how this tool visualizes your current active context and namespace:
 
@@ -178,7 +178,7 @@ source <(kubectl completion zsh)
 alias kubectl=kubecolor
 # make completion work with kubecolor
 compdef kubecolor=kubectl
-```
+```plaintext
 
 This is an example of how this tool colorizes the output of Kubernetes commands:
 
@@ -208,7 +208,7 @@ Install the tool on Mac as below:
 
 ```sh
 brew install derailed/popeye/popeye
-```
+```plaintext
 
 ## Kube-shell <a href="#3201" id="3201"></a>
 

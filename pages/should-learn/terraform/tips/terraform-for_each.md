@@ -25,7 +25,7 @@ resource "azurerm_storage_account" "my_storage" {
   account_tier             = "Standard"
   account_replication_type = "GRS"
 }
-```
+```plaintext
 
 ### Using Terraform For\_each
 
@@ -52,7 +52,7 @@ resource "azurerm_storage_account" "my_storage" {
   account_tier             = "Standard"
   account_replication_type = "GRS"
 }
-```
+```plaintext
 
 ### Using the For Expression
 
@@ -84,7 +84,7 @@ output "storage_account_names" {
     azurerm_storage_account.my_storage.example[storage].id
   ]
 }
-```
+```plaintext
 
 ### The For Expression With If Clause
 
@@ -94,7 +94,7 @@ The syntax looks like the below:
 
 ```hcl
 [for VAR in COLLECTION: IF CONDITION_EXPRESSION: VAR]
-```
+```plaintext
 
 `VAR` is the name of the variable that represents each item in the collection, `COLLECTION` is the collection to be filtered, and `CONDITION_EXPRESSION` is the boolean expression that determines whether each item should be included in the filtered collection.
 
@@ -127,7 +127,7 @@ locals {
 output "grs_storage_account_names" {
   value = [for sa in local.grs_storage_accounts: sa.name]
 }
-```
+```plaintext
 
 ### The For\_each Expression With If Clause
 
@@ -137,7 +137,7 @@ The syntax for using the `if` clause in an expression is as follows:
 
 ```hcl
 ${condition ? true_value : false_value}
-```
+```plaintext
 
 In the example below, we use the `if` condition to set the `account_replication_type` to `GRS` if the `environment` variable is set to `prod` , if it is not, then the `account_replication_type` will be set to `LRS` .
 
@@ -166,6 +166,6 @@ resource "azurerm_storage_account" "my_storage" {
   account_tier             = "Standard"
   account_replication_type = "${var.environment == "prod" ? "GRS" : "LRS"}"
 }
-```
+```plaintext
 
 ### Key

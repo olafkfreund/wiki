@@ -29,7 +29,7 @@ $ tree
 1 directory, 3 files
 
 0 directories, 2 files
-```
+```plaintext
 
 We already familiar with the `nginx` Deployment and Service file, let’s focus on the `kustomization.yml` file:
 
@@ -44,7 +44,7 @@ images:
 resources:
 - nginx_deploy.yml
 - nginx_service.yml
-```
+```plaintext
 
 As you can see from the above file content, we set a new tag for the **nginx** image, and sets which **`resources`** to apply the settings to. As `Service` does not have images, `Kustomize` will only apply to the `Deployment`, but since we will need `Service` in the later steps, so we are setting it anyway.
 
@@ -87,7 +87,7 @@ spec:
       - image: nginx:1.21.0
         imagePullPolicy: IfNotPresent
         name: nginx
-```
+```plaintext
 
 As you can see from the above output, Kustomize generated `Service` and `Deployment` content. If you pay attention, the contents of **`Service`** did not change, but the contents of Deployment changed.
 
@@ -98,7 +98,7 @@ containers:
 - name: nginx
   image: nginx:1.20.0
   imagePullPolicy: IfNotPresent
-```
+```plaintext
 
 compare with the output from `kustomize` command output:
 
@@ -107,7 +107,7 @@ containers:
 - name: nginx
   image: nginx:1.21.0
   imagePullPolicy: IfNotPresent
-```
+```plaintext
 
 we see that **`image: nginx:1.20.0`** got changed to **`— image: nginx:1.21.0`**, as was specified in the **kustomization.yml** file. Without updating the `nginx_deploy.yml` file, we can change the image tag during deployment.
 
@@ -124,7 +124,7 @@ $ pwd
 $ /home/txu/sample-app
 $ mkdir base
 $ cd base
-```
+```plaintext
 
 Now in the `base` directory, let’s create `kustomization.yml` with the following content:
 
@@ -133,7 +133,7 @@ $ vim kustomization.yaml
 # kustomization.yaml contents
 resources:
 - pod.yml
-```
+```plaintext
 
 The `pod.yml` file:
 
@@ -149,7 +149,7 @@ spec:
   containers:
   - name: nginx
     image: nginx:latest
-```
+```plaintext
 
 ### Dev Overlay <a href="#27d5" id="27d5"></a>
 
@@ -158,7 +158,7 @@ Let’s make a `dev` variant overlaying `base` :
 ```sh
 $ mkdir dev
 $ cd dev
-```
+```plaintext
 
 Create a kustomize file in `dev` :
 
@@ -168,7 +168,7 @@ $ vim kustomization.yml
 resources:
 - ./../base
 namePrefix: dev-
-```
+```plaintext
 
 ### Production Overlay <a href="#c4c0" id="c4c0"></a>
 
@@ -177,7 +177,7 @@ Similar to `dev` overlaying, let’s create a `prod` variant overlaying `base` :
 ```sh
 $ mkdir prod
 $ cd prod
-```
+```plaintext
 
 Create a kustomize file in `dev` :
 
@@ -187,7 +187,7 @@ $ vim kustomization.yal
 resources:
 - ./../base
 namePrefix: prod-
-```
+```plaintext
 
 Now at project root level, define a kustomize file:
 
@@ -197,7 +197,7 @@ resources:
 - ./dev
 - ./production
 namePrefix: cluster-a-
-```
+```plaintext
 
 The entire app structure looks like:
 
@@ -214,7 +214,7 @@ $ tree
     └── kustomization.yml
 
 3 directories, 5 files
-```
+```plaintext
 
 Now let’s build the final output:
 
@@ -241,7 +241,7 @@ spec:
   containers:
   - image: nginx:latest
     name: nginx
-```
+```plaintext
 
 ## Kustomize vs Helm <a href="#df8e" id="df8e"></a>
 

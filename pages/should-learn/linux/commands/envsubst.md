@@ -20,7 +20,7 @@ Suppose you have a configuration file that contains environment variables that n
 
 ```bash
 envsubst < config.ini.template > config.ini
-```
+```plaintext
 
 This command reads the contents of the `config.ini.template` file, replaces any environment variables in the text with their values, and writes the result to the `config.ini` file.
 
@@ -30,7 +30,7 @@ Suppose you have a Kubernetes deployment file that contains environment variable
 
 ```bash
 envsubst < deployment.yaml.template | kubectl apply -f -
-```
+```plaintext
 
 This command reads the contents of the `deployment.yaml.template` file, replaces any environment variables in the text with their values, and applies the resulting deployment configuration to the Kubernetes cluster.
 
@@ -40,7 +40,7 @@ Suppose you have a configuration file for a web application that contains enviro
 
 ```bash
 envsubst < app.config.template > app.config
-```
+```plaintext
 
 This command reads the contents of the `app.config.template` file, replaces any environment variables in the text with their values, and writes the result to the `app.config` file.
 

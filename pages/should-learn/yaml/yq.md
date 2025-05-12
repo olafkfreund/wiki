@@ -10,25 +10,25 @@ Read a value:
 
 ```sh
 yq '.a.b[0].c' file.yaml
-```
+```plaintext
 
 Pipe from STDIN:
 
 ```sh
 yq '.a.b[0].c' < file.yaml
-```
+```plaintext
 
 Update a yaml file, inplace
 
 ```sh
 yq -i '.a.b[0].c = "cool"' file.yaml
-```
+```plaintext
 
 Update using environment variables
 
 ```shell
 NAME=mike yq -i '.a.b[0].c = strenv(NAME)' file.yaml
-```
+```plaintext
 
 Merge multiple files
 
@@ -36,7 +36,7 @@ Merge multiple files
 # note the use of `ea` to evaluate all the files at once
 # instead of in sequence
 yq ea '. as $item ireduce ({}; . * $item )' path/to/*.yml
-```
+```plaintext
 
 Multiple updates to a yaml file
 
@@ -46,13 +46,13 @@ yq -i '
   .x.y.z = "foobar" |
   .person.name = strenv(NAME)
 ' file.yaml
-```
+```plaintext
 
 Convert JSON to YAML
 
-```
+```plaintext
 yq -Poy sample.json
-```
+```plaintext
 
 See the [documentation](https://mikefarah.gitbook.io/yq/) for more examples.
 
@@ -73,21 +73,21 @@ For instance, VERSION=v4.2.0 and BINARY=yq\_linux\_amd64
 ```sh
 wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
   tar xz && mv ${BINARY} /usr/bin/yq
-```
+```plaintext
 
 **Plain binary**
 
 ```sh
 wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY} -O /usr/bin/yq &&\
     chmod +x /usr/bin/yq
-```
+```plaintext
 
 **Latest version**
 
 ```sh
 wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
     chmod +x /usr/bin/yq
-```
+```plaintext
 
 #### MacOS / Linux via Homebrew:
 
@@ -95,13 +95,13 @@ Using [Homebrew](https://brew.sh/)
 
 ```shell
 brew install yq
-```
+```plaintext
 
 #### Linux via snap:
 
 ```shell
 snap install yq
-```
+```plaintext
 
 **Snap notes**
 
@@ -109,13 +109,13 @@ snap install yq
 
 ```sh
 sudo cat /etc/myfile | yq '.a.path'
-```
+```plaintext
 
 And to write to a root file you can either use [sponge](https://linux.die.net/man/1/sponge):
 
 ```shell
 sudo cat /etc/myfile | yq '.a.path = "value"' | sudo sponge /etc/myfile
-```
+```plaintext
 
 or write to a temporary file:
 
@@ -123,7 +123,7 @@ or write to a temporary file:
 sudo cat /etc/myfile | yq '.a.path = "value"' | sudo tee /etc/myfile.tmp
 sudo mv /etc/myfile.tmp /etc/myfile
 rm /etc/myfile.tmp
-```
+```plaintext
 
 #### Run with Docker or Podman
 
@@ -131,13 +131,13 @@ rm /etc/myfile.tmp
 
 ```sh
 docker run --rm -v "${PWD}":/workdir mikefarah/yq [command] [flags] [expression ]FILE...
-```
+```plaintext
 
 Note that you can run `yq` in docker without network access and other privileges if you desire, namely `--security-opt=no-new-privileges --cap-drop all --network none`.
 
 ```shell
 podman run --rm -v "${PWD}":/workdir mikefarah/yq [command] [flags] [expression ]FILE...
-```
+```plaintext
 
 **Pipe in via STDIN:**
 
@@ -145,21 +145,21 @@ You'll need to pass the `-i\--interactive` flag to docker:
 
 ```sh
 docker run -i --rm mikefarah/yq '.this.thing' < myfile.yml
-```
+```plaintext
 
 ```sh
 podman run -i --rm mikefarah/yq '.this.thing' < myfile.yml
-```
+```plaintext
 
 **Run commands interactively:**
 
 ```sh
 docker run --rm -it -v "${PWD}":/workdir --entrypoint sh mikefarah/yq
-```
+```plaintext
 
 ```sh
 podman run --rm -it -v "${PWD}":/workdir --entrypoint sh mikefarah/yq
-```
+```plaintext
 
 It can be useful to have a bash function to avoid typing the whole docker command:
 
@@ -167,13 +167,13 @@ It can be useful to have a bash function to avoid typing the whole docker comman
 yq() {
   docker run --rm -i -v "${PWD}":/workdir mikefarah/yq "$@"
 }
-```
+```plaintext
 
 ```shell
 yq() {
   podman run --rm -i -v "${PWD}":/workdir mikefarah/yq "$@"
 }
-```
+```plaintext
 
 **Running as root:**
 
@@ -181,11 +181,11 @@ yq() {
 
 ```sh
 docker run --user="root" -it --entrypoint sh mikefarah/yq
-```
+```plaintext
 
 ```sh
 podman run --user="root" -it --entrypoint sh mikefarah/yq
-```
+```plaintext
 
 Or, in your Dockerfile:
 
@@ -195,7 +195,7 @@ FROM mikefarah/yq
 USER root
 RUN apk add --no-cache bash
 USER yq
-```
+```plaintext
 
 **Missing timezone data**
 
@@ -207,7 +207,7 @@ FROM mikefarah/yq
 USER root
 RUN apk add --no-cache tzdata
 USER yq
-```
+```plaintext
 
 **Podman with SELinux**
 
@@ -215,7 +215,7 @@ If you are using podman with SELinux, you will need to set the shared volume fla
 
 ```sh
 -v "${PWD}":/workdir:z
-```
+```plaintext
 
 #### GitHub Action
 
@@ -231,7 +231,7 @@ If you are using podman with SELinux, you will need to set the shared volume fla
       cmd: yq '.all.children.["${{ matrix.ip_address }}"].username' ops/inventories/production.yml
   - name: Reuse a variable obtained in another step
     run: echo ${{ steps.get_username.outputs.result }}
-```
+```plaintext
 
 See [https://mikefarah.gitbook.io/yq/usage/github-action](https://mikefarah.gitbook.io/yq/usage/github-action) for more.
 
@@ -239,4 +239,4 @@ See [https://mikefarah.gitbook.io/yq/usage/github-action](https://mikefarah.gitb
 
 ```sh
 go install github.com/mikefarah/yq/v4@latest
-```
+```plaintext

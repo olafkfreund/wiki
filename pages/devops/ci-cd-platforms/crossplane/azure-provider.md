@@ -13,7 +13,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-azure:v0.32.0
 EOF
-```
+```plaintext
 
 The Crossplane `Provider` Custom Resource Definitions tells Kubernetes how to connect to the provider.
 
@@ -25,7 +25,7 @@ TipIt may take up to five minutes for the provider to list `HEALTHY` as `True`.
 kubectl get providers
 NAME                     INSTALLED   HEALTHY   PACKAGE                                          AGE
 upbound-provider-azure   True        True      xpkg.upbound.io/upbound/provider-azure:v0.32.0   22m
-```
+```plaintext
 
 A provider installs their own Kubernetes _Custom Resource Definitions_ (CRDs). These CRDs allow you to create Azure resources directly inside Kubernetes.
 
@@ -48,7 +48,7 @@ Log in to the Azure command-line.
 
 ```command
 az login
-```
+```plaintext
 
 #### Create an Azure service principal  <a href="#create-an-azure-service-principal" id="create-an-azure-service-principal"></a>
 
@@ -61,7 +61,7 @@ az ad sp create-for-rbac \
 --sdk-auth \
 --role Owner \
 --scopes /subscriptions/$$<subscription_id>$$
-```
+```plaintext
 
 Save your Azure JSON output as `azure-credentials.json`.
 
@@ -76,7 +76,7 @@ kubectl create secret \
 generic azure-secret \
 -n crossplane-system \
 --from-file=creds=./azure-credentials.json
-```
+```plaintext
 
 View the secret with `kubectl describe secret`
 
@@ -92,7 +92,7 @@ Type:  Opaque
 Data
 ====
 creds:  629 bytes
-```
+```plaintext
 
 ### Create a ProviderConfig  <a href="#create-a-providerconfig" id="create-a-providerconfig"></a>
 
@@ -114,7 +114,7 @@ spec:
       name: azure-secret
       key: creds
 EOF
-```
+```plaintext
 
 This attaches the Azure credentials, saved as a Kubernetes secret, as a `secretRef` .
 

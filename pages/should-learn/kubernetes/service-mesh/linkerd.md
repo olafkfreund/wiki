@@ -10,7 +10,7 @@ You can validate your setup by running:
 
 ```bash
 kubectl version --short
-```
+```plaintext
 
 You should see output with both a `Client Version` and `Server Version` component.
 
@@ -26,7 +26,7 @@ To install the CLI manually, run:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/install | sh
-```
+```plaintext
 
 Be sure to follow the instructions to add it to your path.
 
@@ -36,7 +36,7 @@ Once installed, verify the CLI is running correctly with:
 
 ```bash
 linkerd version
-```
+```plaintext
 
 You should see the CLI version, and also `Server version: unavailable`. This is because you haven’t installed the control plane on your cluster. Don’t worry—we’ll fix that soon enough.
 
@@ -46,7 +46,7 @@ Kubernetes clusters can be configured in many different ways. Before we can inst
 
 ```bash
 linkerd check --pre
-```
+```plaintext
 
 If there are any checks that do not pass, make sure to follow the provided links and fix those issues before proceeding.
 
@@ -58,7 +58,7 @@ The first step is to install the control plane core. To do this, run:
 
 ```bash
 linkerd install | kubectl apply -f -
-```
+```plaintext
 
 The `linkerd install` command generates a Kubernetes manifest with all the core control plane resources. (Feel free to inspect the output.) Piping this manifest into `kubectl apply` then instructs Kubernetes to add those resources to your cluster.
 
@@ -70,7 +70,7 @@ Now let’s wait for the control plane to finish installing. Depending on the sp
 
 ```bash
 linkerd check
-```
+```plaintext
 
 Next, we’ll install some _extensions_. Extensions add non-critical but often useful functionality to Linkerd. For this guide, we will need:
 
@@ -81,20 +81,20 @@ For this guide, you can install either or both. To install the viz extension, ru
 
 ```bash
 linkerd viz install | kubectl apply -f - # install the on-cluster metrics stack
-```
+```plaintext
 
 To install the buoyant-cloud extension, run:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSfL https://buoyant.cloud/install | sh # get the installer
 linkerd buoyant install | kubectl apply -f - # connect to the hosted metrics stack
-```
+```plaintext
 
 Once you’ve installed your extensions, let’s validate everything one last time:
 
 ```bash
 linkerd check
-```
+```plaintext
 
 Assuming everything is green, we’re ready for the next step!
 
@@ -104,7 +104,7 @@ With the control plane and extensions installed and running, we’re now ready t
 
 ```bash
 linkerd viz dashboard &
-```
+```plaintext
 
 You should see a screen like this:
 
@@ -114,7 +114,7 @@ If you installed the buoyant-cloud extension, run:
 
 ```bash
 linkerd buoyant dashboard &
-```
+```plaintext
 
 You should see a screen lke this:
 
@@ -130,13 +130,13 @@ Install _emojivoto_ into the `emojivoto` namespace by running:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/emojivoto.yml | kubectl apply -f -
-```
+```plaintext
 
 Before we mesh it, let’s take a look at the app. If you’re using [Docker Desktop](https://www.docker.com/products/docker-desktop) at this point you can visit [http://localhost](http://localhost/) directly. If you’re not using Docker Desktop, we’ll need to forward the `web-svc` service. To forward `web-svc` locally to port 8080, you can run:
 
 ```bash
 kubectl -n emojivoto port-forward svc/web-svc 8080:80
-```
+```plaintext
 
 Now visit [http://localhost:8080](http://localhost:8080/). Voila! The emojivoto app in all its glory.
 
@@ -148,7 +148,7 @@ Next, let’s add Linkerd to _emojivoto_ by running:
 kubectl get -n emojivoto deploy -o yaml \
   | linkerd inject - \
   | kubectl apply -f -
-```
+```plaintext
 
 This command retrieves all of the deployments running in the `emojivoto` namespace, runs the manifest through `linkerd inject`, and then reapplies it to the cluster. The `linkerd inject` command adds annotations to the pod spec instructing Linkerd to “inject” the proxy as a container to the pod spec.
 
@@ -158,4 +158,4 @@ Congratulations! You’ve now added Linkerd to existing services! Just as with t
 
 ```bash
 linkerd -n emojivoto check --proxy
-```
+```plaintext

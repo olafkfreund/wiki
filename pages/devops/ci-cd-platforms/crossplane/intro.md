@@ -35,9 +35,9 @@ Alternatively, you can also use a makefile that I have written. This will instal
 
 Let us now install the AWS Provider. This will Install all the CRD’s ( Custom Resources Definitions ) required to create resources on the cloud. Ex: **rdsinstances.database.aws.crossplane.io**, **ec2.aws.crossplane.io/v1alpha1,** etc.
 
-```
+```plaintext
 kubectl apply -f aws-provider.yaml 
-```
+```plaintext
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:700/1*C_gpn4Fd9UtFLYbQDm3TXg.png" alt="" height="147" width="700"><figcaption><p>Provider Package</p></figcaption></figure>
 

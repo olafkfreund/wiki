@@ -9,12 +9,12 @@ description: >-
 ```powershell
 Get-AzVM -Name TestVM -ResourceGroupName TestGroup |
   Select-Object -Property *
-```
+```plaintext
 
 ```powershell
 Get-AzVM -Name TestVM -ResourceGroupName TestGroup |
   Select-Object -Property Name, VmId, ProvisioningState
-```
+```plaintext
 
 Select nested properties:
 
@@ -22,7 +22,7 @@ Select nested properties:
 ```powershell
 Get-AzVM -ResourceGroupName TestGroup |
   Select-Object -Property Name, @{label='OSType'; expression={$_.StorageProfile.OSDisk.OSType}}
-```
+```plaintext
 {% endcode %}
 
 Filter results:
@@ -31,4 +31,4 @@ Filter results:
 Get-AzVM -ResourceGroupName TestGroup |
   Where-Object {$_.StorageProfile.OsDisk.OsType -eq 'Linux'} |
   Select-Object -Property Name, VmID, ProvisioningState
-```
+```plaintext

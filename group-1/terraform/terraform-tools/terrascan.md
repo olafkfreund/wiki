@@ -15,25 +15,25 @@ tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz
 install terrascan /usr/local/bin && rm terrascan
 $ alias terrascan="`pwd`/terrascan
 terrascan
-```
+```plaintext
 {% endcode %}
 
 Windows Install:
 
-```
+```plaintext
 tar -zxf terrascan_<version number>_Windows_x86_64.tar.gz
-```
+```plaintext
 
 Docker use:
 
 ```bash
 $ docker run --rm tenable/terrascan version
-```
+```plaintext
 
 Use terrascan with docker from command line:
 
 {% code overflow="wrap" lineNumbers="true" %}
 ```bash
 alias terrascan="docker run --rm -it -v "$(pwd):/iac" -w /iac tenable/terrascan"
-```
+```plaintext
 {% endcode %}

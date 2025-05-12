@@ -20,7 +20,7 @@ terraform {
     path = "relative/path/to/terraform.tfstate"
   }
 }
-```
+```plaintext
 
 In this example, the `path` argument tells Terraform where to store the state file. The path is relative to the root module directory. If the path is not specified, Terraform will use the default location, which is `terraform.tfstate` in the root module directory.
 
@@ -38,7 +38,7 @@ terraform {
     region = "us-east-1"
   }
 }
-```
+```plaintext
 
 ## Key Points of Using Backends <a href="#82a8" id="82a8"></a>
 
@@ -63,7 +63,7 @@ terraform {
     dynamodb_table = "mytable"
   }
 }
-```
+```plaintext
 
 In this example, Terraform uses an S3 bucket in the `us-west-2` region to store the state file. The `mybucket` and `path/to/my/key` values should be replaced with your actual bucket name and key. The `dynamodb_table` option is used for state locking and consistency checking, which prevents others from running Terraform at the same time.
 
@@ -78,7 +78,7 @@ terraform {
     key                  = "prod.terraform.tfstate"
   }
 }
-```
+```plaintext
 
 In this example, Terraform uses an Azure Storage Account Blob Container to store the state file. Replace `"StorageAccount-ResourceGroup"`, `"abcd1234"`, `"tfstate"`, and `"prod.terraform.tfstate"` with your actual resource group name, storage account name, storage container name, and key respectively.
 

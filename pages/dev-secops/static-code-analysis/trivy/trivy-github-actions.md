@@ -30,7 +30,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
-```
+```plaintext
 
 #### Scan CI Pipeline (w/ Trivy Config)
 
@@ -55,7 +55,7 @@ jobs:
         scan-type: 'fs'
         scan-ref: '.'
         trivy-config: trivy.yaml
-```
+```plaintext
 
 In this case `trivy.yaml` is a YAML configuration that is checked in as part of the repo. Detailed information is available on the Trivy website but an example is as follows:
 
@@ -63,7 +63,7 @@ In this case `trivy.yaml` is a YAML configuration that is checked in as part of 
 format: json
 exit-code: 1
 severity: CRITICAL
-```
+```plaintext
 
 It is possible to define all options in the `trivy.yaml` file. Specifying individual options via the action are left for backward compatibility purposes. Defining the following is required as they cannot be defined with the config file:
 
@@ -107,7 +107,7 @@ jobs:
       with:
         input: /github/workspace/vuln-image.tar
         severity: 'CRITICAL,HIGH'
-```
+```plaintext
 
 #### Using Trivy with GitHub Code Scanning
 
@@ -143,7 +143,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
-```
+```plaintext
 
 You can find a more in-depth example here: [https://github.com/aquasecurity/trivy-sarif-demo/blob/master/.github/workflows/scan.yml](https://github.com/aquasecurity/trivy-sarif-demo/blob/master/.github/workflows/scan.yml)
 
@@ -180,7 +180,7 @@ jobs:
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
-```
+```plaintext
 
 See this for more details: [https://docs.github.com/en/actions/learn-github-actions/expressions#always](https://docs.github.com/en/actions/learn-github-actions/expressions#always)
 
@@ -218,7 +218,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
-```
+```plaintext
 
 #### Using Trivy to scan your rootfs directories
 
@@ -255,7 +255,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
-```
+```plaintext
 
 #### Using Trivy to scan Infrastructure as Code
 
@@ -263,7 +263,7 @@ It's also possible to scan your IaC repos with Trivy's built-in repo scan. This 
 
 If you have [GitHub code scanning](https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/about-code-scanning) available you can use Trivy as a scanning tool as follows:
 
-```
+```plaintext
 name: build
 on:
   push:
@@ -293,7 +293,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
-```
+```plaintext
 
 #### Using Trivy to generate SBOM
 
@@ -331,7 +331,7 @@ jobs:
           output: 'dependency-results.sbom.json'
           image-ref: '.'
           github-pat: ${{ secrets.GITHUB_TOKEN }} # or ${{ secrets.github_pat_name }} if you're using a PAT
-```
+```plaintext
 
 #### Using Trivy to scan your private registry
 
@@ -370,7 +370,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
-```
+```plaintext
 
 **AWS ECR (Elastic Container Registry)**
 
@@ -406,7 +406,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
-```
+```plaintext
 
 **GCR (Google Container Registry)**
 
@@ -442,7 +442,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
-```
+```plaintext
 
 **Self-Hosted**
 
@@ -477,7 +477,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
-```
+```plaintext
 
 ### Customizing
 

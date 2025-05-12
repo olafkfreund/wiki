@@ -11,7 +11,7 @@ curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.
 sudo dnf makecache
 sudo dnf install powershell
 pwsh
-```
+```plaintext
 {% endcode %}
 
 Running PowerShell from a container:
@@ -29,5 +29,5 @@ podman run \
  --volume /:/var/host \
  mcr.microsoft.com/powershell \
  /usr/bin/pwsh -WorkingDirectory $(pwd)as
-```
+```plaintext
 {% endcode %}

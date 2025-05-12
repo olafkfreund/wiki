@@ -18,7 +18,7 @@ Using Powershell:
 New-AzResourceGroup `
   -Name templateSpecRG `
   -Location westus2
-```
+```plaintext
 
 2. Create the template spec in that resource group. Give the new template spec the name _storageSpec_.
 
@@ -29,7 +29,7 @@ New-AzTemplateSpec `
   -ResourceGroupName templateSpecRG `
   -Location westus2 `
   -TemplateFile "C:\templates\main. Bicep"
-```
+```plaintext
 
 Using Bicep:
 
@@ -108,7 +108,7 @@ resource createTemplateSpecVersion 'Microsoft.Resources/templateSpecs/versions@2
     }
   }
 }
-```
+```plaintext
 
 2. Use Azure PowerShell or Azure CLI to create a new resource group.
 
@@ -116,13 +116,13 @@ resource createTemplateSpecVersion 'Microsoft.Resources/templateSpecs/versions@2
 New-AzResourceGroup `
   -Name templateSpecRG `
   -Location westus2
-```
+```plaintext
 
 ```powershell
 az group create \
   --name templateSpecRG \
   --location westus2
-```
+```plaintext
 
 3. Create the template spec in that resource group. The template spec name _storageSpec_ and version number `1.0` are parameters in the Bicep file.
 
@@ -130,13 +130,13 @@ az group create \
 New-AzResourceGroupDeployment `
   -ResourceGroupName templateSpecRG `
   -TemplateFile "C:\templates\main.bicep"
-```
+```plaintext
 
 ```powershell
 az deployment group create \
   --resource-group templateSpecRG \
   --template-file "C:\templates\main.bicep"
-```
+```plaintext
 
 ### Deploy template spec <a href="#deploy-template-spec" id="deploy-template-spec"></a>
 
@@ -150,14 +150,14 @@ Use the template spec to deploy a storage account. This example uses the resourc
 New-AzResourceGroup `
   -Name storageRG `
   -Location westus2
-```
+```plaintext
 
 2. Get the resource ID of the template spec.
 
 {% code overflow="wrap" lineNumbers="true" %}
 ```powershell
 $id = (Get-AzTemplateSpec -ResourceGroupName templateSpecRG -Name storageSpec -Version "1.0").Versions.Id
-```
+```plaintext
 {% endcode %}
 
 3. Deploy the template spec.
@@ -166,7 +166,7 @@ $id = (Get-AzTemplateSpec -ResourceGroupName templateSpecRG -Name storageSpec -V
 New-AzResourceGroupDeployment `
   -TemplateSpecId $id `
   -ResourceGroupName storageRG
-```
+```plaintext
 
 4. You provide parameters exactly as you would for a Bicep file deployment. Redeploy the template spec with a parameter for the storage account type.
 
@@ -176,7 +176,7 @@ New-AzResourceGroupDeployment `
   -TemplateSpecId $id `
   -ResourceGroupName storageRG `
   -storageAccountType Standard_GRS
-```
+```plaintext
 {% endcode %}
 
 Using Bicep:
@@ -189,17 +189,17 @@ To deploy a template spec using a Bicep file, use a module. The module links to 
 module deployTemplateSpec 'ts:<subscriptionId>/templateSpecRG/storageSpec:1.0' = {
   name: 'deployVersion1'
 }
-```
+```plaintext
 
 2. Replace `<subscriptionId>` in the module. Use Azure PowerShell or Azure CLI to get your subscription ID.
 
 ```powershell
 (Get-AzContext).Subscription.Id
-```
+```plaintext
 
 ```powershell
 az account show --query "id" --output tsv
-```
+```plaintext
 
 3. Use Azure PowerShell or Azure CLI to create a new resource group for the storage account.
 
@@ -207,13 +207,13 @@ az account show --query "id" --output tsv
 New-AzResourceGroup `
   -Name storageRG `
   -Location westus2
-```
+```plaintext
 
 ```powershell
 az group create \
   --name storageRG \
   --location westus2
-```
+```plaintext
 
 4. Deploy the template spec with Azure PowerShell or Azure CLI.
 
@@ -221,13 +221,13 @@ az group create \
 New-AzResourceGroupDeployment `
   -ResourceGroupName storageRG `
   -TemplateFile "C:\templates\storage.bicep"
-```
+```plaintext
 
 ```powershell
 az deployment group create \
   --resource-group storageRG \
   --template-file "C:\templates\storage.bicep"
-```
+```plaintext
 
 5. You can add a parameter and redeploy the template spec with a different storage account type. Copy the sample and replace your _storage.bicep_ file. Then, redeploy the template spec deployment.
 
@@ -238,7 +238,7 @@ module deployTemplateSpec 'ts:<subscriptionId>/templateSpecRG/storageSpec:1.0' =
     storageAccountType: 'Standard_GRS'
   }
 }
-```
+```plaintext
 
 ### Update template spec version <a href="#update-template-spec-version" id="update-template-spec-version"></a>
 
@@ -253,14 +253,14 @@ New-AzTemplateSpec `
   -ResourceGroupName templateSpecRG `
   -Location westus2 `
   -TemplateFile "C:\templates\main.bicep"
-```
+```plaintext
 
 2. To deploy the new version, get the resource ID for the `2.0` version.
 
 {% code overflow="wrap" %}
 ```powershell
 $id = (Get-AzTemplateSpec -ResourceGroupName templateSpecRG -Name storageSpec -Version "2.0").Versions.Id
-```
+```plaintext
 {% endcode %}
 
 3. Deploy the new version and use the `storageNamePrefix` to specify a prefix for the storage account name.
@@ -270,5 +270,5 @@ New-AzResourceGroupDeployment `
   -TemplateSpecId $id `
   -ResourceGroupName storageRG `
   -storageNamePrefix "demo"
-```
+```plaintext
 

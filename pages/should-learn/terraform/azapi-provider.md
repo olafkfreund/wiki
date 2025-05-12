@@ -31,7 +31,7 @@ provider "azapi" {
 provider "azurerm" {
   features {}
 }
-```
+```plaintext
 {% endcode %}
 
 {% code overflow="wrap" lineNumbers="true" %}
@@ -61,9 +61,9 @@ resource "azapi_resource" "qs101-lab" {
     }
   })
 }
-```
+```plaintext
 {% endcode %}
 
 ```bash
 terraform init -upgrade
-```
+```plaintext

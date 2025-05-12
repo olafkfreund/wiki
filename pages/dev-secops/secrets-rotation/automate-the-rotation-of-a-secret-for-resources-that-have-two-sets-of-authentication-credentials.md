@@ -82,13 +82,13 @@ Change and deploy
 	  }
 	]
   }
-```
+```plaintext
 
 You'll now have a key vault and two storage accounts. You can verify this setup in the Azure CLI or Azure PowerShell by running this command:
 
 ```bash
 az resource list -o table -g vaultrotation
-```
+```plaintext
 
 The result will look something like this output:
 
@@ -100,7 +100,7 @@ Name                     ResourceGroup         Location    Type                 
 vaultrotation-kv         vaultrotation      westus      Microsoft.KeyVault/vaults
 vaultrotationstorage     vaultrotation      westus      Microsoft.Storage/storageAccounts
 vaultrotationstorage2    vaultrotation      westus      Microsoft.Storage/storageAccounts
-```
+```plaintext
 
 ### Create and deploy the key rotation function <a href="#create-and-deploy-the-key-rotation-function" id="create-and-deploy-the-key-rotation-function"></a>
 
@@ -381,32 +381,32 @@ The function app rotation function requires the following components and configu
         }
     ]
 }
-```
+```plaintext
 
 #### Add the storage account access keys to Key Vault secrets <a href="#add-the-storage-account-access-keys-to-key-vault-secrets" id="add-the-storage-account-access-keys-to-key-vault-secrets"></a>
 
 ```bash
 az keyvault set-policy --upn <email-address-of-user> --name vaultrotation-kv --secret-permissions set delete get list
-```
+```plaintext
 
 You can now create a new secret with a storage account access key as its value. You'll also need the storage account resource ID, secret validity period, and key ID to add to the secret so the rotation function can regenerate the key in the storage account.
 
 ```bash
 az storage account show -n vaultrotationstorage
-```
+```plaintext
 
 List the storage account access keys so you can get the key values:
 
 ```bash
 az storage account keys list -n vaultrotationstorage
-```
+```plaintext
 
 Add secret to key vault with validity period for 60 days, storage account resource ID, and for demonstration purpose to trigger rotation immediately set expiration date to tomorrow. Run this command, using your retrieved values for `key1Value` and `storageAccountResourceId`:b
 
 ```bash
 $tomorrowDate = (get-date).AddDays(+1).ToString("yyyy-MM-ddTHH:mm:ssZ")
 az keyvault secret set --name storageKey --vault-name vaultrotation-kv --value <key1Value> --tags "CredentialId=key1" "ProviderAddress=<storageAccountResourceId>" "ValidityPeriodDays=60" --expires $tomorrowDate
-```
+```plaintext
 
 This secret will trigger `SecretNearExpiry` event within several minutes. This event will in turn trigger the function to rotate the secret with expiration set to 60 days. In that configuration, 'SecretNearExpiry' event would be triggered every 30 days (30 days before expiry) and rotation function will alternate rotation between key1 and key2.
 
@@ -416,7 +416,7 @@ Use this command to get the secret information:
 
 ```azurecli
 az keyvault secret show --vault-name vaultrotation-kv --name storageKey
-```
+```plaintext
 
 Notice that `CredentialId` is updated to the alternate `keyName` and that `value` is regenerated:
 
@@ -426,7 +426,7 @@ Retrieve the access keys to compare the values:
 
 ```bash
 az storage account keys list -n vaultrotationstorage 
-```
+```plaintext
 
 Notice that `value` of the key is same as secret in key vault:
 

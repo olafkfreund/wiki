@@ -4,7 +4,7 @@
 
 ### Including users and groups
 
-```
+```plaintext
   1#cloud-config
   2# Add groups to the system
   3# The following example adds the 'admingroup' group with members 'root' and 'sys'
@@ -154,11 +154,11 @@
 147#     lock_passwd: True
 148#     gecos: Ubuntu
 149#     groups: [adm, audio, cdrom, dialout, floppy, video, plugdev, dip, netdev]
-```
+```plaintext
 
 ### Writing out arbitrary files
 
-```
+```plaintext
  1#cloud-config
  2# vim: syntax=yaml
  3#
@@ -191,11 +191,11 @@
 30    H4sIAIDb/U8C/1NW1E/KzNMvzuBKTc7IV8hIzcnJVyjPL8pJ4QIA6N+MVxsAAAA=
 31  path: /usr/bin/hello
 32  permissions: '0755'
-```
+```plaintext
 
 ### Adding a yum repository
 
-```
+```plaintext
  1#cloud-config
  2# vim: syntax=yaml
  3#
@@ -216,11 +216,11 @@
 18    gpgcheck: true
 19    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL
 20    name: Extra Packages for Enterprise Linux 5 - Testing
-```
+```plaintext
 
 ### Configure an instance’s trusted CA certificates
 
-```
+```plaintext
  1#cloud-config
  2#
  3# This is an example file to configure an instance's trusted CA certificates
@@ -252,11 +252,11 @@
 29   -----BEGIN CERTIFICATE-----
 30   YOUR-ORGS-TRUSTED-CA-CERT-HERE
 31   -----END CERTIFICATE-----
-```
+```plaintext
 
 ### Install and run [chef](http://www.chef.io/chef/) recipes
 
-```
+```plaintext
   1#cloud-config
   2#
   3# This is an example file to automatically install chef-client and run a
@@ -365,11 +365,11 @@
 106# Capture all subprocess output into a logfile
 107# Useful for troubleshooting cloud-init issues
 108output: {all: '| tee -a /var/log/cloud-init-output.log'}
-```
+```plaintext
 
 ### Install and run _ansible-pull_
 
-```
+```plaintext
  1#cloud-config
  2package_update: true
  3package_upgrade: true
@@ -384,11 +384,11 @@
 12  pull:
 13    url: "https://github.com/holmanb/vmboot.git"
 14    playbook_name: ubuntu.yml
-```
+```plaintext
 
 ### Configure instance to be managed by Ansible
 
-```
+```plaintext
  1#cloud-config
  2#
  3# A common use-case for cloud-init is to bootstrap user and ssh
@@ -453,11 +453,11 @@
 62# 6HWfDpX4HgoM8AAAALaG9sbWFuYkBhcmM=
 63# -----END OPENSSH PRIVATE KEY-----
 64#
-```
+```plaintext
 
 ### Configure instance to be an Ansible controller
 
-```
+```plaintext
   1#cloud-config
   2#
   3# Demonstrate setting up an ansible controller host on boot.
@@ -598,11 +598,11 @@
 138      azExckpZSWU3K2U5QjBsaGt1MEFGd0d5cWxXUW1TL01oSXBuakhJazV0UDRoZUhHU216S1FXSkRi
 139      VHNrTldkNmFxMUc3CjZIV2ZEcFg0SGdvTThBQUFBTGFHOXNiV0Z1WWtCaGNtTT0KLS0tLS1FTkQg
 140      T1BFTlNTSCBQUklWQVRFIEtFWS0tLS0tCg==
-```
+```plaintext
 
 ### Add primary apt repositories
 
-```
+```plaintext
  1#cloud-config
  2
  3# Add primary apt repositories
@@ -655,11 +655,11 @@
 50  primary:
 51    - arches: [default]
 52      search_dns: True
-```
+```plaintext
 
 ### Run commands on first boot
 
-```
+```plaintext
  1#cloud-config
  2
  3# boot commands
@@ -675,9 +675,9 @@
 13bootcmd:
 14  - echo 192.168.1.130 us.archive.ubuntu.com >> /etc/hosts
 15  - [ cloud-init-per, once, mymkfs, mkfs, /dev/vdb ]
-```
+```plaintext
 
-```
+```plaintext
  1#cloud-config
  2
  3# run commands
@@ -702,11 +702,11 @@
 22 # Early boot environments can race systemd-tmpfiles-clean LP: #1707222.
 23 - mkdir /run/mydir
 24 - [ wget, "http://slashdot.org", -O, /run/mydir/index.html ]
-```
+```plaintext
 
 ### Install arbitrary packages
 
-```
+```plaintext
  1#cloud-config
  2
  3# Install additional packages on first boot
@@ -722,11 +722,11 @@
 13 - pwgen
 14 - pastebinit
 15 - [libpython2.7, 2.7.3-0ubuntu3.1]
-```
+```plaintext
 
 ### Update apt database on first boot
 
-```
+```plaintext
 1#cloud-config
 2# Update apt database on first boot (run 'apt-get update').
 3# Note, if packages are given, or package_upgrade is true, then
@@ -734,22 +734,22 @@
 5#
 6# Default: false
 7package_update: true
-```
+```plaintext
 
 ### Run apt or yum upgrade
 
-```
+```plaintext
 1#cloud-config
 2
 3# Upgrade the instance on first boot
 4#
 5# Default: false
 6package_upgrade: true
-```
+```plaintext
 
 ### Adjust mount points mounted
 
-```
+```plaintext
  1#cloud-config
  2
  3# set up mount points
@@ -796,11 +796,11 @@
 44  filename: /swap.img
 45  size: "auto" # or size in bytes
 46  maxsize: 10485760   # size in bytes
-```
+```plaintext
 
 ### `Configure instance's SSH keys`
 
-```
+```plaintext
  1#cloud-config
  2
  3# add each entry to ~/.ssh/authorized_keys for the configured user or the
@@ -855,11 +855,11 @@
 52# emit_keys_to_console to false suppresses this output.
 53ssh:
 54  emit_keys_to_console: false
-```
+```plaintext
 
 ### Additional apt configuration and repositories
 
-```
+```plaintext
   1#cloud-config
   2# apt_pipelining (configure Acquire::http::Pipeline-Depth)
   3# Default: disables HTTP pipelining. Certain web servers, such
@@ -1207,11 +1207,11 @@
 345        uBJKQOZm5iltJp15cgyIkBkGe8Mx18VFyVglAZey
 346        =Y2oI
 347        -----END PGP PUBLIC KEY BLOCK-----
-```
+```plaintext
 
 ### Disk setup
 
-```
+```plaintext
   1#cloud-config
   2# Cloud-init supports the creation of simple partition tables and filesystems
   3# on devices.
@@ -1479,11 +1479,11 @@
 265#
 266# Behavior Caveat: The default behavior is to _check_ if the filesystem exists.
 267#   If a filesystem matches the specification, then the operation is a no-op.
-```
+```plaintext
 
 ### Configure data sources
 
-```
+```plaintext
  1#cloud-config
  2
  3# Documentation on data sources configuration options
@@ -1552,11 +1552,11 @@
 66    base64_keys: []
 67    # a boolean indicating that all keys not in 'no_base64_decode' are encoded
 68    base64_all: False
-```
+```plaintext
 
 ### Create partitions and filesystems
 
-```
+```plaintext
   1#cloud-config
   2# Cloud-init supports the creation of simple partition tables and filesystems
   3# on devices.
@@ -1824,6 +1824,6 @@
 265#
 266# Behavior Caveat: The default behavior is to _check_ if the filesystem exists.
 267
-```
+```plaintext
 
 \

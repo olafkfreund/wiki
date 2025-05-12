@@ -83,7 +83,7 @@ net.ipv4.udp_wmem_min = 16384
 net.ipv4.tcp_max_tw_buckets = 1440000
 net.ipv4.tcp_tw_recycle = 1
 net.ipv4.tcp_tw_reuse = 1
-```
+```plaintext
 
 **Use **_**TuneD**_** to configure kernel settings**
 
@@ -121,4 +121,4 @@ kernel.numa_balancing=0
 # kernel.sched_migration_cost_ns = 500000
 # kernel.sched_min_granularity_ns = 15000000
 # kernel.sched_wakeup_granularity_ns = 2000000
-```
+```plaintext

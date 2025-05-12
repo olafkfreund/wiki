@@ -156,12 +156,12 @@ Here is the list.
 	"WinGetVersion" : "1.6.1573-preview"
 }
 
-```
-````
+```plaintext
+````plaintext
 {% endcode %}
 
 to install from the list, use the command:
 
 ```powershell
 winget import -i myinstall.json
-```
+```plaintext

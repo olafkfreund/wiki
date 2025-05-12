@@ -34,15 +34,22 @@ fi
 
 echo "📚 Setting up documentation with HonKit..."
 
+# Run the fix scripts first
+echo "🔧 Fixing code blocks in documentation files..."
+./scripts/fix-code-blocks.js
+
+echo "🔧 Adding support for additional programming languages..."
+./scripts/fix-highlighting.js
+
 # Install the required plugins using our plugin installer script
-echo "Installing required plugins..."
+echo "📦 Installing required plugins..."
 ./scripts/install-honkit-plugins.sh
 
 # Build the book
-echo "Building documentation..."
+echo "🔨 Building documentation..."
 honkit build
 
 # Serve the book for preview
-echo "Starting local server at http://localhost:4000"
+echo "🚀 Starting local server at http://localhost:4000"
 echo "Press Ctrl+C to stop the server"
 honkit serve

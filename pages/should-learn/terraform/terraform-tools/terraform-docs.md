@@ -12,25 +12,25 @@ Linux:
 
 ```bash
 brew install terraform-docs/tap/terraform-docs
-```
+```plaintext
 
 Windows:
 
 ```powershell
 scoop bucket add terraform-docs https://github.com/terraform-docs/scoop-bucket
 scoop install terraform-docs
-```
+```plaintext
 
 ```powershell
 choco install terraform-docs
-```
+```plaintext
 
 Docker/Podman
 
 {% code overflow="wrap" lineNumbers="true" %}
 ```bash
 /docker run --rm --volume "$(pwd):/terraform-docs" -u $(id -u) quay.io/terraform-docs/terraform-docs:0.16.0 markdown /terraform-docs
-```
+```plaintext
 {% endcode %}
 
 GitHub Actions:
@@ -56,7 +56,7 @@ jobs:
         output-file: README.md
         output-method: inject
         git-push: "true"
-```
+```plaintext
 {% endcode %}
 
 #### pre-commit hook
@@ -71,7 +71,7 @@ repos:
     hooks:
       - id: terraform-docs-go
         args: ["markdown", "table", "--output-file", "README.md", "./mymodule/path"]
-```
+```plaintext
 {% endcode %}
 
 ### Configuration
@@ -133,5 +133,5 @@ settings:
   required: true
   sensitive: true
   type: trueaml
-```
+```plaintext
 {% endcode %}

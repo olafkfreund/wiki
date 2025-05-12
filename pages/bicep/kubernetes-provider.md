@@ -17,7 +17,7 @@ This preview feature can be enabled by configuring the [bicepconfig.json](https:
     "extensibility": true
   }
 }
-```
+```plaintext
 
 The following sample imports the Kubernetes provider:
 
@@ -29,7 +29,7 @@ import 'kubernetes@1.0.0' with {
   namespace: 'default'
   kubeConfig: kubeConfig
 } as k8s
-```
+```plaintext
 
 Take this example:
 
@@ -95,7 +95,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
 }
 
 output controlPlaneFQDN string = aks.properties.fqdn
-```
+```plaintext
 {% endcode %}
 
 ### Add the application definition: <a href="#add-the-application-definition" id="add-the-application-definition"></a>
@@ -188,14 +188,14 @@ spec:
   - port: 80
   selector:
     app: azure-vote-front
-```
+```plaintext
 
 2. Open azure-vote.bicep and add the following line at the end of the file to output the load balancer public IP:
 
 {% code overflow="wrap" %}
 ```bicep
 output frontendIp string = coreService_azureVoteFront.status.loadBalancer.ingress[0].ip
-```
+```plaintext
 {% endcode %}
 
 3. Before the `output` statement in `main.bicep`, add the following Bicep to reference the newly created `azure-vote.bicep` module:
@@ -207,13 +207,13 @@ module kubernetes './azure-vote.bicep' = {
     kubeConfig: aks.listClusterAdminCredential().kubeconfigs[0].value
   }
 }
-```
+```plaintext
 
 4. At the bottom of `main.bicep`, add the following line to output the load balancer public IP:
 
 ```bicep
 output lbPublicIp string = kubernetes.outputs.frontendIpi
-```
+```plaintext
 
 ### Deploy the Bicep file <a href="#deploy-the-bicep-file" id="deploy-the-bicep-file"></a>
 
@@ -223,7 +223,7 @@ Using CLI:
 ```bash
 az group create --name myResourceGroup --location eastus
 az deployment group create --resource-group myResourceGroup --template-file main.bicep --parameters clusterName=<cluster-name> dnsPrefix=<dns-previs> linuxAdminUsername=<linux-admin-username> sshRSAPublicKey='<ssh-key>'er
-```
+```plaintext
 {% endcode %}
 
 Using Powershell:
@@ -232,5 +232,5 @@ Using Powershell:
 ```powershell
 New-AzResourceGroup -Name myResourceGroup -Location eastus
 New-AzResourceGroupDeployment -ResourceGroupName myResourceGroup -TemplateFile ./main.bicep -clusterName=<cluster-name> -dnsPrefix=<dns-prefix> -linuxAdminUsername=<linux-admin-username> -sshRSAPublicKey="<ssh-key>"
-```
+```plaintext
 {% endcode %}

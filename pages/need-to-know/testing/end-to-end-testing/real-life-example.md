@@ -16,13 +16,13 @@ An e2e-framework test is written as a normal Go test function. First, you will n
 
 ```sh
 go get sigs.k8s.io/e2e-framework@latest
-```
+```plaintext
 
 The first step in using e2e-framework is to (programmatically) setup and configure a test environment, `tenv`, that will be used to run the defined test.
 
 ```go
 tenv := env.NewWithConfig(envconf.New())
-```
+```plaintext
 
 Prior to continue, it should be understood that e2e-framework tests are broken into units called `features`. A feature can have a name, arbitrary labels (used for filtering), and lifecycle setup/teardown functions. Crucially, features can also include assessment functions which contain test logic for the feature.
 
@@ -49,7 +49,7 @@ func TestHello(t *testing.T) {
 
   tenv.Test(t, feat.Feature())
 }
-```
+```plaintext
 
 In the example above, feature `feat` has title “Hello Feature” and defines label `type=simple`. It also includes a `Setup` function that is used to initialize variable `name`. Method call `Assess` defines an assessment function, that contains a simple test logic, with title “test message”. Lastly, test environment `tenv` is used to trigger the test with method call `tenv.Test(t, feat.Feature())`.
 
@@ -66,7 +66,7 @@ go test .
         --- PASS: TestHello /Hello_Feature/test_message (0.00s)
 PASS
 ok      vladimirvivien/e2e-framework/simple  0.803s
-```
+```plaintext
 
 ## An end-to-end Kubernetes test <a href="#3b0a" id="3b0a"></a>
 
@@ -98,7 +98,7 @@ func TestMain(m *testing.M) {
  )
  os.Exit(testenv.Run(m))
 }
-```
+```plaintext
 
 The source snippet above also highlights the fact that the e2e-framework comes bundled with several pre-defined environment functions (in package `envfuncs`). This example uses environment function `envfuncs.CreateKindCluster` to create a KinD cluster during the environment setup. Conversely, environment function `envfuncs.DestroyKindCluster` is used to teardown the cluster after the test is finished.
 
@@ -183,7 +183,7 @@ func newDeployment(namespace string, name string, replicas int32) *appsv1.Deploy
  }
 
 }
-```
+```plaintext
 
 What is going on in the code above, you may be wondering? Go test function `TestDeployment` defines feature variable `feat` with a `Setup`, an `Assess`, and a `Teardown` method which creates a Deployment object, waits for the deployment replicas to be fully deployed, and deletes the deployment respectively.
 
@@ -195,7 +195,7 @@ Because the e2e-framework integrates well with KinD, all that is required to run
 
 ```shell
 go test .
-```
+```plaintext
 
 The framework will automatically create a kind cluster, create the deployment object in the cluster, run the test specified in the assessment, delete the object, and finally delete the cluster once all tests have completed.
 
@@ -205,19 +205,19 @@ The e2e-framework also exposes several flags to help you configure the execution
 
 ```shell
 go test -v . -args --features "depolyment"
-```
+```plaintext
 
 Or, you can specify to only run features with a specific label.
 
 ```shell
 go test -v . -args --labels "app=web"
-```
+```plaintext
 
 The framework also supports flags that skips tests based on provided values. For instance, the following will skip assessments with title “pod-unstable” during test execution.
 
 ```sh
 go test -v . -args --skip-assessment "pod-unstable"
-```
+```plaintext
 
 > Read more about e2e-framework supported flags [here](https://github.com/kubernetes-sigs/e2e-framework/tree/main/examples/flags).
 

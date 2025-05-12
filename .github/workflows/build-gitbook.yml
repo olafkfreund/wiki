@@ -18,10 +18,22 @@ jobs:
         with:
           node-version: '20'
           
-      - name: Install HonKit and plugins
+      - name: Install HonKit and prepare environment
         run: |
           npm install -g honkit
+          chmod +x ./scripts/fix-code-blocks.js
+          chmod +x ./scripts/fix-highlighting.js
           chmod +x ./scripts/install-honkit-plugins.sh
+          
+      - name: Fix documentation issues
+        run: |
+          # Fix code blocks formatting issues
+          ./scripts/fix-code-blocks.js
+          
+          # Add support for additional programming languages
+          ./scripts/fix-highlighting.js
+          
+          # Install required plugins
           ./scripts/install-honkit-plugins.sh
           
       - name: Build documentation

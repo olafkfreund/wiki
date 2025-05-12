@@ -17,7 +17,7 @@ Moving on, let’s define a public struct called `Client` in `client.go`
 type Client struct {
 	Clientset kubernetes.Interface
 }
-```
+```plaintext
 
 Create a method called `CreatePod` that is called upon the `Client` struct to create pods in a given `namespace` as shown in the same `client.go` file
 
@@ -33,7 +33,7 @@ func (c Client) CreatePod(pod *v1.Pod) (*v1.Pod, error) {
 	klog.Infof("Pod %s is succesfully created", pod.Name)
 	return pod, nil
 }
-```
+```plaintext
 
 The complete `client.go` file looks like this
 
@@ -63,7 +63,7 @@ func (c Client) CreatePod(pod *v1.Pod) (*v1.Pod, error) {
 	klog.Infof("Pod %s is succesfully created", pod.Name)
 	return pod, nil
 }
-```
+```plaintext
 
 Now, let us implement a `main.go` to consume the above `CreatePod` method. For this, we need to
 
@@ -81,7 +81,7 @@ clientset, err := kubernetes.NewForConfig(config)
 if err != nil {
     panic(err. Error())
 }
-```
+```plaintext
 
 * load the `Client` struct
 
@@ -89,7 +89,7 @@ if err != nil {
 /client := client.Client{
     Clientset: clientset,
 }
-```
+```plaintext
 
 * define a `pod` resource object
 
@@ -113,7 +113,7 @@ pod := &v1.Pod{
 			},
 		},
 	}
-```
+```plaintext
 
 * invoke the `CreatePod` call upon the `client` object
 
@@ -124,7 +124,7 @@ if err != nil {
   fmt.Printf("%s", err)
 }
 klog.Infof("Pod %s has been successfully created", pod. Name)
-```
+```plaintext
 
 The complete `main. Go` file looks like this
 
@@ -186,7 +186,7 @@ func main() {
 	}
 	klog.Infof("Pod %s has been successfully created", pod.Name)
 }
-```
+```plaintext
 
 When we run this `main.go` file against a running cluster, we end up creating a pod called `test-pod` in the `default` namespace.
 
@@ -243,7 +243,7 @@ func TestCreatePod(t *testing.T) {
 	}
 
 }
-```
+```plaintext
 
 Now, if we run this test file using `go test` command, we will successfully execute the `CreatePod()` method even without running this against any running K8s cluster & by bypassing the `Get()` call by mimicing it to return the same object as sent as a parameter to it. Output will be something as shown
 
@@ -252,6 +252,6 @@ go test
 I0520 00:02:03.789351   23893 pod.go:23] Pod test-pod is succesfully created
 PASS
 ok      github.com/kubernetes-sdk-for-go-101    0.681s
-```
+```plaintext
 
 You can keep this article as reference and build upon this, a test framework or a unit test package for your applications employing Kubernetes `client-go`.&#x20;

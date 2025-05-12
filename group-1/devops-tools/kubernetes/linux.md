@@ -14,5 +14,5 @@ brew install kubeless
 brew install kubespy
 brew install kubeval
 brew install k9s
-```
+```plaintext
 {% endcode %}

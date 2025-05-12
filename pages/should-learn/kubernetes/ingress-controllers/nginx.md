@@ -6,7 +6,7 @@
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace ingress-nginx --create-namespace
-```
+```plaintext
 
 It will install the controller in the `ingress-nginx` namespace, creating that namespace if it doesn't already exist.
 
@@ -21,13 +21,13 @@ This command is _idempotent_:
 
 ```shell
 helm show values ingress-nginx --repo https://kubernetes.github.io/ingress-nginx
-```
+```plaintext
 
 **If you don't have Helm** or if you prefer to use a YAML manifest, you can run the following command instead:
 
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/cloud/deploy.yaml
-```
+```plaintext
 
 Info
 
@@ -43,7 +43,7 @@ A few pods should start in the `ingress-nginx` namespace:
 
 ```sh
 kubectl get pods --namespace=ingress-nginx
-```
+```plaintext
 
 After a while, they should all be running. The following command will wait for the ingress controller pod to be up, running, and ready:
 
@@ -52,7 +52,7 @@ kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
   --timeout=120s
-```
+```plaintext
 
 #### Local testing[¶](https://kubernetes.github.io/ingress-nginx/deploy/#local-testing) <a href="#local-testing" id="local-testing"></a>
 
@@ -61,20 +61,20 @@ Let's create a simple web server and the associated service:
 ```shell
 kubectl create deployment demo --image=httpd --port=80
 kubectl expose deployment demo
-```
+```plaintext
 
 Then create an ingress resource. The following example uses a host that maps to `localhost`:
 
 ```sh
 kubectl create ingress demo-localhost --class=nginx \
   --rule="demo.localdev.me/*=demo:80"
-```
+```plaintext
 
 Now, forward a local port to the ingress controller:
 
 ```shell
 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80
-```
+```plaintext
 
 Info
 
@@ -86,7 +86,7 @@ At this point, you can access your deployment using curl ;
 
 ```sh
 curl --resolve demo.localdev.me:8080:127.0.0.1 http://demo.localdev.me:8080
-```
+```plaintext
 
 You should see a HTML response containing text like **"It works!"**.
 
@@ -98,7 +98,7 @@ You can see that IP address or FQDN with the following command:
 
 ```shell
 kubectl get service ingress-nginx-controller --namespace=ingress-nginx
-```
+```plaintext
 
 It will be the `EXTERNAL-IP` field. If that field shows `<pending>`, this means that your Kubernetes cluster wasn't able to provision the load balancer (generally, this is because it doesn't support services of type `LoadBalancer`).
 
@@ -107,13 +107,13 @@ Once you have the external IP address (or FQDN), set up a DNS record pointing to
 ```shell
 kubectl create ingress demo --class=nginx \
   --rule="www.demo.io/*=demo:80"
-```
+```plaintext
 
 Alternatively, the above command can be rewritten as follows for the `--rule` command and below.
 
 ```sh
 kubectl create ingress demo --class=nginx \
   --rule www.demo.io/=demo:80
-```
+```plaintext
 
 You should then be able to see the "It works!" page when you connect to http://www.demo.io/. Congratulations, you are serving a public website hosted on a Kubernetes cluster! 🎉

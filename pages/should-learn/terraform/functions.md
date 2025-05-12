@@ -13,7 +13,7 @@ locals {
  optional_value = null
  result = coalesce(local.optional_value, local.fallback_value)
 }
-```
+```plaintext
 
 > In my infrastructure, I had a scenario where I needed to handle optional input variables. Let’s say one of the input variables, **optional\_value**, could be null or have a specific value. However, I wanted to ensure that I always have a valid value to work with.
 
@@ -40,7 +40,7 @@ resource "azurerm_storage_account" "example" {
     ip_rules       = ["23.45.1.0/30"]
   }
 }
-```
+```plaintext
 
 > I needed to create multiple instances of a particular resource, each with a unique name that included static values and variable inputs. By using the \`join()\` function, I combined the static strings _“web”, “app”,_ and the index value of the current instance (incremented by 1) with a hyphen separator. Additionally, I included the value of the _“environment”_ variable to differentiate instances based on the environment.
 
@@ -51,7 +51,7 @@ Description: The _lookup()_ function looks up a value in a map based on a given 
 
 Use case: Looking up values in a map is helpful when you need to retrieve specific configuration values based on keys.
 
-```
+```plaintext
 locals {
  environment_vars = {
    "dev" = "development"
@@ -61,7 +61,7 @@ locals {
  current_environment = "prod"
  environment_type = lookup(local.environment_vars, local.current_environment, "unknown")
 }
-```
+```plaintext
 
 > I used it to retrieve the environment type based on the current environment. By using the _lookup()_ function, I searched for the value associated with the _current\_environment_ key in the _environment\_vars_ map. If the key was found, the corresponding value was assigned to _environment\_type_. If the key was not found, I provided a default value of “_**unknown**_”.
 
@@ -84,7 +84,7 @@ resource "azurerm_linux_web_app" "webapp" {
     minimum_tls_version = "1.2"
   }
 }
-```
+```plaintext
 
 > We have so many functions which we can use to achieve similar things I used this _format()_ function to create multiple S3 buckets with sequentially numbered names. By using the _format()_ function, I constructed the bucket name by combining the static string “my-bucket-” with the index value. This is similar to what we did with join() function.
 
@@ -100,7 +100,7 @@ locals {
  regions = ["uksouth", "ukwest" ]
  primary_region = element(local.regions, 1)
 }
-```
+```plaintext
 
 > Here we used _element()_ to designate a specific region as the primary region for my deployment. By using the _element()_ function with an index value of 1, I retrieved the element at index 1 from the _regions_ list, assigning it to _primary\_region_.
 

@@ -4,19 +4,19 @@ description: Install "oh-my-posh" for Powershell
 
 # Oh-my-Posh for PowerShell
 
-```
+```plaintext
 Install-module posh-git
 Install-module oh-my-posh
 Install-module Terminal-Icons
-```
+```plaintext
 
 To make it work in PowerShell vi need to configure the `$profile`
 
 
 
-```
+```plaintext
 code $profile
-```
+```plaintext
 
 Add this to Your `$profile`
 
@@ -37,5 +37,5 @@ Add this to Your `$profile`
  Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
  Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
-```
+```plaintext
 {% endcode %}

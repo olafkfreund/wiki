@@ -15,4 +15,4 @@ services:
     image: redis
 volumes:
   logvolume01: {}
-```
+```plaintext

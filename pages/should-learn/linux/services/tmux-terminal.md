@@ -8,11 +8,11 @@ Installing tmux:
 
 ```bash
 brew install tmux
-```
+```plaintext
 
 ```bash
 dnf install tmux -y
-```
+```plaintext
 
 #### Start new named session:
 

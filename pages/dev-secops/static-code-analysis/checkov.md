@@ -4,9 +4,9 @@
 
 It scans cloud infrastructure provisioned using Terraform, Cloudformation, Kubernetes, Serverlessor ARM Templates and detects security and compliance misconfigurations.
 
-```
+```plaintext
 Documentation: https://github.com/bridgecrewio/checkov
-```
+```plaintext
 
 ```yaml
 trigger: none
@@ -71,7 +71,7 @@ stages:
           docker rmi "bridgecrew/checkov" -f | true
         displayName: 'Remove Terraform Quality Check Docker Images'
         condition: always()
-```
+```plaintext
 
 GitHub Workflow:
 
@@ -138,4 +138,4 @@ jobs:
       if: ${{ always() }}
       with:
         sarif_file: results.sarif
-```
+```plaintext

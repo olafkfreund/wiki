@@ -12,6 +12,6 @@ PowerShellCopy
 
 ```powershell
 wsl --install
-```
+```plaintext
 
 This command will enable the features necessary to run WSL and install the Ubuntu or Fedora distribution of Linux.

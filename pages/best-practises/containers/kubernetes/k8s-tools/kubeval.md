@@ -23,7 +23,7 @@ Suppose you have a CI/CD pipeline that deploys Kubernetes manifests to a product
   run: |
     curl -sL https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar xz
     ./kubeval --strict --ignore-missing-schemas deployment.yaml
-```
+```plaintext
 
 This command downloads the latest version of `kubeval`, validates the `deployment.yaml` file against the Kubernetes API schema, and fails the build if the manifest is invalid.
 
@@ -36,7 +36,7 @@ Suppose you have a custom resource that needs to be validated before deployment.
   run: |
     curl -sL https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar xz
     ./kubeval --strict --ignore-missing-schemas --crd my-crd.yaml custom-resource.yaml
-```
+```plaintext
 
 This command validates the `custom-resource.yaml` file against the custom resource definition `my-crd.yaml`. It ensures that the custom resource is valid and will work as expected when deployed to a Kubernetes cluster.
 
@@ -50,7 +50,7 @@ Suppose you are using a third-party Kubernetes resource that needs to be validat
     curl -sL https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar xz
     ./kubeval --strict --ignore-missing-schemas --schema-location https://raw.githubusercontent.com/third-party/resource/main/schema.yaml
 third-party-resource.yaml
-```
+```plaintext
 
 This command validates the `third-party-resource.yaml` file against the third-party resource definition located at `https://raw.githubusercontent.com/third-party/resource/main/schema.yaml`. It ensures that the third-party resource is valid and will work as expected when deployed to a Kubernetes cluster.
 

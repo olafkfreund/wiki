@@ -18,7 +18,7 @@ az storage account create --resource-group $RESOURCE_GROUP_NAME --name $STORAGE_
 
 # Create blob container
 az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME
-```
+```plaintext
 {% endcode %}
 
 {% code overflow="wrap" lineNumbers="true" %}
@@ -35,7 +35,7 @@ $storageAccount = New-AzStorageAccount -ResourceGroupName $RESOURCE_GROUP_NAME -
 
 # Create blob container
 New-AzStorageContainer -Name $CONTAINER_NAME -Context $storageAccount.context
-```
+```plaintext
 {% endcode %}
 
 2.  ### Configure terraform backend state <a href="#3-configure-terraform-backend-state" id="3-configure-terraform-backend-state"></a>
@@ -53,14 +53,14 @@ To configure the backend state, you need the following Azure storage information
 ```bash
 ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query '[0].value' -o tsv)
 export ARM_ACCESS_KEY=$ACCOUNT_KEY
-```
+```plaintext
 {% endcode %}
 
 {% code overflow="wrap" lineNumbers="true" %}
 ```powershell
 $ACCOUNT_KEY=(Get-AzStorageAccountKey -ResourceGroupName $RESOURCE_GROUP_NAME -Name $STORAGE_ACCOUNT_NAME)[0].value
 $env:ARM_ACCESS_KEY=$ACCOUNT_KEY
-```
+```plaintext
 {% endcode %}
 
 Create a Terraform configuration with a `backend` configuration block.
@@ -90,12 +90,12 @@ resource "azurerm_resource_group" "state-demo-secure" {
   name     = "state-demo"
   location = "eastus"
 }
-```
+```plaintext
 
 ```bash
 terraform init
-```
+```plaintext
 
 ```bash
 terraform apply
-```
+```plaintext

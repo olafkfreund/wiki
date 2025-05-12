@@ -55,7 +55,7 @@ Use the [`file`](https://learn.microsoft.com/en-us/dotnet/framework/configure-ap
   </startup>
   …
 </configuration>
-```
+```plaintext
 
 Access secrets:
 
@@ -64,7 +64,7 @@ static void Main(string[] args)
 {
     String mySecret = System.Configuration.ConfigurationManager.AppSettings["mySecret"];
 }
-```
+```plaintext
 
 When running in Azure, ConfigurationManager will load these settings from the process environment. We don't need to upload secrets files to the server or change any code.
 
@@ -75,14 +75,14 @@ Store secrets in environment variables or in a `.env` file
 ```bash
 $ cat .env
 MY_SECRET=mySecret
-```
+```plaintext
 
 Use the [dotenv](https://www.npmjs.com/package/dotenv) package to load and access environment variables
 
 ```json
 require('dotenv').config()
 let mySecret = process.env("MY_SECRET")
-```
+```plaintext
 
 #### Python <a href="#python" id="python"></a>
 
@@ -91,7 +91,7 @@ Store secrets in environment variables or in a `.env` file
 ```bash
 $ cat .env
 MY_SECRET=mySecret
-```
+```plaintext
 
 Use the [dotenv](https://pypi.org/project/python-dotenv/) package to load and access environment variables
 
@@ -102,18 +102,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 my_secret = os.getenv('MY_SECRET')
-```
+```plaintext
 
 Another good library for reading environment variables is `environs`
 
-```
+```plaintext
 from environs import Env
 
 
 env = Env()
 env.read_env()
 my_secret = os.environ["MY_SECRET"]
-```
+```plaintext
 
 #### Databricks <a href="#databricks" id="databricks"></a>
 

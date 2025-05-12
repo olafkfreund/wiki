@@ -86,7 +86,7 @@ compute_client.virtual_machines.create_or_update(
     vm_name=vm_name,
     parameters=vm_parameters
 )
-```
+```plaintext
 
 Create an Azure Storage Account:
 
@@ -115,7 +115,7 @@ account_params = StorageAccountCreateParameters(
 )
 
 storage_client.storage_accounts.create(rg_name, account_name, account_params)
-```
+```plaintext
 
 3. List Azure Virtual Machines:
 
@@ -136,6 +136,6 @@ vms = compute_client.virtual_machines.list(rg_name)
 
 for vm in vms:
     print(vm.name)
-````
+````plaintext
 
 These examples demonstrate how to create a Virtual Machine, create an Azure Storage Account, and list Virtual Machines using Python and the Azure SDK. Of course, there are many more operations you can perform with the SDK, and the documentation provides a comprehensive reference for all available functionality.

@@ -37,7 +37,7 @@ steps:
     overrideParameters: '-storageAccountType Standard_LRS'
     deploymentMode: 'Incremental'
     deploymentName: 'DeployPipelineTemplate'ml
-```
+```plaintext
 
 #### Use Azure CLI task <a href="#use-azure-cli-task" id="use-azure-cli-task"></a>
 
@@ -68,12 +68,12 @@ steps:
       az --version
       az group create --name $(resourceGroupName) --location $(location)
       az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile)
-```
+```plaintext
 
 To override the parameters, update the last line of `inlineScript` to:
 
 {% code overflow="wrap" %}
 ```powershell
 az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters storageAccountType='Standard_GRS' location='eastus'
-```
+```plaintext
 {% endcode %}

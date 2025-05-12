@@ -16,7 +16,7 @@ sudo dnf install -y https://packages.microsoft.com/config/rhel/9.0/packages-micr
 sudo dnf install -y https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
 sudo dnf install azure-cli
 
-```
+```plaintext
 {% endcode %}
 
 Proxy settings if needed:
@@ -29,25 +29,25 @@ export HTTPS_PROXY=https://[proxy]:[port]
 # Basic auth
 export HTTP_PROXY=http://[username]:[password]@[proxy]:[port]
 export HTTPS_PROXY=https://[username]:[password]@[proxy]:[port]
-```
+```plaintext
 
 Docker/Podman
 
 ```bash
 docker run -it mcr.microsoft.com/azure-cli
-```
+```plaintext
 
 If you want to pick up the SSH keys from your user environment, use `-v ${HOME}/.ssh:/root/.ssh` to mount your SSH keys in the environment.
 
 ```bash
 docker run -it -v ${HOME}/.ssh:/root/.ssh mcr.microsoft.com/azure-cli
-```
+```plaintext
 
 Windows:
 
 ```powershell
 winget install -e --id Microsoft.AzureCLI
-```
+```plaintext
 
 Great source for examples:
 

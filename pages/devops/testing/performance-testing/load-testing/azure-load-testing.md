@@ -16,7 +16,7 @@ The following YAML snippet shows how to pass the secret to the [Load Testing Git
         "value": "${{ secrets.MY_SECRET }}"
         }
     ]
-```
+```plaintext
 
 The following YAML snippet shows how to pass the secret to the [Azure Pipelines task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/test/azure-load-testing):
 
@@ -34,5 +34,5 @@ The following YAML snippet shows how to pass the secret to the [Azure Pipelines 
           "value": "$(mySecret)"
           }
       ]
-```
+```plaintext
 

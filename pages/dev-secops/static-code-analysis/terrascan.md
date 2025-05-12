@@ -64,7 +64,7 @@ stages:
           testRunTitle: Terrascan Scan
           failTaskOnFailedTests: false
           publishRunAttachments: true
-```
+```plaintext
 
 GitHub Workflow;
 
@@ -105,4 +105,4 @@ jobs:
       uses: github/codeql-action/upload-sarif@v1
       with:
         sarif_file: terrascan.sarif
-```
+```plaintext

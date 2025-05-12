@@ -51,7 +51,7 @@ The Helm charts used in this guide are the same underlying charts used when inst
 ```sh
 $ helm repo add istio https://istio-release.storage.googleapis.com/charts
 $ helm repo update
-```
+```plaintext
 
 ### Installation steps <a href="#installation-steps" id="installation-steps"></a>
 
@@ -59,7 +59,7 @@ This section describes the procedure to install Istio using Helm. The general sy
 
 ```sh
 $ helm install <release> <chart> --namespace <namespace> --create-namespace [--set <other_parameters>]
-```
+```plaintext
 
 The variables specified in the command are as follows:
 
@@ -77,28 +77,28 @@ You can display the default values of configuration parameters using the `helm s
 
     ```shell
     $ kubectl create namespace istio-system
-    ```
+    ```plaintext
 2.  Install the Istio base chart which contains cluster-wide Custom Resource Definitions (CRDs) which must be installed prior to the deployment of the Istio control plane:
 
     When performing a revisioned installation, the base chart requires the `--set defaultRevision=<revision>` value to be set for resource validation to function. Below we install the `default` revision, so `--set defaultRevision=default` is configured.
 
     ```sh
     $ helm install istio-base istio/base -n istio-system --set defaultRevision=default
-    ```
+    ```plaintext
 3.  Validate the CRD installation with the `helm ls` command:
 
     ```sh
     $ helm ls -n istio-system
     NAME       NAMESPACE    REVISION UPDATED         STATUS   CHART        APP VERSION
     istio-base istio-system 1        ... ... ... ... deployed base-1.16.1  1.16.1
-    ```
+    ```plaintext
 
     In the output locate the entry for `istio-base` and make sure the status is set to `deployed`.
 4.  Install the Istio discovery chart which deploys the `istiod` service:
 
     ```sh
     $ helm install istiod istio/istiod -n istio-system --wait
-    ```
+    ```plaintext
 5.  Verify the Istio discovery chart installation:
 
     ```shell
@@ -106,7 +106,7 @@ You can display the default values of configuration parameters using the `helm s
     NAME       NAMESPACE    REVISION UPDATED         STATUS   CHART         APP VERSION
     istio-base istio-system 1        ... ... ... ... deployed base-1.16.1   1.16.1
     istiod     istio-system 1        ... ... ... ... deployed istiod-1.16.1 1.16.1
-    ```
+    ```plaintext
 6.  Get the status of the installed helm chart to ensure it is deployed:
 
     ```sh
@@ -139,20 +139,20 @@ You can display the default values of configuration parameters using the `helm s
     For further documentation see https://istio.io website
 
     Tell us how your install/upgrade experience went at https://forms.gle/99uiMML96AmsXY5d6
-    ```
+    ```plaintext
 7.  Check `istiod` service is successfully installed and its pods are running:
 
     ```shell
     $ kubectl get deployments -n istio-system --output wide
     NAME     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                         SELECTOR
     istiod   1/1     1            1           10m   discovery    docker.io/istio/pilot:1.16.1   istio=pilot
-    ```
+    ```plaintext
 8.  (Optional) Install an ingress gateway:
 
-    ```
+    ```plaintext
     $ kubectl create namespace istio-ingress
     $ helm install istio-ingress istio/gateway -n istio-ingress --wait
-    ```
+    ```plaintext
 
     See [Installing Gateways](https://istio.io/latest/docs/setup/additional-setup/gateway/) for in-depth documentation on gateway installation.
 

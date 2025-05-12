@@ -59,7 +59,7 @@ copilot.setup {
   },
 }
 
-```
+```plaintext
 
 Windows config:
 
@@ -96,5 +96,5 @@ if not ok then
   return
 end
 
-```
+```plaintext
 {% endcode %}

@@ -26,7 +26,7 @@ provider "databricks" {
 
 # Retrieve information about the current user.
 data "databricks_current_user" "me" {}
-```
+```plaintext
 
 To authenticate with environment variables, add the following content instead.&#x20;
 
@@ -45,7 +45,7 @@ provider "databricks" {}
 
 # Retrieve information about the current user.
 data "databricks_current_user" "me" {}
-```
+```plaintext
 
 To authenticate with the Azure CLI, add the following content instead:
 
@@ -71,7 +71,7 @@ provider "databricks" {
 
 # Retrieve information about the current user.
 data "databricks_current_user" "me" {}
-```
+```plaintext
 
 Create another file named `auth.auto.tfvars`, and add the following content to the file. This file contains variable values for authenticating Terraform with your workspace. Replace the placeholder values with your own values.
 
@@ -81,7 +81,7 @@ Copy
 
 ```hcl
 databricks_connection_profile = "DEFAULT"
-```
+```plaintext
 
 To authenticate with the Azure CLI, add the following content instead:
 
@@ -89,13 +89,13 @@ Copy
 
 ```hcl
 databricks_host = "https://<workspace-instance-name>"
-```
+```plaintext
 
 To authenticate with with environment variables, you do not need an `auth.auto.tfvars` file.
 
 ```bash
 terraform init
-```
+```plaintext
 
 Create another file named `cluster.tf`, and add the following content to the file. This content creates a cluster with the smallest amount of resources allowed. This cluster uses the lastest Databricks Runtime Long Term Support (LTS) version.
 
@@ -131,7 +131,7 @@ resource "databricks_cluster" "this" {
 output "cluster_url" {
  value = databricks_cluster.this.url
 }
-```
+```plaintext
 
 For an all-purpose cluster:
 
@@ -177,7 +177,7 @@ resource "databricks_cluster" "this" {
 output "cluster_url" {
  value = databricks_cluster.this.url
 }
-```
+```plaintext
 
 Create another file named `cluster.auto.tfvars`, and add the following content to the file. This file contains variable values for customizing the cluster. Replace the placeholder values with your own values.
 
@@ -188,7 +188,7 @@ cluster_name                    = "My Cluster"
 cluster_autotermination_minutes = 60
 cluster_num_workers             = 1
 cluster_data_security_mode      = "SINGLE_USER"
-```
+```plaintext
 
 For an all-purpose cluster:
 
@@ -196,7 +196,7 @@ For an all-purpose cluster:
 cluster_name                    = "My Cluster"
 cluster_autotermination_minutes = 60
 cluster_num_workers             = 1
-```
+```plaintext
 
 Create another file named `notebook.tf`, and add the following content to the file:
 
@@ -226,7 +226,7 @@ resource "databricks_notebook" "this" {
 output "notebook_url" {
  value = databricks_notebook.this.url
 }
-```
+```plaintext
 
 \
 For the Python notebook a file named `notebook-getting-started-lakehouse-e2e.py` with the following contents:
@@ -326,7 +326,7 @@ df = spark.read.table(table_name)
 # COMMAND ----------
 
 display(df)
-```
+```plaintext
 
 For the Python notebook  a file named `notebook-quickstart-create-databricks-workspace-portal.py` with the following contents:
 
@@ -353,7 +353,7 @@ df.createOrReplaceTempView('source')
 
 print('Displaying top 10 rows: ')
 display(spark.sql('SELECT * FROM source LIMIT 10'))
-```
+```plaintext
 
 If you are creating the notebook, create another file named `notebook.auto.tfvars`, and add the following content to the file. This file contains variable values for customizing the notebook configuration.
 
@@ -363,7 +363,7 @@ For the Python notebook:
 notebook_subdirectory = "Terraform"
 notebook_filename     = "notebook-getting-started-lakehouse-e2e.py"
 notebook_language     = "PYTHON"
-```
+```plaintext
 
 For the Python notebook:
 
@@ -371,7 +371,7 @@ For the Python notebook:
 notebook_subdirectory = "Terraform"
 notebook_filename     = "notebook-quickstart-create-databricks-workspace-portal.py"
 notebook_language     = "PYTHON"
-```
+```plaintext
 
 If you are creating a notebook, in your Azure Databricks workspace, be sure to set up any requirements for the notebook to run successfully.
 
@@ -401,7 +401,7 @@ resource "databricks_job" "this" {
 output "job_url" {
   value = databricks_job.this.url
 }
-```
+```plaintext
 
 If you are creating the job, create another file named `job.auto.tfvars`, and add the following content to the file. This file contains a variable value for customizing the job configuration.
 
@@ -409,21 +409,21 @@ Copy
 
 ```hcl
 job_name = "My Job"
-```
+```plaintext
 
 
 
-```
+```plaintext
 terraform validate
-```
+```plaintext
 
-```
+```plaintext
 terraform plan
-```
+```plaintext
 
-```
+```plaintext
 terraform apply
-```
+```plaintext
 
 \
 

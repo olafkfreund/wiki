@@ -74,4 +74,4 @@ description: >-
           Write-Host "##### TO BE MERGED FROM $(Build.SourceBranchName) TO Main #####"
           az repos pr update --id $prid --auto-complete true --squash true --status completed --delete-source-branch true
           Write-Host "##### MERGE SUCCESSFULL #####"
-```
+```plaintext

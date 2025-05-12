@@ -27,7 +27,7 @@ Ansible Playbooks describe the desired state of the system and use Ansible modul
         - body-parser
     - name: Start the application
       shell: node /path/to/app.js
-```
+```plaintext
 
 This playbook installs Node.js and the necessary dependencies on the web servers, and starts the application.
 
@@ -49,7 +49,7 @@ This playbook installs Node.js and the necessary dependencies on the web servers
         name: myuser
         password: mypassword
         priv: mydb:ALL
-```
+```plaintext
 
 This playbook installs PostgreSQL and creates a database and user on the db servers.
 
@@ -65,7 +65,7 @@ This playbook installs PostgreSQL and creates a database and user on the db serv
     - name: Upgrade all packages
       apt:
         upgrade: dist
-```
+```plaintext
 
 This playbook updates the package cache and upgrades all packages on all servers.
 
@@ -84,7 +84,7 @@ Here's an example playbook that configures the "net.ipv4.ip\_forward" parameter 
         value: 1
         state: present
         reload: yes
-```
+```plaintext
 
 This playbook uses the "sysctl" module to set the "net.ipv4.ip\_forward" parameter to 1 on all web servers. The "become" keyword is used to run the playbook with root privileges, as modifying kernel parameters requires elevated privileges.
 
@@ -94,7 +94,7 @@ You can run this playbook using the "ansible-playbook" command:
 
 ```bash
 ansible-playbook sysctl.yml
-```
+```plaintext
 
 This will execute the playbook and configure the "net.ipv4.ip\_forward" parameter on all web servers in the inventory.
 

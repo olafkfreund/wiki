@@ -54,7 +54,7 @@ The first step is to create a directory for your module. You can do this in your
 
 ```sh
 mkdir my-terraform-module
-```
+```plaintext
 
 ### Step 2: Define the Module Inputs and Outputs <a href="#23cf" id="23cf"></a>
 
@@ -74,7 +74,7 @@ variable "instance_type" {
   type    = string
   default = "t2.micro"
 }
-```
+```plaintext
 
 Next, create another file named `outputs.tf` within the `my-terraform-module` directory, and define the output values for your module using the `output` block. Here's an example:
 
@@ -86,7 +86,7 @@ output "instance_id" {
 output "instance_public_ip" {
   value = aws_instance.my_instance.public_ip
 }
-```
+```plaintext
 
 ### Step 3: Define the Resources <a href="#30ad" id="30ad"></a>
 
@@ -103,7 +103,7 @@ resource "aws_instance" "my_instance" {
     Name = "my-instance"
   }
 }
-```
+```plaintext
 
 ### Step 4: Add Provider Configuration <a href="#7dfd" id="7dfd"></a>
 
@@ -113,7 +113,7 @@ If your module uses resources from a specific cloud provider, you’ll need to c
 provider "aws" {
   region = var.aws_region
 }
-```
+```plaintext
 
 ### Step 5: Create a README <a href="#2b06" id="2b06"></a>
 
@@ -143,4 +143,4 @@ output "instance_id" {
 output "instance_public_ip" {
   value = module.my_module.instance_public_ip
 }
-```
+```plaintext

@@ -28,4 +28,4 @@ pool:
 steps:
 - task: MicrosoftSecurityDevOps@1
   displayName: 'Microsoft Security DevOps'
-```
+```plaintext

@@ -112,4 +112,4 @@ jobs:
             Write-Host "##vso[task.complete result=Succeeded;]No secrets detected."
           }
         displayName: "Analyzing detect-secrets results"
-```
+```plaintext

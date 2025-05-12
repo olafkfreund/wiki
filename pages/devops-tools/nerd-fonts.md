@@ -11,5 +11,5 @@ Use the GetNF tool to install NF
 git clone https://github.com/ronniedroid/getnf.git
 cd getnf
 ./install.sh
-```
+```plaintext
 {% endcode %}

@@ -46,7 +46,7 @@ spec:
             memory: "512Mi"
         ports:
         - containerPort: 80
-```
+```plaintext
 
 In this example, the `resources` field is used to set the resource limits for the container. The `limits` field specifies the maximum amount of CPU and memory that the container is allowed to use. In this case, the container is limited to 1 CPU and 512 MB of memory.
 
@@ -75,7 +75,7 @@ spec:
             cpu: "2"
             memory: "8Gi"
             nvidia.com/gpu: "1"
-```
+```plaintext
 
 In this example, the `resources` field is used to set the CPU, memory, and GPU resource limits for the container. The `limits` field specifies the maximum amount of CPU and memory that the container is allowed to use, as well as the number of GPUs that can be used. In this case, the container is limited to 2 CPUs, 8 GB of memory, and 1 GPU.
 
@@ -105,7 +105,7 @@ spec:
             memory: 4Gi
         ports:
         - containerPort: 80
-```
+```plaintext
 
 In this example, the shorthand notation is used to set the resource limits for the container. The `limits` field specifies the maximum amount of CPU and memory that the container is allowed to use. In this case, the container is limited to 2 CPUs and 4 GB of memory.
 

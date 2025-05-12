@@ -68,4 +68,4 @@ sudo apt-get install -y code
 logger -t devvm "VSCode Installed: $?"
 logger -t devvm "Success"
 exit 0
-````
+````plaintext

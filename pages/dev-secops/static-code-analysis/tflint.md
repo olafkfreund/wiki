@@ -64,7 +64,7 @@ stages:
           docker rmi "ghcr.io/terraform-linters/tflint-bundle" -f | true
         displayName: 'Remove Terraform Quality Check Docker Images'
         condition: always()
-```
+```plaintext
 
 GitHub Workflow
 
@@ -97,4 +97,4 @@ jobs:
     - name: Run TFLint
       working-directory: ./Infrastructure-Source-Code/terraform/azure
       run: tflint -f compact
-```
+```plaintext

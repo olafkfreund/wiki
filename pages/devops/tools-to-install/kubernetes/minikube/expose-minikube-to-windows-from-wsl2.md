@@ -2,9 +2,9 @@
 
 Change following in `/usr/lib/systemd/system/docker.service`
 
-```
+```plaintext
 ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 --tls=false --containerd=/run/containerd/containerd.sock
-```
+```plaintext
 
 Copy all certs from `.minkube/` root and `./minkube/profiles` to `./minkube` in Windows&#x20;
 
@@ -47,13 +47,13 @@ users:
   user:
     client-certificate: C:\Users\xxxx\.minikube\profiles\minikube\client.crt
     client-key: C:\Users\xxxx\.minikube\profiles\minikube\client.key
-```
+```plaintext
 
 <pre class="language-powershell"><code class="lang-powershell">docker context update<a data-footnote-ref href="#user-content-fn-1"> </a>wsl --docker "host=tcp://XXX.XXX.XXX.XxX:2376"
 </code></pre>
 
 ```powershell
 docker context use wsl
-```
+```plaintext
 
 [^1]: 

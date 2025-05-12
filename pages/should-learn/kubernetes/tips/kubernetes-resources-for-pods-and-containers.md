@@ -25,7 +25,7 @@ In Kubernetes, CPU resources can be allocated to Pods and containers to ensure t
 
 pod.yaml
 
-```
+```plaintext
 apiVersion: v1
 kind: Pod
 metadata:
@@ -39,7 +39,7 @@ spec:
         cpu: "100m"
       limits:
         cpu: "200m"
-```
+```plaintext
 
 This example specifies a pod with a single container that has a CPU request of 100 millicores (100m) and a CPU limit of 200 millicores (200m):
 
@@ -55,7 +55,7 @@ In Kubernetes, memory resources can be allocated to Pods and containers to ensur
 
 pod.yaml
 
-```
+```plaintext
 apiVersion: v1
 kind: Pod
 metadata:
@@ -69,7 +69,7 @@ spec:
         memory: "64Mi"
       limits:
         memory: "128Mi"
-```
+```plaintext
 
 This example specifies a pod with a single container that has a memory request of 64 megabytes (64Mi) and a memory limit of 128 megabytes (128Mi).
 
@@ -85,40 +85,40 @@ When a container **exceeds its memory limit** in Kubernetes, it is **terminated 
 
 1. Check the CPU and memory usage for all Pods
 
-```
+```plaintext
 $ kubectl top pods -A
-```
+```plaintext
 
 Output columns:
 
-```
+```plaintext
 NAMESPACE     NAME    CPU(cores)   MEMORY(bytes)
-```
+```plaintext
 
 2\. Find the pod that consumes the most **CPU** resources
 
-```
+```plaintext
 $ kubectl top pods -A --no-headers | sort --reverse --key 3 | head -n 1
 $ kubectl top pods -A --no-headers | sort -nr -k3 | head -1
-```
+```plaintext
 
 3\. Find the pod that consumes the most **memory** resources
 
-```
+```plaintext
 $ kubectl top pods -A --no-headers | sort --reverse --key 4 | head -n 1
 $ kubectl top pods -A --no-headers | sort -nr -k4 | head -1
-```
+```plaintext
 
 4\. Check the CPU and memory usage of Nodes
 
-```
+```plaintext
 $ kubectl top nodes
-```
+```plaintext
 
 Output columns:
 
-```
+```plaintext
 NAME    CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
-```
+```plaintext
 
 \

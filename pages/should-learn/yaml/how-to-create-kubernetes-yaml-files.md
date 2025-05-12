@@ -84,7 +84,7 @@ Remember to activate it in the settings and reload VS Code. Add this line to the
 "yaml.schemas": {
   "Kubernetes": "*.yaml"
 }
-```
+```plaintext
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:700/1*ssv7K5es5evjKC6-DVHJUw.png" alt="" height="387" width="700"><figcaption></figcaption></figure>
 

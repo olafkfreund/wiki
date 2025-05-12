@@ -18,7 +18,7 @@ data "databricks_spark_version" "latest" {}
 data "databricks_node_type" "smallest" {
   local_disk = true
 }
-```
+```plaintext
 
 ### Standard functionality <a href="#standard-functionality" id="standard-functionality"></a>
 
@@ -110,7 +110,7 @@ output "notebook_url" {
 output "job_url" {
   value = databricks_job.this.url
 }
-```
+```plaintext
 
 ### Workspace security <a href="#workspace-security" id="workspace-security"></a>
 
@@ -188,7 +188,7 @@ resource "databricks_permissions" "pool" {
     permission_level = "CAN_ATTACH_TO"
   }
 }
-```
+```plaintext
 
 ### Advanced configuration <a href="#advanced-configuration" id="advanced-configuration"></a>
 
@@ -209,4 +209,4 @@ resource "databricks_ip_access_list" "only_me" {
   ip_addresses = ["${data.http.my.body}/32"]
   depends_on = [databricks_workspace_conf.this]
 }
-```
+```plaintext

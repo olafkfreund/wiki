@@ -10,14 +10,14 @@ Create a resource group for the deployment.
 
 ```powershell
 az group create -n exampleRG -l westus
-```
+```plaintext
 
 Create or use an existing service princprincipal
 
 {% code overflow="wrap" %}
 ```bash
 az ad sp create-for-rbac --name myApp --role contributor --scopes /subscriptions/{subscription-id}/resourceGroups/exampleRG --sdk-auth
-```
+```plaintext
 {% endcode %}
 
 Create secrets for your Azure credentials, resource group, and subscriptions.
@@ -65,7 +65,7 @@ jobs:
         template: ./main.bicep
         parameters: 'storagePrefix=mystore storageSKU=Standard_LRS'
         failOnStdErr: false
-```
+```plaintext
 
 5. Select **Start commit**.
 6. Select **Commit directly to the main branch**.

@@ -42,4 +42,4 @@ stages:
           testResultsFormat: 'NUnit'
           testResultsFiles: '$(System.DefaultWorkingDirectory)\Results\*-armttk.xml'
         condition: always()
-```
+```plaintext

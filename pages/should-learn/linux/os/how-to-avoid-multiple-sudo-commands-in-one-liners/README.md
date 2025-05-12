@@ -2,10 +2,10 @@
 
 We all love one-liners but soon one-liner like this will destroy the coolness of using oneliners
 
-```
+```plaintext
 
 sudo apt-get update && sudo apt-get upgrade -y
-```
+```plaintext
 
 \
 Use Here strings
@@ -18,7 +18,7 @@ This command will ask for sudo once, which makes the command sorter since we don
 
 ```bash
 $ sudo -s <<< 'apt update -y && apt upgrade -y'
-```
+```plaintext
 
 _Example: Command span in many lines_
 
@@ -27,6 +27,6 @@ In case that the commands span in multiple lines we can do the following, pressi
 ```bash
 $ sudo -s <<< 'apt update -y
 > apt upgrade -y'
-```
+```plaintext
 
 \

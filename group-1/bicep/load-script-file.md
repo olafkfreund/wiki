@@ -29,6 +29,6 @@ resource exampleScript 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
     retentionInterval: 'P1D'
   }
 }
-```
+```plaintext
 {% endcode %}
 

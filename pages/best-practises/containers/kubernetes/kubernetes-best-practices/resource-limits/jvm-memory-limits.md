@@ -77,7 +77,7 @@ Specify `KUBERNETES_MEMORY_LIMITS` in env
     resourceFieldRef:
       containerName: {PUT_YOUR_CONTAINER_NAME_HERE}
       resource: limits.memory
-```
+```plaintext
 
 Start your application with `entrypoint.sh` that evaluates heap size with fixed predefined meta space and compressed class space.
 
@@ -94,4 +94,4 @@ java \
   -XX:CompressedClassSpaceSize=${COMPRESSED_CLASS_SPACE_MB}m \
   -jar \
   app.jar
-```
+```plaintext

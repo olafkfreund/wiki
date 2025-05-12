@@ -9,7 +9,7 @@ Agree if you want a linear or non-linear commit history. There are pros and cons
 
 Merging `topic` into `main`
 
-```
+```plaintext
   A---B---C topic
  /         \
 D---E---F---G---H main
@@ -17,7 +17,7 @@ D---E---F---G---H main
 git fetch origin
 git checkout main
 git merge topic
-```
+```plaintext
 
 ### Two approaches to achieve a linear commit history <a href="#two-approaches-to-achieve-a-linear-commit-history" id="two-approaches-to-achieve-a-linear-commit-history"></a>
 
@@ -25,7 +25,7 @@ git merge topic
 
 Before merging `topic` into `main`, we rebase `topic` with the `main` branch:
 
-```
+```plaintext
           A---B---C topic
          /         \
 D---E---F-----------G---H main
@@ -34,7 +34,7 @@ git checkout main
 git pull
 git checkout topic
 git rebase origin/main
-```
+```plaintext
 
 Create a PR topic --> main in Azure DevOps and approve using the squash merge option
 
@@ -42,10 +42,10 @@ Create a PR topic --> main in Azure DevOps and approve using the squash merge op
 
 [Squash merging](https://learn.microsoft.com/en-us/azure/devops/repos/git/merging-with-squash?view=azure-devops) is a merge option that allows you to condense the Git history of topic branches when you complete a pull request. Instead of adding each commit on `topic` to the history of `main`, a squash merge takes all the file changes and adds them to a single new commit on `main`.
 
-```
+```plaintext
           A---B---C topic
          /
 D---E---F-----------G---H main
-```
+```plaintext
 
 Create a PR topic --> main in Azure DevOps and approve using the squash merge option

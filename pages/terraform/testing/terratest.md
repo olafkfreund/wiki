@@ -52,7 +52,7 @@ func TestAzureStorageAccount(t *testing.T) {
  // Cleanup resources
  defer azure.DeleteResourceGroup(t, resourceGroupName)
 }
-```
+```plaintext
 
 ### Unit Testing
 

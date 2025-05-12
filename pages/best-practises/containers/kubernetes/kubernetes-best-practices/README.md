@@ -16,7 +16,7 @@ spec:
   containers:
     - name: development01
     image: nginx
-```
+```plaintext
 
 ### Use Labels
 
@@ -39,7 +39,7 @@ spec:
      resources:
        limits:
         cpu: 1
-```
+```plaintext
 
 ### Readiness and Liveness Probes
 
@@ -62,7 +62,7 @@ livenessProbe:
        httpGet:
          path: /prodhealth
          port: 8080
-```
+```plaintext
 
 ### Security using RBAC and Firewall
 
@@ -79,7 +79,7 @@ rules:
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "list"]
-```
+```plaintext
 
 ### Set Resource Requests & Limits
 
@@ -103,7 +103,7 @@ containers:
         limits:                              
             memory: "256Mi"
             cpu: "800m"
-```
+```plaintext
 
 ### Audit Your Logs Regularly
 
@@ -113,7 +113,7 @@ You need to pass the parameter mentioned below while stating the kube-apiserver 
 
 ```yaml
 --audit-policy-file=/etc/kubernetes/audit-policy.yaml --audit-log-path=/var/log/audit.log
-```
+```plaintext
 
 ```yaml
 apiVersion: audit.k8s.io/v1
@@ -129,4 +129,4 @@ rules:
      resources:
      - group: ""
       resources: ["pods/log", "pods/status"]
-```
+```plaintext

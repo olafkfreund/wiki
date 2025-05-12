@@ -47,7 +47,7 @@ xml_report.xml
       inputs:
         testResultsFormat: 'NUnit'
         testResultsFiles: 'converted_report.xml'
-```
+```plaintext
 
 _**Test and then you will see the test results**_
 
@@ -140,7 +140,7 @@ stages:
       inputs:
         testResultsFormat: 'NUnit'
         testResultsFiles: 'owaspzap/test-results.xml'
-```
+```plaintext
 
 _**After executing the pipeline, you can see the test results**_
 

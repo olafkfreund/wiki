@@ -26,7 +26,7 @@ We use Terraform and an argo terraform module that I have implemented in order t
 
 modules/kubernetes\_modules/argo/argo\_rollouts.tf
 
-```
+```plaintext
 resource "helm_release" "argo_rollouts" {
 
   for_each = var.argo_rollouts != null ? toset(["devops"]) : toset([])
@@ -51,11 +51,11 @@ resource "helm_release" "argo_rollouts" {
 
   values = var.argo_rollouts.values 
 }
-```
+```plaintext
 
 modules/kubernetes\_modules/argo/variables.tf
 
-```
+```plaintext
 variable "argo_rollouts" {
 
     type = object({
@@ -68,13 +68,13 @@ variable "argo_rollouts" {
 
     default = null
 }
-```
+```plaintext
 
 ## Blue Green Example Project <a href="#9081" id="9081"></a>
 
 examples/bluegreen/main.tf
 
-```
+```plaintext
 module "argo" {
 
     source = "../../modules/kubernetes_modules/argo"
@@ -97,11 +97,11 @@ module "argo" {
         ]
     }
 }
-```
+```plaintext
 
 Remember to define providers.tf in order to use kubernetes and helm providers and to connect to your cluster.
 
-```
+```plaintext
 provider "kubernetes" {
   config_path    = "~/.kube/config"
 
@@ -112,7 +112,7 @@ provider "helm" {
     config_path = "~/.kube/config"
   }
 }
-```
+```plaintext
 
 Running terraform apply, we deploy Argo Rollouts on our target cluster.
 
@@ -120,7 +120,7 @@ Running terraform apply, we deploy Argo Rollouts on our target cluster.
 
 To obtain the advanced deployments capabilities, we need to specify our Application Manifest via Argo Rollout CRD: Rollout. It is the same of Kubernetes deployments plus a strategy block with which you can define your deployment strategy:
 
-```
+```plaintext
 
 
 resource "kubernetes_namespace" "my_app" {
@@ -259,7 +259,7 @@ resource "kubernetes_service_v1" "blue_green_preview" {
         ]
     }
 }
-```
+```plaintext
 
 After that we have (_**for simplicity we draw only one pod in the image**_):
 
@@ -273,17 +273,17 @@ The SVC **suer-hello-prod** (and **BalancerProd**) is used for production traffi
 
 If we do a HTTP GET request to BalancerProd:
 
-```
+```plaintext
 curl http://192.168.93.140:8088 && echo
 VERSION V2
-```
+```plaintext
 
 And also it is exposed on preview side via BalancerPreview:
 
-```
+```plaintext
 curl http://192.168.93.140:8089 && echo
 VERSION V2
-```
+```plaintext
 
 To see the status of our application , there is also
 
@@ -319,24 +319,24 @@ k get all -n my-app
 
 curl BalancerProd
 
-```
+```plaintext
  curl http://192.168.93.140:8088 && echo
 VERSION V2
-```
+```plaintext
 
 curl BalancerPreview
 
-```
+```plaintext
 curl http://192.168.93.140:8089 && echo
 VERSION V3
-```
+```plaintext
 
 Once tested the functionality and the performance of super-hello:V3, we can promote the rollout and so switching to use super-hello:V3 in production:
 
-```
+```plaintext
 > kubectl argo rollouts promote super-hello
 rollout 'super-hello' promoted
-```
+```plaintext
 
 So we have:
 
@@ -356,17 +356,17 @@ k get all -n my-app
 
 curl BalancerProd
 
-```
+```plaintext
 curl http://192.168.93.140:8088 && echo
 VERSION V3
-```
+```plaintext
 
 curl BalancerPreview
 
-```
+```plaintext
 curl http://192.168.93.140:8089 && echo
 VERSION V3
-```
+```plaintext
 
 Finaly, the old super-hello:V2 is destroyed:
 

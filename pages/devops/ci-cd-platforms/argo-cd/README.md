@@ -21,7 +21,7 @@ Application definitions, configurations, and environments should be declarative 
 ```sh
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
+```plaintext
 
 This will create a new namespace, `argocd`, where Argo CD services and application resources will live.
 
@@ -34,7 +34,7 @@ If you are not interested in UI, SSO, multi-cluster features then you can instal
 ```sh
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
-```
+```plaintext
 
 This default installation will have a self-signed certificate and cannot be accessed without a bit of extra work. Do one of:
 
@@ -52,7 +52,7 @@ Also available in Mac, Linux and WSL Homebrew:
 
 ```sh
 brew install argocd
-```
+```plaintext
 
 ### 3. Access The Argo CD API Server[¶](https://argo-cd.readthedocs.io/en/stable/getting\_started/#3-access-the-argo-cd-api-server) <a href="#3-access-the-argo-cd-api-server" id="3-access-the-argo-cd-api-server"></a>
 
@@ -64,7 +64,7 @@ Change the argocd-server service type to `LoadBalancer`:
 
 ```sh
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-```
+```plaintext
 
 #### Ingress[¶](https://argo-cd.readthedocs.io/en/stable/getting\_started/#ingress) <a href="#ingress" id="ingress"></a>
 
@@ -76,7 +76,7 @@ Kubectl port-forwarding can also be used to connect to the API server without ex
 
 ```sh
 kubectl port-forward svc/argocd-server -n argocd 8080:443
-```
+```plaintext
 
 The API server can then be accessed using https://localhost:8080
 
@@ -86,7 +86,7 @@ The initial password for the `admin` account is auto-generated and stored as cle
 
 ```shell
 argocd admin initial-password -n argocd
-```
+```plaintext
 
 Warning
 
@@ -96,7 +96,7 @@ Using the username `admin` and the password from above, login to Argo CD's IP or
 
 ```shell
 argocd login <ARGOCD_SERVER>
-```
+```plaintext
 
 Note
 
@@ -106,7 +106,7 @@ Change the password using the command:
 
 ```sh
 argocd account update-password
-```
+```plaintext
 
 ### 5. Register A Cluster To Deploy Apps To (Optional)[¶](https://argo-cd.readthedocs.io/en/stable/getting\_started/#5-register-a-cluster-to-deploy-apps-to-optional) <a href="#5-register-a-cluster-to-deploy-apps-to-optional" id="5-register-a-cluster-to-deploy-apps-to-optional"></a>
 
@@ -116,13 +116,13 @@ First list all clusters contexts in your current kubeconfig:
 
 ```sh
 kubectl config get-contexts -o name
-```
+```plaintext
 
 Choose a context name from the list and supply it to `argocd cluster add CONTEXTNAME`. For example, for docker-desktop context, run:
 
 ```shell
 argocd cluster add docker-desktop
-```
+```plaintext
 
 The above command installs a ServiceAccount (`argocd-manager`), into the kube-system namespace of that kubectl context, and binds the service account to an admin-level ClusterRole. Argo CD uses this service account token to perform its management tasks (i.e. deploy/monitoring).
 
@@ -140,13 +140,13 @@ First we need to set the current namespace to argocd running the following comma
 
 ```sh
 kubectl config set-context --current --namespace=argocd
-```
+```plaintext
 
 Create the example guestbook application with the following command:
 
 ```shell
 argocd app create guestbook --repo https://github.com/argoproj/argocd-example-apps.git --path guestbook --dest-server https://kubernetes.default.svc --dest-namespace default
-```
+```plaintext
 
 #### Creating Apps Via UI[¶](https://argo-cd.readthedocs.io/en/stable/getting\_started/#creating-apps-via-ui) <a href="#creating-apps-via-ui" id="creating-apps-via-ui"></a>
 
@@ -194,13 +194,13 @@ Health Status:      Missing
 GROUP  KIND        NAMESPACE  NAME          STATUS     HEALTH
 apps   Deployment  default    guestbook-ui  OutOfSync  Missing
        Service     default    guestbook-ui  OutOfSync  Missing
-```
+```plaintext
 
 The application status is initially in `OutOfSync` state since the application has yet to be deployed, and no Kubernetes resources have been created. To sync (deploy) the application, run:
 
 ```sh
 argocd app sync guestbook
-```
+```plaintext
 
 This command retrieves the manifests from the repository and performs a `kubectl apply` of the manifests. The guestbook app is now running and you can now view its resource components, logs, events, and assessed health status.
 

@@ -7,7 +7,25 @@
     "start": "honkit serve",
     "build": "honkit build"
   },
-  "keywords": ["devops", "documentation"],
+  "keywords": [
+    "devops",
+    "documentation"
+  ],
   "author": "Olaf K Freund",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gitbook-plugin-advanced-emoji": "^0.2.2",
+    "gitbook-plugin-anchors": "^0.7.1",
+    "gitbook-plugin-copy-code-button": "^0.0.2",
+    "gitbook-plugin-edit-link": "^2.0.2",
+    "gitbook-plugin-expandable-chapters": "^0.2.0",
+    "gitbook-plugin-github": "^3.0.0",
+    "gitbook-plugin-hints": "^1.0.2",
+    "gitbook-plugin-include": "^0.1.0",
+    "gitbook-plugin-include-codeblock": "^3.2.3",
+    "gitbook-plugin-insert-logo": "^0.1.5",
+    "gitbook-plugin-search-pro": "^2.0.2",
+    "gitbook-plugin-tabs": "^0.0.7",
+    "gitbook-plugin-theme-comscore": "^0.0.3"
+  }
 }

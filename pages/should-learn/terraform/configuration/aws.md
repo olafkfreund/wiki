@@ -35,7 +35,7 @@ provider "aws" {
   access_key = "my-access-key"
   secret_key = "my-secret-key"
 }
-```
+```plaintext
 
 Other settings related to authorization can be configured, such as:
 
@@ -51,14 +51,14 @@ For example:
 
 ```terraform
 provider "aws" {}
-```
+```plaintext
 
 ```sh
 $ export AWS_ACCESS_KEY_ID="anaccesskey"
 $ export AWS_SECRET_ACCESS_KEY="asecretkey"
 $ export AWS_REGION="us-west-2"
 $ terraform plan
-```
+```plaintext
 
 Other environment variables related to authorization are:
 
@@ -82,7 +82,7 @@ provider "aws" {
   shared_credentials_files = ["/Users/tf_user/.aws/creds"]
   profile                  = "customprofile"
 }
-```
+```plaintext
 
 #### [Container Credentials](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#container-credentials) <a href="#container-credentials" id="container-credentials"></a>
 
@@ -110,7 +110,7 @@ provider "aws" {
     external_id  = "EXTERNAL_ID"
   }
 }
-```
+```plaintext
 
 > **Hands-on:** Try the [Use AssumeRole to Provision AWS Resources Across Accounts](https://learn.hashicorp.com/tutorials/terraform/aws-assumerole) tutorial.
 
@@ -128,7 +128,7 @@ provider "aws" {
     web_identity_token_file = "/Users/tf_user/secrets/web-identity-token"
   }
 }
-```
+```plaintext
 
 #### [Using an External Credentials Process](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#using-an-external-credentials-process) <a href="#using-an-external-credentials-process" id="using-an-external-credentials-process"></a>
 
@@ -140,9 +140,9 @@ For example:
 provider "aws" {
   profile = "customprofile"
 }
-```
+```plaintext
 
-```
+```plaintext
 [profile customprofile]
 credential_process = custom-process --username jdoe
-```
+```plaintext

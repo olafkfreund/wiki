@@ -39,7 +39,7 @@ provider "kubernetes" {
   client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
   cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
 }
-```
+```plaintext
 
 Deploy Nginx Controller:
 
@@ -121,4 +121,4 @@ resource "local_file" "kubeconfig" {
   content  = var.kubeconfig
   filename = "${path.root}/kubeconfig"
 }
-```
+```plaintext

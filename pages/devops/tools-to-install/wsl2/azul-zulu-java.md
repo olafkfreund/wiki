@@ -23,7 +23,7 @@ Installing with a package manager requires `root` privileges. Log in as `root` o
     ```bash
      # add the Azul RPM repository 
     sudo yum install -y https://cdn.azul.com/zulu/bin/zulu-repo-1.0.0-1.noarch.rpm
-    ```
+    ```plaintext
 2.  Install the required Azul Zulu package.
 
     For RHEL or Fedora
@@ -31,28 +31,28 @@ Installing with a package manager requires `root` privileges. Log in as `root` o
     ```bash
      # install Azul Zulu 11 JDK 
     sudo yum install zulu11-jdk
-    ```
+    ```plaintext
 
     The default installation folder is:
 
     ```bash
      /usr/lib/jvm/java-<major_version>-zulu-openjdk-ca
-    ```
+    ```plaintext
 
     For example, the default installation folder for Azul Zulu JDK 11 is:
 
     ```bash
      /usr/lib/jvm/java-11-zulu-openjdk-ca
-    ```
+    ```plaintext
 3.  (Optional) You may want to add the `<installation_folder>/bin` to your `PATH` environment variable so you can run `java` without typing the full path.
 
     ```bash
      export PATH=<installation_folder>/bin:$PATH
-    ```
+    ```plaintext
 4.  Your Java version in use remains the same unless you explicitly change it. Use this command to list the installed Java versions on your system:
 
     ```bash
     sudo alternatives --config java
-    ```
+    ```plaintext
 
 \

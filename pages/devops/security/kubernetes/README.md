@@ -133,9 +133,9 @@ Kubernetes ships an integrated Role-Based Access Control (RBAC) component that m
 
 RBAC authorization uses the rbac.authorization.k8s.io API group to drive authorization decisions, allowing you to dynamically configure policies through the Kubernetes API. To enable RBAC, start the API server with the --authorization-mode flag set to a comma-separated list that includes RBAC; for example:
 
-```
+```plaintext
 kube-apiserver --authorization-mode=Example,RBAC --other-options --more-options
-```
+```plaintext
 
 For detailed examples of utilizing RBAC, refer to Kubernetes documentation at [https://kubernetes.io/docs/reference/access-authn-authz/rbac](https://kubernetes.io/docs/reference/access-authn-authz/rbac)
 

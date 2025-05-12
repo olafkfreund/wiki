@@ -16,7 +16,7 @@ Thank you for considering contributing to this DevOps knowledge base! This docum
 - Use fenced code blocks with language specification:
   ```bash
   # This is a bash code block
-  ```
+  ```plaintext
 - Include descriptive alt text for images
 - Keep line length under 120 characters
 
@@ -29,7 +29,7 @@ All content pages should include YAML front matter:
 description: Brief description of the page content
 keywords: keyword1, keyword2, keyword3
 ---
-```
+```plaintext
 
 ## Advanced GitBook Features
 
@@ -39,7 +39,7 @@ Reference global variables defined in `book.json` using:
 
 ```markdown
 Kubernetes version: {{ book.kubernetesVersion }}
-```
+```plaintext
 
 ### Including Reusable Snippets
 
@@ -47,7 +47,7 @@ To include reusable content:
 
 ```markdown
 {% include "/_snippets/snippet-name.md" %}
-```
+```plaintext
 
 ### Using Tabs
 
@@ -62,7 +62,7 @@ Content for option 1
 Content for option 2
 {% endtab %}
 {% endtabs %}
-```
+```plaintext
 
 ## Submitting Changes
 

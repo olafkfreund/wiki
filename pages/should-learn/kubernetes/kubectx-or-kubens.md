@@ -12,7 +12,7 @@ For example,
 
 ```bash
 kubectx demo-clsuter
-```
+```plaintext
 
 By default, when you use kubectl without the `--namespace` flag, it lists all the resources in the default namespace.
 
@@ -22,7 +22,7 @@ For example, If I have a namespace named `devops-tools` I can set it as default 
 
 ```bash
 kubens devops-tools
-```
+```plaintext
 
 Now, if you run kubectl to list pods or any resources, it will use the `devops-tools` namespace by default without adding `--namepsace` flag to the `kubectl`command.
 
@@ -33,6 +33,6 @@ Now, if you say, I don’t want to install a separate plugin for this. Then, do 
 ```bash
 alias kubens='kubectl config set-context --current --namespace '
 alias kubectx='kubectl config use-context '
-```
+```plaintext
 
 An alias will also do the trick!

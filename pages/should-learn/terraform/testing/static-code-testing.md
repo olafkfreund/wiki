@@ -9,14 +9,14 @@ Linting is the process of checking source code for syntax and style errors.
 
 ```hcl
 tflint /path/to/terraform/code
-```
+```plaintext
 
 * **Checkov**: This is an open-source static analysis tool for Terraform that checks for security and compliance issues in your Terraform code. Install it using the python package manager _pip_ and run it using the command below:
 
 ```hcl
 pip install checkov
 checkov -d /path/to/terraform/code
-```
+```plaintext
 
 Checkov will identify security issues and provides recommendations for how to fix the issue, along with the location of the relevant code, such as publically accessible storage accounts.
 
@@ -32,7 +32,7 @@ Severity: CRITICAL
 Tags: [network,storage]
 Status: FAILED
 Resource:
-```
+```plaintext
 
 Check out the list of [other popular tools used in Terraform-managed deployments](https://spacelift.io/blog/terraform-tools).
 
@@ -45,7 +45,7 @@ It can easily be installed using pip and run using the command shown below:
 ```hcl
 pip install terraform-compliance
 terraform-compliance -p /path/to/policy/file.yaml -f /path/to/terraform/code
-```
+```plaintext
 
 For example, the YAML file below specifies that Azure Storage Account should not be publicly accessible:
 
@@ -56,7 +56,7 @@ controls:
     rules:
       - azure_storage_account:
           public_access_allowed: False
-```
+```plaintext
 
 ### Drift Testing
 
@@ -71,6 +71,6 @@ Found 11 resource(s) – 73% coverage
 – 8 managed by terraform
 – 2 not managed by terraform
 – 1 found in terraform state but missing on the cloud provider
-```
+```plaintext
 
 Periodic monitoring of the IaC-managed infrastructure to proactively check for drifts is a challenge.

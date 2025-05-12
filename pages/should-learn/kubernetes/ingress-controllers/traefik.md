@@ -13,19 +13,19 @@ Add Traefik Labs chart repository to Helm:
 
 ```bash
 helm repo add traefik https://traefik.github.io/charts
-```
+```plaintext
 
 You can update the chart repository by running:
 
 ```bash
 helm repo update
-```
+```plaintext
 
 And install it with the `helm` command line:
 
 ```bash
 helm install traefik traefik/traefik
-```
+```plaintext
 
 Helm Features
 
@@ -42,7 +42,7 @@ kubectl create ns traefik-v2
 # Install in the namespace "traefik-v2"
 helm install --namespace=traefik-v2 \
     traefik traefik/traefik
-```
+```plaintext
 
 #### Exposing the Traefik dashboard
 
@@ -50,7 +50,7 @@ This HelmChart does not expose the Traefik dashboard by default, for security co
 
 ```shell
 kubectl port-forward $(kubectl get pods --selector "app.kubernetes.io/name=traefik" --output=name) 9000:9000
-```
+```plaintext
 
 It can then be reached at: `http://127.0.0.1:9000/dashboard/`
 
@@ -71,7 +71,7 @@ spec:
       services:
         - name: api@internal
           kind: TraefikService
-```
+```plaintext
 
 Dynamic configuration:
 
@@ -103,4 +103,4 @@ http:
       loadBalancer:
         servers:
         - url: http://private/whoami-service
-```
+```plaintext

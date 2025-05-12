@@ -16,7 +16,7 @@ Overall, Kustomize is a useful tool for managing Kubernetes deployments and conf
 
 Suppose you have a directory named `my-app` with the following structure:
 
-```
+```plaintext
 my-app/
 ├── base/
 │   ├── deployment.yaml
@@ -27,22 +27,22 @@ my-app/
     └── prod/
         ├── patch.yaml
         └── service.yaml
-```
+```plaintext
 
 To build the `dev` overlay configuration, you can run:
 
-```
+```plaintext
 cd my-app/overlays/dev
 kustomize build
-```
+```plaintext
 
 This will generate the Kubernetes YAML manifests for the `dev` environment by combining the base resources with the `dev` overlay patch file.
 
 You can then apply these manifests to your Kubernetes cluster using `kubectl apply`:
 
-```
+```plaintext
 kustomize build | kubectl apply -f -
-```
+```plaintext
 
 This will apply the generated YAML manifests to your Kubernetes cluster.
 

@@ -31,7 +31,7 @@ services:
 volumes:
     db_data:
 
-```
+```plaintext
 
 ```hcl
 provider "azurerm" {
@@ -71,7 +71,7 @@ resource "azurerm_app_service" "main" {
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
   }
 }
-```
+```plaintext
 
 
 

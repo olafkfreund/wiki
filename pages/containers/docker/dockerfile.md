@@ -32,4 +32,4 @@ FROM scratch
 COPY --from=build /bin/project /bin/project
 ENTRYPOINT ["/bin/project"]
 CMD ["--help"]
-```
+```plaintext

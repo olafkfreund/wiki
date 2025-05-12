@@ -41,7 +41,7 @@ stages:
           targetPath: '$(Build.ArtifactStagingDirectory)\ReleaseNotes.md'
           artifact: 'ReleaseNotes'
           publishLocation: 'pipeline'
-```
+```plaintext
 
 Included template for release notes.
 
@@ -72,4 +72,4 @@ Included template for release notes.
   -  **Message:** {{this.message}}
   -  **Commited by:** {{this.author.displayName}} 
 {{/forEach}
-```
+```plaintext

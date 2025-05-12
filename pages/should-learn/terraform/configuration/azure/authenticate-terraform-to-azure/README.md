@@ -17,7 +17,7 @@ Using bash:
 
     ```bash
     export MSYS_NO_PATHCONV=1    
-    ```
+    ```plaintext
 
     **Key points:**
 
@@ -29,7 +29,7 @@ Azure CLICopy
 {% code overflow="wrap" lineNumbers="true" %}
 ```bash
 az ad sp create-for-rbac --name <service_principal_name> --role Contributor --scopes /subscriptions/<subscription_id>
-```
+```plaintext
 {% endcode %}
 
 1. **Key points:**
@@ -48,7 +48,7 @@ PowerShellCopy
 
 ```powershell
 Connect-AzAccount
-```
+```plaintext
 
 **Key points:**
 
@@ -63,7 +63,7 @@ PowerShellCopy
 
 ```powershell
 Get-AzContext
-```
+```plaintext
 
 1. To view all enabled Azure subscriptions for the logged-in Microsoft account, run [Get-AzSubscription](https://learn.microsoft.com/en-us/powershell/module/az.accounts/get-azsubscription).
 
@@ -71,7 +71,7 @@ Azure CLICopy
 
 ```azurecli
 Get-AzSubscription
-```
+```plaintext
 
 1. To use a specific Azure subscription, run [Set-AzContext](https://learn.microsoft.com/en-us/powershell/module/az.accounts/set-azcontext).
 
@@ -79,7 +79,7 @@ PowerShellCopy
 
 ```powershell
 Set-AzContext -Subscription "<subscription_id_or_subscription_name>"
-```
+```plaintext
 
 **Key points:**
 
@@ -91,7 +91,7 @@ PowerShellCopy
 
 ```powershell
 $sp = New-AzADServicePrincipal -DisplayName <service_principal_name> -Role "Contributor"
-```
+```plaintext
 
 **Key points:**
 
@@ -104,7 +104,7 @@ PowerShellCopy
 
 ```powershell
 $sp.AppId
-```
+```plaintext
 
 **Key points:**
 
@@ -116,7 +116,7 @@ PowerShellCopy
 
 ```powershell
 $sp.PasswordCredentials.SecretText
-```
+```plaintext
 
 1. **Key points:**
    * Make note of the password as it's needed to use the service principal.

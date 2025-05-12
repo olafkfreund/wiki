@@ -11,7 +11,7 @@ Download Nerd Fonts for windows:
 {% code overflow="wrap" lineNumbers="true" %}
 ```powershell
 curl.exe -O -J -L https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/CascadiaCode.zip
-```
+```plaintext
 {% endcode %}
 
 Install the Font by using "Settings-Personalisation-Fonts"

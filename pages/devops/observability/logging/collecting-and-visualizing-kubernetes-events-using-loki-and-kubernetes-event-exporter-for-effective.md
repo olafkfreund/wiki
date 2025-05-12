@@ -37,19 +37,19 @@ persistence:
 memberlist:
   service:
     publishNotReadyAddresses: true
-```
+```plaintext
 
 To deploy our Helm chart add [Grafana’s chart repository](https://github.com/grafana/helm-charts) to Helm:
 
-```
+```plaintext
 helm repo add grafana https://grafana.github.io/helm-charts
-```
+```plaintext
 
 After that we run a command to deploy our Loki, in our case it would be in the “monitoring” namespace. Debug flag I use to make sure that all configuration is perfect
 
 ```sh
 helm install loki grafana/loki -n monitoring -f loki-values.yaml --debug
-```
+```plaintext
 
 ## Kubernetes Event Exporter <a href="#0e1f" id="0e1f"></a>
 
@@ -104,7 +104,7 @@ nodeSelector:
   kubernetes.io/os: linux
 
 affinity: {}
-```
+```plaintext
 
 In addition to this file, you need to include the “config” property, which I will describe below. Within the “config” property, you can specify the destination for the event exporter’s data. In our case, we will use Loki, but you can integrate many other applications as listed in the [documentation](https://github.com/resmoio/kubernetes-event-exporter/blob/master/README.md). Since Loki does not have a direct integration, we will utilize it as a simple [webhook](https://github.com/opsgenie/kubernetes-event-exporter/issues/149), making requests to the Loki API. Furthermore, we will format our request to display comprehensive event data. The receiver is listed as a “dump” to easily access and read the logs via the command line using the command `kubectl logs`.
 
@@ -143,19 +143,19 @@ config: |
               values:
                 - - "{{ mul .GetTimestampMs 1000000 }}"
                   - "severity={{ .Type }} namespace={{ .InvolvedObject.Namespace }} object={{ .InvolvedObject.Kind }}/{{ .InvolvedObject.Name }} reason={{ .Reason }} message={{ .Message }}"
-```
+```plaintext
 
 Just like in the Loki deployment, we add the repo:
 
 ```sh
 helm repo add kubernetes-event-exporter https://resmoio.github.io/kubernetes-event-exporter
-```
+```plaintext
 
 And deploy with our values.yaml file in the “monitoring” namespace:
 
 ```sh
 helm install kubernetes-event-exporter -f values.yaml . -n monitoring --debug
-```
+```plaintext
 
 ## Data visualization with Grafana <a href="#46c9" id="46c9"></a>
 

@@ -300,4 +300,4 @@ resource pvtEndpointDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneG
     privateEndpoint
   ]
 }
-```
+```plaintext

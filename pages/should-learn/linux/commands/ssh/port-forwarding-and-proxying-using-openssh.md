@@ -90,4 +90,4 @@ The following command opens a SOCKS proxy at the port _**`9090`**_ on your local
 
 ```bash
 pkill ssh
-```
+```plaintext

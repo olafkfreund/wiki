@@ -11,13 +11,13 @@ Install Checkov on Linux:
 
 ```bash
 pip3 install checkov
-```
+```plaintext
 
 or install by using brew:
 
 ```bash
 brew install checkov
-```
+```plaintext
 
 Use Checkov with Terraform:
 
@@ -26,7 +26,7 @@ terraform init
 terraform plan -out tf.plan
 terraform show -json tf.plan  > tf.json 
 checkov -f tf.json
-```
+```plaintext
 
 Docker and Podman:
 
@@ -34,7 +34,7 @@ Docker and Podman:
 ```bash
 docker pull bridgecrew/checkov
 docker run --tty --volume /user/tf:/tf --workdir /tf bridgecrew/checkov --directory /tf
-```
+```plaintext
 {% endcode %}
 
 GitHub Action:
@@ -63,7 +63,7 @@ jobs:
         with:
           directory: example/examplea
           framework: terraform 
-```
+```plaintext
 {% endcode %}
 
 Checkov with Azure DevOps for terraform:
@@ -100,7 +100,7 @@ Checkov with Azure DevOps for terraform:
         checkov -f main.json -o junitxml > Checkov-Plan-Report.xml
   continueOnError: true
   displayName: Checkov plan scan
-```
+```plaintext
 
 Chekov with Azure DevOps and Bicep:
 
@@ -135,5 +135,5 @@ stages:
               testResultsFiles: "CheckovReport.xml"
               searchFolder: "$(System.DefaultWorkingDirectory)"
             displayName: "Publish Test results"
-```
+```plaintext
 {% endcode %}

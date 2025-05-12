@@ -1,6 +1,6 @@
 # RHEL in WSL2
 
-```
+```plaintext
 On a podman/docker capable host:
      1. podman pull registry.access.redhat.com/ubi9
      2. podman run --name ubi9 ubi9
@@ -8,7 +8,7 @@ On a podman/docker capable host:
 Copy ubi8.tar to Windows
      1. wsl import c:\wsl\rhel9 $HOME/wsl/rhel9 ubi9.tar
      2. wsl -d rhel9
-```
+```plaintext
 
 ### A registration to awesomeness <a href="#a-registration-to-awesomeness" id="a-registration-to-awesomeness"></a>
 
@@ -32,4 +32,4 @@ subscription-manager usage --set="Development/Test"
 
 # Once everything is set, we can attach the system to our Red Hat subscription
 subscription-manager attach
-```
+```plaintext

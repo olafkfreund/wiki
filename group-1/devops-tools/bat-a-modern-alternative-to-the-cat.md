@@ -9,4 +9,4 @@ description: 'Install bat on Fedora:'
 ```bash
 sudo dnf install bat
 echo "alias batcat="bat" >> .bashrc
-```
+```plaintext

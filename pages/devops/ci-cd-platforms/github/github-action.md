@@ -44,7 +44,7 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-```
+```plaintext
 
 This code creates a workflow that automatically builds and deploys an ASP.NET Core application to an Azure Web App whenever code is pushed to the main branch. The workflow runs on an Ubuntu virtual machine and uses the `actions/checkout@v2` action to check out the code from the repository.
 
@@ -97,7 +97,7 @@ jobs:
         templateFile: ${{ env.AZURE_TEMPLATE_FILE }}
         parametersFile: ${{ env.AZURE_PARAMETER_FILE }}
         resourceGroupName: ${{ env.AZURE_RG }}
-```
+```plaintext
 
 This code creates a GitHub Action that deploys infrastructure in Azure using an Azure Resource Manager (ARM) template. The workflow is triggered whenever code is pushed to the main branch.
 

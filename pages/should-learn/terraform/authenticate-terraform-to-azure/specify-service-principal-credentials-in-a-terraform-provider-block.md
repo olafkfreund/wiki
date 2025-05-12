@@ -26,4 +26,4 @@ provider "azurerm" {
 }
 
 # Your code goes here
-```
+```plaintext

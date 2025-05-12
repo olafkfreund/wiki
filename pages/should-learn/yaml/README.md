@@ -29,7 +29,7 @@ Let’s look at a few simple examples of YAML.
 Kubernetes:
   master: 1
   worker: 3
-```
+```plaintext
 
 Its JSON equivalent is as follows:
 
@@ -40,7 +40,7 @@ Its JSON equivalent is as follows:
     "worker": 3
   }
 }
-```
+```plaintext
 
 I won’t go into detail about YAML language, you can refer to its official website to learn more, but I did draw a basic YAML mind map below:
 
@@ -65,7 +65,7 @@ $ kubectl explain pod
 $ kubectl explain pod.metadata
 $ kubectl explain pod.spec
 $ kubectl explain pod.spec.containers
-```
+```plaintext
 
 Sample output will look like:
 
@@ -77,7 +77,7 @@ Third trick is we can also let kubectl “do it” for us, generating a “docum
 
 ```bash
 $ kubectl run ngx --image=nginx:alpine --dry-run=client -o yaml
-```
+```plaintext
 
 The above command will generate an absolutely correct YAML file:
 
@@ -97,7 +97,7 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
-```
+```plaintext
 
 [\
 ](https://medium.com/tag/kubernetes?source=post\_page-----2f102903478---------------kubernetes-----------------)\

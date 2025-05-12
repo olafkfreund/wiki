@@ -8,7 +8,7 @@ User Case Examples
 
 ```sh
 cat employees.json | jq '.[] | .name'
-```
+```plaintext
 
 This will output a list of names of all the employees in the JSON file.
 
@@ -16,7 +16,7 @@ This will output a list of names of all the employees in the JSON file.
 
 ```sh
 cat products.json | jq '.[] | select(.price < 10)'
-```
+```plaintext
 
 This will output a list of all the products in the JSON file that have a price less than $10.
 
@@ -24,7 +24,7 @@ This will output a list of all the products in the JSON file that have a price l
 
 ```sh
 cat orders.json | jq -r '["OrderID","CustomerID","OrderDate"], (.[] | [.OrderID,.CustomerID,.OrderDate]) | @csv'
-```
+```plaintext
 
 This will output the data in a CSV format, with the headers "OrderID", "CustomerID", and "OrderDate" followed by the corresponding values for each order.
 
@@ -34,7 +34,7 @@ jq can also be used with the Azure CLI to process and manipulate JSON output fro
 
 ```sh
 az vm list --output json | jq '.[].name'
-```
+```plaintext
 
 This will output a list of all the virtual machine names in your Azure subscription.
 

@@ -33,7 +33,7 @@ You can use the `kubectl describe pod <pod-name>` command to check the events of
 
 ```sh
 $ kubectl describe pod my-pod
-```
+```plaintext
 
 Look for “Failed to pull image” or “ImagePullBackOff” events. These would indicate issues with pulling the Docker image.
 
@@ -43,7 +43,7 @@ Use the `kubectl describe node <node-name>` command to check the resources on yo
 
 ```sh
 $ kubectl describe node my-node
-```
+```plaintext
 
 ### Issues with Persistent Volumes <a href="#3e3b" id="3e3b"></a>
 
@@ -51,7 +51,7 @@ You can check Pod status use `kubectl` command:
 
 ```sh
 $ kubectl describe pod my-pod
-```
+```plaintext
 
 Looking for errors like:
 
@@ -59,13 +59,13 @@ Looking for errors like:
 Kubelet(k8s-node2) Error syncing pod, skipping: timeout expired waiting 
 for volumes toattach/mount for pod "my-pod"/"default". 
 list of unattached/unmounted volumes=[ceph-pv]
-```
+```plaintext
 
 Then check the PVC status:
 
 ```sh
 $ kubectl get pvc
-```
+```plaintext
 
 If the STATUS of a PVC is not “Bound”, there might be issues with storage provisioning.
 
@@ -75,7 +75,7 @@ Network issues can be a bit harder to diagnose. You can check the logs of your C
 
 ```sh
 $ kubectl -n kube-system logs -l k8s-app=calico-node
-```
+```plaintext
 
 ### Security Context Issues <a href="#6841" id="6841"></a>
 
@@ -83,7 +83,7 @@ Check the security context of your Pod using the `kubectl get pod <pod-name> -o 
 
 ```sh
 $ kubectl get pod my-pod -o yaml
-```
+```plaintext
 
 ### Docker or Runtime Issues <a href="#0eef" id="0eef"></a>
 
@@ -91,7 +91,7 @@ Check the logs on your node. The way to do this depends on your node’s operati
 
 ```sh
 $ journalctl -u docker
-```
+```plaintext
 
 ## Conclusion <a href="#e963" id="e963"></a>
 

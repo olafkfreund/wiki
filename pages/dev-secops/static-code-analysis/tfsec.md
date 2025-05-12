@@ -82,7 +82,7 @@ stages:
           # args: --workspace my-workspace --config-file ./tfsec.yml
           dir: $(System.DefaultWorkingDirectory)/Infrastructure-Source-Code/terraform
           publishTestResults: true
-```
+```plaintext
 
 GitHub Workflow
 
@@ -111,4 +111,4 @@ jobs:
         with:
           # Path to SARIF file relative to the root of the repository
           sarif_file: tfsec.sarif
-```
+```plaintext

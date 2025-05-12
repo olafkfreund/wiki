@@ -20,7 +20,7 @@ Suppose you have a configuration file that contains a placeholder value that nee
 
 ```bash
 sed -i 's/placeholder_value/new_value/g' config.ini
-```
+```plaintext
 
 This command replaces all occurrences of "placeholder\_value" with "new\_value" in the config.ini file.
 
@@ -30,7 +30,7 @@ Suppose you have a log file that contains some irrelevant information that you w
 
 ```bash
 sed -i '/irrelevant_info/d' access.log
-```
+```plaintext
 
 This command removes all lines that contain the string "irrelevant\_info" from the access.log file.
 
@@ -41,7 +41,7 @@ Suppose you have a configuration file that needs to be modified to add a new lin
 ```bash
 sed -i '3i
 ew_line' config.ini
-```
+```plaintext
 
 This command inserts the string "new\_line" as a new line at line 3 of the config.ini file.
 

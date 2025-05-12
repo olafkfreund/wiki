@@ -67,20 +67,20 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2021-09-01'
 }
 
 output containerIPv4Address string = containerGroup.properties.ipAddress.ip
-```
+```plaintext
 {% endcode %}
 
 ```bash
 az group create --name exampleRG --location eastus
 az deployment group create --resource-group exampleRG --template-file main.bicep
-```
+```plaintext
 
 ```bash
 // Some codeaz resource list --resource-group exampleRG
-```
+```plaintext
 
 {% code overflow="wrap" %}
 ```bash
 // Some codeaz container logs --resource-group exampleRG --name acilinuxpublicipcontainergroup
-```
+```plaintext
 {% endcode %}

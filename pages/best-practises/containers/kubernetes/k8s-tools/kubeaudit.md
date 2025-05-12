@@ -31,7 +31,7 @@ Suppose you have a CI/CD pipeline that deploys Kubernetes configurations to a pr
   run: |
     curl -sL https://github.com/Shopify/kubeaudit/releases/latest/download/kubeaudit-linux-amd64.tar.gz | tar xz
     ./kubeaudit audit deployment.yaml
-```
+```plaintext
 
 This command downloads the latest version of `kubeaudit`, audits the `deployment.yaml` file for security issues, and fails the build if any security issues are found.
 
@@ -41,7 +41,7 @@ Suppose you are developing a Kubernetes configuration locally and want to audit 
 
 ```bash
 kubeaudit audit deployment.yaml
-```
+```plaintext
 
 This command audits the `deployment.yaml` file for security issues and prints any security issues found to the console.
 
@@ -54,7 +54,7 @@ Suppose you have a Kubernetes configuration that violates a specific security ru
   run: |
     curl -sL https://github.com/Shopify/kubeaudit/releases/latest/download/kubeaudit-linux-amd64.tar.gz | tar xz
     ./kubeaudit audit --ignore-container-read-only-root-filesystem deployment.yaml
-```
+```plaintext
 
 This command audits the `deployment.yaml` file for security issues but ignores the `--ignore-container-read-only-root-filesystem` rule.
 

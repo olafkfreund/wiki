@@ -13,7 +13,7 @@ metadata:
 spec:
   package: xpkg.upbound.io/upbound/provider-aws:v0.27.0
 EOF
-```
+```plaintext
 
 The Crossplane `Provider` Custom Resource Definition tells Kubernetes how to connect to the provider.
 
@@ -23,7 +23,7 @@ Verify the provider installed with `kubectl get providers`.
 kubectl get providers
 NAME                   INSTALLED   HEALTHY   PACKAGE                                        AGE
 upbound-provider-aws   True        True      xpkg.upbound.io/upbound/provider-aws:v0.27.0   12m
-```
+```plaintext
 
 A provider installs their own Kubernetes _Custom Resource Definitions_ (CRDs). These CRDs allow you to create AWS resources directly inside Kubernetes.
 
@@ -45,7 +45,7 @@ Create a text file containing the AWS account `aws_access_key_id` and `aws_secre
 [default]
 aws_access_key_id = <aws_access_key>
 aws_secret_access_key = <aws_secret_key>
-```
+```plaintext
 
 Save this text file as `aws-credentials.txt`.
 
@@ -59,7 +59,7 @@ kubectl create secret \
 generic aws-secret \
 -n crossplane-system \
 --from-file=creds=./aws-credentials.txt
-```
+```plaintext
 
 View the secret with `kubectl describe secret`
 
@@ -75,7 +75,7 @@ Type:  Opaque
 Data
 ====
 creds:  114 bytes
-```
+```plaintext
 
 ### Create a ProviderConfig  <a href="#create-a-providerconfig" id="create-a-providerconfig"></a>
 
@@ -97,7 +97,7 @@ spec:
       name: aws-secret
       key: creds
 EOF
-```
+```plaintext
 
 This attaches the AWS credentials, saved as a Kubernetes secret, as a `secretRef` .
 

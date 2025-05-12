@@ -4,6 +4,9 @@ structure:
   readme: README.md
   summary: SUMMARY.md
 
+gitbook:
+  spaceID: FTk8pBcGEQwB11SlngkL
+
 redirects:
   previous/page: new-folder/page.md
 

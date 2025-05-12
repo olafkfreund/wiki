@@ -74,7 +74,7 @@ jobs:
         tf_actions_version: 0.14.8
         tf_actions_subcommand: 'apply'
         tf_actions_working_dir: "./terraform"
-```
+```plaintext
 {% endcode %}
 
 1. Within the GitHub repository to where you are going to be running the terraform from, select settings -> secrets

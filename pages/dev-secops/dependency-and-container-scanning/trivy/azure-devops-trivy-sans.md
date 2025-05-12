@@ -71,7 +71,7 @@ stages:
         repository: '$(imageName)'
         command: 'push'
         tags: '$(tag)'
-```
+```plaintext
 
 ### The result <a href="#the-result" id="the-result"></a>
 

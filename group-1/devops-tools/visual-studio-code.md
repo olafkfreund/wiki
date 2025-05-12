@@ -10,7 +10,7 @@ Install the repo
 ```sh
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-```
+```plaintext
 {% endcode %}
 
 Update the package cache and install
@@ -18,12 +18,12 @@ Update the package cache and install
 ```bash
 dnf check-update
 sudo dnf install code
-```
+```plaintext
 
 ```bash
 dnf update
 sudo dnf install -y code
-```
+```plaintext
 
 Nerd font configuration to make terminal look good :smile:
 
@@ -33,4 +33,4 @@ Nerd font configuration to make terminal look good :smile:
 "terminal.integrated.gpuAcceleration": "canvas",
 "terminal.integrated.lineHeight": 1.3,
 "azureTerraform.terminal": "integrated"
-```
+```plaintext

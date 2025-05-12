@@ -25,17 +25,17 @@ This procedure describes how to enable the RPM Fusion software repositories with
     ```bash
     $ sudo dnf install \
       https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-    ```
+    ```plaintext
 2.  Optionally, enable the _Nonfree_ repository:
 
     ```bash
     $ sudo dnf install \
       https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-    ```
+    ```plaintext
 3. The first time you attempt to install packages from these repositories, the `dnf` utility prompts you to confirm the signature of the repositories. Confirm it.
 
 If you want to use Fedora as your main workstation please consider installing:
 
 ```bash
 sudo dnf install fedora-workstation-repositories
-```
+```plaintext

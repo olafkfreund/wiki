@@ -35,7 +35,7 @@ resource runPowerShellInlineWithOutput 'Microsoft.Resources/deploymentScripts@20
 }
 
 output result string = runPowerShellInlineWithOutput.properties.outputs.text
-```
+```plaintext
 {% endcode %}
 
 Save the preceding content into a Bicep file called **inlineScript.bicep**, and use the following PowerShell script to deploy the Bicep file.
@@ -50,5 +50,5 @@ New-AzResourceGroup -Name $resourceGroupName -Location $location
 New-AzResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile "inlineScript.bicep"
 
 Write-Host "Press [ENTER] to continue ..."
-```
+```plaintext
 {% endcode %}

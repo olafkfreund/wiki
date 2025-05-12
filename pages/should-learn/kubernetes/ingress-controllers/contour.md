@@ -8,13 +8,13 @@ Run the following to install Contour:
 
 ```bash
 $ kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
-```
+```plaintext
 
 Verify the Contour pods are ready by running the following:
 
 ```bash
 $ kubectl get pods -n projectcontour -o wide
-```
+```plaintext
 
 You should see the following:
 
@@ -29,19 +29,19 @@ Add the bitnami chart repository (which contains the Contour chart) by running t
 
 ```bash
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-```
+```plaintext
 
 Install the Contour chart by running the following:
 
 ```bash
 $ helm install my-release bitnami/contour --namespace projectcontour --create-namespace
-```
+```plaintext
 
 Verify Contour is ready by running:
 
 ```bash
 $ kubectl -n projectcontour get po,svc
-```
+```plaintext
 
 You should see the following:
 
@@ -58,7 +58,7 @@ Deploy the Gateway provisioner:
 
 ```bash
 $ kubectl apply -f https://projectcontour.io/quickstart/contour-gateway-provisioner.yaml
-```
+```plaintext
 
 Verify the Gateway provisioner deployment is available:
 
@@ -66,7 +66,7 @@ Verify the Gateway provisioner deployment is available:
 $ kubectl -n projectcontour get deployments
 NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
 contour-gateway-provisioner   1/1     1            1           1m
-```
+```plaintext
 
 Create a GatewayClass:
 
@@ -79,7 +79,7 @@ metadata:
 spec:
   controllerName: projectcontour.io/gateway-controller
 EOF
-```
+```plaintext
 
 Create a Gateway:
 
@@ -100,7 +100,7 @@ spec:
         namespaces:
           from: All
 EOF
-```
+```plaintext
 
 Verify the `Gateway` is available (it may take up to a minute to become available):
 
@@ -108,13 +108,13 @@ Verify the `Gateway` is available (it may take up to a minute to become availabl
 $ kubectl -n projectcontour get gateways
 NAME        CLASS     ADDRESS         READY   AGE
 contour     contour                   True    27s
-```
+```plaintext
 
 Verify the Contour pods are ready by running the following:
 
 ```bash
 $ kubectl -n projectcontour get pods
-```
+```plaintext
 
 You should see the following:
 
@@ -129,13 +129,13 @@ To install [httpbin](https://httpbin.org/), run the following:
 
 ```bash
 kubectl apply -f https://projectcontour.io/examples/httpbin.yaml
-```
+```plaintext
 
 Verify the pods and service are ready by running:
 
 ```bash
 kubectl get po,svc,ing -l app=httpbin
-```
+```plaintext
 
 You should see the following:
 
@@ -147,7 +147,7 @@ You should see the following:
 
 ```bash
 kubectl patch ingress httpbin -p '{"spec":{"ingressClassName": "contour"}}'
-```
+```plaintext
 
 Now we’re ready to send some traffic to our sample application, via Contour & Envoy.
 
@@ -164,7 +164,7 @@ $ kubectl -n projectcontour port-forward service/my-release-contour-envoy 8888:8
 
 # If using the Gateway provisioner
 $ kubectl -n projectcontour port-forward service/envoy-contour 8888:80
-```
+```plaintext
 
 In a browser or via `curl`, make a request to [http://local.projectcontour.io:8888](http://local.projectcontour.io:8888/) (note, `local.projectcontour.io` is a public DNS record resolving to 127.0.0.1 to make use of the forwarded port). You should see the `httpbin` home page.
 
