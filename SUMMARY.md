@@ -304,6 +304,8 @@
   * [AWS](pages/public-clouds/aws/README.md)
     * [Authentication Methods](pages/public-clouds/aws/authentication.md)
     * [Best Practices](pages/public-clouds/aws/best-practices.md)
+  * [Google Cloud Platform (GCP)](pages/public-clouds/gcp/README.md)
+    * [GCP Services](pages/public-clouds/gcp/services/README.md)
 * [Private Cloud](pages/private-cloud.md)
 * [Best Practises](pages/best-practises/README.md)
   * [Containers](pages/best-practises/containers/README.md)
