@@ -4,12 +4,23 @@ description: Install Nerd Fonts on Fedora
 
 # Nerd Fonts
 
+## Installation with GetNF
+
 Use the GetNF tool to install NF
 
-{% code overflow="wrap" lineNumbers="true" %}
+### Method 1: Manual clone and install
+
 ```bash
-git clone https://github.com/ronniedroid/getnf.git
+git clone https://github.com/getnf/getnf.git
 cd getnf
 ./install.sh
-```plaintext
-{% endcode %}
+```
+
+### Method 2: One-command installation
+
+Or with one command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash -s -- --silent
+```
+
