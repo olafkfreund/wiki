@@ -337,3 +337,7 @@
 ## NixOS
 
 * [NixOS Overview](pages/Nixos/README.md)
+  * [Install NixOS (PC, Mac, WSL, VM)](pages/Nixos/install.md)
+  * [Using devenv with Nix (Terraform & AWS)](pages/Nixos/devenv.md)
+  * [Devbox for Kubernetes: Local & AKS](pages/Nixos/devbox-k8s.md)
+  * [devenv for Node.js + Kubernetes](pages/Nixos/devenv-nodejs-k8s.md)
