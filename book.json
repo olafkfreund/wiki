@@ -14,13 +14,12 @@
     "include",
     "search-pro",
     "tabs",
-    "insert-logo",
     "github",
     "theme-comscore"
   ],
   "pluginsConfig": {
     "insert-logo": {
-      "url": "assets/images/logo.png",
+      "url": "assets/images/logo.svg",
       "style": "background: none; max-height: 30px; min-height: 30px"
     },
     "github": {

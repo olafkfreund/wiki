@@ -1,0 +1,13 @@
+{
+  "name": "devops-knowledge-base",
+  "version": "1.0.0",
+  "description": "DevOps Knowledge Base",
+  "main": "index.js",
+  "scripts": {
+    "start": "honkit serve",
+    "build": "honkit build"
+  },
+  "keywords": ["devops", "documentation"],
+  "author": "Olaf K Freund",
+  "license": "MIT"
+}

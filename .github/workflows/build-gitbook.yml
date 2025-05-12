@@ -1,4 +1,4 @@
-name: Build and Deploy GitBook
+name: Build and Deploy Documentation
 
 on:
   push:
@@ -16,114 +16,35 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
           
-      - name: Install GitBook CLI and patch graceful-fs
+      - name: Install HonKit and plugins
         run: |
-          npm install -g gitbook-cli
+          npm install -g honkit
+          chmod +x ./scripts/install-honkit-plugins.sh
+          ./scripts/install-honkit-plugins.sh
           
-          # Create patch script for the graceful-fs issue
-          cat > patch-gitbook.js << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
-          
-          function findGracefulFsFile() {
-            // Path to the global node_modules in GitHub Actions
-            const basePath = '/opt/hostedtoolcache/node/16.20.2/x64/lib/node_modules';
-            const polyfillsPath = path.join(basePath, 'gitbook-cli/node_modules/npm/node_modules/graceful-fs/polyfills.js');
-            
-            if (fs.existsSync(polyfillsPath)) {
-              return polyfillsPath;
-            }
-            
-            // Try alternative paths if the first one doesn't exist
-            const alt1 = path.join(basePath, 'gitbook-cli/node_modules/graceful-fs/polyfills.js');
-            if (fs.existsSync(alt1)) {
-              return alt1;
-            }
-            
-            // Search recursively for the file
-            console.log("Searching for graceful-fs polyfills.js file...");
-            let foundPath = null;
-            
-            function searchRecursively(dir, depth = 0) {
-              if (depth > 10) return; // Limit recursion depth
-              
-              const files = fs.readdirSync(dir);
-              for (const file of files) {
-                const filePath = path.join(dir, file);
-                const stat = fs.statSync(filePath);
-                
-                if (stat.isDirectory()) {
-                  searchRecursively(filePath, depth + 1);
-                } else if (file === 'polyfills.js' && filePath.includes('graceful-fs')) {
-                  foundPath = filePath;
-                  console.log(`Found at: ${filePath}`);
-                  return;
-                }
-              }
-            }
-            
-            searchRecursively(path.join(basePath, 'gitbook-cli'));
-            return foundPath;
-          }
-          
-          const gracefulFsPath = findGracefulFsFile();
-          
-          if (!gracefulFsPath) {
-            console.error('Could not find graceful-fs polyfills.js file');
-            process.exit(1);
-          }
-          
-          console.log(`Patching file: ${gracefulFsPath}`);
-          
-          // Read the file content
-          const content = fs.readFileSync(gracefulFsPath, 'utf8');
-          
-          // Check if already patched
-          if (content.includes('typeof cb === "function"')) {
-            console.log('Already patched!');
-            process.exit(0);
-          }
-          
-          // Replace the problematic code
-          const patchedContent = content.replace(
-            'if (cb) cb.apply(this, arguments)',
-            'if (cb && typeof cb === "function") cb.apply(this, arguments)'
-          );
-          
-          // Write the patched content back
-          fs.writeFileSync(gracefulFsPath, patchedContent);
-          console.log('GitBook CLI has been patched successfully!');
-          EOF
-          
-          # Run the patch script
-          node patch-gitbook.js
-          
-      - name: Install GitBook plugins and build
+      - name: Build documentation
         run: |
-          cd $GITHUB_WORKSPACE
-          gitbook install
-          gitbook build
+          honkit build
           
-      - name: Upload GitBook build
+      - name: Upload documentation build
         uses: actions/upload-artifact@v4
         with:
-          name: gitbook-build
+          name: documentation-build
           path: _book
           retention-days: 1
           
-  # Optional: Add a deploy job here if you want to deploy the built GitBook
   deploy:
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: Download GitBook build
+      - name: Download documentation build
         uses: actions/download-artifact@v4
         with:
-          name: gitbook-build
+          name: documentation-build
           path: _book
           
       - name: Deploy to GitHub Pages
@@ -131,5 +52,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_book
-          # Uncomment the following line if you want to use a custom domain
-          # cname: your-custom-domain.com

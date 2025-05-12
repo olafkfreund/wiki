@@ -1,8 +1,8 @@
 {pkgs ? import <nixpkgs> {}}:
 pkgs.mkShell {
   buildInputs = with pkgs; [
-    # Use nodejs v16 which has better compatibility with GitBook CLI
-    nodejs-16_x
+    # Use nodejs v20 which has better compatibility with GitBook CLI than v22+
+    nodejs_20
 
     # Optional: Include other tools you might need
     git
