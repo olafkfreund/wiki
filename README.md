@@ -1,22 +1,45 @@
 ---
 description: >-
-  This is my attempt to describe DevOps for Azure Platform Engineers and a
-  knowledge base for my self.
+  Multi-Cloud Architecture & DevOps Knowledge Base by Olaf K Freund - 
+  Insights from 28+ years in cloud architecture, DevOps, and platform engineering.
 cover: .gitbook/assets/itl.cat_4k-wallpaper-for-windows_910235.png
 coverY: 0
 ---
 
-# Welcome!
+# Welcome to My Cloud Engineering Knowledge Base
 
-A DevOps Engineer is a professional responsible for the integration and automation of software development, testing, and deployment processes within an organization. DevOps engineers bridge the gap between software development and IT operations, ensuring that the software development lifecycle (SDLC) runs smoothly and efficiently.
+## About This Resource
 
-Here are some of the key responsibilities of a DevOps Engineer:
+Welcome to my comprehensive knowledge repository on modern cloud architecture, DevOps practices, and platform engineering. With over 28 years of experience working across AWS, Azure, GCP, and NixOS environments, I've compiled this resource to document best practices, technical insights, and practical solutions that have proven effective throughout my career.
 
-1. Continuous Integration and Delivery (CI/CD): DevOps Engineers are responsible for creating and maintaining automated deployment pipelines that enable continuous integration and delivery of software. This involves setting up and configuring build and deployment tools, such as Jenkins, GitLab, GitHub, Azure DevOps and Kubernetes.
-2. Infrastructure as Code (IaC): DevOps Engineers use tools like Ansible, Terraform, Bicep, Puppet and ARM Templates to automate infrastructure provisioning and configuration. This allows for the rapid and consistent deployment of infrastructure resources, such as virtual machines, containers, and storage.
-3. Monitoring and Analytics: DevOps Engineers use tools like Prometheus, Grafana, and ELK stack to monitor system performance and gather analytics data. This data is used to identify issues, optimize performance, and improve the user experience.
-4. Collaboration and Communication: DevOps Engineers work closely with software developers, IT operations teams, and other stakeholders to ensure that everyone is aligned with the goals of the project. They use tools like Slack and JIRA to communicate and collaborate effectively across different teams and locations.
-5. Security and Compliance: DevOps Engineers are responsible for ensuring that software and infrastructure meet security and compliance requirements, such as HIPAA, PCI DSS, and GDPR. They use tools like Vault, Twistlock, and Aqua Security to implement security best practices and monitor for potential security threats.
+As a Cloud Architect and DevOps Leader, I'm passionate about building resilient, secure, and efficient cloud systems while constantly exploring emerging technologies and methodologies. Whether you're a seasoned cloud professional or just beginning your journey, I hope you'll find valuable information to enhance your understanding and implementation of cloud-native approaches.
 
-Overall, DevOps Engineers play a critical role in modern software development and IT operations. They help organizations deliver software faster, more reliably, and with higher quality, while also improving system performance, security, and compliance.
+## Multi-Cloud & Modern DevOps in 2025
+
+In today's rapidly evolving landscape, successful cloud engineering encompasses several key areas:
+
+### 1. Cloud-Native Architecture
+Modern cloud solutions leverage containerization (Kubernetes), serverless computing, and microservices architectures to create scalable, resilient systems that can span multiple cloud providers while maintaining consistent governance and security controls.
+
+### 2. Infrastructure as Code (IaC) & GitOps
+Beyond just automation, today's cloud environments are fully defined and managed through code (Terraform, Bicep, Crossplane), with infrastructure changes flowing through the same robust testing and validation processes as application code. GitOps practices ensure infrastructure state matches its declared configuration in Git.
+
+### 3. Platform Engineering & Developer Experience
+Creating internal developer platforms with self-service capabilities accelerates innovation while maintaining governance. Tools like Backstage, custom Kubernetes operators, and service meshes build a cohesive ecosystem that empowers developers while preserving operational stability.
+
+### 4. Observability & Reliability Engineering
+Advanced monitoring goes beyond metrics to include distributed tracing, sophisticated logging, and chaos engineering practices that proactively identify and mitigate potential system failures before they impact users.
+
+### 5. DevSecOps & Compliance Automation
+Security is embedded throughout the development lifecycle with automated vulnerability scanning, supply chain security controls, and compliance verification - shifting security left while maintaining velocity.
+
+## About Me
+
+I'm a London-based Cloud Architect and DevOps leader with extensive experience designing and implementing enterprise-scale cloud solutions across AWS, Azure, and GCP. My expertise spans Kubernetes orchestration, NixOS/Nix-based immutable infrastructure, GitOps workflows, and multi-cloud governance models.
+
+Currently working as a Senior DevOps Consultant specializing in helping organizations implement modern cloud-native practices. Previously held leadership positions at R3, Contino, Live-Tech Games, Kantar, OFGEM, and other technology organizations.
+
+Feel free to explore this knowledge base, and I welcome any feedback or suggestions for improvement!
+
+[LinkedIn Profile](https://www.linkedin.com/in/olaffreund/) | [GitHub](https://github.com/olafkfreund)
 
