@@ -1,36 +1,66 @@
-/* Custom styling for DevOps Knowledge Base */
+/* Custom styling for DevOps Knowledge Base - Gruvbox Theme */
+
+/* Main colors */
+:root {
+  --gruvbox-bg: #282828;
+  --gruvbox-bg-soft: #32302f;
+  --gruvbox-bg-muted: #3c3836;
+  --gruvbox-fg: #ebdbb2;
+  --gruvbox-fg-muted: #bdae93;
+  --gruvbox-red: #cc241d;
+  --gruvbox-green: #98971a;
+  --gruvbox-yellow: #d79921;
+  --gruvbox-blue: #458588;
+  --gruvbox-purple: #b16286;
+  --gruvbox-aqua: #689d6a;
+  --gruvbox-orange: #d65d0e;
+  --gruvbox-gray: #a89984;
+}
+
+/* Basic page styling */
+.book {
+  background-color: var(--gruvbox-bg);
+  color: var(--gruvbox-fg);
+}
 
 /* Improve readability with a slightly larger font size and better line height */
 .markdown-section {
   font-size: 16px;
   line-height: 1.6;
+  color: var(--gruvbox-fg);
 }
 
 /* Better code block styling */
 .markdown-section pre {
-  background-color: #f7f8fa;
-  border-left: 4px solid #2674a6;
+  background-color: var(--gruvbox-bg-soft);
+  border-left: 4px solid var(--gruvbox-blue);
   border-radius: 3px;
+  color: var(--gruvbox-fg);
+}
+
+.markdown-section code {
+  background-color: var(--gruvbox-bg-muted);
+  color: var(--gruvbox-fg);
 }
 
 /* Custom callout boxes */
 .markdown-section blockquote.info {
-  background-color: #f2f9ff;
-  border-left: 4px solid #42acf3;
+  background-color: rgba(69, 133, 136, 0.15);
+  border-left: 4px solid var(--gruvbox-blue);
   padding: 10px 15px;
   border-radius: 3px;
 }
 
 .markdown-section blockquote.warning {
-  background-color: #fff9ee;
-  border-left: 4px solid #f7b731;
+  background-color: rgba(214, 153, 14, 0.15);
+  border-left: 4px solid var(--gruvbox-yellow);
   padding: 10px 15px;
   border-radius: 3px;
 }
 
 .markdown-section blockquote.danger {
-  background-color: #ffefef;
-  border-left: 4px solid #ff5252;
+  background-color: rgba(204, 36, 29, 0.15);
+  border-left: 4px solid var(--gruvbox-red);
   padding: 10px 15px;
   border-radius: 3px;
 }
@@ -44,39 +74,59 @@
 }
 
 .markdown-section table th {
-  background-color: #f5f7fa;
+  background-color: var(--gruvbox-bg-muted);
   font-weight: bold;
+  color: var(--gruvbox-fg);
 }
 
 .markdown-section table td, 
 .markdown-section table th {
   padding: 8px 12px;
-  border: 1px solid #e6ecf1;
+  border: 1px solid var(--gruvbox-bg-muted);
 }
 
 /* Make headers more distinct */
 .markdown-section h1 {
-  border-bottom: 1px solid #eaecef;
+  border-bottom: 1px solid var(--gruvbox-bg-muted);
   padding-bottom: 0.3em;
+  color: var(--gruvbox-fg);
 }
 
 .markdown-section h2 {
-  border-bottom: 1px solid #eaecef;
+  border-bottom: 1px solid var(--gruvbox-bg-muted);
   padding-bottom: 0.2em;
+  color: var(--gruvbox-fg);
+}
+
+/* Links */
+.markdown-section a {
+  color: var(--gruvbox-aqua);
+}
+
+.markdown-section a:hover {
+  color: var(--gruvbox-blue);
+  text-decoration: underline;
 }
 
 /* Tabs styling */
 .nav-tabs {
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid var(--gruvbox-bg-muted);
 }
 
 .nav-tabs > li.active > a {
   border: none;
-  border-bottom: 2px solid #4183c4;
+  border-bottom: 2px solid var(--gruvbox-orange);
+  color: var(--gruvbox-orange);
 }
 
 /* Glossary term highlighting */
 .glossary-term {
-  border-bottom: 1px dotted #375eab;
+  border-bottom: 1px dotted var(--gruvbox-aqua);
   cursor: help;
+}
+
+/* Selection styling */
+::selection {
+  background: var(--gruvbox-bg-muted);
+  color: var(--gruvbox-fg);
 }
