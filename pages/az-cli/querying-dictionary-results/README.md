@@ -1,86 +1,72 @@
-# Querying dictionary results
+# Querying dictionary results (2025 Update)
 
+Azure CLI supports powerful querying and output formatting using the `--query` parameter (JMESPath syntax) and the `--output` parameter. Here are the latest best practices and examples:
+
+## Basic Output Formats
 ```bash
-az account show
-az account show --output json # JSON is the default format
-az account show --output yaml
-az account show --output table
-```plaintext
+az account show --output json   # JSON (default)
+az account show --output yaml   # YAML (easy to read)
+az account show --output table  # Table (for high-level overviews)
+az account show --output tsv    # Tab-separated (for scripting)
+```
 
-#### Querying and formatting single values and nested values <a href="#querying-and-formatting-single-values-and-nested-values" id="querying-and-formatting-single-values-and-nested-values"></a>
-
+## Querying Single and Nested Values
 ```bash
-az account show --query name # Querying a single value
-az account show --query name -o tsv # Removes quotation marks from the output
+az account show --query name                # Single value
+az account show --query name -o tsv         # Remove quotes for scripting
+az account show --query user.name           # Nested value
+az account show --query user.name -o tsv    # Nested value, no quotes
+```
 
-az account show --query user.name # Querying a nested value
-az account show --query user.name -o tsv # Removes quotation marks from the output
-```plaintext
-
-#### Querying and formatting properties from arrays <a href="#querying-and-formatting-properties-from-arrays" id="querying-and-formatting-properties-from-arrays"></a>
-
-{% code overflow="wrap" %}
+## Querying and Formatting Arrays
 ```bash
 az account list --query "[].{subscription_id:id, name:name, isDefault:isDefault}" -o table
-```plaintext
-{% endcode %}
+```
 
-#### Querying and formatting multiple values, including nested values <a href="#querying-and-formatting-multiple-values-including-nested-values" id="querying-and-formatting-multiple-values-including-nested-values"></a>
-
-{% code overflow="wrap" %}
+## Querying Multiple and Nested Values
 ```bash
-az account show --query [name,id,user.name] # return multiple values
-az account show --query [name,id,user.name] -o table # return multiple values as a table
-```plaintext
-{% endcode %}
+az account show --query [name,id,user.name] -o table
+```
 
-#### Renaming properties in a query <a href="#renaming-properties-in-a-query" id="renaming-properties-in-a-query"></a>
-
-{% code overflow="wrap" %}
+## Renaming Properties in Output
 ```bash
-az account show --query "{SubscriptionName: name, SubscriptionId: id, UserName: user.name}" # Rename the values returned
-az account show --query "{SubscriptionName: name, SubscriptionId: id, UserName: user.name}" -o table # Rename the values returned in a table
-```plaintext
-{% endcode %}
+az account show --query "{SubscriptionName: name, SubscriptionId: id, UserName: user.name}" -o table
+```
 
-#### Querying Boolean values <a href="#querying-boolean-values" id="querying-boolean-values"></a>
-
-{% code overflow="wrap" fullWidth="true" %}
+## Querying Boolean and Filtering
 ```bash
-az account list
-az account list --query "[?isDefault]" # Returns the default subscription
-az account list --query "[?isDefault]" -o table # Returns the default subscription as a table
-az account list --query "[?isDefault].[name,id]" # Returns the name and id of the default subscription
-az account list --query "[?isDefault].[name,id]" -o table # Returns the name and id of the default subscription as a table
-az account list --query "[?isDefault].{SubscriptionName: name, SubscriptionId: id}" -o table # Returns the name and id of the default subscription as a table with friendly names
+az account list --query "[?isDefault]" -o table
+az account list --query "[?isDefault].{SubscriptionName: name, SubscriptionId: id}" -o table
+az account list --query "[?isDefault == `false`].name" -o table
+az account list --query "[? contains(name, 'Test')].id" -o tsv
+```
 
-az account list --query "[?isDefault == \`false\`]" # Returns all non-default subscriptions, if any
-az account list --query "[?isDefault == \`false\`].name" -o table # Returns all non-default subscriptions, if any, as a table
-
-az account list --query "[?isDefault].id" -o tsv # Returns the subscription id without quotation marks
-subscriptionId="$(az account list --query "[?isDefault].id" -o tsv)" # Captures the subscription id as a variable.
-echo $subscriptionId # Returns the contents of the variable.
-az account list --query "[? contains(name, 'Test')].id" -o tsv # Returns the subscription id of a non-default subscription containing the substring 'Test'
-subscriptionId="$(az account list --query "[? contains(name, 'Test')].id" -o tsv) # Captures the subscription id as a variable. 
-az account set -s $subscriptionId # Sets the current active subscription
-```plaintext
-{% endcode %}
-
-#### Working with spaces and quotation marks <a href="#working-with-spaces-and-quotation-marks" id="working-with-spaces-and-quotation-marks"></a>
-
-{% code lineNumbers="true" fullWidth="true" %}
+## Storing Output in Variables (Bash)
 ```bash
-resourceGroup='msdocs-learn-bash-$randomIdentifier'
-echo $resourceGroup # The $ is ignored in the creation of the $resourceGroup variable
-resourceGroup="msdocs-learn-bash-$randomIdentifier"
-echo $resourceGroup # The $randomIdentifier is evaluated when defining the $resourceGroup variable
-location="East US" # The space is ignored when defining the $location variable
-echo The value of the location variable is $location # The value of the $location variable is evaluated
-echo "The value of the location variable is $location" # The value of the $location variable is evaluated
-echo "The value of the location variable is \$location" # The value of the $location variable is not evaluated
-echo 'The value of the location variable is $location' # The value of the $location variable is not evaluated
-az group create --name $resourceGroup --location $location # Notice that the space in the $location variable is not ignored and the command fails as it treats the value after the space as a new command 
-az group create --name $resourceGroup --location "$location" # Notice that the space in the $location variable is ignored and the location argument accepts the entire string as the value
-```plaintext
-{% endcode %}
+subscriptionId=$(az account list --query "[?isDefault].id" -o tsv)
+az account set --subscription $subscriptionId
+```
+
+## Customizing Table Output
+```bash
+az vm list --query "[].{resource:resourceGroup, name:name}" --output table
+```
+
+## Advanced: Sorting and Filtering
+```bash
+az vm list --resource-group QueryDemo --query "sort_by([].{Name:name, Size:storageProfile.osDisk.diskSizeGb}, &Size)" --output table
+```
+
+## Best Practices
+- Use `--query` to filter and shape output for readability and automation.
+- Use `-o tsv` for scripting to avoid extra quotes.
+- Use `-o table` for human-friendly summaries.
+- Store sensitive output in variables, not in logs.
+- Use `az config set core.output=table` to set a default output format.
+- For complex JSON processing, pipe output to `jq`.
+
+## References
+- [Azure CLI Query Documentation](https://learn.microsoft.com/en-us/cli/azure/query-azure-cli)
+- [JMESPath Query Language](https://jmespath.org/)
+- [Azure CLI Output Formats](https://learn.microsoft.com/en-us/cli/azure/format-output-azure-cli)
 
