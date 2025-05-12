@@ -1,0 +1,82 @@
+/* Custom styling for DevOps Knowledge Base */
+
+/* Improve readability with a slightly larger font size and better line height */
+.markdown-section {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Better code block styling */
+.markdown-section pre {
+  background-color: #f7f8fa;
+  border-left: 4px solid #2674a6;
+  border-radius: 3px;
+}
+
+/* Custom callout boxes */
+.markdown-section blockquote.info {
+  background-color: #f2f9ff;
+  border-left: 4px solid #42acf3;
+  padding: 10px 15px;
+  border-radius: 3px;
+}
+
+.markdown-section blockquote.warning {
+  background-color: #fff9ee;
+  border-left: 4px solid #f7b731;
+  padding: 10px 15px;
+  border-radius: 3px;
+}
+
+.markdown-section blockquote.danger {
+  background-color: #ffefef;
+  border-left: 4px solid #ff5252;
+  padding: 10px 15px;
+  border-radius: 3px;
+}
+
+/* Improve table styling */
+.markdown-section table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.markdown-section table th {
+  background-color: #f5f7fa;
+  font-weight: bold;
+}
+
+.markdown-section table td, 
+.markdown-section table th {
+  padding: 8px 12px;
+  border: 1px solid #e6ecf1;
+}
+
+/* Make headers more distinct */
+.markdown-section h1 {
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+.markdown-section h2 {
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.2em;
+}
+
+/* Tabs styling */
+.nav-tabs {
+  border-bottom: 2px solid #ddd;
+}
+
+.nav-tabs > li.active > a {
+  border: none;
+  border-bottom: 2px solid #4183c4;
+}
+
+/* Glossary term highlighting */
+.glossary-term {
+  border-bottom: 1px dotted #375eab;
+  cursor: help;
+}

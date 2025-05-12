@@ -1,0 +1,27 @@
+# GitBook generated files
+_book/
+node_modules/
+*.log
+*.swp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# GitBook plugin generated files
+book.pdf
+book.epub
+book.mobi

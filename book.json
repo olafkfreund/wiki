@@ -1,0 +1,49 @@
+{
+  "title": "DevOps Knowledge Base",
+  "description": "Comprehensive DevOps documentation covering Kubernetes, cloud platforms, CI/CD, and more",
+  "author": "Olaf K Freund",
+  "language": "en",
+  "plugins": [
+    "expandable-chapters",
+    "copy-code-button",
+    "hints",
+    "include-codeblock",
+    "advanced-emoji",
+    "anchors",
+    "edit-link",
+    "include",
+    "search-pro",
+    "tabs",
+    "insert-logo",
+    "github",
+    "theme-comscore"
+  ],
+  "pluginsConfig": {
+    "insert-logo": {
+      "url": "assets/images/logo.png",
+      "style": "background: none; max-height: 30px; min-height: 30px"
+    },
+    "github": {
+      "url": "https://github.com/olafkfreund/wiki"
+    },
+    "edit-link": {
+      "base": "https://github.com/olafkfreund/wiki/edit/main",
+      "label": "Edit This Page"
+    },
+    "sharing": {
+      "linkedin": true,
+      "twitter": true,
+      "facebook": false,
+      "all": [
+        "linkedin", "twitter"
+      ]
+    }
+  },
+  "variables": {
+    "kubernetesVersion": "1.28",
+    "azureCLIVersion": "2.55.0",
+    "terraformVersion": "1.7.2",
+    "fluxVersion": "2.2.0",
+    "helmVersion": "3.14.0"
+  }
+}
