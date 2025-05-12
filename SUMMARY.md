@@ -333,3 +333,7 @@
         * [CI/CD for AKS apps with GitHub Actions and GitFlow](pages/best-practises/containers/kubernetes/deployment/ci-cd-for-aks-apps-with-github-actions-and-gitflow.md)
       * [Vcluster](pages/best-practises/containers/kubernetes/vcluster.md)
     * [OpenShift](pages/best-practises/containers/openshift.md)
+
+## NixOS
+
+* [NixOS Overview](pages/Nixos/README.md)
