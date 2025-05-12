@@ -341,3 +341,6 @@
   * [Using devenv with Nix (Terraform & AWS)](pages/Nixos/devenv.md)
   * [Devbox for Kubernetes: Local & AKS](pages/Nixos/devbox-k8s.md)
   * [devenv for Node.js + Kubernetes](pages/Nixos/devenv-nodejs-k8s.md)
+  * [Deploying NixOS to Cloud Platforms with nix-anywhere](pages/Nixos/nix-anywhere-cloud.md)
+  * [NixOS Generators: Azure VM & QEMU Image Creation](pages/Nixos/nixos-generators-azure-qemu.md)
+  * [Deploying a Fleet of NixOS Servers with Colmena](pages/Nixos/colmena-fleet.md)
