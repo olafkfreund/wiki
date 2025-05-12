@@ -4,7 +4,7 @@
 
 ## Pages
 
-* [About me](pages/about-me.md)
+* [Curriculum Vitae](pages/cv.md)
 * [Need to know](pages/need-to-know/README.md)
   * [SOW](pages/need-to-know/sow.md)
   * [Testing](pages/need-to-know/testing/README.md)
