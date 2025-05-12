@@ -1,294 +1,430 @@
 ---
-description: Comprehensive guide for deploying and managing Amazon ECS (Elastic Container Service) using Terraform and AWS CLI
+description: Amazon Elastic Container Service (ECS) - Fully managed container orchestration service on AWS
 ---
 
-# Amazon Elastic Container Service (ECS)
+# Amazon ECS (Elastic Container Service)
 
 ## Overview
 
-Amazon Elastic Container Service (ECS) is a fully managed container orchestration service that allows you to run, stop, and manage Docker containers on a cluster. ECS eliminates the need to install, operate, and scale your own cluster management infrastructure. With simple API calls, you can launch and stop container-enabled applications, query the state of your cluster, and access familiar features like security groups, load balancing, and IAM roles.
+Amazon Elastic Container Service (ECS) is a fully managed container orchestration service that makes it easy to deploy, manage, and scale containerized applications. As of May 2025, ECS supports Docker containers and integrates with a range of AWS services to provide a comprehensive platform for running applications without managing the underlying infrastructure.
 
-## Deployment Options
+ECS offers two launch types: EC2 for more control over your infrastructure, and Fargate for serverless container deployments.
 
-ECS offers three launch types for your containers:
-- **Fargate** - Serverless compute engine for containers (no EC2 instance management)
-- **EC2** - Self-managed EC2 instances for more control over infrastructure
-- **External** - Register external instances (on-premises or VMs) in your ECS cluster
+## Key Concepts
 
-## Deployment with Terraform
+### ECS Core Components
+- **Cluster**: Logical grouping of tasks or services
+- **Task Definition**: Blueprint for your application that specifies containers, CPU, memory, and networking
+- **Task**: Instance of a task definition running on a cluster
+- **Service**: Ensures a specified number of tasks are running at all times
+- **Container Instance**: EC2 instance running the ECS agent (EC2 launch type only)
+- **Capacity Provider**: Infrastructure management strategy for your cluster (EC2 or Fargate)
 
-### Prerequisites
+### ECS Launch Types
+- **EC2 Launch Type**: Containers run on EC2 instances that you manage
+- **Fargate Launch Type**: Serverless option where AWS manages the underlying infrastructure
+- **External Launch Type**: Run ECS tasks on your own servers or VMs
 
-- [Terraform](https://www.terraform.io/downloads.html) (1.0.0+)
-- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) configured with appropriate credentials
+### ECS Networking
+- **awsvpc Mode**: Each task gets its own ENI and security group
+- **bridge Mode**: Docker's default networking mode (EC2 launch type only)
+- **host Mode**: Containers use the host's network interface (EC2 launch type only)
+- **VPC Endpoints**: Private connectivity to AWS services
 
-### Creating an ECS Cluster with Fargate
+## Deploying ECS with Terraform
+
+### Basic ECS Cluster with Fargate
 
 ```hcl
-module "ecs" {
-  source = "terraform-aws-modules/ecs/aws"
-  version = "~> 5.2"
-
-  cluster_name = "ecs-fargate-cluster"
-
-  # Enable CloudWatch Container Insights
-  cluster_configuration = {
-    execute_command_configuration = {
-      logging = "OVERRIDE"
-      log_configuration = {
-        cloud_watch_log_group_name = "/aws/ecs/fargate-cluster"
-      }
-    }
-  }
-
-  # Configure Fargate capacity providers with weights
-  fargate_capacity_providers = {
-    FARGATE = {
-      default_capacity_provider_strategy = {
-        weight = 50
-      }
-    }
-    FARGATE_SPOT = {
-      default_capacity_provider_strategy = {
-        weight = 50
-      }
-    }
-  }
-
-  tags = {
-    Environment = "dev"
-    Terraform   = "true"
-  }
+provider "aws" {
+  region = "us-west-2"
 }
-```
 
-### Creating an ECS Cluster with EC2 Autoscaling
-
-```hcl
-module "ecs" {
-  source = "terraform-aws-modules/ecs/aws"
-  version = "~> 5.2"
-
-  cluster_name = "ecs-ec2-cluster"
-
-  # Enable CloudWatch Container Insights
-  cluster_configuration = {
-    execute_command_configuration = {
-      logging = "OVERRIDE"
-      log_configuration = {
-        cloud_watch_log_group_name = "/aws/ecs/ec2-cluster"
-      }
-    }
-  }
-
-  # Configure EC2 autoscaling capacity providers
-  autoscaling_capacity_providers = {
-    general = {
-      auto_scaling_group_arn         = module.autoscaling["general"].autoscaling_group_arn
-      managed_termination_protection = "ENABLED"
-
-      managed_scaling = {
-        maximum_scaling_step_size = 5
-        minimum_scaling_step_size = 1
-        status                    = "ENABLED"
-        target_capacity           = 80
-      }
-
-      default_capacity_provider_strategy = {
-        weight = 100
-      }
-    }
-  }
-
-  tags = {
-    Environment = "dev"
-    Terraform   = "true"
-  }
-}
-```
-
-### Defining a Container Definition
-
-```hcl
-module "container_definition" {
-  source = "terraform-aws-modules/ecs/aws//modules/container-definition"
-  version = "~> 5.2"
-
-  name      = "web-app"
-  image     = "nginx:latest"
-  cpu       = 256
-  memory    = 512
-  essential = true
+# Create a VPC for ECS
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 4.0"
   
-  port_mappings = [
-    {
-      name          = "http"
-      containerPort = 80
-      protocol      = "tcp"
-    }
-  ]
-
-  environment = [
-    {
-      name  = "ENVIRONMENT"
-      value = "dev"
-    }
-  ]
-
-  # CloudWatch logging configuration
-  enable_cloudwatch_logging = true
-  log_configuration = {
-    logDriver = "awslogs"
-    options = {
-      awslogs-group         = "/ecs/web-app"
-      awslogs-region        = "us-east-1"
-      awslogs-stream-prefix = "ecs"
-    }
+  name = "ecs-vpc"
+  cidr = "10.0.0.0/16"
+  
+  azs             = ["us-west-2a", "us-west-2b", "us-west-2c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+  enable_dns_hostnames = true
+  
+  tags = {
+    Environment = "production"
   }
 }
-```
 
-### Creating an ECS Service
+# Create an ECS cluster
+resource "aws_ecs_cluster" "main" {
+  name = "app-cluster"
+  
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+  
+  tags = {
+    Environment = "production"
+  }
+}
 
-```hcl
-module "ecs_service" {
-  source = "terraform-aws-modules/ecs/aws//modules/service"
-  version = "~> 5.2"
+# Create an ECS task execution role
+resource "aws_iam_role" "ecs_task_execution_role" {
+  name = "ecs-task-execution-role"
+  
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        },
+        Effect = "Allow",
+        Sid    = ""
+      }
+    ]
+  })
+}
 
-  name        = "web-service"
-  cluster_arn = module.ecs.cluster_arn
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
 
-  # Task definition
-  cpu    = 256
-  memory = 512
-
-  # Container definition(s)
-  container_definitions = {
-    web-app = {
-      cpu       = 256
-      memory    = 512
-      essential = true
+# Create a task definition
+resource "aws_ecs_task_definition" "app" {
+  family                   = "app-task"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = 256
+  memory                   = 512
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  
+  container_definitions = jsonencode([
+    {
+      name      = "app-container"
       image     = "nginx:latest"
-      port_mappings = [
+      essential = true
+      portMappings = [
         {
-          name          = "http"
           containerPort = 80
+          hostPort      = 80
           protocol      = "tcp"
         }
       ]
-      
-      # CloudWatch logging configuration
-      enable_cloudwatch_logging = true
-      log_configuration = {
+      logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = "/ecs/web-service"
-          awslogs-region        = "us-east-1"
-          awslogs-stream-prefix = "ecs"
+          "awslogs-group"         = "/ecs/app-task"
+          "awslogs-region"        = "us-west-2"
+          "awslogs-stream-prefix" = "ecs"
         }
       }
     }
+  ])
+  
+  tags = {
+    Environment = "production"
+    Application = "app"
   }
+}
 
-  # Fargate platform configuration
-  launch_type = "FARGATE"
-  platform_version = "LATEST"
+# Create a CloudWatch log group
+resource "aws_cloudwatch_log_group" "app_logs" {
+  name              = "/ecs/app-task"
+  retention_in_days = 30
   
-  # VPC networking configuration
-  network_mode = "awsvpc"
-  subnet_ids   = ["subnet-abcde012", "subnet-bcde012a"]
+  tags = {
+    Environment = "production"
+    Application = "app"
+  }
+}
+
+# Create a security group for the ECS tasks
+resource "aws_security_group" "ecs_tasks" {
+  name        = "ecs-tasks-sg"
+  description = "Allow inbound traffic to ECS tasks"
+  vpc_id      = module.vpc.vpc_id
   
-  # Security configuration
-  security_group_rules = {
-    ingress_http = {
-      type        = "ingress"
-      from_port   = 80
-      to_port     = 80
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-      description = "Allow HTTP traffic"
-    }
-    egress_all = {
-      type        = "egress"
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-      description = "Allow all outbound traffic"
-    }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   
-  # Load balancer integration
-  load_balancer = {
-    service = {
-      target_group_arn = aws_lb_target_group.this.arn
-      container_name   = "web-app"
-      container_port   = 80
-    }
-  }
-  
-  # Autoscaling configuration
-  autoscaling_enabled = true
-  autoscaling_min_capacity = 1
-  autoscaling_max_capacity = 5
-  
-  # Define autoscaling policies (CPU & memory based)
-  autoscaling_policies = {
-    cpu = {
-      policy_type = "TargetTrackingScaling"
-      target_tracking_scaling_policy_configuration = {
-        predefined_metric_specification = {
-          predefined_metric_type = "ECSServiceAverageCPUUtilization"
-        }
-        target_value = 70
-      }
-    }
-    memory = {
-      policy_type = "TargetTrackingScaling"
-      target_tracking_scaling_policy_configuration = {
-        predefined_metric_specification = {
-          predefined_metric_type = "ECSServiceAverageMemoryUtilization"
-        }
-        target_value = 70
-      }
-    }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   
   tags = {
-    Environment = "dev"
-    Terraform   = "true"
+    Environment = "production"
+  }
+}
+
+# Create an ECS service
+resource "aws_ecs_service" "app" {
+  name            = "app-service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.app.arn
+  desired_count   = 2
+  launch_type     = "FARGATE"
+  
+  network_configuration {
+    subnets         = module.vpc.private_subnets
+    security_groups = [aws_security_group.ecs_tasks.id]
+    assign_public_ip = false
+  }
+  
+  load_balancer {
+    target_group_arn = aws_lb_target_group.app.arn
+    container_name   = "app-container"
+    container_port   = 80
+  }
+  
+  depends_on = [aws_lb_listener.app]
+  
+  tags = {
+    Environment = "production"
+    Application = "app"
+  }
+}
+
+# Create an Application Load Balancer
+resource "aws_lb" "app" {
+  name               = "app-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.lb.id]
+  subnets            = module.vpc.public_subnets
+  
+  enable_deletion_protection = false
+  
+  tags = {
+    Environment = "production"
+  }
+}
+
+# Create a security group for the load balancer
+resource "aws_security_group" "lb" {
+  name        = "alb-sg"
+  description = "Allow inbound traffic to ALB"
+  vpc_id      = module.vpc.vpc_id
+  
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  tags = {
+    Environment = "production"
+  }
+}
+
+# Create a target group for the load balancer
+resource "aws_lb_target_group" "app" {
+  name     = "app-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = module.vpc.vpc_id
+  target_type = "ip"
+  
+  health_check {
+    path                = "/"
+    port                = "traffic-port"
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
+    timeout             = 5
+    interval            = 30
+    matcher             = "200-299"
+  }
+}
+
+# Create a listener for the load balancer
+resource "aws_lb_listener" "app" {
+  load_balancer_arn = aws_lb.app.arn
+  port              = 80
+  protocol          = "HTTP"
+  
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
+  }
+}
+
+output "alb_dns_name" {
+  value = aws_lb.app.dns_name
+}
+```
+
+### ECS with EC2 Launch Type
+
+```hcl
+# Create an Auto Scaling Group for ECS
+resource "aws_iam_role" "ecs_instance_role" {
+  name = "ecs-instance-role"
+  
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        },
+        Effect = "Allow"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_instance_role_policy" {
+  role       = aws_iam_role.ecs_instance_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_instance_profile" "ecs_instance_profile" {
+  name = "ecs-instance-profile"
+  role = aws_iam_role.ecs_instance_role.name
+}
+
+resource "aws_launch_template" "ecs_launch_template" {
+  name_prefix   = "ecs-launch-template-"
+  image_id      = "ami-0f07478f5c5a9a9d9"  # Amazon ECS-optimized AMI ID (check for latest)
+  instance_type = "t3.medium"
+  
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ecs_instance_profile.name
+  }
+  
+  vpc_security_group_ids = [aws_security_group.ecs_instances.id]
+  
+  user_data = base64encode(<<EOF
+#!/bin/bash
+echo ECS_CLUSTER=${aws_ecs_cluster.main.name} >> /etc/ecs/ecs.config
+EOF
+  )
+}
+
+resource "aws_autoscaling_group" "ecs_asg" {
+  name                = "ecs-asg"
+  vpc_zone_identifier = module.vpc.private_subnets
+  min_size            = 2
+  max_size            = 10
+  desired_capacity    = 2
+  
+  launch_template {
+    id      = aws_launch_template.ecs_launch_template.id
+    version = "$Latest"
+  }
+  
+  tag {
+    key                 = "AmazonECSManaged"
+    value               = true
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_ecs_capacity_provider" "ec2_capacity_provider" {
+  name = "ec2-capacity-provider"
+  
+  auto_scaling_group_provider {
+    auto_scaling_group_arn = aws_autoscaling_group.ecs_asg.arn
+    
+    managed_scaling {
+      maximum_scaling_step_size = 100
+      minimum_scaling_step_size = 1
+      status                    = "ENABLED"
+      target_capacity           = 70
+    }
+  }
+}
+
+resource "aws_ecs_cluster_capacity_providers" "cluster_capacity_providers" {
+  cluster_name = aws_ecs_cluster.main.name
+  
+  capacity_providers = [aws_ecs_capacity_provider.ec2_capacity_provider.name]
+  
+  default_capacity_provider_strategy {
+    capacity_provider = aws_ecs_capacity_provider.ec2_capacity_provider.name
+    weight            = 1
+  }
+}
+
+resource "aws_security_group" "ecs_instances" {
+  name        = "ecs-instances-sg"
+  description = "Security group for ECS instances"
+  vpc_id      = module.vpc.vpc_id
+  
+  ingress {
+    from_port       = 0
+    to_port         = 65535
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lb.id]
+  }
+  
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 ```
 
-## Deployment with AWS CLI
+## Deploying ECS with AWS CLI
 
-### Creating an ECS Cluster
+### Prerequisites
+Before you begin, ensure you have:
+- AWS CLI (version 2.13.0 or higher) installed and configured
+- Docker installed (for building and pushing images)
+- Appropriate IAM permissions for ECS operations
+
+### 1. Create an ECS Cluster
 
 ```bash
-# Create an ECS cluster with Fargate and Fargate Spot capacity providers
+# Create a simple ECS cluster
 aws ecs create-cluster \
-  --cluster-name my-fargate-cluster \
-  --capacity-providers FARGATE FARGATE_SPOT \
-  --default-capacity-provider-strategy capacityProvider=FARGATE,weight=1 capacityProvider=FARGATE_SPOT,weight=1 \
-  --settings name=containerInsights,value=enabled \
-  --region us-east-1
+  --cluster-name app-cluster \
+  --settings name=containerInsights,value=enabled
+
+# View clusters
+aws ecs list-clusters
 ```
 
-### Creating a Task Definition
+### 2. Register a Task Definition
 
-First, create a JSON file for the task definition:
+First, create a task definition JSON file:
 
 ```bash
 cat > task-definition.json << EOF
 {
-  "family": "web-app",
+  "family": "app-task",
+  "executionRoleArn": "arn:aws:iam::<YOUR_ACCOUNT_ID>:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
-  "executionRoleArn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
-  "taskRoleArn": "arn:aws:iam::123456789012:role/ecsTaskRole",
   "containerDefinitions": [
     {
-      "name": "web-app",
+      "name": "app-container",
       "image": "nginx:latest",
       "essential": true,
       "portMappings": [
@@ -298,76 +434,111 @@ cat > task-definition.json << EOF
           "protocol": "tcp"
         }
       ],
-      "environment": [
-        {
-          "name": "ENVIRONMENT",
-          "value": "dev"
-        }
-      ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/web-app",
-          "awslogs-region": "us-east-1",
+          "awslogs-group": "/ecs/app-task",
+          "awslogs-region": "us-west-2",
           "awslogs-stream-prefix": "ecs"
         }
-      },
-      "cpu": 256,
-      "memory": 512
+      }
     }
   ],
-  "requiresCompatibilities": ["FARGATE"],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
   "cpu": "256",
   "memory": "512"
 }
 EOF
 
 # Register the task definition
-aws ecs register-task-definition \
-  --cli-input-json file://task-definition.json \
-  --region us-east-1
+aws ecs register-task-definition --cli-input-json file://task-definition.json
+
+# List task definitions
+aws ecs list-task-definitions
 ```
 
-### Creating a Service
+### 3. Create a CloudWatch Log Group
 
 ```bash
-# Create a CloudWatch log group
-aws logs create-log-group \
-  --log-group-name /ecs/web-app \
-  --region us-east-1
+aws logs create-log-group --log-group-name /ecs/app-task
+```
 
-# Create an ECS service
+### 4. Create a Service
+
+```bash
+# Create the ECS service
 aws ecs create-service \
-  --cluster my-fargate-cluster \
-  --service-name web-service \
-  --task-definition web-app:1 \
-  --launch-type FARGATE \
-  --platform-version LATEST \
-  --network-configuration "awsvpcConfiguration={subnets=[subnet-abcde012,subnet-bcde012a],securityGroups=[sg-abcdef01],assignPublicIp=ENABLED}" \
+  --cluster app-cluster \
+  --service-name app-service \
+  --task-definition app-task \
   --desired-count 2 \
-  --deployment-configuration "minimumHealthyPercent=100,maximumPercent=200" \
-  --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/web-app-tg/1234567890abcdef,containerName=web-app,containerPort=80" \
-  --region us-east-1
+  --launch-type FARGATE \
+  --network-configuration "awsvpcConfiguration={subnets=[subnet-12345,subnet-67890],securityGroups=[sg-12345],assignPublicIp=DISABLED}" \
+  --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:us-west-2:<YOUR_ACCOUNT_ID>:targetgroup/app-target-group/1234567890,containerName=app-container,containerPort=80"
 ```
 
-### Configuring Service Auto Scaling
+### 5. Run a Standalone Task
 
 ```bash
-# Register a scalable target for the ECS service
+aws ecs run-task \
+  --cluster app-cluster \
+  --task-definition app-task \
+  --count 1 \
+  --launch-type FARGATE \
+  --network-configuration "awsvpcConfiguration={subnets=[subnet-12345,subnet-67890],securityGroups=[sg-12345],assignPublicIp=ENABLED}"
+```
+
+### 6. List Running Tasks and Services
+
+```bash
+# List services in a cluster
+aws ecs list-services --cluster app-cluster
+
+# Describe a service
+aws ecs describe-services --cluster app-cluster --services app-service
+
+# List tasks
+aws ecs list-tasks --cluster app-cluster
+
+# Describe a task
+aws ecs describe-tasks --cluster app-cluster --tasks task-id
+```
+
+### 7. Update a Service
+
+```bash
+# Scale a service
+aws ecs update-service \
+  --cluster app-cluster \
+  --service app-service \
+  --desired-count 3
+
+# Update a service to use a new task definition
+aws ecs update-service \
+  --cluster app-cluster \
+  --service app-service \
+  --task-definition app-task:2  # new version of the task definition
+```
+
+### 8. Set up Auto Scaling for a Service
+
+```bash
+# Register a scalable target
 aws application-autoscaling register-scalable-target \
   --service-namespace ecs \
+  --resource-id service/app-cluster/app-service \
   --scalable-dimension ecs:service:DesiredCount \
-  --resource-id service/my-fargate-cluster/web-service \
-  --min-capacity 1 \
-  --max-capacity 5 \
-  --region us-east-1
+  --min-capacity 2 \
+  --max-capacity 10
 
-# Create a scaling policy based on CPU utilization
+# Create a step scaling policy
 aws application-autoscaling put-scaling-policy \
   --service-namespace ecs \
+  --resource-id service/app-cluster/app-service \
   --scalable-dimension ecs:service:DesiredCount \
-  --resource-id service/my-fargate-cluster/web-service \
-  --policy-name web-service-cpu-scaling \
+  --policy-name cpu-tracking-scaling-policy \
   --policy-type TargetTrackingScaling \
   --target-tracking-scaling-policy-configuration '{
     "TargetValue": 70.0,
@@ -376,283 +547,178 @@ aws application-autoscaling put-scaling-policy \
     },
     "ScaleOutCooldown": 60,
     "ScaleInCooldown": 60
-  }' \
-  --region us-east-1
+  }'
 ```
 
-## Service Discovery Integration
-
-ECS services can be registered with AWS Cloud Map for service discovery:
-
-### Terraform Configuration
-
-```hcl
-module "ecs_service" {
-  # ... previous configuration ...
-
-  service_connect_configuration = {
-    namespace = "example-namespace"
-    service = {
-      client_alias = {
-        port     = 80
-        dns_name = "web-app"
-      }
-      port_name      = "http"
-      discovery_name = "web-app"
-    }
-  }
-
-  # ... rest of configuration ...
-}
-```
-
-### AWS CLI Configuration
-
-First, create a namespace:
+### 9. Clean Up
 
 ```bash
-# Create a private DNS namespace
-aws servicediscovery create-private-dns-namespace \
-  --name example.local \
-  --vpc vpc-abcdef01 \
-  --region us-east-1
+# Delete a service
+aws ecs update-service --cluster app-cluster --service app-service --desired-count 0
+aws ecs delete-service --cluster app-cluster --service app-service
 
-# Create a service within the namespace
-aws servicediscovery create-service \
-  --name web-app \
-  --dns-config "NamespaceId=ns-abcdef01,RoutingPolicy=MULTIVALUE,DnsRecords=[{Type=A,TTL=60}]" \
-  --health-check-custom-config "FailureThreshold=1" \
-  --region us-east-1
+# Delete a cluster
+aws ecs delete-cluster --cluster app-cluster
 ```
 
-Then include the service discovery configuration when creating the ECS service:
+## ECS with EC2 Launch Type using AWS CLI
+
+### 1. Create an EC2 Instance Role
+
+```bash
+# Create IAM role policy document
+cat > ecs-instance-role-trust.json << EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+
+# Create IAM role
+aws iam create-role \
+  --role-name ecsInstanceRole \
+  --assume-role-policy-document file://ecs-instance-role-trust.json
+
+# Attach policy to role
+aws iam attach-role-policy \
+  --role-name ecsInstanceRole \
+  --policy-arn arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role
+
+# Create an instance profile
+aws iam create-instance-profile \
+  --instance-profile-name ecsInstanceProfile
+
+# Add role to instance profile
+aws iam add-role-to-instance-profile \
+  --instance-profile-name ecsInstanceProfile \
+  --role-name ecsInstanceRole
+```
+
+### 2. Launch EC2 Instances with ECS Agent
+
+```bash
+# Create a security group for the ECS instances
+aws ec2 create-security-group \
+  --group-name ecs-instances \
+  --description "Security group for ECS instances" \
+  --vpc-id vpc-12345
+
+# Add inbound rule
+aws ec2 authorize-security-group-ingress \
+  --group-id sg-12345 \
+  --protocol tcp \
+  --port 80 \
+  --source-group sg-loadbalancer
+
+# Launch EC2 instance with ECS agent
+aws ec2 run-instances \
+  --image-id ami-0f07478f5c5a9a9d9 \  # Amazon ECS-optimized AMI
+  --instance-type t3.medium \
+  --key-name my-key-pair \
+  --security-group-ids sg-12345 \
+  --subnet-id subnet-12345 \
+  --iam-instance-profile Name=ecsInstanceProfile \
+  --user-data "#!/bin/bash
+echo ECS_CLUSTER=app-cluster >> /etc/ecs/ecs.config"
+```
+
+### 3. Create a Capacity Provider
+
+First, set up an Auto Scaling Group:
+
+```bash
+# Create a launch configuration
+aws autoscaling create-launch-configuration \
+  --launch-configuration-name ecs-launch-config \
+  --image-id ami-0f07478f5c5a9a9d9 \  # Amazon ECS-optimized AMI
+  --instance-type t3.medium \
+  --security-groups sg-12345 \
+  --iam-instance-profile ecsInstanceProfile \
+  --user-data "#!/bin/bash
+echo ECS_CLUSTER=app-cluster >> /etc/ecs/ecs.config"
+
+# Create an Auto Scaling Group
+aws autoscaling create-auto-scaling-group \
+  --auto-scaling-group-name ecs-asg \
+  --launch-configuration-name ecs-launch-config \
+  --min-size 2 \
+  --max-size 10 \
+  --desired-capacity 2 \
+  --vpc-zone-identifier "subnet-12345,subnet-67890" \
+  --tags "Key=AmazonECSManaged,Value=true,PropagateAtLaunch=true"
+```
+
+Then create the capacity provider:
+
+```bash
+# Create the capacity provider
+aws ecs create-capacity-provider \
+  --name ec2-capacity-provider \
+  --auto-scaling-group-provider "autoScalingGroupArn=arn:aws:autoscaling:us-west-2:<YOUR_ACCOUNT_ID>:autoScalingGroup:1234:autoScalingGroupName/ecs-asg,managedScaling={status=ENABLED,targetCapacity=70,minimumScalingStepSize=1,maximumScalingStepSize=100},managedTerminationProtection=DISABLED"
+
+# Associate with the cluster
+aws ecs put-cluster-capacity-providers \
+  --cluster app-cluster \
+  --capacity-providers ec2-capacity-provider \
+  --default-capacity-provider-strategy "capacityProvider=ec2-capacity-provider,weight=1"
+```
+
+### 4. Create a Service with EC2 Launch Type
 
 ```bash
 aws ecs create-service \
-  --cluster my-fargate-cluster \
-  --service-name web-service \
-  --task-definition web-app:1 \
-  --launch-type FARGATE \
-  --network-configuration "awsvpcConfiguration={subnets=[subnet-abcde012,subnet-bcde012a],securityGroups=[sg-abcdef01],assignPublicIp=ENABLED}" \
-  --service-registries "registryArn=arn:aws:servicediscovery:us-east-1:123456789012:service/srv-abcdef01234567890" \
+  --cluster app-cluster \
+  --service-name app-service-ec2 \
+  --task-definition app-task \
   --desired-count 2 \
-  --region us-east-1
+  --capacity-provider-strategy "capacityProvider=ec2-capacity-provider,weight=1" \
+  --network-configuration "awsvpcConfiguration={subnets=[subnet-12345,subnet-67890],securityGroups=[sg-12345]}" \
+  --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:us-west-2:<YOUR_ACCOUNT_ID>:targetgroup/app-target-group/1234567890,containerName=app-container,containerPort=80"
 ```
 
-## Best Practices
+## Best Practices for ECS
 
-### Security
+1. **Security**
+   - Use IAM roles for tasks to provide least-privilege permissions
+   - Implement security groups for your containers
+   - Keep your ECS Agent updated
+   - Use secrets management with AWS Secrets Manager or Parameter Store
 
-1. **Use IAM Roles** - Always use IAM roles with least-privilege access for tasks.
-   ```bash
-   # Create task execution role policy document
-   cat > task-execution-policy.json << EOF
-   {
-     "Version": "2012-10-17",
-     "Statement": [
-       {
-         "Effect": "Allow",
-         "Action": [
-           "ecr:GetAuthorizationToken",
-           "ecr:BatchCheckLayerAvailability",
-           "ecr:GetDownloadUrlForLayer",
-           "ecr:BatchGetImage",
-           "logs:CreateLogStream",
-           "logs:PutLogEvents"
-         ],
-         "Resource": "*"
-       }
-     ]
-   }
-   EOF
-   
-   # Create IAM policy
-   aws iam create-policy \
-     --policy-name ECSTaskExecutionPolicy \
-     --policy-document file://task-execution-policy.json \
-     --region us-east-1
-   ```
+2. **Cost Optimization**
+   - Choose the right launch type for your workload (EC2 vs. Fargate)
+   - Use Spot capacity providers for non-critical or batch workloads
+   - Implement auto-scaling to match capacity with demand
+   - Consider Compute Savings Plans for Fargate usage
 
-2. **Network Security** - Use security groups to restrict container traffic.
-   ```hcl
-   resource "aws_security_group" "ecs_tasks" {
-     name        = "ecs-tasks-sg"
-     description = "Allow inbound traffic to ECS tasks"
-     vpc_id      = "vpc-abcdef01"
-     
-     ingress {
-       from_port   = 80
-       to_port     = 80
-       protocol    = "tcp"
-       cidr_blocks = ["10.0.0.0/8"]
-     }
-     
-     egress {
-       from_port   = 0
-       to_port     = 0
-       protocol    = "-1"
-       cidr_blocks = ["0.0.0.0/0"]
-     }
-   }
-   ```
+3. **Performance and Scalability**
+   - Use Application Load Balancers for HTTP/HTTPS applications
+   - Implement service auto-scaling based on appropriate metrics
+   - Optimize container images for faster launches
+   - Use Service Discovery for service-to-service communication
 
-3. **Secrets Management** - Use AWS Secrets Manager to manage sensitive data.
-   ```hcl
-   resource "aws_secretsmanager_secret" "db_password" {
-     name = "db-password"
-   }
-   
-   resource "aws_secretsmanager_secret_version" "db_password" {
-     secret_id     = aws_secretsmanager_secret.db_password.id
-     secret_string = jsonencode({
-       username = "dbuser"
-       password = "supersecretpassword" # Use variables or secure sources in production
-     })
-   }
-   ```
-   
-   And reference in task definition:
-   ```hcl
-   container_definitions = {
-     app = {
-       # ... other configuration ...
-       secrets = [
-         {
-           name      = "DB_USERNAME"
-           valueFrom = "${aws_secretsmanager_secret.db_password.arn}:username::"
-         },
-         {
-           name      = "DB_PASSWORD"
-           valueFrom = "${aws_secretsmanager_secret.db_password.arn}:password::"
-         }
-       ]
-     }
-   }
-   ```
+4. **Reliability**
+   - Deploy across multiple availability zones
+   - Use containerized health checks
+   - Implement task placement strategies and constraints
+   - Use deployment circuit breaker to prevent failed deployments
 
-### Cost Optimization
+5. **Monitoring and Observability**
+   - Enable Container Insights
+   - Use structured logging with CloudWatch Logs
+   - Set up appropriate CloudWatch alarms
+   - Implement X-Ray for distributed tracing
 
-1. **Use Fargate Spot** - For non-critical workloads to save up to 70% compared to On-Demand pricing.
-   ```hcl
-   fargate_capacity_providers = {
-     FARGATE_SPOT = {
-       default_capacity_provider_strategy = {
-         weight = 100
-       }
-     }
-   }
-   ```
+## Reference Links
 
-2. **Right-sizing Tasks** - Match CPU and memory allocations to your application's needs.
-
-3. **Cost Allocation** - Use tags for cost allocation and tracking.
-   ```hcl
-   tags = {
-     Environment = "dev"
-     Project     = "web-app"
-     CostCenter  = "12345"
-   }
-   ```
-
-### Operations
-
-1. **Container Insights** - Enable CloudWatch Container Insights for monitoring.
-   ```hcl
-   cluster_configuration = {
-     execute_command_configuration = {
-       logging = "OVERRIDE"
-       log_configuration = {
-         cloud_watch_log_group_name = "/aws/ecs/my-cluster"
-       }
-     }
-   }
-   ```
-
-2. **Health Checks** - Configure container health checks to ensure application availability.
-   ```hcl
-   container_definitions = {
-     app = {
-       # ... other configuration ...
-       health_check = {
-         command     = ["CMD-SHELL", "curl -f http://localhost/health || exit 1"]
-         interval    = 30
-         timeout     = 5
-         retries     = 3
-         startPeriod = 60
-       }
-     }
-   }
-   ```
-
-3. **Logging** - Use structured logging with CloudWatch Logs.
-   ```hcl
-   container_definitions = {
-     app = {
-       # ... other configuration ...
-       log_configuration = {
-         logDriver = "awslogs"
-         options = {
-           awslogs-group         = "/ecs/service-name"
-           awslogs-region        = "us-east-1"
-           awslogs-stream-prefix = "app"
-         }
-       }
-     }
-   }
-   ```
-
-## Common Issues and Troubleshooting
-
-### Service Deployment Issues
-
-If services are failing to deploy or launch tasks:
-
-```bash
-# Check service deployment status
-aws ecs describe-services \
-  --cluster my-fargate-cluster \
-  --services web-service \
-  --region us-east-1
-
-# Check task failures
-aws ecs describe-task-sets \
-  --cluster my-fargate-cluster \
-  --service web-service \
-  --task-sets $(aws ecs list-task-sets --cluster my-fargate-cluster --service web-service --query 'taskSets[0].id' --output text) \
-  --region us-east-1
-```
-
-### Resource Constraints
-
-If tasks are failing due to resource constraints:
-
-```bash
-# Check available resources in cluster
-aws ecs describe-clusters \
-  --clusters my-fargate-cluster \
-  --include ATTACHMENTS SETTINGS STATISTICS \
-  --region us-east-1
-```
-
-### Networking Issues
-
-If tasks are having network connectivity issues:
-
-```bash
-# Check ENI configuration for Fargate tasks
-aws ec2 describe-network-interfaces \
-  --filters "Name=description,Values=*fargate*" \
-  --region us-east-1
-
-# Validate security group rules
-aws ec2 describe-security-groups \
-  --group-ids sg-abcdef01 \
-  --region us-east-1
-```
-
-## References
-
-- [AWS ECS Documentation](https://docs.aws.amazon.com/ecs/latest/developerguide/Welcome.html)
-- [Terraform AWS ECS Module](https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws/latest)
-- [AWS CLI ECS Reference](https://docs.aws.amazon.com/cli/latest/reference/ecs/index.html)
-- [ECS Best Practices](https://docs.aws.amazon.com/AmazonECS/latest/bestpracticesguide/ecs-bp.html)
+- [AWS ECS Documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html)
+- [ECS API Reference](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/Welcome.html)
+- [ECS AWS CLI Reference](https://docs.aws.amazon.com/cli/latest/reference/ecs/index.html)
+- [ECS Best Practices Guide](https://aws.github.io/aws-ecs-best-practices)

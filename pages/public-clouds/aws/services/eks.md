@@ -1,328 +1,162 @@
 ---
-description: Comprehensive guide for deploying and managing Amazon EKS (Elastic Kubernetes Service) using Terraform and AWS CLI
+description: Amazon Elastic Kubernetes Service (EKS) - Managed Kubernetes service on AWS
 ---
 
-# Amazon Elastic Kubernetes Service (EKS)
+# Amazon EKS (Elastic Kubernetes Service)
 
 ## Overview
 
-Amazon Elastic Kubernetes Service (EKS) is a managed Kubernetes service that makes it easy to run Kubernetes on AWS without needing to install, operate, and maintain your own Kubernetes control plane. EKS is certified Kubernetes conformant, so applications managed by EKS are fully compatible with applications managed by any standard Kubernetes environment.
+Amazon Elastic Kubernetes Service (EKS) is a managed Kubernetes service that makes it easy to run Kubernetes on AWS without needing to install, operate, and maintain your own Kubernetes control plane. As of May 2025, EKS supports Kubernetes versions 1.26 through 1.30 and automatically manages the availability and scalability of the Kubernetes control plane nodes.
 
-## Key Features
+## Key Concepts
 
-- **Managed Control Plane**: AWS manages the Kubernetes control plane, including the API servers and etcd database.
-- **Highly Available**: Control plane runs across multiple availability zones.
-- **Integrated Security**: Integration with AWS IAM for authentication and authorization.
-- **Automated Updates**: Managed Kubernetes version updates and patches.
-- **Native VPC Networking**: Uses the Amazon VPC CNI for native pod networking on AWS.
-- **Extensible**: Supports standard Kubernetes add-ons and AWS integrations.
+### EKS Architecture
+- **Control Plane**: Managed by AWS across multiple availability zones
+- **Worker Nodes**: EC2 instances that run your containerized applications
+- **Node Groups**: Collection of EC2 instances managed as a group
+- **Fargate Profiles**: Serverless compute for EKS pods
+- **VPC CNI Plugin**: Provides networking for pods using AWS VPC
 
-## Deployment Options
+### Access Management
+- **IAM Integration**: Role-based access using AWS IAM
+- **OIDC Provider**: Authentication via OpenID Connect
+- **Cluster IAM Role**: Role that allows EKS to manage resources
+- **Node IAM Role**: Role that allows worker nodes to access AWS services
 
-- **Managed Node Groups**: AWS-managed worker nodes with auto-scaling and lifecycle management.
-- **Self-managed Nodes**: Manually configure and manage worker nodes.
-- **Fargate**: Serverless compute for Kubernetes pods.
-- **Windows Support**: Run Windows container workloads.
+### Networking
+- **VPC Requirements**: EKS has specific networking requirements
+- **Pod Networking**: Managed through AWS VPC CNI
+- **LoadBalancer Services**: Integration with AWS ALB/NLB
+- **Cluster Endpoint Access**: Public, private, or both
 
-## Deployment with Terraform
-
-### Prerequisites
-
-- [Terraform](https://www.terraform.io/downloads.html) (v1.0.0+)
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/) (matching your EKS version)
-- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) configured with appropriate credentials
+## Deploying EKS with Terraform
 
 ### Basic EKS Cluster
 
 ```hcl
+provider "aws" {
+  region = "us-west-2"
+}
+
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 4.0"
+  
+  name = "eks-vpc"
+  cidr = "10.0.0.0/16"
+  
+  azs             = ["us-west-2a", "us-west-2b", "us-west-2c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+  enable_dns_hostnames = true
+  
+  public_subnet_tags = {
+    "kubernetes.io/cluster/my-eks-cluster" = "shared"
+    "kubernetes.io/role/elb"               = "1"
+  }
+  
+  private_subnet_tags = {
+    "kubernetes.io/cluster/my-eks-cluster" = "shared"
+    "kubernetes.io/role/internal-elb"      = "1"
+  }
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.0"
-
-  cluster_name    = "my-eks-cluster"
-  cluster_version = "1.28"
-
-  cluster_endpoint_public_access = true
+  version = "~> 19.15"
   
-  vpc_id     = "vpc-1234567890abcdef0"
-  subnet_ids = ["subnet-abcde012", "subnet-bcde012a", "subnet-cdef0123"]
-
-  eks_managed_node_group_defaults = {
-    instance_types = ["t3.medium"]
-  }
-
+  cluster_name    = "my-eks-cluster"
+  cluster_version = "1.30"
+  
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnets
+  
+  cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = true
+  
   eks_managed_node_groups = {
-    default = {
-      min_size     = 1
-      max_size     = 3
+    main = {
+      min_size     = 2
+      max_size     = 10
       desired_size = 2
-
+      
       instance_types = ["t3.medium"]
       capacity_type  = "ON_DEMAND"
     }
   }
-
-  # Enable EKS add-ons
-  cluster_addons = {
-    coredns = {
-      most_recent = true
-    }
-    kube-proxy = {
-      most_recent = true
-    }
-    vpc-cni = {
-      most_recent = true
-    }
-  }
-
-  tags = {
-    Environment = "dev"
-    Terraform   = "true"
-  }
-}
-```
-
-### Configuring kubectl
-
-```hcl
-resource "local_file" "kubeconfig" {
-  content  = module.eks.kubeconfig
-  filename = "${path.module}/kubeconfig_${module.eks.cluster_name}"
-}
-
-# Alternatively, configure kubectl directly
-resource "null_resource" "update_kubeconfig" {
-  depends_on = [module.eks]
-  
-  provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --region ${var.region} --name ${module.eks.cluster_name}"
-  }
-}
-```
-
-### Advanced Configuration (with Fargate)
-
-```hcl
-module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.0"
-
-  cluster_name    = "my-eks-cluster"
-  cluster_version = "1.28"
-
-  cluster_endpoint_public_access = true
-  
-  vpc_id     = "vpc-1234567890abcdef0"
-  subnet_ids = ["subnet-abcde012", "subnet-bcde012a", "subnet-cdef0123"]
-
-  # Fargate profile configuration
-  fargate_profiles = {
-    default = {
-      name = "default"
-      selectors = [
-        {
-          namespace = "default"
-        },
-        {
-          namespace = "kube-system"
-        }
-      ]
-      
-      subnet_ids = ["subnet-abcde012", "subnet-bcde012a"]
-      
-      tags = {
-        Owner = "default"
-      }
-    }
-    
-    application = {
-      name = "application"
-      selectors = [
-        {
-          namespace = "app"
-        }
-      ]
-    }
-  }
-
-  # Managed Node Group for workloads that can't run on Fargate
-  eks_managed_node_groups = {
-    critical = {
-      min_size     = 1
-      max_size     = 3
-      desired_size = 1
-
-      instance_types = ["t3.large"]
-      capacity_type  = "ON_DEMAND"
-      
-      labels = {
-        workload = "critical"
-      }
-      
-      taints = [
-        {
-          key    = "dedicated"
-          value  = "critical"
-          effect = "NO_SCHEDULE"
-        }
-      ]
-    }
-  }
-
-  # Enable EKS add-ons
-  cluster_addons = {
-    coredns = {
-      most_recent = true
-    }
-    kube-proxy = {
-      most_recent = true
-    }
-    vpc-cni = {
-      most_recent = true
-    }
-    aws-ebs-csi-driver = {
-      most_recent = true
-    }
-  }
-
-  # OIDC Provider configuration for service accounts
-  enable_irsa = true
   
   tags = {
-    Environment = "dev"
-    Terraform   = "true"
+    Environment = "production"
+    Application = "my-app"
   }
+}
+
+output "cluster_endpoint" {
+  value = module.eks.cluster_endpoint
+}
+
+output "cluster_certificate_authority_data" {
+  value = module.eks.cluster_certificate_authority_data
+}
+
+output "configure_kubectl" {
+  value = "aws eks update-kubeconfig --region us-west-2 --name my-eks-cluster"
 }
 ```
 
-### Adding Cluster Autoscaler
+### Advanced EKS Configuration
 
 ```hcl
-module "cluster_autoscaler_irsa_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-account-eks"
+# Additional configuration for Fargate profiles
+resource "aws_eks_fargate_profile" "example" {
+  cluster_name           = module.eks.cluster_name
+  fargate_profile_name   = "example-profile"
+  pod_execution_role_arn = aws_iam_role.fargate_pod_execution_role.arn
+  subnet_ids             = module.vpc.private_subnets
 
-  role_name                        = "cluster-autoscaler"
-  attach_cluster_autoscaler_policy = true
-  cluster_autoscaler_cluster_names = [module.eks.cluster_name]
-
-  oidc_providers = {
-    ex = {
-      provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:cluster-autoscaler"]
+  selector {
+    namespace = "default"
+    labels = {
+      "fargate" = "true"
     }
   }
 }
 
-resource "kubernetes_service_account" "cluster_autoscaler" {
-  metadata {
-    name      = "cluster-autoscaler"
-    namespace = "kube-system"
-    labels = {
-      "k8s-addon" = "cluster-autoscaler.addons.k8s.io"
-      "k8s-app"   = "cluster-autoscaler"
-    }
-    annotations = {
-      "eks.amazonaws.com/role-arn" = module.cluster_autoscaler_irsa_role.iam_role_arn
-    }
-  }
+# Example of adding managed add-ons
+resource "aws_eks_addon" "vpc_cni" {
+  cluster_name = module.eks.cluster_name
+  addon_name   = "vpc-cni"
+  addon_version = "v1.16.0-eksbuild.1"  # Check for the latest version
 }
 
-resource "kubernetes_deployment" "cluster_autoscaler" {
-  metadata {
-    name      = "cluster-autoscaler"
-    namespace = "kube-system"
-    labels = {
-      "app" = "cluster-autoscaler"
-    }
-  }
+resource "aws_eks_addon" "coredns" {
+  cluster_name = module.eks.cluster_name
+  addon_name   = "coredns"
+  addon_version = "v1.11.0-eksbuild.1"  # Check for the latest version
+}
 
-  spec {
-    replicas = 1
-
-    selector {
-      match_labels = {
-        "app" = "cluster-autoscaler"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          "app" = "cluster-autoscaler"
-        }
-        annotations = {
-          "cluster-autoscaler.kubernetes.io/safe-to-evict" = "false"
-        }
-      }
-
-      spec {
-        service_account_name = "cluster-autoscaler"
-        containers {
-          name  = "cluster-autoscaler"
-          image = "k8s.gcr.io/autoscaling/cluster-autoscaler:v1.23.0"
-          command = [
-            "./cluster-autoscaler",
-            "--v=4",
-            "--stderrthreshold=info",
-            "--cloud-provider=aws",
-            "--skip-nodes-with-local-storage=false",
-            "--expander=least-waste",
-            "--node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/${module.eks.cluster_name}"
-          ]
-          resources {
-            limits = {
-              cpu    = "100m"
-              memory = "300Mi"
-            }
-            requests = {
-              cpu    = "100m"
-              memory = "300Mi"
-            }
-          }
-          volume_mount {
-            mount_path = "/etc/ssl/certs/ca-certificates.crt"
-            name       = "ssl-certs"
-            read_only  = true
-          }
-          image_pull_policy = "Always"
-        }
-        volumes {
-          name = "ssl-certs"
-          host_path {
-            path = "/etc/ssl/certs/ca-certificates.crt"
-          }
-        }
-      }
-    }
-  }
+resource "aws_eks_addon" "kube_proxy" {
+  cluster_name = module.eks.cluster_name
+  addon_name   = "kube-proxy"
+  addon_version = "v1.30.0-eksbuild.1"  # Check for the latest version
 }
 ```
 
-## Deployment with AWS CLI
+## Deploying EKS with AWS CLI
 
-### Creating an EKS Cluster
+### Pre-requisites
+Before you begin, ensure you have:
+- AWS CLI (version 2.13.0 or higher) installed and configured
+- `kubectl` installed
+- IAM permissions to create EKS clusters
 
-```bash
-# Create an EKS cluster
-aws eks create-cluster \
-  --name my-eks-cluster \
-  --role-arn arn:aws:iam::123456789012:role/eks-cluster-role \
-  --resources-vpc-config subnetIds=subnet-abcde012,subnet-bcde012a,subnet-cdef0123,securityGroupIds=sg-abcdef01 \
-  --kubernetes-version 1.28 \
-  --region us-east-1
-
-# Monitor cluster creation status
-aws eks describe-cluster \
-  --name my-eks-cluster \
-  --region us-east-1 \
-  --query "cluster.status"
-```
-
-### Creating IAM Roles for Cluster and Node Groups
-
-Create a file named `eks-cluster-role-trust-policy.json`:
+### 1. Create an IAM Role for EKS
 
 ```bash
+# Create the policy document for EKS
 cat > eks-cluster-role-trust-policy.json << EOF
 {
   "Version": "2012-10-17",
@@ -338,18 +172,50 @@ cat > eks-cluster-role-trust-policy.json << EOF
 }
 EOF
 
-# Create the IAM role for EKS cluster
+# Create the IAM role
 aws iam create-role \
-  --role-name eks-cluster-role \
+  --role-name EKSClusterRole \
   --assume-role-policy-document file://eks-cluster-role-trust-policy.json
 
 # Attach required policies to the role
 aws iam attach-role-policy \
-  --role-name eks-cluster-role \
+  --role-name EKSClusterRole \
   --policy-arn arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+```
 
-# Create node group role
-cat > eks-node-role-trust-policy.json << EOF
+### 2. Create a VPC for EKS
+
+You can use AWS CloudFormation to deploy a VPC compatible with EKS:
+
+```bash
+aws cloudformation create-stack \
+  --stack-name eks-vpc \
+  --template-url https://amazon-eks.s3.us-west-2.amazonaws.com/cloudformation/2023-02-09/amazon-eks-vpc-sample.yaml
+```
+
+### 3. Create the EKS Cluster
+
+```bash
+aws eks create-cluster \
+  --name my-eks-cluster \
+  --role-arn arn:aws:iam::<ACCOUNT_ID>:role/EKSClusterRole \
+  --resources-vpc-config subnetIds=subnet-<ID1>,subnet-<ID2>,subnet-<ID3>,securityGroupIds=sg-<ID> \
+  --kubernetes-version 1.30
+```
+
+Wait for the cluster to be created (10-15 minutes):
+
+```bash
+aws eks describe-cluster \
+  --name my-eks-cluster \
+  --query "cluster.status"
+```
+
+### 4. Create Node IAM Role
+
+```bash
+# Create the policy document
+cat > node-role-trust-policy.json << EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -364,603 +230,87 @@ cat > eks-node-role-trust-policy.json << EOF
 }
 EOF
 
+# Create the IAM role
 aws iam create-role \
-  --role-name eks-node-role \
-  --assume-role-policy-document file://eks-node-role-trust-policy.json
+  --role-name EKSNodeRole \
+  --assume-role-policy-document file://node-role-trust-policy.json
 
-# Attach required policies to the node role
+# Attach required policies
 aws iam attach-role-policy \
-  --role-name eks-node-role \
+  --role-name EKSNodeRole \
   --policy-arn arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
 
 aws iam attach-role-policy \
-  --role-name eks-node-role \
+  --role-name EKSNodeRole \
   --policy-arn arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
 
 aws iam attach-role-policy \
-  --role-name eks-node-role \
+  --role-name EKSNodeRole \
   --policy-arn arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
 ```
 
-### Creating a Managed Node Group
+### 5. Create a Node Group
 
 ```bash
-# Create a node group
 aws eks create-nodegroup \
   --cluster-name my-eks-cluster \
-  --nodegroup-name my-node-group \
-  --node-role arn:aws:iam::123456789012:role/eks-node-role \
-  --subnets subnet-abcde012 subnet-bcde012a \
-  --disk-size 20 \
-  --scaling-config minSize=1,maxSize=3,desiredSize=2 \
+  --nodegroup-name my-eks-nodegroup \
+  --node-role arn:aws:iam::<ACCOUNT_ID>:role/EKSNodeRole \
+  --subnets subnet-<ID1> subnet-<ID2> subnet-<ID3> \
   --instance-types t3.medium \
-  --region us-east-1
+  --scaling-config minSize=2,maxSize=5,desiredSize=3
 ```
 
-### Creating a Fargate Profile
+### 6. Configure kubectl to Work with Your EKS Cluster
 
 ```bash
-# Create a Fargate profile
-aws eks create-fargate-profile \
-  --fargate-profile-name default-profile \
-  --cluster-name my-eks-cluster \
-  --pod-execution-role-arn arn:aws:iam::123456789012:role/eks-fargate-role \
-  --subnets subnet-abcde012 subnet-bcde012a \
-  --selectors namespace=default namespace=kube-system \
-  --region us-east-1
-```
-
-### Configuring kubectl
-
-```bash
-# Update kubeconfig to connect to the cluster
 aws eks update-kubeconfig \
   --name my-eks-cluster \
-  --region us-east-1
+  --region us-west-2
+```
 
-# Verify connection to cluster
+### 7. Verify the Cluster and Nodes
+
+```bash
 kubectl get nodes
+kubectl get pods --all-namespaces
 ```
 
-### Installing Kubernetes Dashboard (Optional)
+## Best Practices for EKS
 
-```bash
-# Deploy the Kubernetes Dashboard
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+1. **Security**
+   - Use IAM roles for service accounts (IRSA) to provide fine-grained permissions
+   - Enable network policies for pod-to-pod traffic control
+   - Utilize Security Groups for Pods to apply AWS security groups to pods
+   - Implement Pod Security Standards
 
-# Create a service account and cluster role binding for admin access
-cat > admin-service-account.yaml << EOF
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: eks-admin
-  namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: eks-admin
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  name: eks-admin
-  namespace: kube-system
-EOF
+2. **Networking**
+   - Plan your CIDR ranges carefully to avoid IP exhaustion
+   - Use VPC CNI custom networking when pod density is high
+   - Implement AWS Load Balancer Controller for advanced ingress features
+   - Consider AWS PrivateLink for private EKS API endpoint access
 
-kubectl apply -f admin-service-account.yaml
+3. **Cost Optimization**
+   - Use Fargate for infrequently used or burst workloads
+   - Implement Cluster Autoscaler for automatic scaling of node groups
+   - Consider Spot Instances for non-critical workloads
+   - Use Graviton (ARM) instances for better price-performance ratio
 
-# Create an authentication token
-kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}')
+4. **Reliability**
+   - Deploy across multiple availability zones
+   - Use managed add-ons for core components (CoreDNS, kube-proxy)
+   - Implement proper resource requests and limits
+   - Use Pod Disruption Budgets for critical workloads
 
-# Start the Kubernetes Dashboard proxy
-kubectl proxy
-```
+5. **Operational Excellence**
+   - Use EKS Blueprints for GitOps-based provisioning
+   - Implement AWS Observability solutions (CloudWatch, Container Insights)
+   - Regularly upgrade EKS versions to stay within support window
+   - Utilize EKS add-ons for streamlined management of common components
 
-## Add-ons and Integrations
+## Reference Links
 
-### Installing the AWS Load Balancer Controller
-
-```bash
-# Create an IAM policy for the AWS Load Balancer Controller
-cat > load-balancer-controller-policy.json << EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "iam:CreateServiceLinkedRole"
-            ],
-            "Resource": "*",
-            "Condition": {
-                "StringEquals": {
-                    "iam:AWSServiceName": "elasticloadbalancing.amazonaws.com"
-                }
-            }
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ec2:DescribeAccountAttributes",
-                "ec2:DescribeAddresses",
-                "ec2:DescribeAvailabilityZones",
-                "ec2:DescribeInternetGateways",
-                "ec2:DescribeVpcs",
-                "ec2:DescribeVpcPeeringConnections",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeInstances",
-                "ec2:DescribeNetworkInterfaces",
-                "ec2:DescribeTags",
-                "ec2:GetCoipPoolUsage",
-                "ec2:DescribeCoipPools",
-                "elasticloadbalancing:DescribeLoadBalancers",
-                "elasticloadbalancing:DescribeLoadBalancerAttributes",
-                "elasticloadbalancing:DescribeListeners",
-                "elasticloadbalancing:DescribeListenerCertificates",
-                "elasticloadbalancing:DescribeSSLPolicies",
-                "elasticloadbalancing:DescribeRules",
-                "elasticloadbalancing:DescribeTargetGroups",
-                "elasticloadbalancing:DescribeTargetGroupAttributes",
-                "elasticloadbalancing:DescribeTargetHealth",
-                "elasticloadbalancing:DescribeTags"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "cognito-idp:DescribeUserPoolClient",
-                "acm:ListCertificates",
-                "acm:DescribeCertificate",
-                "iam:ListServerCertificates",
-                "iam:GetServerCertificate",
-                "waf-regional:GetWebACL",
-                "waf-regional:GetWebACLForResource",
-                "waf-regional:AssociateWebACL",
-                "waf-regional:DisassociateWebACL",
-                "wafv2:GetWebACL",
-                "wafv2:GetWebACLForResource",
-                "wafv2:AssociateWebACL",
-                "wafv2:DisassociateWebACL",
-                "shield:GetSubscriptionState",
-                "shield:DescribeProtection",
-                "shield:CreateProtection",
-                "shield:DeleteProtection"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ec2:AuthorizeSecurityGroupIngress",
-                "ec2:RevokeSecurityGroupIngress"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "elasticloadbalancing:CreateListener",
-                "elasticloadbalancing:DeleteListener",
-                "elasticloadbalancing:CreateRule",
-                "elasticloadbalancing:DeleteRule"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "elasticloadbalancing:AddTags",
-                "elasticloadbalancing:RemoveTags"
-            ],
-            "Resource": [
-                "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*",
-                "arn:aws:elasticloadbalancing:*:*:loadbalancer/net/*/*",
-                "arn:aws:elasticloadbalancing:*:*:loadbalancer/app/*/*"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "elasticloadbalancing:ModifyLoadBalancerAttributes",
-                "elasticloadbalancing:SetIpAddressType",
-                "elasticloadbalancing:SetSecurityGroups",
-                "elasticloadbalancing:SetSubnets",
-                "elasticloadbalancing:DeleteLoadBalancer",
-                "elasticloadbalancing:ModifyTargetGroup",
-                "elasticloadbalancing:ModifyTargetGroupAttributes",
-                "elasticloadbalancing:DeleteTargetGroup"
-            ],
-            "Resource": "*",
-            "Condition": {
-                "Null": {
-                    "aws:ResourceTag/elbv2.k8s.aws/cluster": "false"
-                }
-            }
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "elasticloadbalancing:RegisterTargets",
-                "elasticloadbalancing:DeregisterTargets"
-            ],
-            "Resource": "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "elasticloadbalancing:SetWebAcl",
-                "elasticloadbalancing:ModifyListener",
-                "elasticloadbalancing:AddListenerCertificates",
-                "elasticloadbalancing:RemoveListenerCertificates",
-                "elasticloadbalancing:ModifyRule"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-EOF
-
-aws iam create-policy \
-  --policy-name AWSLoadBalancerControllerIAMPolicy \
-  --policy-document file://load-balancer-controller-policy.json \
-  --region us-east-1
-
-# Create service account and AWS IAM role binding
-eksctl create iamserviceaccount \
-  --cluster=my-eks-cluster \
-  --namespace=kube-system \
-  --name=aws-load-balancer-controller \
-  --attach-policy-arn=arn:aws:iam::123456789012:policy/AWSLoadBalancerControllerIAMPolicy \
-  --override-existing-serviceaccounts \
-  --approve \
-  --region us-east-1
-
-# Install the AWS Load Balancer Controller using Helm
-helm repo add eks https://aws.github.io/eks-charts
-helm repo update
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
-  --set clusterName=my-eks-cluster \
-  --set serviceAccount.create=false \
-  --set serviceAccount.name=aws-load-balancer-controller \
-  --namespace kube-system
-```
-
-### Installing the EBS CSI Driver
-
-```bash
-# Create an IAM policy for the EBS CSI Driver
-cat > ebs-csi-policy.json << EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateSnapshot",
-        "ec2:AttachVolume",
-        "ec2:DetachVolume",
-        "ec2:ModifyVolume",
-        "ec2:DescribeAvailabilityZones",
-        "ec2:DescribeInstances",
-        "ec2:DescribeSnapshots",
-        "ec2:DescribeTags",
-        "ec2:DescribeVolumes",
-        "ec2:DescribeVolumesModifications"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateTags"
-      ],
-      "Resource": [
-        "arn:aws:ec2:*:*:volume/*",
-        "arn:aws:ec2:*:*:snapshot/*"
-      ],
-      "Condition": {
-        "StringEquals": {
-          "ec2:CreateAction": [
-            "CreateVolume",
-            "CreateSnapshot"
-          ]
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteTags"
-      ],
-      "Resource": [
-        "arn:aws:ec2:*:*:volume/*",
-        "arn:aws:ec2:*:*:snapshot/*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateVolume"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "aws:RequestTag/ebs.csi.aws.com/cluster": "true"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateVolume"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "aws:RequestTag/CSIVolumeName": "*"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteVolume"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteVolume"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/CSIVolumeName": "*"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteVolume"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/kubernetes.io/created-for/pvc/name": "*"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteSnapshot"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/CSIVolumeSnapshotName": "*"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteSnapshot"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
-        }
-      }
-    }
-  ]
-}
-EOF
-
-aws iam create-policy \
-  --policy-name AmazonEBSCSIDriverPolicy \
-  --policy-document file://ebs-csi-policy.json \
-  --region us-east-1
-
-# Create service account and AWS IAM role binding
-eksctl create iamserviceaccount \
-  --cluster=my-eks-cluster \
-  --namespace=kube-system \
-  --name=ebs-csi-controller-sa \
-  --attach-policy-arn=arn:aws:iam::123456789012:policy/AmazonEBSCSIDriverPolicy \
-  --override-existing-serviceaccounts \
-  --approve \
-  --region us-east-1
-
-# Install the EBS CSI Driver using Helm
-helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
-helm repo update
-helm install aws-ebs-csi-driver aws-ebs-csi-driver/aws-ebs-csi-driver \
-  --namespace kube-system \
-  --set controller.serviceAccount.create=false \
-  --set controller.serviceAccount.name=ebs-csi-controller-sa
-```
-
-## Best Practices
-
-### Security
-
-1. **Use IAM Roles for Service Accounts (IRSA)**: Avoid using long-lived AWS credentials in pods.
-   ```bash
-   # Enable OIDC provider for the cluster
-   eksctl utils associate-iam-oidc-provider \
-     --cluster my-eks-cluster \
-     --approve \
-     --region us-east-1
-   
-   # Create IAM role for service account
-   eksctl create iamserviceaccount \
-     --cluster=my-eks-cluster \
-     --namespace=default \
-     --name=my-service-account \
-     --attach-policy-arn=arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess \
-     --approve \
-     --region us-east-1
-   ```
-
-2. **Network Policies**: Implement network policies to control pod-to-pod communication.
-   ```bash
-   # Install Calico
-   kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/calico-operator.yaml
-   kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/calico-crs.yaml
-   
-   # Example network policy
-   cat > network-policy.yaml << EOF
-   apiVersion: networking.k8s.io/v1
-   kind: NetworkPolicy
-   metadata:
-     name: default-deny
-     namespace: default
-   spec:
-     podSelector: {}
-     policyTypes:
-     - Ingress
-     - Egress
-   EOF
-   
-   kubectl apply -f network-policy.yaml
-   ```
-
-3. **Encrypt Secrets**: Use AWS KMS for encrypting Kubernetes secrets.
-   ```bash
-   # Enable envelope encryption of secrets
-   aws eks update-cluster-config \
-     --name my-eks-cluster \
-     --encryption-config '[{"resources":["secrets"],"provider":{"keyArn":"arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"}}]' \
-     --region us-east-1
-   ```
-
-### Cost Optimization
-
-1. **Use Spot Instances for Non-Critical Workloads**:
-   ```bash
-   # Create a spot instance managed node group
-   aws eks create-nodegroup \
-     --cluster-name my-eks-cluster \
-     --nodegroup-name spot-nodes \
-     --node-role arn:aws:iam::123456789012:role/eks-node-role \
-     --subnets subnet-abcde012 subnet-bcde012a \
-     --capacity-type SPOT \
-     --scaling-config minSize=1,maxSize=5,desiredSize=3 \
-     --instance-types t3.medium,t3a.medium,m5.large,m5a.large \
-     --region us-east-1
-   ```
-
-2. **Right-Size Your Nodes**: Choose instance types that fit your workloads.
-
-3. **Use Cluster Autoscaler**: Automatically adjusts node count based on demand.
-
-4. **Leverage Fargate for Variable Workloads**: Pay only for what you use.
-
-### Operations
-
-1. **Monitoring with CloudWatch Container Insights**:
-   ```bash
-   # Enable Container Insights
-   aws eks update-cluster-config \
-     --name my-eks-cluster \
-     --logging '{"clusterLogging":[{"types":["api","audit","authenticator","controllerManager","scheduler"],"enabled":true}]}' \
-     --region us-east-1
-   
-   # Install CloudWatch agent
-   kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluentd-quickstart.yaml
-   ```
-
-2. **Implement Proper Tagging**: Tag all resources for cost allocation and organization.
-   ```bash
-   aws eks tag-resource \
-     --resource-arn arn:aws:eks:us-east-1:123456789012:cluster/my-eks-cluster \
-     --tags "Environment=dev,Team=platform,CostCenter=12345" \
-     --region us-east-1
-   ```
-
-3. **Regular Updates**: Keep your EKS cluster up to date.
-   ```bash
-   # Update EKS cluster version
-   aws eks update-cluster-version \
-     --name my-eks-cluster \
-     --kubernetes-version 1.28 \
-     --region us-east-1
-   ```
-
-## Common Issues and Troubleshooting
-
-### Authorization Issues
-
-```bash
-# Check if IAM authenticator is configured properly
-aws eks describe-cluster \
-  --name my-eks-cluster \
-  --query "cluster.identity.oidc" \
-  --region us-east-1
-
-# Update aws-auth ConfigMap to add users/roles
-eksctl create iamidentitymapping \
-  --cluster my-eks-cluster \
-  --arn arn:aws:iam::123456789012:role/admin-role \
-  --username admin \
-  --group system:masters \
-  --region us-east-1
-```
-
-### Networking Issues
-
-```bash
-# Check VPC CNI version and configuration
-kubectl describe daemonset aws-node -n kube-system
-
-# Check pod CIDR allocation
-aws ec2 describe-vpcs \
-  --vpc-ids vpc-1234567890abcdef0 \
-  --query "Vpcs[].CidrBlockAssociationSet" \
-  --region us-east-1
-
-# Validate security group configuration
-aws ec2 describe-security-groups \
-  --filters "Name=tag:aws:eks:cluster-name,Values=my-eks-cluster" \
-  --region us-east-1
-```
-
-### Node Issues
-
-```bash
-# Check node status
-kubectl get nodes -o wide
-
-# Describe a problematic node
-kubectl describe node <node-name>
-
-# Check node logs
-aws ec2 get-console-output \
-  --instance-id i-1234567890abcdef0 \
-  --region us-east-1
-
-# Check kubelet logs on the node
-ssh ec2-user@<node-ip> 'sudo journalctl -u kubelet'
-```
-
-## References
-
-- [Amazon EKS Documentation](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
+- [AWS EKS Documentation](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
 - [Terraform AWS EKS Module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest)
-- [AWS CLI EKS Reference](https://docs.aws.amazon.com/cli/latest/reference/eks/index.html)
-- [EKS Best Practices Guides](https://aws.github.io/aws-eks-best-practices/)
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
+- [EKS Workshop](https://www.eksworkshop.com/)
+- [AWS EKS Best Practices Guide](https://aws.github.io/aws-eks-best-practices/)
