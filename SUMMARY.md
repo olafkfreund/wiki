@@ -98,6 +98,7 @@
 * [AWS](pages/public-clouds/aws/README.md)
   * [Authentication](pages/public-clouds/aws/authentication.md)
   * [Best Practices](pages/public-clouds/aws/best-practices.md)
+  * [Tips & Tricks](pages/public-clouds/aws/tips-and-tricks.md)
 * [Google Cloud](pages/public-clouds/gcp/README.md)
   * [Services](pages/public-clouds/gcp/services/README.md)
 * [Private Cloud](pages/private-cloud.md)
