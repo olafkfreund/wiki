@@ -1,43 +1,67 @@
----
-description: >-
-  A utility to generate documentation from Terraform modules in various output
-  formats.
----
-
 # Terraform-docs
 
-### Installation:
+Terraform-docs is a utility for generating documentation from Terraform modules in various output formats.
 
-Linux:
+## Installation
 
+### Using Homebrew
 ```bash
-brew install terraform-docs/tap/terraform-docs
-```plaintext
+brew install terraform-docs
+```
 
-Windows:
-
-```powershell
-scoop bucket add terraform-docs https://github.com/terraform-docs/scoop-bucket
-scoop install terraform-docs
-```plaintext
-
-```powershell
-choco install terraform-docs
-```plaintext
-
-Docker/Podman
-
-{% code overflow="wrap" lineNumbers="true" %}
+### Using Go
 ```bash
-/docker run --rm --volume "$(pwd):/terraform-docs" -u $(id -u) quay.io/terraform-docs/terraform-docs:0.16.0 markdown /terraform-docs
-```plaintext
-{% endcode %}
+go install github.com/terraform-docs/terraform-docs@latest
+```
 
-GitHub Actions:
+### Docker
+```bash
+docker pull quay.io/terraform-docs/terraform-docs:latest
+```
 
-{% code overflow="wrap" lineNumbers="true" %}
+## Usage
+
+### Basic Command
+```bash
+terraform-docs markdown table /path/to/module
+```
+
+### Configuration File
+Create `.terraform-docs.yml` in your module directory:
+
 ```yaml
-/name: Generate terraform docs
+formatter: "markdown table"
+
+sections:
+  show:
+    - requirements
+    - providers
+    - inputs
+    - outputs
+
+output:
+  file: "README.md"
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+```
+
+## Integration with Git Hooks
+
+Add to `.git/hooks/pre-commit`:
+
+```bash
+#!/bin/sh
+terraform-docs markdown table --output-file README.md ./module/
+```
+
+## CI/CD Integration
+
+### GitHub Actions
+```yaml
+name: Generate terraform docs
 on:
   - pull_request
 
@@ -49,89 +73,106 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Render terraform docs and push changes back to PR
-      uses: terraform-docs/gh-actions@main
+    - name: Render terraform docs
+      uses: terraform-docs/gh-actions@v1.0.0
       with:
         working-dir: .
         output-file: README.md
         output-method: inject
         git-push: "true"
-```plaintext
-{% endcode %}
+```
 
-#### pre-commit hook
-
-With pre-commit, you can ensure your Terraform module documentation is kept up-to-date each time you make a commit.
-
-{% code overflow="wrap" lineNumbers="true" %}
+### Azure DevOps Pipeline
 ```yaml
-repos:
-  - repo: https://github.com/terraform-docs/terraform-docs
-    rev: "v0.16.0"
-    hooks:
-      - id: terraform-docs-go
-        args: ["markdown", "table", "--output-file", "README.md", "./mymodule/path"]
-```plaintext
-{% endcode %}
+steps:
+- script: |
+    curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz
+    tar -xzf terraform-docs.tar.gz
+    chmod +x terraform-docs
+    ./terraform-docs markdown table . > README.md
+  displayName: 'Generate Module Documentation'
+```
 
-### Configuration
+## Output Formats
 
-terraform-docs can be configured with a yaml file. The default name of this file is `.terraform-docs.yml` and the path order for locating it is:
+1. Markdown Table (default)
+```bash
+terraform-docs markdown table /path/to/module
+```
 
-1. root of module directory
-2. `.config/` folder at root of module directory
-3. current directory
-4. `.config/` folder at current directory
-5. `$HOME/.tfdocs.d/`
+2. Markdown Document
+```bash
+terraform-docs markdown document /path/to/module
+```
 
-{% code overflow="wrap" lineNumbers="true" %}
-```yaml
-formatter: "" # this is required
+3. JSON
+```bash
+terraform-docs json /path/to/module
+```
 
-version: ""
+4. YAML
+```bash
+terraform-docs yaml /path/to/module
+```
 
-header-from: main.tf
-footer-from: ""
+## Best Practices
 
-recursive:
-  enabled: false
-  path: modules
+1. **Documentation Comments**
+   ```hcl
+   variable "instance_type" {
+     description = "The type of EC2 instance to launch"
+     type        = string
+     default     = "t3.micro"
+   }
+   ```
 
-sections:
-  hide: []
-  show: []
+2. **Required vs Optional**
+   ```hcl
+   variable "environment" {
+     description = "(Required) The environment this resource belongs to"
+     type        = string
+   }
 
-content: ""
+   variable "tags" {
+     description = "(Optional) Additional tags for the resource"
+     type        = map(string)
+     default     = {}
+   }
+   ```
 
-output:
-  file: ""
-  mode: inject
-  template: |-
-    <!-- BEGIN_TF_DOCS -->
-    {{ .Content }}
-    <!-- END_TF_DOCS -->
+3. **Examples in Description**
+   ```hcl
+   variable "allowed_ports" {
+     description = "List of allowed ports. Example: [80, 443]"
+     type        = list(number)
+     default     = [80, 443]
+   }
+   ```
 
-output-values:
-  enabled: false
-  from: ""
+## Common Issues and Solutions
 
-sort:
-  enabled: true
-  by: name
+1. **Missing Documentation**
+   - Ensure all variables and outputs have descriptions
+   - Use meaningful names for resources
+   - Include examples where appropriate
 
-settings:
-  anchor: true
-  color: true
-  default: true
-  description: false
-  escape: true
-  hide-empty: false
-  html: true
-  indent: 2
-  lockfile: true
-  read-comments: true
-  required: true
-  sensitive: true
-  type: trueaml
-```plaintext
-{% endcode %}
+2. **Version Conflicts**
+   - Keep terraform-docs updated
+   - Pin version in CI/CD pipelines
+   - Check compatibility with Terraform version
+
+3. **Output Formatting**
+   - Use consistent formatting
+   - Follow team conventions
+   - Include all necessary sections
+
+## Checklist
+
+- [ ] All variables have descriptions
+- [ ] All outputs have descriptions
+- [ ] Required vs optional is clearly marked
+- [ ] Examples are included where helpful
+- [ ] Documentation is generated automatically
+- [ ] CI/CD integration is configured
+- [ ] Git hooks are set up (if needed)
+- [ ] Version is pinned in automation
