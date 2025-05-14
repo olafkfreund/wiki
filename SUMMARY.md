@@ -13,6 +13,8 @@
 * [SRE Fundamentals](pages/sre/README.md)
   * [Toil Reduction](pages/sre/toil.md)
   * [System Simplicity](pages/sre/simplicity.md)
+  * [Scenarios](pages/sre/senarios/README.md)
+    * [AWS VM Log Monitoring API](pages/sre/senarios/aws-vm-monitoring-api.md)
 * [Agile Development](pages/devops/agile-development/README.md)
   * [Team Agreements](pages/devops/agile-development/team-agreements/README.md)
     * [Definition of Done](pages/devops/agile-development/team-agreements/definition-of-done.md)
