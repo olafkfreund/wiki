@@ -346,3 +346,14 @@
   * [Deploying NixOS to Cloud Platforms with nix-anywhere](pages/Nixos/nix-anywhere-cloud.md)
   * [NixOS Generators: Azure VM & QEMU Image Creation](pages/Nixos/nixos-generators-azure-qemu.md)
   * [Deploying a Fleet of NixOS Servers with Colmena](pages/Nixos/colmena-fleet.md)
+
+## Claude LLM Integration
+* [Claude](pages/llm/claude/README.md)
+  * [Installation Guide](pages/llm/claude/claude-installation.md)
+    * [Basic Setup](pages/llm/claude/claude-installation.md#linux-installation)
+    * [Project Roles](pages/llm/claude/claude-installation.md#role-configuration-and-project-initialization)
+    * [Initializing Projects](pages/llm/claude/claude-installation.md#initializing-claude-for-existing-projects)
+    * [Best Practices](pages/llm/claude/claude-installation.md#best-practices-for-role-configuration)
+  * [Creating a CLAUDE.md Project Guide](pages/llm/claude/claude-project-guide.md)
+  * [MCP Server Setup](pages/llm/claude/mcp-server-setup.md)
+  * [LLM Modules Comparison](pages/llm/claude/llm-modules-comparison.md)
