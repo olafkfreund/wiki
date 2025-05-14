@@ -139,7 +139,18 @@
   * [GPU Setup](pages/llm/ollama/gpu-setup.md)
   * [Open WebUI](pages/llm/ollama/open-webui.md)
 * [Copilot](pages/llm/copilot/README.md)
+  * [Installation Guide](pages/llm/copilot/installation.md)
+  * [VS Code Integration](pages/llm/copilot/vscode-integration.md)
+  * [CLI Usage](pages/llm/copilot/cli-usage.md)
 * [Gemini](pages/llm/gemini/README.md)
+  * [Installation on Linux](pages/llm/gemini/installation-linux.md)
+  * [Installation on WSL](pages/llm/gemini/installation-wsl.md)
+  * [Installation on NixOS](pages/llm/gemini/installation-nixos.md)
+  * [Gemini 2.5 Features](pages/llm/gemini/gemini-2-5-features.md)
+  * [Roles and Agents](pages/llm/gemini/roles-and-agents.md)
+  * [NotebookML Guide](pages/llm/gemini/notebookml-guide.md)
+  * [Cloud Infrastructure Deployment](pages/llm/gemini/cloud-infrastructure-deployment.md)
+  * [Summary](pages/llm/gemini/summary.md)
 * [LLM Comparison](pages/llm/claude/llm-modules-comparison.md)
 
 ## 💻 Development Environment
