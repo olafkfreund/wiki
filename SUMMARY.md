@@ -8,6 +8,7 @@
 * [DevOps Overview](pages/devops/README.md)
   * [Engineering Fundamentals](pages/devops/engineering-fundamentals-checklist.md)
   * [Implementing DevOps Strategy](pages/devops/implementing-devops-strategy.md)
+  * [DevOps Readiness Assessment](pages/devops/devops-readiness-assessment.md)
   * [Lifecycle Management](pages/need-to-know/devops-lifecycle-management.md)
   * [The 12 Factor App](pages/need-to-know/the-12-factor-app.md)
   * [Design for Self Healing](pages/need-to-know/design-for-self-healing.md)
