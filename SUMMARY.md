@@ -95,6 +95,7 @@
   * [Landing Zones](pages/public-clouds/azure/azure-landing-zone/README.md)
   * [Services](pages/public-clouds/azure/services/README.md)
   * [Monitoring](pages/public-clouds/azure/monitoring/README.md)
+  * [Tips & Tricks](pages/public-clouds/azure/tips-and-tricks.md)
 * [AWS](pages/public-clouds/aws/README.md)
   * [Authentication](pages/public-clouds/aws/authentication.md)
   * [Best Practices](pages/public-clouds/aws/best-practices.md)
