@@ -347,7 +347,7 @@
   * [NixOS Generators: Azure VM & QEMU Image Creation](pages/Nixos/nixos-generators-azure-qemu.md)
   * [Deploying a Fleet of NixOS Servers with Colmena](pages/Nixos/colmena-fleet.md)
 
-## Claude LLM Integration
+## LLM Integration
 * [Claude](pages/llm/claude/README.md)
   * [Installation Guide](pages/llm/claude/claude-installation.md)
     * [Basic Setup](pages/llm/claude/claude-installation.md#linux-installation)
@@ -357,3 +357,11 @@
   * [Creating a CLAUDE.md Project Guide](pages/llm/claude/claude-project-guide.md)
   * [MCP Server Setup](pages/llm/claude/mcp-server-setup.md)
   * [LLM Modules Comparison](pages/llm/claude/llm-modules-comparison.md)
+* [Ollama](pages/llm/ollama/README.md)
+  * [Installation Guide](pages/llm/ollama/installation.md)
+  * [Configuration](pages/llm/ollama/configuration.md)
+  * [Models and Fine-tuning](pages/llm/ollama/models.md)
+  * [DevOps Usage Examples](pages/llm/ollama/devops-usage.md)
+  * [Docker Setup](pages/llm/ollama/docker-setup.md)
+  * [GPU Setup Guide](pages/llm/ollama/gpu-setup.md)
+  * [Open WebUI Integration](pages/llm/ollama/open-webui.md)
