@@ -1,12 +1,14 @@
 # Cloud Engineering & DevOps Knowledge Base
 
-* [Welcome!](README.md) - Introduction to this knowledge resource
+* [Welcome!](README.md) - Your comprehensive guide to modern DevOps practices
+* [How to Use This Wiki](pages/how-to-use.md) - Navigation tips and content organization
 * [About Me](pages/about-me.md) - Professional background and expertise
 * [CV](pages/cv.md) - Professional experience and skills
+* [Quick Start Guides](pages/quick-starts/README.md) - Fast track to common DevOps tasks
 
 ## 🧠 DevOps & SRE Foundations
 
-* [DevOps Overview](pages/devops/README.md) - Core DevOps principles and practices
+* [DevOps Overview](pages/devops/README.md) - Core principles for continuous delivery and reliability
   * [Engineering Fundamentals](pages/devops/engineering-fundamentals-checklist.md) - Essential skills for DevOps engineers
   * [Implementing DevOps Strategy](pages/devops/implementing-devops-strategy.md) - Planning and executing DevOps transformations
   * [DevOps Readiness Assessment](pages/devops/devops-readiness-assessment.md) - Evaluate organization readiness for DevOps
@@ -14,239 +16,249 @@
   * [The 12 Factor App](pages/need-to-know/the-12-factor-app.md) - Modern application development methodology
   * [Design for Self Healing](pages/need-to-know/design-for-self-healing.md) - Building resilient systems
   * [Incident Management Best Practices (2025)](pages/devops/incident-management-best-practices-2025.md) - Modern incident handling approaches
-* [SRE Fundamentals](pages/sre/README.md) - Site Reliability Engineering principles
-  * [Toil Reduction](pages/sre/toil.md) - Eliminating manual, repetitive work
-  * [System Simplicity](pages/sre/simplicity.md) - Building maintainable systems
-  * [Real-world Scenarios](pages/sre/senarios/README.md) - Practical applications of SRE
-    * [AWS VM Log Monitoring API](pages/sre/senarios/aws-vm-monitoring-api.md) - Implementation example
-* [Agile Development](pages/devops/agile-development/README.md) - Agile methodologies and practices
-  * [Team Agreements](pages/devops/agile-development/team-agreements/README.md) - Establishing team norms
-    * [Definition of Done](pages/devops/agile-development/team-agreements/definition-of-done.md) - Clear completion criteria
-    * [Definition of Ready](pages/devops/agile-development/team-agreements/definition-of-ready.md) - Work intake standards
-    * [Team Manifesto](pages/devops/agile-development/team-agreements/team-manifesto.md) - Team values and principles
-    * [Working Agreement](pages/devops/agile-development/team-agreements/sections-of-a-working-agreement.md) - Collaboration guidelines
+* [SRE Fundamentals](pages/sre/README.md) - Site Reliability Engineering principles and practices
+  * [Toil Reduction](pages/sre/toil.md) - Identifying and eliminating repetitive operational work
+  * [System Simplicity](pages/sre/simplicity.md) - Designing and maintaining maintainable systems
+  * [Real-world Scenarios](pages/sre/senarios/README.md) - Practical applications and case studies
+    * [AWS VM Log Monitoring API](pages/sre/senarios/aws-vm-monitoring-api.md) - Implementing centralized logging
+* [Agile Development](pages/devops/agile-development/README.md) - Iterative and collaborative methodologies
+  * [Team Agreements](pages/devops/agile-development/team-agreements/README.md) - Establishing effective team norms
+    * [Definition of Done](pages/devops/agile-development/team-agreements/definition-of-done.md) - Setting clear completion criteria
+    * [Definition of Ready](pages/devops/agile-development/team-agreements/definition-of-ready.md) - Standardizing work intake requirements
+    * [Team Manifesto](pages/devops/agile-development/team-agreements/team-manifesto.md) - Defining shared values and principles
+    * [Working Agreement](pages/devops/agile-development/team-agreements/sections-of-a-working-agreement.md) - Establishing collaboration guidelines
 
 ## 🛠️ Infrastructure as Code (IaC)
 
-* [Terraform](pages/terraform/README.md) - Multi-cloud infrastructure automation
-  * [Getting Started](pages/terraform/install.md) - Installation and initial setup
+* [IaC Overview](pages/iac/README.md) - Introduction to infrastructure automation
+* [Terraform](pages/terraform/README.md) - HashiCorp's multi-cloud infrastructure automation
+  * [Getting Started](pages/terraform/install.md) - Installation and initial setup [BEGINNER]
   * [Cloud Integrations](pages/terraform/) - Provider-specific implementations
-    * [Azure Scenarios](pages/terraform/azure-scenarios.md) - Azure resource deployment patterns
-    * [AWS Scenarios](pages/terraform/aws-scenarios.md) - AWS resource deployment patterns
-    * [GCP Scenarios](pages/terraform/gcp-scenarios.md) - Google Cloud deployment patterns
+    * [Azure Scenarios](pages/terraform/azure-scenarios.md) - Azure resource management patterns
+    * [AWS Scenarios](pages/terraform/aws-scenarios.md) - AWS deployment strategies
+    * [GCP Scenarios](pages/terraform/gcp-scenarios.md) - Google Cloud automation patterns
   * [Testing and Validation](pages/terraform/testing/) - Ensuring infrastructure quality
     * [Unit Testing](pages/terraform/testing/unit-testing.md) - Testing individual resources
     * [Integration Testing](pages/terraform/testing/integration-testing.md) - Testing resource interactions
     * [End-to-End Testing](pages/terraform/testing/e2e-testing.md) - Testing complete infrastructure
     * [Terratest Guide](pages/terraform/testing/terratest.md) - Go-based testing framework
-  * [Best Practices](pages/terraform/best-practices/) - Recommended implementation approaches
-    * [State Management](pages/terraform/best-practices/state-management.md) - Handling Terraform state
+  * [Best Practices](pages/terraform/best-practices/) - Production-ready implementation strategies
+    * [State Management](pages/terraform/best-practices/state-management.md) - Remote state and locking [ADVANCED]
     * [Security](pages/terraform/best-practices/security.md) - Securing infrastructure code
-    * [Code Organization](pages/terraform/best-practices/code-organization.md) - Structure for maintainability
-    * [Performance](pages/terraform/best-practices/performance.md) - Optimizing Terraform runs
+    * [Code Organization](pages/terraform/best-practices/code-organization.md) - Project structure and modules
+    * [Performance](pages/terraform/best-practices/performance.md) - Optimizing deployment speed
   * [Tools & Utilities](pages/terraform/tools/) - Enhancing the Terraform workflow
-    * [Terraform Docs](pages/terraform/tools/terraform-docs.md) - Automated documentation
-    * [TFLint](pages/terraform/tools/tflint.md) - Static code analysis
-    * [Checkov](pages/terraform/tools/checkov.md) - Security & compliance scanning
-    * [Terrascan](pages/terraform/tools/terrascan.md) - Vulnerability scanning
-  * [CI/CD Integration](pages/terraform/cicd/) - Automation with CI/CD platforms
-    * [GitHub Actions](pages/terraform/cicd/github-actions.md) - GitHub-based automation
-    * [Azure Pipelines](pages/terraform/cicd/azure-pipelines.md) - Azure DevOps automation
-    * [GitLab CI](pages/terraform/cicd/gitlab-ci.md) - GitLab-based automation
-* [Bicep](group-1/bicep/README.md) - Azure-native infrastructure as code
-  * [Getting Started](group-1/bicep/getting-started.md) - First steps with Bicep
-  * [Template Specs](group-1/bicep/template-spec-for-bicep.md) - Reusable infrastructure templates 
-  * [Best Practices](group-1/bicep/best-practices.md) - Guidelines for effective Bicep usage
-  * [Modules](group-1/bicep/modules.md) - Creating reusable components
-  * [Examples](group-1/bicep/examples.md) - Sample implementations
-  * [Advanced Features](group-1/bicep/use-inline-scripts.md) - Using inline scripts with Bicep
-  * [CI/CD Integration](group-1/bicep/) - Automation workflows
+    * [Terraform Docs](pages/terraform/tools/terraform-docs.md) - Automated documentation generation
+    * [TFLint](pages/terraform/tools/tflint.md) - Static code analysis and linting
+    * [Checkov](pages/terraform/tools/checkov.md) - Policy-as-code scanning
+    * [Terrascan](pages/terraform/tools/terrascan.md) - Security vulnerability scanning
+  * [CI/CD Integration](pages/terraform/cicd/) - Automating infrastructure deployment
+    * [GitHub Actions](pages/terraform/cicd/github-actions.md) - GitHub-based automation workflows
+    * [Azure Pipelines](pages/terraform/cicd/azure-pipelines.md) - Azure DevOps integration
+    * [GitLab CI](pages/terraform/cicd/gitlab-ci.md) - GitLab-based deployment pipelines
+* [Bicep](group-1/bicep/README.md) - Azure-native infrastructure as code language
+  * [Getting Started](group-1/bicep/getting-started.md) - First steps with Bicep [BEGINNER]
+  * [Template Specs](group-1/bicep/template-spec-for-bicep.md) - Creating reusable infrastructure templates
+  * [Best Practices](group-1/bicep/best-practices.md) - Guidelines for effective Bicep implementations
+  * [Modules](group-1/bicep/modules.md) - Building reusable components [INTERMEDIATE]
+  * [Examples](group-1/bicep/examples.md) - Sample implementations for common scenarios
+  * [Advanced Features](group-1/bicep/use-inline-scripts.md) - Using inline scripts and extensions
+  * [CI/CD Integration](group-1/bicep/) - Automating Bicep deployments
     * [GitHub Actions](group-1/bicep/bicep-with-github-actions.md) - GitHub workflow integration
     * [Azure Pipelines](group-1/bicep/integrate-bicep-with-azure-pipelines.md) - Azure DevOps integration
 
 ## 🐳 Containers & Orchestration
 
-* [Docker](pages/best-practises/containers/docker/README.md) - Container technology fundamentals
-  * [Dockerfile Best Practices](pages/best-practises/containers/docker/dockerfile.md) - Optimizing container builds
-  * [Docker Compose](pages/best-practises/containers/docker/docker-compose.md) - Multi-container applications
-* [Kubernetes](pages/containers/kubernetes/README.md) - Container orchestration platform
+* [Containerization Overview](pages/containers/README.md) - Introduction to container technology
+* [Docker](pages/best-practises/containers/docker/README.md) - Container runtime and tooling
+  * [Dockerfile Best Practices](pages/best-practises/containers/docker/dockerfile.md) - Efficient and secure container images
+  * [Docker Compose](pages/best-practises/containers/docker/docker-compose.md) - Multi-container application management
+* [Kubernetes](pages/containers/kubernetes/README.md) - Production-grade container orchestration
   * [CLI Tools](pages/containers/kubernetes/) - Essential command-line utilities
-    * [Kubectl](pages/containers/kubernetes/kubectl.md) - Primary Kubernetes CLI
+    * [Kubectl](pages/containers/kubernetes/kubectl.md) - Primary Kubernetes control tool
     * [Kubens](pages/containers/kubernetes/kubens.md) - Namespace switching utility
     * [Kubectx](pages/containers/kubernetes/kubectx.md) - Context switching utility
-  * [Core Concepts](pages/need-to-know/kubernetes/kubernetes-concepts.md) - Fundamental Kubernetes principles
-  * [Components](pages/need-to-know/kubernetes/kubernetes-components.md) - Kubernetes architecture
-  * [Best Practices](pages/best-practises/containers/kubernetes/kubernetes-best-practices/README.md) - Recommended approaches
-  * [Advanced Features](pages/should-learn/kubernetes/) - Beyond the basics
-    * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md) - Service-to-service communication
-    * [Ingress Controllers](pages/should-learn/kubernetes/ingress-controllers/README.md) - Managing external access
+  * [Core Concepts](pages/need-to-know/kubernetes/kubernetes-concepts.md) - Fundamental Kubernetes architecture
+  * [Components](pages/need-to-know/kubernetes/kubernetes-components.md) - Cluster building blocks
+  * [Best Practices](pages/best-practises/containers/kubernetes/kubernetes-best-practices/README.md) - Production implementation guidelines
+  * [Advanced Features](pages/should-learn/kubernetes/) - Beyond the basics [ADVANCED]
+    * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md) - Network traffic management
+    * [Ingress Controllers](pages/should-learn/kubernetes/ingress-controllers/README.md) - External access management
       * [NGINX](pages/should-learn/kubernetes/ingress-controllers/nginx.md) - NGINX-based ingress
-      * [Traefik](pages/should-learn/kubernetes/ingress-controllers/traefik.md) - Traefik ingress controller
-      * [Kong](pages/should-learn/kubernetes/ingress-controllers/kong.md) - Kong API gateway
-      * [Gloo Edge](pages/should-learn/kubernetes/ingress-controllers/gloo-edge.md) - API gateway
-  * [Troubleshooting](pages/should-learn/kubernetes/troubleshooting/README.md) - Diagnosing and fixing issues
-    * [Pod Troubleshooting Commands](pages/should-learn/kubernetes/troubleshooting/kubernetes-pod-troubleshooting-commands.md) - Diagnostic tools
-* [OpenShift](pages/best-practises/containers/openshift.md) - Enterprise Kubernetes platform
+      * [Traefik](pages/should-learn/kubernetes/ingress-controllers/traefik.md) - Cloud-native edge router
+      * [Kong](pages/should-learn/kubernetes/ingress-controllers/kong.md) - API gateway implementation
+      * [Gloo Edge](pages/should-learn/kubernetes/ingress-controllers/gloo-edge.md) - Next-gen API gateway
+  * [Troubleshooting](pages/should-learn/kubernetes/troubleshooting/README.md) - Diagnosing and resolving common issues
+    * [Pod Troubleshooting Commands](pages/should-learn/kubernetes/troubleshooting/kubernetes-pod-troubleshooting-commands.md) - Essential diagnostic tools
+* [OpenShift](pages/best-practises/containers/openshift.md) - Red Hat's enterprise Kubernetes platform
 
 ## 🔄 CI/CD & GitOps
 
-* [CI/CD Overview](pages/devops/ci-cd-platforms/README.md) - Continuous integration and delivery concepts
-* [Continuous Integration](pages/devops/continuous-integration.md) - Automating code integration and testing
-* [Continuous Delivery](pages/devops/continuous-delivery/README.md) - Reliable software release processes
-  * [Deployment Strategies](pages/need-to-know/guide-to-blue-green-canary-and-rolling-deployments.md) - Progressive deployment methods
-  * [Secrets Management](pages/devops/continuous-delivery/secrets-management.md) - Managing sensitive information
-* [CI/CD Platforms](pages/devops/ci-cd-platforms/) - Implementation options
-  * [Azure DevOps](pages/azure-devops/README.md) - Microsoft's DevOps platform
-    * [Pipelines](pages/azure-devops/pipelines/README.md) - CI/CD implementation
-      * [Stages](pages/azure-devops/pipelines/stages.md) - Pipeline organization
-      * [Jobs](pages/azure-devops/pipelines/jobs.md) - Execution units
-      * [Steps](pages/azure-devops/pipelines/steps.md) - Individual tasks
-      * [Templates](pages/azure-devops/pipelines/templates.md) - Reusable configurations
-      * [Extends](pages/azure-devops/pipelines/extends.md) - Template inheritance
-      * [Service Connections](pages/azure-devops/pipelines/service-connections.md) - External integrations
-      * [Best Practices for 2025](pages/azure-devops/pipelines/README.md#best-practices-for-2025) - Modern approaches
-      * [Agents and Runners](pages/azure-devops/pipelines/README.md#agents-and-runners) - Execution environments
-      * [Third-Party Integrations](pages/azure-devops/pipelines/README.md#third-party-integrations) - Ecosystem connections
+* [CI/CD Overview](pages/devops/ci-cd-platforms/README.md) - Automated build, test and deployment pipelines
+* [Continuous Integration](pages/devops/continuous-integration.md) - Automating code validation and integration
+* [Continuous Delivery](pages/devops/continuous-delivery/README.md) - Reliable software release automation
+  * [Deployment Strategies](pages/need-to-know/guide-to-blue-green-canary-and-rolling-deployments.md) - Progressive release methods
+  * [Secrets Management](pages/devops/continuous-delivery/secrets-management.md) - Securing sensitive configuration data
+* [CI/CD Platforms](pages/devops/ci-cd-platforms/) - Tool selection and implementation
+  * [Azure DevOps](pages/azure-devops/README.md) - Microsoft's comprehensive DevOps platform
+    * [Pipelines](pages/azure-devops/pipelines/README.md) - YAML-based CI/CD implementation
+      * [Stages](pages/azure-devops/pipelines/stages.md) - Pipeline organization units
+      * [Jobs](pages/azure-devops/pipelines/jobs.md) - Execution containers
+      * [Steps](pages/azure-devops/pipelines/steps.md) - Individual pipeline tasks
+      * [Templates](pages/azure-devops/pipelines/templates.md) - Reusable pipeline components
+      * [Extends](pages/azure-devops/pipelines/extends.md) - Template inheritance and customization
+      * [Service Connections](pages/azure-devops/pipelines/service-connections.md) - External service authentication
+      * [Best Practices for 2025](pages/azure-devops/pipelines/README.md#best-practices-for-2025) - Modern pipeline approaches
+      * [Agents and Runners](pages/azure-devops/pipelines/README.md#agents-and-runners) - Pipeline execution environments
+      * [Third-Party Integrations](pages/azure-devops/pipelines/README.md#third-party-integrations) - Extended tool integration
       * [Azure DevOps CLI](pages/azure-devops/pipelines/README.md#azure-devops-cli) - Command-line automation
-    * [Boards & Work Items](pages/devops/ci-cd-platforms/azure-devops/boards-and-work-items/README.md) - Project management
-  * [GitHub Actions](pages/devops/ci-cd-platforms/github/github-action.md) - GitHub's CI/CD solution
-* [GitOps](pages/devops/gitops/README.md) - Git-centric infrastructure automation
-  * [Flux](pages/devops/gitops/flux/README.md) - CNCF GitOps tool
-  * [ArgoCD](pages/devops/ci-cd-platforms/argo-cd/README.md) - Declarative GitOps CD tool
+    * [Boards & Work Items](pages/devops/ci-cd-platforms/azure-devops/boards-and-work-items/README.md) - Agile project management
+  * [GitHub Actions](pages/devops/ci-cd-platforms/github/github-action.md) - GitHub's integrated CI/CD solution
+* [GitOps](pages/devops/gitops/README.md) - Git-based infrastructure and application delivery
+  * [Flux](pages/devops/gitops/flux/README.md) - Kubernetes continuous delivery with GitOps
+  * [ArgoCD](pages/devops/ci-cd-platforms/argo-cd/README.md) - Declarative continuous delivery for Kubernetes
 
 ## ☁️ Cloud Platforms
 
-* [Cloud Strategy](pages/public-clouds/README.md) - Multi-cloud approach and considerations
-* [Azure](pages/public-clouds/azure/README.md) - Microsoft Azure platform
-  * [Best Practices](pages/public-clouds/azure/best-practise/README.md) - Recommended approaches
-  * [Landing Zones](pages/public-clouds/azure/azure-landing-zone/README.md) - Enterprise-scale foundations
-  * [Services](pages/public-clouds/azure/services/README.md) - Key Azure offerings
-  * [Monitoring](pages/public-clouds/azure/monitoring/README.md) - Observability solutions
-  * [Administration Tools](pages/public-clouds/azure/) - Management interfaces
-    * [Azure PowerShell](pages/azure-powershell/README.md) - PowerShell automation
-    * [Azure CLI](pages/az-cli/README.md) - Command-line interface
-  * [Tips & Tricks](pages/public-clouds/azure/tips-and-tricks.md) - Productivity enhancers
-* [AWS](pages/public-clouds/aws/README.md) - Amazon Web Services platform
-  * [Authentication](pages/public-clouds/aws/authentication.md) - Access management
-  * [Best Practices](pages/public-clouds/aws/best-practices.md) - Recommended approaches
-  * [Tips & Tricks](pages/public-clouds/aws/tips-and-tricks.md) - Productivity enhancers
-* [Google Cloud](pages/public-clouds/gcp/README.md) - Google Cloud Platform
-  * [Services](pages/public-clouds/gcp/services/README.md) - Key GCP offerings
+* [Cloud Strategy](pages/public-clouds/README.md) - Multi-cloud and platform selection guidelines
+* [Azure](pages/public-clouds/azure/README.md) - Microsoft's cloud computing platform
+  * [Best Practices](pages/public-clouds/azure/best-practise/README.md) - Architecture and implementation guidelines
+  * [Landing Zones](pages/public-clouds/azure/azure-landing-zone/README.md) - Enterprise-scale foundation architecture
+  * [Services](pages/public-clouds/azure/services/README.md) - Key platform capabilities
+  * [Monitoring](pages/public-clouds/azure/monitoring/README.md) - Azure-native observability solutions
+  * [Administration Tools](pages/public-clouds/azure/) - Platform management interfaces
+    * [Azure PowerShell](pages/azure-powershell/README.md) - PowerShell-based automation
+    * [Azure CLI](pages/az-cli/README.md) - Command-line management interface
+  * [Tips & Tricks](pages/public-clouds/azure/tips-and-tricks.md) - Productivity enhancements
+* [AWS](pages/public-clouds/aws/README.md) - Amazon's cloud platform
+  * [Authentication](pages/public-clouds/aws/authentication.md) - IAM and access management
+  * [Best Practices](pages/public-clouds/aws/best-practices.md) - Well-Architected implementation guidance
+  * [Tips & Tricks](pages/public-clouds/aws/tips-and-tricks.md) - Efficiency improvements
+* [Google Cloud](pages/public-clouds/gcp/README.md) - Google's cloud platform
+  * [Services](pages/public-clouds/gcp/services/README.md) - Key platform offerings
 * [Private Cloud](pages/private-cloud.md) - On-premises implementations
 
 ## 🔐 Security & Compliance
 
-* [DevSecOps](pages/dev-secops/README.md) - Security-integrated development
-  * [Real-life Examples](pages/dev-secops/real-life-examples.md) - Case studies and implementations
-  * [Scanning & Protection](pages/dev-secops/) - Automated security controls
-    * [Dependency Scanning](pages/dev-secops/dependency-and-container-scanning.md) - Software supply chain security
-    * [Credential Scanning](pages/dev-secops/credential-scanning/README.md) - Preventing secret leaks
-    * [Container Security Scanning](pages/dev-secops/container-security-scanning.md) - Container vulnerabilities
+* [DevSecOps Overview](pages/security/README.md) - Security throughout the delivery pipeline
+* [DevSecOps](pages/dev-secops/README.md) - Security-integrated development practices
+  * [Real-life Examples](pages/dev-secops/real-life-examples.md) - Implementation case studies
+  * [Scanning & Protection](pages/dev-secops/) - Automated security tooling
+    * [Dependency Scanning](pages/dev-secops/dependency-and-container-scanning.md) - Supply chain security
+    * [Credential Scanning](pages/dev-secops/credential-scanning/README.md) - Secret detection and prevention
+    * [Container Security Scanning](pages/dev-secops/container-security-scanning.md) - Container image analysis
     * [Static Code Analysis](pages/dev-secops/static-code-analysis/README.md) - Code quality and security
       * [Best Practices](pages/dev-secops/static-code-analysis/best-practices.md) - Effective implementation
       * [Tool Integration Guide](pages/dev-secops/static-code-analysis/tool-integration.md) - Setup instructions
-      * [Pipeline Configuration](pages/dev-secops/static-code-analysis/pipeline-config.md) - Automation examples
-  * [CI/CD Security](pages/dev-secops/ci-cd-security.md) - Pipeline security controls
-  * [Secrets Rotation](pages/dev-secops/secrets-rotation/README.md) - Managing sensitive credentials
-* [Security Best Practices](pages/devops/security/README.md) - General security guidelines
-  * [Threat Modeling](pages/devops/security/threat-modeling.md) - Identifying security risks
-  * [Kubernetes Security](pages/devops/security/kubernetes/README.md) - Container orchestration security
-* [SecOps](pages/secops/README.md) - Security operations
+      * [Pipeline Configuration](pages/dev-secops/static-code-analysis/pipeline-config.md) - CI/CD integration
+  * [CI/CD Security](pages/dev-secops/ci-cd-security.md) - Securing the deployment pipeline
+  * [Secrets Rotation](pages/dev-secops/secrets-rotation/README.md) - Automated credential management
+* [Security Best Practices](pages/devops/security/README.md) - Holistic security guidelines
+  * [Threat Modeling](pages/devops/security/threat-modeling.md) - Structured risk assessment
+  * [Kubernetes Security](pages/devops/security/kubernetes/README.md) - Container platform hardening
+* [SecOps](pages/secops/README.md) - Security operations and management
 * [Zero Trust Model](pages/need-to-know/zero-trust-model/README.md) - Modern security architecture
-* [Cloud Compliance](pages/need-to-know/cloud-compliance/README.md) - Regulatory frameworks
-  * [ISO/IEC 27001:2022](pages/need-to-know/cloud-compliance/iso-iec-27001-2022.md) - Information security standard
-  * [ISO 22301:2019](pages/need-to-know/cloud-compliance/iso-22301-2019.md) - Business continuity
-  * [PCI DSS](pages/need-to-know/cloud-compliance/pci-dss.md) - Payment card security
-  * [CSA STAR](pages/need-to-know/cloud-compliance/csa-star.md) - Cloud security assurance
-* [Security Frameworks](pages/need-to-know/public-cloud-security-frameworks/README.md) - Structured approaches
-* [SIEM and SOAR](pages/need-to-know/siem-and-soar.md) - Security monitoring and response
+* [Cloud Compliance](pages/need-to-know/cloud-compliance/README.md) - Regulatory frameworks and standards
+  * [ISO/IEC 27001:2022](pages/need-to-know/cloud-compliance/iso-iec-27001-2022.md) - Information security management
+  * [ISO 22301:2019](pages/need-to-know/cloud-compliance/iso-22301-2019.md) - Business continuity planning
+  * [PCI DSS](pages/need-to-know/cloud-compliance/pci-dss.md) - Payment card industry compliance
+  * [CSA STAR](pages/need-to-know/cloud-compliance/csa-star.md) - Cloud security certification
+* [Security Frameworks](pages/need-to-know/public-cloud-security-frameworks/README.md) - Implementation methodologies
+* [SIEM and SOAR](pages/need-to-know/siem-and-soar.md) - Security monitoring and automation
 
 ## 🔍 Observability & Monitoring
 
-* [Observability Fundamentals](pages/devops/observability/README.md) - Core monitoring concepts
-* [Logging](pages/devops/observability/logging/README.md) - Log collection and analysis
-* [Metrics](pages/devops/observability/metrics.md) - Quantitative measurement
-* [Tracing](pages/devops/observability/tracing.md) - Request flow visualization
-* [Dashboards](pages/devops/observability/dashboard.md) - Data visualization
-* [SLOs and SLAs](pages/need-to-know/understanding-sli-slo-and-sla.md) - Performance objectives
-* [Observability as Code](pages/devops/observability/observability-as-code.md) - Automated monitoring
-* [Pipeline Observability](pages/devops/observability/observability-of-ci-cd-pipelines.md) - CI/CD insights
+* [Observability Fundamentals](pages/devops/observability/README.md) - Unified monitoring approach
+* [Logging](pages/devops/observability/logging/README.md) - Log collection and analysis strategies
+* [Metrics](pages/devops/observability/metrics.md) - Quantitative system measurements
+* [Tracing](pages/devops/observability/tracing.md) - Distributed transaction monitoring
+* [Dashboards](pages/devops/observability/dashboard.md) - Visualization and reporting
+* [SLOs and SLAs](pages/need-to-know/understanding-sli-slo-and-sla.md) - Service level objectives and agreements
+* [Observability as Code](pages/devops/observability/observability-as-code.md) - Automated monitoring setup
+* [Pipeline Observability](pages/devops/observability/observability-of-ci-cd-pipelines.md) - CI/CD process insights
 
 ## 🧪 Testing Strategies
 
-* [Testing Overview](pages/devops/testing/README.md) - Comprehensive testing approach
-* [Modern Testing Approaches](pages/need-to-know/testing/README.md) - Cloud-native testing
+* [Testing Overview](pages/devops/testing/README.md) - Comprehensive quality assurance approach
+* [Modern Testing Approaches](pages/need-to-know/testing/README.md) - Cloud-native validation techniques
 * [End-to-End Testing](pages/need-to-know/testing/end-to-end-testing/README.md) - Complete system validation
-* [Unit Testing](pages/need-to-know/testing/unit-testing.md) - Component-level validation
-* [Performance Testing](pages/devops/testing/performance-testing/README.md) - System capability measurement
-  * [Load Testing](pages/devops/testing/performance-testing/load-testing/README.md) - Capacity assessment
-* [Fault Injection Testing](pages/devops/testing/fault-injection-testing.md) - Resilience verification
-* [Integration Testing](pages/devops/testing/integration-testing.md) - Component interaction testing
+* [Unit Testing](pages/need-to-know/testing/unit-testing.md) - Component-level verification
+* [Performance Testing](pages/devops/testing/performance-testing/README.md) - System capability assessment
+  * [Load Testing](pages/devops/testing/performance-testing/load-testing/README.md) - Capacity verification
+* [Fault Injection Testing](pages/devops/testing/fault-injection-testing.md) - Chaos engineering practice
+* [Integration Testing](pages/devops/testing/integration-testing.md) - Component interaction validation
 * [Smoke Testing](pages/devops/testing/smoke-testing.md) - Basic functionality verification
 
 ## 🧠 AI & LLM Integration
 
-* [Overview](pages/llm/README.md) - AI in DevOps introduction
-* [Claude](pages/llm/claude/README.md) - Anthropic's AI assistant
-  * [Installation Guide](pages/llm/claude/claude-installation.md) - Setup instructions
-  * [Project Guides](pages/llm/claude/claude-project-guide.md) - Implementation patterns
-  * [MCP Server Setup](pages/llm/claude/mcp-server-setup.md) - Multi-Claude Protocol
-  * [LLM Comparison](pages/llm/claude/llm-modules-comparison.md) - Model capabilities analysis
-* [Ollama](pages/llm/ollama/README.md) - Local LLM runner
-  * [Installation Guide](pages/llm/ollama/installation.md) - Setup instructions
-  * [Configuration](pages/llm/ollama/configuration.md) - Customization options
-  * [Models and Fine-tuning](pages/llm/ollama/models.md) - Available models
-  * [DevOps Usage](pages/llm/ollama/devops-usage.md) - Automation applications
+* [Overview](pages/llm/README.md) - AI applications in DevOps workflows
+* [Claude](pages/llm/claude/README.md) - Anthropic's large language model
+  * [Installation Guide](pages/llm/claude/claude-installation.md) - Setup and configuration
+  * [Project Guides](pages/llm/claude/claude-project-guide.md) - Implementation strategies
+  * [MCP Server Setup](pages/llm/claude/mcp-server-setup.md) - Multi-Claude Protocol implementation
+  * [LLM Comparison](pages/llm/claude/llm-modules-comparison.md) - Feature and capability analysis
+* [Ollama](pages/llm/ollama/README.md) - Local LLM deployment solution
+  * [Installation Guide](pages/llm/ollama/installation.md) - Platform-specific setup
+  * [Configuration](pages/llm/ollama/configuration.md) - Customization and optimization
+  * [Models and Fine-tuning](pages/llm/ollama/models.md) - Available model options
+  * [DevOps Usage](pages/llm/ollama/devops-usage.md) - Automation integrations
   * [Docker Setup](pages/llm/ollama/docker-setup.md) - Containerized deployment
-  * [GPU Setup](pages/llm/ollama/gpu-setup.md) - Hardware acceleration
-  * [Open WebUI](pages/llm/ollama/open-webui.md) - Browser interface
-* [Copilot](pages/llm/copilot/README.md) - GitHub's AI assistant
-  * [Installation Guide](pages/llm/copilot/installation.md) - Setup instructions
-  * [VS Code Integration](pages/llm/copilot/vscode-integration.md) - Editor integration
-  * [CLI Usage](pages/llm/copilot/cli-usage.md) - Command-line features
-* [Gemini](pages/llm/gemini/README.md) - Google's AI model
+  * [GPU Setup](pages/llm/ollama/gpu-setup.md) - Hardware acceleration configuration
+  * [Open WebUI](pages/llm/ollama/open-webui.md) - Browser-based interface
+* [Copilot](pages/llm/copilot/README.md) - GitHub's AI programming assistant
+  * [Installation Guide](pages/llm/copilot/installation.md) - Setup and licensing
+  * [VS Code Integration](pages/llm/copilot/vscode-integration.md) - Editor productivity features
+  * [CLI Usage](pages/llm/copilot/cli-usage.md) - Command-line capabilities
+* [Gemini](pages/llm/gemini/README.md) - Google's multimodal AI model
   * [Installation Guides](pages/llm/gemini/) - Platform-specific setup
-    * [Linux Installation](pages/llm/gemini/installation-linux.md) - Standard Linux setup
-    * [WSL Installation](pages/llm/gemini/installation-wsl.md) - Windows Subsystem for Linux
-    * [NixOS Installation](pages/llm/gemini/installation-nixos.md) - NixOS package manager
-  * [Gemini 2.5 Features](pages/llm/gemini/gemini-2-5-features.md) - Latest capabilities
+    * [Linux Installation](pages/llm/gemini/installation-linux.md) - Standard Linux deployment
+    * [WSL Installation](pages/llm/gemini/installation-wsl.md) - Windows Subsystem for Linux setup
+    * [NixOS Installation](pages/llm/gemini/installation-nixos.md) - NixOS package configuration
+  * [Gemini 2.5 Features](pages/llm/gemini/gemini-2-5-features.md) - Latest model capabilities
   * [Roles and Agents](pages/llm/gemini/roles-and-agents.md) - Specialized assistants
-  * [NotebookML Guide](pages/llm/gemini/notebookml-guide.md) - Notebook integration
-  * [Cloud Infrastructure Deployment](pages/llm/gemini/cloud-infrastructure-deployment.md) - Production setup
-  * [Summary](pages/llm/gemini/summary.md) - Key takeaways
+  * [NotebookML Guide](pages/llm/gemini/notebookml-guide.md) - Jupyter integration
+  * [Cloud Infrastructure Deployment](pages/llm/gemini/cloud-infrastructure-deployment.md) - Production implementation
+  * [Summary](pages/llm/gemini/summary.md) - Key takeaways and best practices
 
 ## 💻 Development Environment
 
-* [Tools Overview](pages/devops/tools-to-install/README.md) - Essential developer utilities
-* [DevOps Tools](pages/devops-tools/README.md) - Specialized DevOps utilities
+* [Tools Overview](pages/devops/tools-to-install/README.md) - Essential development utilities
+* [DevOps Tools](pages/devops-tools/README.md) - Specialized engineering tools
 * [Operating Systems](pages/devops/tools-to-install/) - Development platforms
   * [NixOS](pages/Nixos/README.md) - Declarative Linux distribution
-    * [Installation](pages/Nixos/install.md) - Setup guide
-    * [DevEnv with Nix](pages/Nixos/devenv.md) - Development environment
-    * [Cloud Deployments](pages/Nixos/nix-anywhere-cloud.md) - Cloud infrastructure
+    * [Installation](pages/Nixos/install.md) - Setup and configuration
+    * [DevEnv with Nix](pages/Nixos/devenv.md) - Development environment setup
+    * [Cloud Deployments](pages/Nixos/nix-anywhere-cloud.md) - Cloud infrastructure management
   * [WSL2](pages/devops/tools-to-install/wsl2/README.md) - Windows Subsystem for Linux
-    * [Distributions](pages/devops/tools-to-install/wsl2/rhel-in-wsl2.md) - Available Linux variants
-    * [Terminal Setup](pages/devops/tools-to-install/wsl2/make-your-terminal-devops-and-kubernetes-friendly.md) - CLI optimization
+    * [Distributions](pages/devops/tools-to-install/wsl2/rhel-in-wsl2.md) - Linux variants for WSL
+    * [Terminal Setup](pages/devops/tools-to-install/wsl2/make-your-terminal-devops-and-kubernetes-friendly.md) - CLI environment optimization
 * [Editor Environments](pages/devops/tools-to-install/) - Code editing tools
-  * [VS Code](pages/devops/tools-to-install/visual-studio-code.md) - Microsoft's code editor
-  * [LunarVim](pages/devops/tools-to-install/lunarvim/README.md) - Vim-based IDE
+  * [VS Code](pages/devops/tools-to-install/visual-studio-code.md) - Microsoft's extensible editor
+  * [LunarVim](pages/devops/tools-to-install/lunarvim/README.md) - Neovim-based IDE
 * [CLI Tools](pages/should-learn/README.md) - Command-line utilities
-  * [Azure CLI](pages/should-learn/az-cli/README.md) - Azure management
-  * [PowerShell](pages/devops/tools-to-install/powershell/README.md) - Microsoft shell
-  * [Linux Commands](pages/should-learn/linux/commands/README.md) - Essential Linux CLI
-  * [YAML Tools](pages/should-learn/yaml/README.md) - YAML manipulation utilities
+  * [Azure CLI](pages/should-learn/az-cli/README.md) - Azure resource management
+  * [PowerShell](pages/devops/tools-to-install/powershell/README.md) - Cross-platform automation shell
+  * [Linux Commands](pages/should-learn/linux/commands/README.md) - Essential command-line operations
+  * [YAML Tools](pages/should-learn/yaml/README.md) - Configuration file manipulation
 
 ## 📚 Programming Languages
 
-* [Python](pages/should-learn/python.md) - General-purpose language with strong DevOps ecosystem
-* [Go](pages/should-learn/go-lang.md) - High-performance cloud-native language
-* [JavaScript/TypeScript](pages/should-learn/README.md) - Web and Node.js development
-* [Java](pages/should-learn/java.md) - Enterprise-focused language
-* [Rust](pages/should-learn/rust.md) - Systems programming with memory safety
+* [Python](pages/should-learn/python.md) - Versatile scripting and application development
+* [Go](pages/should-learn/go-lang.md) - Cloud-native systems programming
+* [JavaScript/TypeScript](pages/should-learn/README.md) - Web and automation scripting
+* [Java](pages/should-learn/java.md) - Enterprise application development
+* [Rust](pages/should-learn/rust.md) - High-performance systems programming
 
 ## 📖 Documentation Best Practices
 
-* [Documentation Strategy](pages/devops/documentation/README.md) - Overall documentation approach
+* [Documentation Strategy](pages/devops/documentation/README.md) - Comprehensive documentation approach
 * [Project Documentation](pages/devops/documentation/projects-and-repositories.md) - Repository-level documentation
 * [Release Notes](pages/devops/documentation/create-release-notes-with-pipeline.md) - Automated change documentation
-* [Static Sites](pages/devops/documentation/how-to-create-a-static-website-for-your-documentation-based-on-mkdocs-and-mkdocs-material.md) - Documentation portal setup
+* [Static Sites](pages/devops/documentation/how-to-create-a-static-website-for-your-documentation-based-on-mkdocs-and-mkdocs-material.md) - Documentation portal creation
+
+## 📋 Reference Materials
+
+* [Glossary](pages/reference/glossary.md) - DevOps and cloud terminology
+* [Troubleshooting Guide](pages/reference/troubleshooting.md) - Common issue resolution
+* [Tool Comparison](pages/reference/tool-comparison.md) - Feature analysis of similar tools
+* [Recommended Reading](pages/reference/reading.md) - Books and external resources
