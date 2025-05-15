@@ -1,10 +1,10 @@
 # Cloud Engineering & DevOps Knowledge Base
 
 * [Welcome!](README.md) - Your comprehensive guide to modern DevOps practices
-* [How to Use This Wiki](pages/how-to-use.md) - Navigation tips and content organization
+<!-- * [How to Use This Wiki](pages/how-to-use.md) - Navigation tips and content organization -->
 * [About Me](pages/about-me.md) - Professional background and expertise
 * [CV](pages/cv.md) - Professional experience and skills
-* [Quick Start Guides](pages/quick-starts/README.md) - Fast track to common DevOps tasks
+<!-- * [Quick Start Guides](pages/quick-starts/README.md) - Fast track to common DevOps tasks -->
 
 ## 🧠 DevOps & SRE Foundations
 
@@ -30,7 +30,7 @@
 
 ## 🛠️ Infrastructure as Code (IaC)
 
-* [IaC Overview](pages/iac/README.md) - Introduction to infrastructure automation
+<!-- * [IaC Overview](pages/iac/README.md) - Introduction to infrastructure automation -->
 * [Terraform](pages/terraform/README.md) - HashiCorp's multi-cloud infrastructure automation
   * [Getting Started](pages/terraform/install.md) - Installation and initial setup [BEGINNER]
   * [Cloud Integrations](pages/terraform/) - Provider-specific implementations
