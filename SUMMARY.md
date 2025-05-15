@@ -78,7 +78,12 @@
   * [Tools & Utilities](pages/best-practises/containers/kubernetes/k8s-tools/README.md)
   * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md)
   * [Ingress Controllers](pages/should-learn/kubernetes/ingress-controllers/README.md)
+    * [NGINX](pages/should-learn/kubernetes/ingress-controllers/nginx.md)
+    * [Traefik](pages/should-learn/kubernetes/ingress-controllers/traefik.md)
+    * [Kong](pages/should-learn/kubernetes/ingress-controllers/kong.md)
+    * [Gloo Edge](pages/should-learn/kubernetes/ingress-controllers/gloo-edge.md)
   * [Troubleshooting](pages/should-learn/kubernetes/troubleshooting/README.md)
+    * [Pod Troubleshooting Commands](pages/should-learn/kubernetes/troubleshooting/kubernetes-pod-troubleshooting-commands.md)
 * [OpenShift](pages/best-practises/containers/openshift.md)
 
 ## 🔄 CI/CD & GitOps
