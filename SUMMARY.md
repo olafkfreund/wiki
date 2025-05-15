@@ -27,10 +27,10 @@
     * [Definition of Ready](pages/devops/agile-development/team-agreements/definition-of-ready.md) - Standardizing work intake requirements
     * [Team Manifesto](pages/devops/agile-development/team-agreements/team-manifesto.md) - Defining shared values and principles
     * [Working Agreement](pages/devops/agile-development/team-agreements/sections-of-a-working-agreement.md) - Establishing collaboration guidelines
-  * [Industry Scenarios](pages/devops/agile-development/senarios/README.md)
-    * [Finance and Banking](pages/devops/agile-development/senarios/finance.md)
-    * [Public Sector (UK/EU)](pages/devops/agile-development/senarios/public_sector.md)
-    * [Energy Sector Edge Computing](pages/devops/agile-development/senarios/energy_sector.md)
+* [Industry Scenarios](pages/devops/agile-development/senarios/README.md)
+  * [Finance and Banking](pages/devops/agile-development/senarios/finance.md)
+  * [Public Sector (UK/EU)](pages/devops/agile-development/senarios/public_sector.md)
+  * [Energy Sector Edge Computing](pages/devops/agile-development/senarios/energy_sector.md)
 
 ## 🛠️ Infrastructure as Code (IaC)
 
@@ -275,5 +275,6 @@
 
 * [Glossary](pages/reference/glossary.md) - DevOps and cloud terminology
 * [Tool Comparison](pages/reference/tool-comparison.md) - Feature analysis of DevOps tools
+* [Recommended Reading](pages/reference/reading.md) - Essential books and resources
 * [Troubleshooting Guide](pages/reference/troubleshooting.md) - Common issue resolution
 * [Recommended Reading](pages/reference/reading.md) - Books and external resources
