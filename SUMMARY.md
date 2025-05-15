@@ -81,6 +81,7 @@
   * [Core Concepts](pages/need-to-know/kubernetes/kubernetes-concepts.md) - Fundamental Kubernetes architecture
   * [Components](pages/need-to-know/kubernetes/kubernetes-components.md) - Cluster building blocks
   * [Best Practices](pages/best-practises/containers/kubernetes/kubernetes-best-practices/README.md) - Production implementation guidelines
+    * [Resource Limits](pages/best-practises/containers/kubernetes/kubernetes-best-practices/resource-limits/README.md) - Configuring CPU and memory constraints
   * [Advanced Features](pages/should-learn/kubernetes/) - Beyond the basics [ADVANCED]
     * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md) - Network traffic management
     * [Ingress Controllers](pages/should-learn/kubernetes/ingress-controllers/README.md) - External access management
@@ -90,6 +91,10 @@
       * [Gloo Edge](pages/should-learn/kubernetes/ingress-controllers/gloo-edge.md) - Next-gen API gateway
   * [Troubleshooting](pages/should-learn/kubernetes/troubleshooting/README.md) - Diagnosing and resolving common issues
     * [Pod Troubleshooting Commands](pages/should-learn/kubernetes/troubleshooting/kubernetes-pod-troubleshooting-commands.md) - Essential diagnostic tools
+  * [Enterprise Architecture](pages/best-practises/containers/kubernetes/enterprise-scale-architecture.md) - Large-scale multi-cloud Kubernetes designs [ADVANCED]
+  * [Health Management](pages/best-practises/containers/kubernetes/health-management.md) - Monitoring and maintaining cluster health [ADVANCED]
+  * [Security & Compliance](pages/best-practises/containers/kubernetes/security-and-compliance.md) - Securing enterprise Kubernetes deployments [ADVANCED]
+  * [Virtual Clusters](pages/best-practises/containers/kubernetes/vcluster.md) - Nested Kubernetes clusters for multi-tenancy
 * [OpenShift](pages/best-practises/containers/openshift.md) - Red Hat's enterprise Kubernetes platform
 
 ## 🔄 CI/CD & GitOps
@@ -114,6 +119,12 @@
       * [Azure DevOps CLI](pages/azure-devops/pipelines/README.md#azure-devops-cli) - Command-line automation
     * [Boards & Work Items](pages/devops/ci-cd-platforms/azure-devops/boards-and-work-items/README.md) - Agile project management
   * [GitHub Actions](pages/devops/ci-cd-platforms/github/github-action.md) - GitHub's integrated CI/CD solution
+  * [GitLab](pages/devops/source-control/gitlab/README.md)
+    * [GitLab Runner](pages/devops/source-control/gitlab/gitlab_runner.md)
+    * Real-life scenarios
+    * Installation guides
+    * Pros and Cons
+    * Comparison with alternatives
 * [GitOps](pages/devops/gitops/README.md) - Git-based infrastructure and application delivery
   * [Flux](pages/devops/gitops/flux/README.md) - Kubernetes continuous delivery with GitOps
   * [ArgoCD](pages/devops/ci-cd-platforms/argo-cd/README.md) - Declarative continuous delivery for Kubernetes

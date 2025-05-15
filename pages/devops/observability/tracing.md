@@ -40,6 +40,8 @@ By 2025, OpenTelemetry has established itself as the universal standard for dist
 
 ### OpenTelemetry Instrumentation Example (2025)
 
+> 💡 **Click the copy button in the top-right corner of the code block to copy the entire example.**
+
 ```java
 // Java service example with OpenTelemetry SDK
 import io.opentelemetry.api.GlobalOpenTelemetry;
@@ -153,6 +155,8 @@ public class OrderService {
 ```
 
 ### OpenTelemetry Collector Configuration (2025)
+
+> 💡 **Click the copy button to use this YAML configuration.**
 
 ```yaml
 receivers:
