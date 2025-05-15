@@ -57,9 +57,14 @@
   * [Template Specs](pages/should-learn/bicep/template-spec-for-bicep.md)
   * [CI/CD Integration](pages/should-learn/bicep/integrate-bicep-with-azure-pipelines.md)
   * [Advanced Features](pages/should-learn/bicep/use-inline-scripts.md)
-* [Configuration Management](pages/need-to-know/README.md)
-  * [Ansible](pages/should-learn/ansible.md)
-  * [Puppet](pages/should-learn/puppet.md)
+
+## Bicep
+
+* [Bicep - Azure Infrastructure as Code](group-1/bicep/README.md)
+* [Template Specs for Bicep](group-1/bicep/template-spec-for-bicep.md)
+* [Using Inline Scripts with Bicep](group-1/bicep/use-inline-scripts.md)
+* [Bicep with GitHub Actions](group-1/bicep/bicep-with-github-actions.md)
+* [Integrate Bicep with Azure Pipelines](group-1/bicep/integrate-bicep-with-azure-pipelines.md)
 
 ## 🐳 Containers & Orchestration
 
