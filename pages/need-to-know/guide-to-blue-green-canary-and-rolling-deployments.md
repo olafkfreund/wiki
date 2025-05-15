@@ -1,46 +1,109 @@
 # Guide to Blue-Green, Canary, and Rolling Deployments
 
-### Blue-Green Deployment <a href="#78bf" id="78bf"></a>
+This guide provides actionable steps, real-life examples, and best practices for implementing blue-green, canary, and rolling deployments in cloud-native environments (AWS, Azure, GCP) using Kubernetes, Terraform, and CI/CD tools.
 
-Blue-green deployment is a deployment strategy that involves maintaining two identical production environments, one known as the blue environment and the other known as the green environment. _**The active environment, which is serving live traffic, is referred to as blue, while the inactive environment is referred to as green.**_ When it’s time to deploy a new release, the new version is first deployed to the green environment. Once the new version is tested and validated in the green environment, _**the live traffic is redirected from the blue environment to the green environment, making the green environment the new active environment.**_
+---
 
-### Pros: <a href="#bbd5" id="bbd5"></a>
+## Blue-Green Deployment
 
-* Blue-green deployment allows for minimal downtime during deployment because the switchover from one environment to the other is seamless and happens quickly.
-* It also makes it easy to roll back to the previous version in the event of a failure, as the previous version is still available in the blue environment.
+Blue-green deployment maintains two identical production environments (blue and green). Traffic is switched to the new version only after validation, enabling zero-downtime releases and easy rollbacks.
 
-### Cons: <a href="#d8f4" id="d8f4"></a>
+**How to Implement (Kubernetes Example):**
+1. Deploy the new version as a separate deployment/service (e.g., `myapp-green`).
+2. Test the green environment (QA, smoke tests).
+3. Switch traffic by updating the service selector:
+   ```sh
+   kubectl patch service myapp-service -p '{"spec": {"selector": {"app": "myapp-green"}}}'
+   ```
+4. Monitor for issues. Roll back by switching the selector back to blue if needed.
 
-* Blue-green deployment requires a significant number of resources, as two identical production environments must be maintained.
-* It can also be more complex to set up and manage than other deployment strategies, as two environments must be kept in sync.
+**Terraform Example (AWS ALB):**
+- Use two target groups (blue/green) and switch the ALB listener rule to point to the new target group.
 
-### Canary Deployment <a href="#0b45" id="0b45"></a>
+**Best Practices:**
+- Automate traffic switch in CI/CD (GitHub Actions, Azure Pipelines).
+- Keep environments in sync using IaC (Terraform, Bicep).
+- Monitor after cutover for quick rollback.
 
-Canary deployment is a deployment strategy that involves gradually rolling out a new version of software to a small subset of users before deploying it to the entire user base. _**The idea behind this approach is to test the new version in a real-world setting and catch any issues before they affect the entire user base.**_
+**Common Pitfalls:**
+- Configuration drift between environments.
+- Not testing green environment thoroughly before switch.
 
-### Pros: <a href="#7a4c" id="7a4c"></a>
+---
 
-* Canary deployment allows for a low-risk release of a new version, as it is only deployed to a small subset of users at first.
-* It also allows for real-world testing of the new version, which can help catch any issues before they affect the entire user base.
-* This approach can be especially useful for catching performance or scalability issues.
+## Canary Deployment
 
-### Cons: <a href="#e786" id="e786"></a>
+Canary deployment gradually routes a small percentage of traffic to the new version, increasing as confidence grows.
 
-* Canary deployment can be complex to set up and manage, as it requires gradually rolling out the new version to different groups of users.
-* It may also result in a poor user experience, as some users may experience the new version while others do not, which can be confusing.
+**How to Implement (Kubernetes Ingress NGINX Example):**
+1. Deploy the new version alongside the stable version.
+2. Use ingress annotations to split traffic:
+   ```yaml
+   nginx.ingress.kubernetes.io/canary: "true"
+   nginx.ingress.kubernetes.io/canary-weight: "10"
+   ```
+3. Gradually increase the canary weight (10% → 25% → 50% → 100%).
+4. Monitor metrics and logs for errors or regressions.
 
-### Rolling Deployment <a href="#ba70" id="ba70"></a>
+**GitHub Actions Example:**
+- Use workflow steps to update canary weights and run automated tests after each increment.
 
-Rolling deployment is a deployment strategy that involves gradually deploying a new version of software to a subset of servers, one server at a time. The new version is first deployed to a small subset of servers, and then the process is repeated for the next subset of servers until the entire production environment has been updated.
+**Best Practices:**
+- Automate canary progression and rollback based on health checks.
+- Use feature flags for user-level canaries.
+- Monitor user experience and error rates closely.
 
-### Pros: <a href="#b7b5" id="b7b5"></a>
+**Common Pitfalls:**
+- Not monitoring canary traffic separately.
+- Skipping incremental rollout steps.
 
-* Rolling deployment allows for a low-risk release of a new version, _as it is deployed gradually to a small subset of servers at a time._
-* It also allows for real-time monitoring and troubleshooting, as the new version can be tested on a small subset of servers before being deployed to the entire production environment.
-* _This approach is especially useful for large-scale deployments_, as it reduces the risk of a deployment failure affecting the entire production environment.
+---
 
-### Cons: <a href="#bef8" id="bef8"></a>
+## Rolling Deployment
 
-* Rolling deployment can be complex to set up and manage, as it requires coordinating the deployment of the new version to different subsets of servers.
-* It may also result in longer deployment times, as the new version must be deployed to each subset of servers one at a time.
-* In some cases, it can also lead to uneven distribution of load, as some servers may have the new version while others do not, which can result in performance issues.
+Rolling deployment updates pods or servers incrementally, ensuring some instances always serve traffic.
+
+**How to Implement (Kubernetes Example):**
+- Use a rolling update strategy in your deployment manifest:
+  ```yaml
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  ```
+- Apply the new deployment:
+  ```sh
+  kubectl apply -f deployment.yaml
+  ```
+- Kubernetes will update pods one at a time, maintaining availability.
+
+**Terraform Example (VMSS on Azure):**
+- Use `rolling_upgrade_policy` for Azure Virtual Machine Scale Sets.
+
+**Best Practices:**
+- Set appropriate `maxUnavailable` and `maxSurge` values for your SLA.
+- Monitor deployment progress and health.
+
+**Common Pitfalls:**
+- Setting `maxUnavailable` too high, causing downtime.
+- Not monitoring for failed updates.
+
+---
+
+## Summary Table
+
+| Strategy      | Downtime | Rollback | Complexity | Use Case                        |
+|---------------|----------|----------|------------|---------------------------------|
+| Blue-Green    | Minimal  | Easy     | High       | Major releases, zero-downtime   |
+| Canary        | Minimal  | Easy     | Medium     | Risk mitigation, feature rollout|
+| Rolling       | Low      | Medium   | Low        | Routine updates, large clusters |
+
+---
+
+## References
+- [Kubernetes Deployment Strategies](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+- [NGINX Ingress Canary](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#canary)
+- [Terraform Blue-Green Example](https://learn.hashicorp.com/tutorials/terraform/blue-green-deployments)
+- [Azure Rolling Upgrade](https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-rolling-upgrade)
+- [AWS Blue/Green Deployments](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-steps.html)

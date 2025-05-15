@@ -1,41 +1,128 @@
-# AWS SRA
+# AWS Security Reference Architecture (SRA)
 
-The AWS Security Reference Architecture aligns to three AWS security foundations: the AWS Cloud Adoption Framework (AWS CAF), AWS Well-Architected, and the AWS Shared Responsibility Model.
+The AWS Security Reference Architecture (SRA) provides a practical blueprint for building secure, compliant, and resilient cloud environments. It aligns with the AWS Cloud Adoption Framework (CAF), AWS Well-Architected Framework, and the AWS Shared Responsibility Model.
 
-AWS Professional Services created [AWS CAF](https://aws.amazon.com/professional-services/CAF/) to help companies design and follow an accelerated path to successful cloud adoption. The guidance and best practices provided by the framework help you build a comprehensive approach to cloud computing across your enterprise and throughout your IT lifecycle. The AWS CAF organizes guidance into six areas of focus, called _perspectives_. Each perspective covers distinct responsibilities owned or managed by functionally related stakeholders. In general, the business, people, and governance perspectives focus on business capabilities; whereas the platform, security, and operations perspectives focus on technical capabilities.
+---
 
-* The [security perspective of the AWS CAF](https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/security-perspective.html) helps you structure the selection and implementation of controls across your business. Following the current AWS recommendations in the security pillar can help you meet your business and regulatory requirements.&#x20;
+## 1. Foundations & Frameworks
+- **AWS CAF:** Organize security guidance into perspectives (business, people, governance, platform, security, operations).
+- **Well-Architected Framework:** Follow the six pillars, especially the [Security Pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html).
+- **Shared Responsibility Model:** AWS secures the cloud infrastructure; you secure your workloads, data, and configurations. ([Learn more](https://aws.amazon.com/compliance/shared-responsibility-model/))
 
-[AWS Well-Architected](http://aws.amazon.com/architecture/well-architected) helps cloud architects build a secure, high-performing, resilient, and efficient infrastructure for their applications and workloads. The framework is based on six pillars—operational excellence, security, reliability, performance efficiency, cost optimization, and sustainability—and provides a consistent approach for AWS customers and Partners to evaluate architectures and implement designs that can scale over time. We believe that having well-architected workloads greatly increases the likelihood of business success.
+---
 
-* The [Well-Architected security pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html) describes how to take advantage of cloud technologies to help protect data, systems, and assets in a way that can improve your security posture. This will help you meet your business and regulatory requirements by following current AWS recommendations. There are additional Well-Architected Framework focus areas that provide more context for specific domains such as governance, serverless, AI/ML, and gaming. These are known as [AWS Well-Architected lenses](https://aws.amazon.com/architecture/well-architected/#AWS\_Well-Architected\_Lenses).&#x20;
+## 2. Security Capabilities: Actionable Steps
 
-Security and compliance are a [shared responsibility between AWS and the customer](https://aws.amazon.com/compliance/shared-responsibility-model/). This shared model can help relieve your operational burden as AWS operates, manages, and controls the components from the host operating system and virtualization layer down to the physical security of the facilities in which the service operates. For example, you assume responsibility and management of the guest operating system (including updates and security patches), application software, server-side data encryption, network traffic route tables, and the configuration of the AWS provided security group firewall. For abstracted services such as Amazon Simple Storage Service (Amazon S3) and Amazon DynamoDB, AWS operates the infrastructure layer, the operating system, and platforms, and you access the endpoints to store and retrieve data. You are responsible for managing your data (including encryption options), classifying your assets, and using AWS Identity and Access Management (IAM) tools to apply the appropriate permissions. This shared model is often described by saying that AWS is responsible for the security _of_ the cloud (that is, for protecting the infrastructure that runs all the services offered in the AWS Cloud), and you are responsible for the security _in_ the cloud (as determined by the AWS Cloud services that you select).&#x20;
+### Security Governance
+- Define security policies and roles in code (e.g., Terraform IAM policies).
+- Example:
+  ```hcl
+  resource "aws_iam_policy" "readonly" {
+    name   = "readonly-policy"
+    policy = data.aws_iam_policy_document.readonly.json
+  }
+  ```
+- Use AWS Organizations for account structure and SCPs (Service Control Policies).
 
-Within the guidance provided by these foundational documents, two sets of concepts are particularly relevant to the design and understanding of the AWS SRA: security capabilities and security design principles.
+### Security Assurance
+- Enable AWS Config to track resource changes:
+  ```sh
+  aws configservice put-configuration-recorder --configuration-recorder name=default,roleARN=<role-arn>
+  aws configservice start-configuration-recorder --configuration-recorder-name default
+  ```
+- Use AWS Security Hub for continuous compliance checks.
 
-### Security capabilities <a href="#security-capabilities" id="security-capabilities"></a>
+### Identity and Access Management
+- Enforce least privilege with IAM roles and policies.
+- Use SSO and MFA for all users.
+- Example: Require MFA for console access.
 
-The security perspective of AWS CAF outlines nine capabilities that help you achieve the confidentiality, integrity, and availability of your data and cloud workloads.
+### Threat Detection
+- Enable GuardDuty in all regions:
+  ```sh
+  aws guardduty create-detector --enable
+  ```
+- Aggregate findings in Security Hub.
 
-* _Security governance_ to develop and communicate security roles, responsibilities, policies, processes, and procedures across your organization’s AWS environment.
-* _Security assurance_ to monitor, evaluate, manage, and improve the effectiveness of your security and privacy programs.
-* _Identity and access management_ to manage identities and permissions at scale.
-* _Threat detection_ to understand and identify potential security misconfigurations, threats, or unexpected behaviors.
-* _Vulnerability management_ to continuously identify, classify, remediate, and mitigate security vulnerabilities.
-* _Infrastructure protection_ to help validate that systems and services within your workloads are protected.
-* _Data protection_ to maintain visibility and control over data, and how it is accessed and used in your organization.
-* _Application security_ to help detect and address security vulnerabilities during the software development process.
-* _Incident response_ to reduce potential harm by effectively responding to security incidents.
+### Vulnerability Management
+- Use AWS Inspector for EC2 and container image scanning.
+- Integrate with CI/CD (e.g., scan ECR images on push).
 
-### Security design principles <a href="#security-principles" id="security-principles"></a>
+### Infrastructure Protection
+- Use Security Groups, NACLs, and VPC flow logs.
+- Automate network segmentation with IaC.
 
-The [security pillar](https://docs.aws.amazon.com/wellarchitected/latest/framework/security.html) of the Well-Architected Framework captures a set of seven design principles that turn specific security areas into practical guidance that can help you strengthen your workload security. Where the security capabilities frame the overall security strategy, these Well-Architected principles describe what you can start doing. They are reflected very deliberately in this AWS SRA and consist of the following:
+### Data Protection
+- Encrypt data at rest (KMS, S3 default encryption) and in transit (TLS).
+- Example: Enable S3 bucket encryption by default.
+  ```hcl
+  resource "aws_s3_bucket" "secure" {
+    bucket = "my-secure-bucket"
+    server_side_encryption_configuration {
+      rule {
+        apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+        }
+      }
+    }
+  }
+  ```
 
-* _Implement a strong identity foundation_ – Implement the principle of least privilege, and enforce separation of duties with appropriate authorization for each interaction with your AWS resources. Centralize identity management, and aim to eliminate reliance on long-term static credentials.
-* _Enable traceability_ – Monitor, generate alerts, and audit actions and changes to your environment in real time. Integrate log and metric collection with systems to automatically investigate and take action.
-* _Apply security at all layers_ – Apply a defense-in-depth approach with multiple security controls. Apply multiple types of controls (for example, preventive and detective controls) to all layers, including edge of network, virtual private cloud (VPC), load balancing, instance and compute services, operating system, application configuration, and code.
-* _Automate security best practices_ – Automated, software-based security mechanisms improve your ability to securely scale more rapidly and cost-effectively. Create secure architectures, and implement controls that are defined and managed as code in version-controlled templates.
-* _Protect data in transit and at rest_ – Classify your data into sensitivity levels and use mechanisms such as encryption, tokenization, and access control where appropriate.
-* _Keep people away from data_ – Use mechanisms and tools to reduce or eliminate the need to directly access or manually process data. This reduces the risk of mishandling or modification and human error when handling sensitive data.
-* _Prepare for security events_ – Prepare for an incident by having incident management and investigation policy and processes that align to your organizational requirements. Run incident response simulations and use tools with automation to increase your speed for detection, investigation, and recovery.
+### Application Security
+- Integrate static code analysis (CodeGuru, SonarQube) in CI/CD.
+- Use WAF and Shield for web app protection.
+
+### Incident Response
+- Automate incident response with Lambda and CloudWatch Events.
+- Example: Auto-isolate compromised EC2 instance.
+  ```hcl
+  # Use Lambda triggered by GuardDuty finding to quarantine instance
+  ```
+- Run regular incident response simulations (tabletop, chaos engineering).
+
+---
+
+## 3. Security Design Principles: Best Practices
+- **Strong Identity Foundation:** Use IAM roles, avoid long-lived credentials, enable SSO and MFA.
+- **Enable Traceability:** Centralize logging (CloudTrail, CloudWatch Logs, S3), enable real-time alerts.
+- **Apply Security at All Layers:** Use defense-in-depth (network, compute, app, data).
+- **Automate Security:** Use Terraform/CloudFormation for all security controls, automate patching and compliance.
+- **Protect Data:** Encrypt everything, classify data, restrict access.
+- **Keep People Away from Data:** Use automation, limit direct access, use session recording.
+- **Prepare for Security Events:** Document runbooks, automate response, conduct regular drills.
+
+---
+
+## 4. Real-Life Example: Secure Multi-Account AWS Landing Zone
+1. Use AWS Control Tower or Terraform to create a multi-account structure (prod, dev, audit).
+2. Apply SCPs to restrict actions (e.g., deny S3 public access).
+3. Enable GuardDuty, Security Hub, and Config in all accounts.
+4. Centralize CloudTrail logs to a secure S3 bucket.
+5. Use IAM roles for cross-account access and automation.
+6. Integrate security checks in CI/CD (Terraform validate, Checkov, Trivy).
+
+---
+
+## 5. Common Pitfalls
+- Not enabling security services in all regions/accounts
+- Overly permissive IAM policies
+- Manual changes outside of IaC
+- Lack of centralized logging and monitoring
+- Not testing incident response plans
+
+---
+
+## 6. References
+- [AWS Security Reference Architecture](https://docs.aws.amazon.com/security-reference-architecture/latest/sra-aws/welcome.html)
+- [AWS Well-Architected Security Pillar](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
+- [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/)
+- [Terraform AWS Provider Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [AWS Security Hub](https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html)
+- [AWS GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html)
+- [AWS Config](https://docs.aws.amazon.com/config/latest/developerguide/)
+- [AWS Inspector](https://docs.aws.amazon.com/inspector/latest/user/)
+- [AWS Control Tower](https://docs.aws.amazon.com/controltower/latest/userguide/)
+
+---
+
+> For step-by-step implementation, see the [AWS SRA GitHub repository](https://github.com/aws-samples/aws-security-reference-architecture-examples) and official AWS documentation.

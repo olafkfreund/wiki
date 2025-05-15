@@ -1,43 +1,86 @@
-# FAQ
+# FAQ: Code Reviews in DevOps
 
-This is a list of questions / frequently occurring issues when working with code reviews and answers how you can tackle them.
+This FAQ addresses common questions and real-life issues encountered during code reviews, with actionable solutions and best practices for engineers.
 
-### What makes a code review different from a PR? <a href="#what-makes-a-code-review-different-from-a-pr" id="what-makes-a-code-review-different-from-a-pr"></a>
+---
 
-A pull request (PR) is a way to notify a task is finished and ready to be merged into the main working branch (source of truth). A code review is having someone go over the code in a PR and validate it before it is merged, but, in general, code reviews can take place outside PRs too.
+### What makes a code review different from a PR?
+A pull request (PR) is a request to merge code into the main branch. A code review is the process of examining that code for quality, security, and compliance before merging. Code reviews can also occur outside PRs (e.g., pair programming, mob reviews).
 
-| Code Review                                                                                                                                                    | Pull Request                                                                                                                                  |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Source code focused                                                                                                                                            | Intended to enhance and enable code reviews. Includes both source code but can have a broader scope (e.g., docs, integration tests, compiles) |
-| Intended for **early feedback** before submitting a PR                                                                                                         | Not intended for **early feedback**. Created when author is ready to merge                                                                    |
-| Usually a synchronous review with faster feedback cycles (draft PRs as an exception). Examples: scheduled meetings, over-the-shoulder review, pair programming | Usually a tool assisted asynchronous review but can be elevated to a synchronous meeting when needed                                          |
+| Code Review                                                                                                   | Pull Request                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Focused on code quality, standards, and knowledge sharing                                                     | Mechanism to propose and track changes before merging                                                          |
+| Can be synchronous (pair/mob, meetings) or asynchronous (PR comments)                                         | Usually asynchronous, but can be discussed in meetings                                                         |
+| Early feedback possible (draft PRs, design reviews)                                                           | Typically used when code is ready for integration                                                              |
 
-### Why do we need code reviews? <a href="#why-do-we-need-code-reviews" id="why-do-we-need-code-reviews"></a>
+---
 
-Our peer code reviews are structured around best practices, to find specific kinds of errors. Much like you would still run a linter over mobbed code, you would still ask someone to make the last pass to make sure the code conforms to expected standards and avoids common pitfalls.
+### Why do we need code reviews?
+- Catch bugs and security issues early
+- Share knowledge and spread best practices
+- Ensure code consistency and maintainability
+- Reduce technical debt
 
-### PRs are too large; how can we fix this? <a href="#prs-are-too-large-how-can-we-fix-this" id="prs-are-too-large-how-can-we-fix-this"></a>
+**Example:**
+> A missed null check in a microservice API was caught during review, preventing a production outage.
 
-Make sure you size the work items into small clear chunks, so the reviewer will be able to understand the code on their own. The team is instructed to commit early, before the full product backlog item / user story is complete, but when an individual item is done. If the work would result in an incomplete feature, make sure it can be turned off, until the full feature is delivered. More information can be found in Pull Requests - Size Guidance.
+---
 
-### How can we expedite code reviews? <a href="#how-can-we-expedite-code-reviews" id="how-can-we-expedite-code-reviews"></a>
+### PRs are too large; how can we fix this?
+- Break work into small, logical commits and PRs
+- Use feature flags for incomplete features
+- Encourage early, incremental reviews (draft PRs)
 
-Slow code reviews might cause delays in delivering features and cause frustration amongst team members.
+**Best Practice:**
+> Limit PRs to 200-400 lines of code for easier, faster reviews ([Microsoft guidance](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/)).
 
-#### Actions you can take <a href="#possible-actions-you-can-take" id="possible-actions-you-can-take"></a>
+---
 
-* Add a rule for PR turnaround time to your work agreement.
-* Set up a slot after the standup to go through pending PRs and assign the ones that are inactive.
-* Dedicate a PR review manager who will be responsible to keep things flowing by assigning or notifying people when PR got stale.
-* Use tools to better indicate stale reviews - [Customize ADO - Task Boards](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/tools/#task-boards).
+### How can we expedite code reviews?
+- Set PR turnaround time in your team agreement
+- Schedule daily review slots (e.g., after standup)
+- Assign a PR review manager to monitor and assign reviews
+- Use tools to highlight stale PRs ([ADO Task Boards](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/tools/#task-boards))
 
-### How can we enforce code review policies? <a href="#how-can-we-enforce-code-review-policies" id="how-can-we-enforce-code-review-policies"></a>
+**Example:**
+> Use GitHub Actions to auto-label and ping reviewers if a PR is idle for 24 hours.
 
-By configuring Branch Policies, you can easily enforce code reviews rules.
+---
 
-### We pair or mob. How should this reflect in our code reviews? <a href="#we-pair-or-mob-how-should-this-reflect-in-our-code-reviews" id="we-pair-or-mob-how-should-this-reflect-in-our-code-reviews"></a>
+### How can we enforce code review policies?
+- Configure branch protection rules (GitHub, Azure Repos, GitLab)
+- Require minimum reviewers and status checks before merging
+- Automate checks (lint, tests, security scans) in CI/CD pipelines
 
-There are two ways to perform a code review:
+**Reference:**
+- [GitHub Branch Protection](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/defining-the-mergeability-of-pull-requests/about-protected-branches)
 
-1. Pair - Someone outside the pair should perform the code review. One of the other major benefits of code reviews is spreading knowledge about the code base to other members of the team that don't usually work in the part of the codebase under review.
-2. Mob - A member of the mob who spent less (or no) time at the keyboard should perform the code review.
+---
+
+### We pair or mob. How should this reflect in our code reviews?
+- Pair: Have someone outside the pair review the code for fresh perspective
+- Mob: A mob member with less keyboard time should review
+- Document who participated in the review for traceability
+
+---
+
+### Best Practices
+- Use checklists for consistent reviews (security, style, tests)
+- Review both code and infrastructure-as-code (Terraform, Helm, etc.)
+- Use LLMs (Copilot, Claude) to suggest improvements or spot issues
+- Document recurring review findings in a team knowledge base
+
+---
+
+### Common Pitfalls
+- Rushing reviews or rubber-stamping approvals
+- Not reviewing IaC or pipeline changes
+- Ignoring automated test failures
+- Lack of feedback on rejected PRs
+
+---
+
+### References
+- [Microsoft Code Review Playbook](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/)
+- [GitHub Code Review Docs](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests)
+- [Azure DevOps Code Review](https://learn.microsoft.com/en-us/azure/devops/repos/git/pull-requests)

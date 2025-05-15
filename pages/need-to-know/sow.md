@@ -2,16 +2,84 @@
 description: Statement of Work (SOW) for a Platform Engineer
 ---
 
-# SOW
+# Statement of Work (SOW) for Platform Engineering Projects
 
-A Statement of Work (SOW) is a document that outlines the scope of work, deliverables, timelines, and dependencies of a project. For a Platform Engineer, an SOW is a critical document that provides a clear understanding of what is expected of them in terms of designing, building, and maintaining the technology platform.
+A Statement of Work (SOW) defines the scope, deliverables, timelines, dependencies, and acceptance criteria for platform engineering projects. This template is tailored for DevOps and cloud infrastructure (AWS, Azure, GCP) and is designed for engineers seeking actionable, real-life guidance.
 
-Here are some key elements that should be included in an SOW for a Platform Engineer:
+---
 
-1. Scope of Work: This section should outline the specific responsibilities and tasks of the Platform Engineer. For example, this may include designing and implementing new features, maintaining existing systems, and resolving technical issues.
-2. Deliverables: This section should define the expected outcomes of the project, including any software, documentation, or other artifacts that the Platform Engineer is expected to produce.
-3. Timelines: This section should include specific deadlines for each task or deliverable, as well as overall project timelines. This helps to ensure that the project stays on track and that stakeholders are aware of expected timelines.
-4. Dependencies: This section should outline any dependencies that the project has on other teams, systems, or technologies. This helps to ensure that all stakeholders are aware of what is required to complete the project successfully.
-5. Acceptance Criteria: This section should include specific criteria that must be met for the project to be considered complete. This helps to ensure that all stakeholders are aligned on what constitutes a successful project outcome.
+## 1. Scope of Work
+- Design, implement, and maintain cloud-based infrastructure using Terraform and Ansible
+- Set up CI/CD pipelines (GitHub Actions, Azure Pipelines, GitLab CI)
+- Deploy and manage Kubernetes clusters (EKS, AKS, GKE, or on-prem)
+- Integrate monitoring, logging, and alerting (Prometheus, Grafana, ELK, Cloud-native tools)
+- Automate security and compliance checks (e.g., Checkov, Trivy, OPA)
+- Provide documentation and knowledge transfer to internal teams
 
-Overall, an SOW for a Platform Engineer is a critical document that provides a clear understanding of what is expected of the Platform Engineer in terms of delivering a successful technology platform. By outlining the scope of work, deliverables, timelines, dependencies, and acceptance criteria, an SOW helps to ensure that all stakeholders are aligned on the project goals and expectations.
+**Example:**
+> Provision a production-ready EKS cluster on AWS using Terraform, configure GitHub Actions for automated deployments, and set up Prometheus/Grafana for monitoring.
+
+---
+
+## 2. Deliverables
+- Infrastructure-as-Code (IaC) repositories (Terraform, Ansible)
+- CI/CD pipeline definitions and scripts
+- Kubernetes manifests and Helm charts
+- Monitoring and alerting dashboards
+- Security and compliance reports
+- User and runbook documentation (Markdown, Gitbook)
+
+---
+
+## 3. Timelines
+| Task                                 | Start Date | End Date   |
+|-------------------------------------- |------------|------------|
+| Infrastructure Design                | 2025-01-10 | 2025-01-20 |
+| IaC Implementation                   | 2025-01-21 | 2025-02-05 |
+| CI/CD Pipeline Setup                 | 2025-02-06 | 2025-02-15 |
+| Kubernetes Deployment                | 2025-02-16 | 2025-02-25 |
+| Monitoring & Security Integration     | 2025-02-26 | 2025-03-05 |
+| Documentation & Handover             | 2025-03-06 | 2025-03-10 |
+
+---
+
+## 4. Dependencies
+- Access to cloud accounts (AWS, Azure, GCP)
+- Network and security group configurations
+- Collaboration with security, networking, and application teams
+- Availability of required licenses or subscriptions
+
+---
+
+## 5. Acceptance Criteria
+- All infrastructure is provisioned and managed via IaC (Terraform/Ansible)
+- CI/CD pipelines pass automated tests and deploy to target environments
+- Kubernetes clusters are operational, secure, and monitored
+- Documentation is complete and reviewed by stakeholders
+- Handover session delivered and knowledge transfer confirmed
+
+---
+
+## Best Practices
+- Use version control (Git) for all code and documentation
+- Automate testing, security, and compliance in CI/CD
+- Schedule regular project reviews and demos with stakeholders
+- Document all architectural decisions and changes
+- Reference official documentation for all tools and cloud services
+
+---
+
+## Common Pitfalls
+- Unclear or changing requirements
+- Manual changes outside of IaC or CI/CD
+- Insufficient documentation or knowledge transfer
+- Ignoring security and compliance automation
+
+---
+
+## References
+- [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
+- [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/)
+- [Google Cloud Architecture Framework](https://cloud.google.com/architecture/framework)
+- [Terraform Docs](https://developer.hashicorp.com/terraform/docs)
+- [Kubernetes Docs](https://kubernetes.io/docs/)

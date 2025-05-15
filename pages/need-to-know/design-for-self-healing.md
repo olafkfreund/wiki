@@ -1,43 +1,103 @@
-# Design for self healing
+# Design for Self-Healing Applications
 
-### Design your application to be self healing when failures occur <a href="#design-your-application-to-be-self-healing-when-failures-occur" id="design-your-application-to-be-self-healing-when-failures-occur"></a>
+Designing for self-healing ensures your cloud-native applications (AWS, Azure, GCP, Kubernetes) can detect, respond to, and recover from failures automatically. This approach increases reliability, reduces manual intervention, and supports high availability.
 
-In a distributed system, failures can happen. Hardware can fail. The network can have transient failures. Rarely, an entire service or region may experience a disruption, but even those must be planned for.
+---
 
-Therefore, design an application to be self healing when failures occur. This requires a three-pronged approach:
+## Key Principles
+1. **Detect Failures**: Use monitoring, health checks, and alerts.
+2. **Respond Gracefully**: Automate recovery actions (restart, failover, scale).
+3. **Log & Monitor**: Capture metrics and logs for operational insight.
 
-* Detect failures.
-* Respond to failures gracefully.
-* Log and monitor failures, to give operational insight.
+---
 
-How you respond to a particular type of failure may depend on your application's availability requirements. For example, if you require very high availability, you might automatically fail over to a secondary region during a regional outage. However, that will incur a higher cost than a single-region deployment.
+## Step-by-Step: Implementing Self-Healing
 
-Also, don't just consider big events like regional outages, which are generally rare. You should focus as much, if not more, on handling local, short-lived failures, such as network connectivity failures or failed database connections.
+### 1. Health Checks & Monitoring
+- Use readiness and liveness probes in Kubernetes:
+  ```yaml
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 5
+  ```
+- Enable cloud-native monitoring (CloudWatch, Azure Monitor, GCP Operations Suite).
+- Set up alerts for critical metrics (CPU, memory, error rates).
 
-### Recommendations <a href="#recommendations" id="recommendations"></a>
+### 2. Automated Recovery
+- **Kubernetes:**
+  - Pods are automatically restarted on failure.
+  - Use Deployments/StatefulSets for self-healing workloads.
+- **Cloud VMs:**
+  - Use auto-healing groups (AWS Auto Scaling, Azure VMSS, GCP Instance Groups).
+- **Serverless:**
+  - Functions are retried automatically on failure (configurable in AWS Lambda, Azure Functions, GCP Cloud Functions).
 
-**Retry failed operations**. Transient failures may occur due to momentary loss of network connectivity, a dropped database connection, or a timeout when a service is busy. Build retry logic into your application to handle transient failures. For many Azure services, the client SDK implements automatic retries. For more information, see [Transient fault handling](https://learn.microsoft.com/en-us/azure/architecture/best-practices/transient-faults) and the [Retry pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/retry).
+### 3. Resiliency Patterns
+- **Retry Logic:**
+  - Implement exponential backoff for transient errors.
+  - Example (Python):
+    ```python
+    import time
+    for i in range(5):
+        try:
+            # call remote service
+            break
+        except Exception:
+            time.sleep(2 ** i)
+    ```
+- **Circuit Breaker:**
+  - Use libraries like Polly (.NET), Resilience4j (Java), or Hystrix (legacy) to prevent cascading failures.
+- **Bulkhead:**
+  - Isolate resources to prevent one failure from impacting the whole system.
+- **Queue-Based Load Leveling:**
+  - Use message queues (SQS, Azure Service Bus, Pub/Sub) to buffer spikes.
 
-**Protect failing remote services (Circuit Breaker)**. It's good to retry after a transient failure, but if the failure persists, you can end up with too many callers hammering a failing service. This can lead to cascading failures, as requests back up. Use the [Circuit Breaker pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker) to fail fast (without making the remote call) when an operation is likely to fail.
+### 4. Failover & Redundancy
+- Deploy across multiple zones/regions.
+- Use managed databases with automatic failover (RDS, Cosmos DB, Cloud SQL).
+- For stateless services, use load balancers (ALB, Azure Load Balancer, GCP Load Balancer).
 
-**Isolate critical resources (Bulkhead)**. Failures in one subsystem can sometimes cascade. This can happen if a failure causes some resources, such as threads or sockets, not to get freed in a timely manner, leading to resource exhaustion. To avoid this, partition a system into isolated groups, so that a failure in one partition does not bring down the entire system.
+### 5. Chaos Engineering & Fault Injection
+- Test failure scenarios using tools like:
+  - [Chaos Mesh](https://chaos-mesh.org/) (Kubernetes)
+  - [AWS Fault Injection Simulator](https://aws.amazon.com/fis/)
+  - [Azure Chaos Studio](https://learn.microsoft.com/en-us/azure/chaos-studio/)
+- Example: Simulate pod failure in Kubernetes:
+  ```sh
+  kubectl delete pod <pod-name> -n <namespace>
+  ```
 
-**Perform load leveling**. Applications may experience sudden spikes in traffic that can overwhelm services on the backend. To avoid this, use the [Queue-Based Load Leveling pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/queue-based-load-leveling) to queue work items to run asynchronously. The queue acts as a buffer that smooths out peaks in the load.
+---
 
-**Fail over**. If an instance can't be reached, fail over to another instance. For things that are stateless, like a web server, put several instances behind a load balancer or traffic manager. For things that store state, like a database, use replicas and fail over. Depending on the data store and how it replicates, this may require the application to deal with eventual consistency.
+## Real-Life Example: Self-Healing Web App on Kubernetes
+1. Deploy app with liveness/readiness probes.
+2. Set up HPA (Horizontal Pod Autoscaler) to scale on CPU/memory.
+3. Use Prometheus + Alertmanager for monitoring and alerting.
+4. Automate rollbacks with ArgoCD/Flux if health checks fail after deployment.
 
-**Compensate failed transactions**. In general, avoid distributed transactions, as they require coordination across services and resources. Instead, compose an operation from smaller individual transactions. If the operation fails midway through, use [Compensating Transactions](https://learn.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction) to undo any step that already completed.
+---
 
-**Checkpoint long-running transactions**. Checkpoints can provide resiliency if a long-running operation fails. When the operation restarts (for example, it is picked up by another VM), it can be resumed from the last checkpoint. Consider implementing a mechanism that records state information about the task at regular intervals, and save this state in durable storage that can be accessed by any instance of the process running the task. In this way, if the process is shut down, the work that it was performing can be resumed from the last checkpoint by using another instance. There are libraries that provide this functionality, such as [NServiceBus](https://docs.particular.net/nservicebus/sagas) and [MassTransit](https://masstransit-project.com/usage/sagas). They transparently persist state, where the intervals are aligned with the processing of messages from queues in Azure Service Bus.
+## Best Practices
+- Always automate detection and recovery—avoid manual intervention.
+- Store all configuration as code (GitOps).
+- Regularly test failure scenarios in lower environments.
+- Document recovery procedures and automate them where possible.
+- Use LLMs (Copilot, Claude) to generate runbooks or analyze logs for root cause.
 
-**Degrade gracefully**. Sometimes you can't work around a problem, but you can provide reduced functionality that is still useful. Consider an application that shows a catalog of books. If the application can't retrieve the thumbnail image for the cover, it might show a placeholder image. Entire subsystems might be noncritical for the application. For example, in an e-commerce site, showing product recommendations is probably less critical than processing orders.
+## Common Pitfalls
+- Relying only on manual monitoring or intervention.
+- Not testing failure and recovery paths.
+- Ignoring resource limits, leading to OOMKilled pods.
+- Failing to monitor both application and infrastructure layers.
 
-**Throttle clients**. Sometimes a small number of users create excessive load, which can reduce your application's availability for other users. In this situation, throttle the client for a certain period of time.&#x20;
+---
 
-**Block bad actors**. Just because you throttle a client, it doesn't mean client was acting maliciously. It just means the client exceeded their service quota. But if a client consistently exceeds their quota or otherwise behaves badly, you might block them. Define an out-of-band process for user to request getting unblocked.
-
-**Use leader election**. When you need to coordinate a task, use [Leader Election](https://learn.microsoft.com/en-us/azure/architecture/patterns/leader-election) to select a coordinator. That way, the coordinator is not a single point of failure. If the coordinator fails, a new one is selected. Rather than implement a leader election algorithm from scratch, consider an off-the-shelf solution such as Zookeeper.
-
-**Test with fault injection**. All too often, the success path is well tested but not the failure path. A system could run in production for a long time before a failure path is exercised. Use fault injection to test the resiliency of the system to failures, either by triggering actual failures or by simulating them.
-
-**Embrace chaos engineering**. Chaos engineering extends the notion of fault injection, by randomly injecting failures or abnormal conditions into production instances.
+## References
+- [Kubernetes Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+- [AWS Auto Healing](https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html)
+- [Azure VMSS Health](https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-health)
+- [Google Cloud Instance Groups](https://cloud.google.com/compute/docs/instance-groups/creating-groups-of-managed-instances)
+- [Chaos Engineering](https://principlesofchaos.org/)
