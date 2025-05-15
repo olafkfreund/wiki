@@ -276,5 +276,4 @@
 * [Glossary](pages/reference/glossary.md) - DevOps and cloud terminology
 * [Tool Comparison](pages/reference/tool-comparison.md) - Feature analysis of DevOps tools
 * [Recommended Reading](pages/reference/reading.md) - Essential books and resources
-* [Troubleshooting Guide](pages/reference/troubleshooting.md) - Common issue resolution
-* [Recommended Reading](pages/reference/reading.md) - Books and external resources
+* [Troubleshooting Guide](pages/reference/troubleshooting.md) - Advanced issue resolution for DevOps/SRE
