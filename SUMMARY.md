@@ -65,6 +65,10 @@
 * [Using Inline Scripts with Bicep](group-1/bicep/use-inline-scripts.md)
 * [Bicep with GitHub Actions](group-1/bicep/bicep-with-github-actions.md)
 * [Integrate Bicep with Azure Pipelines](group-1/bicep/integrate-bicep-with-azure-pipelines.md)
+* [Getting Started with Bicep](group-1/bicep/getting-started.md)
+* [Best Practices](group-1/bicep/best-practices.md)
+* [Modules](group-1/bicep/modules.md)
+* [Examples](group-1/bicep/examples.md)
 
 ## 🐳 Containers & Orchestration
 
