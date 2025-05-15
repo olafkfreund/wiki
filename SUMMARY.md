@@ -274,6 +274,6 @@
 ## 📋 Reference Materials
 
 * [Glossary](pages/reference/glossary.md) - DevOps and cloud terminology
+* [Tool Comparison](pages/reference/tool-comparison.md) - Feature analysis of DevOps tools
 * [Troubleshooting Guide](pages/reference/troubleshooting.md) - Common issue resolution
-* [Tool Comparison](pages/reference/tool-comparison.md) - Feature analysis of similar tools
 * [Recommended Reading](pages/reference/reading.md) - Books and external resources
