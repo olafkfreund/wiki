@@ -1,6 +1,56 @@
-# Bicep
+# Azure Databricks with Bicep
 
-This template allows you to create a network security group, a virtual network and an Azure Databricks workspace with the virtual network, and Private Endpoint.
+This document explains how to deploy Azure Databricks in a secure configuration using Bicep. The template creates a fully-featured Azure Databricks workspace with network security groups, virtual network integration, and private endpoint connectivity.
+
+## Architecture
+
+This deployment creates:
+
+1. **Network Security Group (NSG)** with required rules for Databricks connectivity
+2. **Virtual Network** with three subnets:
+   - Public subnet for Databricks (when public access is enabled)
+   - Private subnet for Databricks
+   - Private Endpoint subnet for secure connectivity
+3. **Azure Databricks Workspace** connected to the VNet
+4. **Private Endpoint** for secure access to the Databricks UI and API
+5. **Private DNS Zone** for name resolution
+
+![Azure Databricks Architecture](https://learn.microsoft.com/en-us/azure/databricks/media/security-private-link-architecture.png)
+
+## Deployment Instructions
+
+### Prerequisites
+
+- Azure CLI installed and logged in
+- Bicep CLI installed
+- Sufficient permissions to create resources in the target subscription
+
+### Deployment Steps
+
+1. Save the Bicep template to a file named `databricks-secure.bicep`
+2. Deploy using Azure CLI:
+
+```bash
+# Create a resource group
+az group create --name rg-databricks-secure --location eastus2
+
+# Deploy the Bicep template
+az deployment group create \
+  --resource-group rg-databricks-secure \
+  --template-file databricks-secure.bicep \
+  --parameters workspaceName=databricks-secure-ws
+```
+
+### Common Parameter Customizations
+
+| Parameter | Description | Common Values |
+|-----------|-------------|---------------|
+| `workspaceName` | Name of your Databricks workspace | `<project>-<env>-dbx` |
+| `pricingTier` | Pricing tier for Databricks | `premium` for advanced security |
+| `disablePublicIp` | Enable secure cluster connectivity | `true` for enhanced security |
+| `publicNetworkAccess` | Allow public access to workspace | `Disabled` for private access only |
+
+## Bicep Template
 
 ```bicep
 @description('Specifies whether to deploy Azure Databricks workspace with secure cluster connectivity (SCC) enabled or not (No Public IP).')
@@ -300,4 +350,76 @@ resource pvtEndpointDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneG
     privateEndpoint
   ]
 }
-```plaintext
+
+// Output the Workspace URL and ID
+output databricksWorkspaceUrl string = workspace.properties.workspaceUrl
+output databricksWorkspaceId string = workspace.id
+```
+
+## Understanding Security Components
+
+### Network Security Group Rules
+
+The NSG created by this template includes the following essential rules:
+
+1. **Worker-to-Worker Inbound**: Allows cluster nodes to communicate with each other
+2. **Worker-to-Webapp**: Allows workers to communicate with Databricks control plane
+3. **Worker-to-SQL**: Allows connectivity to Azure SQL services
+4. **Worker-to-Storage**: Allows connectivity to Azure Storage services
+5. **Worker-to-Worker Outbound**: Allows outbound communication between nodes
+6. **Worker-to-Eventhub**: Allows connectivity to Azure Event Hub services
+
+### Private Endpoint Configuration
+
+The private endpoint created by this template:
+
+1. Connects to the `databricks_ui_api` service of the workspace
+2. Configures a private DNS zone for name resolution
+3. Links the DNS zone to the virtual network
+
+## Best Practices
+
+1. **Secure Network Configuration**:
+   - Always use `disablePublicIp = true` in production environments
+   - Set `publicNetworkAccess = 'Disabled'` for maximum security
+
+2. **Subnet Sizing**:
+   - Ensure subnets are sized appropriately for your workloads
+   - Default configuration allows for up to ~4,000 IP addresses per subnet
+   - For large clusters or many concurrent workloads, consider expanding subnet sizes
+
+3. **DNS Resolution**:
+   - The template creates a private DNS zone for `privatelink.azuredatabricks.net`
+   - Ensure your network configuration allows DNS resolution from connected networks
+
+4. **NSG Customization**:
+   - Use `requiredNsgRules = 'NoAzureDatabricksRules'` to manage NSG rules manually
+   - Add custom rules for additional security requirements
+
+5. **Workspace Access**:
+   - Consider Azure AD authentication for the workspace
+   - Use Azure RBAC and Databricks access controls to limit user permissions
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Deployment Failures**:
+   - Verify resource name uniqueness
+   - Check for overlapping IP address ranges
+   - Ensure you have sufficient permissions
+
+2. **Connectivity Issues**:
+   - Verify DNS resolution to the private endpoint
+   - Check NSG rules aren't blocking required traffic
+   - Validate private endpoint is properly configured
+
+3. **Workspace Access Problems**:
+   - When using private endpoint, ensure clients can resolve the private DNS
+   - Verify Azure AD permissions for workspace access
+
+## Additional Resources
+
+- [Azure Databricks Documentation](https://learn.microsoft.com/en-us/azure/databricks/)
+- [Secure Azure Databricks deployments using Private Link](https://learn.microsoft.com/en-us/azure/databricks/security/network/secure-with-private-link)
+- [Network Security in Azure Databricks](https://learn.microsoft.com/en-us/azure/databricks/security/network/)

@@ -1,7 +1,8 @@
 # Table of Contents
 
 * [Welcome!](README.md)
-* [About Me](pages/cv.md)
+* [About Me](pages/about-me.md)
+* [CV](pages/cv.md)
 
 ## 🧠 Core Concepts
 
@@ -12,6 +13,7 @@
   * [Lifecycle Management](pages/need-to-know/devops-lifecycle-management.md)
   * [The 12 Factor App](pages/need-to-know/the-12-factor-app.md)
   * [Design for Self Healing](pages/need-to-know/design-for-self-healing.md)
+  * [Incident Management Best Practices (2025)](pages/devops/incident-management-best-practices-2025.md)
 * [SRE Fundamentals](pages/sre/README.md)
   * [Toil Reduction](pages/sre/toil.md)
   * [System Simplicity](pages/sre/simplicity.md)
@@ -88,8 +90,18 @@
 * [Continuous Delivery](pages/devops/continuous-delivery/README.md)
   * [Deployment Strategies](pages/need-to-know/guide-to-blue-green-canary-and-rolling-deployments.md)
   * [Secrets Management](pages/devops/continuous-delivery/secrets-management.md)
-* [Azure DevOps](pages/devops/ci-cd-platforms/azure-devops/README.md)
-  * [Pipelines](pages/devops/ci-cd-platforms/azure-devops/pipelines/README.md)
+* [Azure DevOps](pages/azure-devops/README.md)
+  * [Pipelines](pages/azure-devops/pipelines/README.md)
+    * [Stages](pages/azure-devops/pipelines/stages.md)
+    * [Jobs](pages/azure-devops/pipelines/jobs.md)
+    * [Steps](pages/azure-devops/pipelines/steps.md)
+    * [Templates](pages/azure-devops/pipelines/templates.md)
+    * [Extends](pages/azure-devops/pipelines/extends.md)
+    * [Service Connections](pages/azure-devops/pipelines/service-connections.md)
+    * [Best Practices for 2025](pages/azure-devops/pipelines/README.md#best-practices-for-2025)
+    * [Agents and Runners](pages/azure-devops/pipelines/README.md#agents-and-runners)
+    * [Third-Party Integrations](pages/azure-devops/pipelines/README.md#third-party-integrations)
+    * [Azure DevOps CLI](pages/azure-devops/pipelines/README.md#azure-devops-cli)
   * [Boards & Work Items](pages/devops/ci-cd-platforms/azure-devops/boards-and-work-items/README.md)
 * [GitHub Actions](pages/devops/ci-cd-platforms/github/github-action.md)
 * [GitOps](pages/devops/gitops/README.md)
@@ -104,6 +116,8 @@
   * [Landing Zones](pages/public-clouds/azure/azure-landing-zone/README.md)
   * [Services](pages/public-clouds/azure/services/README.md)
   * [Monitoring](pages/public-clouds/azure/monitoring/README.md)
+  * [Azure PowerShell](pages/azure-powershell/README.md)
+  * [Azure CLI](pages/az-cli/README.md)
   * [Tips & Tricks](pages/public-clouds/azure/tips-and-tricks.md)
 * [AWS](pages/public-clouds/aws/README.md)
   * [Authentication](pages/public-clouds/aws/authentication.md)
@@ -129,6 +143,7 @@
 * [Security Best Practices](pages/devops/security/README.md)
   * [Threat Modeling](pages/devops/security/threat-modeling.md)
   * [Kubernetes Security](pages/devops/security/kubernetes/README.md)
+* [SecOps](pages/secops/README.md)
 * [Zero Trust Model](pages/need-to-know/zero-trust-model/README.md)
 * [Cloud Compliance](pages/need-to-know/cloud-compliance/README.md)
   * [ISO/IEC 27001:2022](pages/need-to-know/cloud-compliance/iso-iec-27001-2022.md)
@@ -152,6 +167,7 @@
 ## 🧪 Testing
 
 * [Testing Strategies](pages/devops/testing/README.md)
+* [Testing in Modern Cloud Infrastructure](pages/need-to-know/testing/README.md)
 * [End-to-End Testing](pages/need-to-know/testing/end-to-end-testing/README.md)
 * [Unit Testing](pages/need-to-know/testing/unit-testing.md)
 * [Performance Testing](pages/devops/testing/performance-testing/README.md)
@@ -167,6 +183,7 @@
   * [Installation Guide](pages/llm/claude/claude-installation.md)
   * [Project Guides](pages/llm/claude/claude-project-guide.md)
   * [MCP Server Setup](pages/llm/claude/mcp-server-setup.md)
+  * [LLM Comparison](pages/llm/claude/llm-modules-comparison.md)
 * [Ollama](pages/llm/ollama/README.md)
   * [Installation Guide](pages/llm/ollama/installation.md)
   * [Configuration](pages/llm/ollama/configuration.md)
@@ -188,11 +205,11 @@
   * [NotebookML Guide](pages/llm/gemini/notebookml-guide.md)
   * [Cloud Infrastructure Deployment](pages/llm/gemini/cloud-infrastructure-deployment.md)
   * [Summary](pages/llm/gemini/summary.md)
-* [LLM Comparison](pages/llm/claude/llm-modules-comparison.md)
 
 ## 💻 Development Environment
 
 * [Tools Overview](pages/devops/tools-to-install/README.md)
+* [DevOps Tools](pages/devops-tools/README.md)
 * [NixOS](pages/Nixos/README.md)
   * [Installation](pages/Nixos/install.md)
   * [DevEnv with Nix](pages/Nixos/devenv.md)
