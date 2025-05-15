@@ -11,6 +11,7 @@ Terraform is HashiCorp's Infrastructure as Code (IaC) tool that enables you to s
 ### Linux Installation
 
 #### Ubuntu/Debian
+
 ```bash
 wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
@@ -18,6 +19,7 @@ sudo apt update && sudo apt install terraform
 ```
 
 #### RHEL/CentOS/Fedora
+
 ```bash
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
@@ -94,12 +96,14 @@ pkgs.mkShell {
 ## Best Practices
 
 ### 1. State Management
+
 - Use remote state storage (AWS S3, Azure Storage, GCP Cloud Storage)
 - Implement state locking
 - Separate state files per environment
 - Enable state encryption
 
 Example backend configuration for Azure:
+
 ```hcl
 terraform {
   backend "azurerm" {
@@ -113,6 +117,7 @@ terraform {
 ```
 
 ### 2. Code Organization
+
 - Use workspaces for environment separation
 - Implement consistent naming conventions
 - Maintain modular code structure
@@ -132,17 +137,20 @@ project/
 ```
 
 ### 3. Security
+
 - Use provider authentication with OIDC
 - Implement least privilege access
 - Enable audit logging
 - Use sensitive input variables
 
 ### 4. Performance
+
 - Use `for_each` instead of `count` where possible
 - Implement parallel resource creation
 - Use data sources efficiently
 
 ### 5. Cost Management
+
 - Implement cost estimation in CI/CD
 - Use cost allocation tags
 - Enable cost reports and budgets
@@ -229,6 +237,7 @@ module "landing_zone" {
 ### 1. CI/CD Integration
 
 GitHub Actions workflow example:
+
 ```yaml
 name: 'Terraform Pipeline'
 on:
@@ -261,6 +270,7 @@ jobs:
 ### 2. Policy as Code
 
 Using OPA (Open Policy Agent) for policy enforcement:
+
 ```hcl
 provider "opa" {
   hostname = "http://localhost:8181"
@@ -279,6 +289,7 @@ data "opa_document" "policy" {
 ## Testing Strategies
 
 ### 1. Unit Testing
+
 Using Terratest for infrastructure testing:
 
 ```go
@@ -307,6 +318,7 @@ func TestTerraformAwsExample(t *testing.T) {
 ```
 
 ### 2. Integration Testing
+
 ```hcl
 module "integration_test" {
   source = "./test"
@@ -325,3 +337,14 @@ module "integration_test" {
 - [HashiCorp Learn](https://learn.hashicorp.com/terraform)
 - [Terraform Best Practices](https://www.terraform-best-practices.com/)
 
+## Related Topics
+
+- [Infrastructure as Code Overview](../iac/README.md) - Core concepts powering Terraform-based automation
+- [AWS Scenarios](aws-scenarios.md) - Practical implementation patterns for AWS resources
+- [Azure Scenarios](azure-scenarios.md) - Azure-specific deployment strategies with Terraform
+- [GCP Scenarios](gcp-scenarios.md) - Google Cloud automation with Terraform
+- [Testing and Validation](testing/) - Ensuring infrastructure reliability with automated tests
+- [CI/CD Integration](cicd/) - Automating Terraform deployments in pipelines
+- [Terraform Best Practices](best-practices/) - Production-ready implementation strategies
+- [Bicep](../../group-1/bicep/README.md) - Alternative IaC approach for Azure-specific workloads
+- [GitOps](../devops/gitops/README.md) - Git-based infrastructure delivery that works with Terraform

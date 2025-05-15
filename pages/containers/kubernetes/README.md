@@ -28,6 +28,7 @@ Most organizations use a managed Kubernetes service for production workloads. Th
 - **CI/CD Pipelines**: Use Kubernetes for dynamic build/test environments and GitOps workflows.
 
 ## 2025 Best Practices
+
 - Use Infrastructure as Code (Terraform, Bicep) to provision clusters and resources
 - Integrate with cloud-native IAM for secure access (Azure AD, AWS IAM, Google IAM)
 - Automate deployments with GitHub Actions, Azure Pipelines, or GitLab CI/CD
@@ -38,6 +39,7 @@ Most organizations use a managed Kubernetes service for production workloads. Th
 - Use LLMs (Copilot, Claude) to generate manifests, Helm charts, and automate troubleshooting
 
 ## Example: Deploying a Web App to Kubernetes
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -74,11 +76,22 @@ spec:
 ```
 
 ## Multi-Cloud & Hybrid Kubernetes
+
 - Use tools like Azure Arc, EKS Anywhere, or Anthos for hybrid/multi-cloud management
 - Standardize on GitOps and IaC for portability
 - Monitor and secure clusters consistently across providers
 
+## Related Topics
+
+- [Docker](../../best-practises/containers/docker/README.md) - Container runtime used by Kubernetes
+- [Kubectl](kubectl.md) - Primary CLI tool for managing Kubernetes
+- [Service Mesh](../../should-learn/kubernetes/service-mesh/README.md) - Advanced networking for Kubernetes
+- [Kubernetes Security](../../devops/security/kubernetes/README.md) - Securing your Kubernetes clusters
+- [GitOps with Flux](../../devops/gitops/flux/README.md) - Continuous deployment to Kubernetes
+- [Troubleshooting](../../should-learn/kubernetes/troubleshooting/README.md) - Solving common Kubernetes problems
+
 ## References
+
 - [Kubernetes Official Docs](https://kubernetes.io/docs/)
 - [AKS Documentation](https://learn.microsoft.com/en-us/azure/aks/)
 - [EKS Documentation](https://docs.aws.amazon.com/eks/)

@@ -121,6 +121,14 @@ AWS is particularly well-suited for:
 - **Big Data Processing**: With services like EMR, Redshift, and Athena
 - **Disaster Recovery**: Geographic redundancy and backup solutions
 
+## Related Topics
+
+- [AWS Authentication](authentication.md) - Managing access to AWS resources
+- [AWS Best Practices](best-practices.md) - Implementation recommendations
+- [Terraform AWS Scenarios](../../../terraform/aws-scenarios.md) - Managing AWS with Terraform
+- [Cloud Compliance](../../../need-to-know/cloud-compliance/README.md) - Regulatory frameworks for AWS
+- [AWS VM Log Monitoring](../../../sre/senarios/aws-vm-monitoring-api.md) - SRE implementation for AWS
+
 ## References
 
 - [AWS Official Documentation](https://docs.aws.amazon.com/)

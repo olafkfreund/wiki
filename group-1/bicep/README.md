@@ -315,3 +315,13 @@ az deployment group what-if \
 - [Integrate Bicep with Azure Pipelines](integrate-bicep-with-azure-pipelines.md)
 - [Bicep Template Specs](template-spec-for-bicep.md)
 - [Use Inline Scripts with Bicep](use-inline-scripts.md)
+
+## Related Topics
+
+- [Terraform](../../pages/terraform/README.md) - Alternative multi-cloud IaC solution
+- [Azure](../../pages/public-clouds/azure/README.md) - Microsoft's cloud platform that Bicep targets
+- [GitHub Actions Integration](bicep-with-github-actions.md) - Automating Bicep deployments with GitHub
+- [Azure Pipelines Integration](integrate-bicep-with-azure-pipelines.md) - CI/CD for Bicep with Azure DevOps
+- [Template Specs](template-spec-for-bicep.md) - Creating reusable infrastructure templates
+- [Inline Scripts](use-inline-scripts.md) - Advanced deployment techniques
+- [DevSecOps](../../pages/dev-secops/README.md) - Security integration for infrastructure code

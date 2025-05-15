@@ -5,6 +5,7 @@ State management is crucial for maintaining infrastructure with Terraform. This 
 ## Remote State Storage
 
 ### Use Remote Backend
+
 Always use a remote backend for state storage:
 
 ```hcl
@@ -19,6 +20,7 @@ terraform {
 ```
 
 ### Backend Options by Cloud Provider
+
 - **AWS**: S3 with DynamoDB for state locking
 - **Azure**: Azure Storage Account with blob container
 - **GCP**: Google Cloud Storage bucket
@@ -38,12 +40,15 @@ terraform {
 ## State Organization
 
 ### State Separation
+
 Maintain separate states for:
+
 - Different environments (dev, staging, prod)
 - Different regions
 - Different business units or applications
 
 Example structure:
+
 ```
 └── terraform/
     ├── prod/
@@ -129,3 +134,10 @@ Common issues and solutions:
 - [ ] State separated by environment
 - [ ] Workspace strategy defined
 - [ ] Documentation updated
+
+## Related Topics
+
+- [Terraform Security](security.md) - Securing your state files and credentials
+- [Code Organization](code-organization.md) - Structuring projects for optimal state management
+- [GitHub Actions Integration](../cicd/github-actions.md) - Automating state management in CI/CD
+- [Azure DevOps Pipelines](../cicd/azure-pipelines.md) - State management with Azure DevOps
