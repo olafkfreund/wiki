@@ -1,34 +1,59 @@
-# Definition of Done
+# Definition of Done (2025)
 
-To close a user story, a sprint, or a milestone it is important to verify that the tasks are complete.
+A clear, actionable Definition of Done (DoD) ensures that user stories, sprints, and releases meet engineering, DevOps, and business standards. The DoD should be agreed upon by the whole team and documented in the project.
 
-The development team should decide together what their Definition of Done is and document this in the project. Below are some examples of checks to verify that the user story, sprint, task is completed.
+---
 
-### Feature/User Story <a href="#featureuser-story" id="featureuser-story"></a>
+## Feature/User Story
 
-* [ ] Acceptance criteria are met
-* [ ] Refactoring is complete
-* [ ] Code builds with no error
-* [ ] Unit tests are written and pass
-* [ ] Existing Unit Tests pass
-* [ ] Sufficient diagnostics/telemetry are logged
-* [ ] Code review is complete
-* [ ] UX review is complete (if applicable)
-* [ ] Documentation is updated
-* [ ] The feature is merged into the develop branch
-* [ ] The feature is signed off by the product owner
+- [ ] Acceptance criteria are met and verified by the Product Owner
+- [ ] Code builds with no errors (locally and in CI)
+- [ ] Unit tests are written, pass locally, and in CI
+- [ ] Existing unit and integration tests pass
+- [ ] Code is reviewed (peer review, optionally with LLM assistance)
+- [ ] Security checks and static analysis pass (e.g., SAST, secret scanning)
+- [ ] Sufficient diagnostics/telemetry are logged
+- [ ] Infrastructure as Code (IaC) updated if needed (Terraform, Bicep, etc.)
+- [ ] Documentation (code, runbooks, user guides) is updated
+- [ ] UX review is complete (if applicable)
+- [ ] Feature branch is merged into the main/develop branch via pull request
+- [ ] Feature is deployed to a test/staging environment via CI/CD
+- [ ] Product Owner signs off
 
-### Sprint Goal <a href="#sprint-goal" id="sprint-goal"></a>
+## Sprint Goal
 
-* [ ] Definition of Done for all user stories included in the sprint are met
-* [ ] Product backlog is updated
-* [ ] Functional and Integration tests pass
-* [ ] Performance tests pass
-* [ ] End 2 End tests pass
-* [ ] All bugs are fixed
-* [ ] The sprint is signed off from developers, software architects, project manager, product owner etc.
+- [ ] DoD for all user stories in the sprint are met
+- [ ] Product backlog is updated and prioritized
+- [ ] Functional, integration, and performance tests pass in CI/CD
+- [ ] End-to-end tests pass in staging/pre-prod
+- [ ] All critical bugs are fixed or have a mitigation plan
+- [ ] Security and compliance checks pass (e.g., container/image scanning)
+- [ ] Sprint review and retrospective are completed
+- [ ] Sprint is signed off by developers, architects, project manager, and product owner
 
-### Release/Milestone <a href="#releasemilestone" id="releasemilestone"></a>
+## Release/Milestone
 
-* [ ] Code Complete (goals of sprints are met)
-* [ ] Release is marked as ready for production deployment by product owner
+- [ ] All sprint goals and DoD items are met
+- [ ] Release candidate is deployed to production-like environment
+- [ ] Release is marked as ready for production by Product Owner
+- [ ] Rollback plan and release notes are prepared
+- [ ] Monitoring, alerting, and runbooks are updated
+- [ ] Stakeholders are notified
+
+---
+
+## Real-Life Example: Cloud-Native Feature DoD
+
+- [ ] Terraform module updated and reviewed
+- [ ] Azure/AWS/GCP resources provisioned in test
+- [ ] GitHub Actions pipeline passes all checks
+- [ ] LLM (e.g., Copilot, Claude) used for code review suggestions
+- [ ] Security scan (Trivy, Checkov) passes
+- [ ] Feature demoed to stakeholders
+
+---
+
+## References
+- [Agile Manifesto](http://agilemanifesto.org/)
+- [Azure DevOps DoD Guidance](https://learn.microsoft.com/en-us/azure/devops/boards/work-items/guidance/definition-of-done)
+- [Scrum.org: Definition of Done](https://www.scrum.org/resources/what-is-the-definition-of-done)

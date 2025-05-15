@@ -1,161 +1,138 @@
-# Linkerd
+# Linkerd (2025)
 
-Linkerd is a _service mesh_ for Kubernetes. It makes running services easier and safer by giving you runtime debugging, observability, reliability, and security—all without requiring any changes to your code.
+Linkerd is a lightweight, open-source service mesh for Kubernetes. It provides runtime debugging, observability, reliability, and security (mTLS) for microservices—without requiring code changes. Linkerd is production-proven and works on all major clouds (AKS, EKS, GKE) and on-prem clusters.
 
-### Step 0: Setup <a href="#step-0-setup" id="step-0-setup"></a>
+---
 
-Before we can do anything, we need to ensure you have access to modern Kubernetes cluster and a functioning `kubectl` command on your local machine. (If you don’t already have a Kubernetes cluster, one easy option is to run one on your local machine. There are many ways to do this, including [kind](https://kind.sigs.k8s.io/), [k3d](https://k3d.io/), [Docker for Desktop](https://www.docker.com/products/docker-desktop), [and more](https://kubernetes.io/docs/setup/).)
+## What is a Service Mesh and Why Use Linkerd?
+A service mesh is an infrastructure layer that transparently manages service-to-service communication. It provides:
+- **Traffic management:** Fine-grained routing, retries, timeouts, circuit breaking
+- **Security:** mTLS encryption, service authentication, and policy enforcement
+- **Observability:** Distributed tracing, metrics, and logging for all service traffic
+- **Reliability:** Automatic retries, failover, and health checks
+- **Zero-trust networking:** Enforce least-privilege and secure-by-default communication
 
-You can validate your setup by running:
+**Why Linkerd?**
+- Lightweight and easy to install (no complex CRDs or sidecar bloat)
+- Fast startup and low resource usage
+- Works with GitOps tools (ArgoCD, Flux) for declarative, auditable deployments
+- Multi-cloud and hybrid ready
 
+---
+
+## Pros and Cons
+| Pros | Cons |
+|------|------|
+| Lightweight, simple to operate | Fewer advanced features than Istio |
+| Fast, low resource overhead | No built-in API gateway |
+| Secure by default (mTLS) | Smaller ecosystem than Istio |
+| GitOps-friendly | |
+| Great for SRE/DevOps teams | |
+
+---
+
+## Step-by-Step: Linkerd Setup and Configuration
+
+### 0. Prerequisites
+- Access to a Kubernetes cluster (AKS, EKS, GKE, or local)
+- `kubectl` installed and configured
+- (Optional) GitOps tool (ArgoCD, Flux) for declarative management
+
+Validate your cluster:
 ```bash
 kubectl version --short
-```plaintext
+```
 
-You should see output with both a `Client Version` and `Server Version` component.
-
-Now that we have our cluster, we’ll install the Linkerd CLI and use it validate that your cluster is capable of hosting the Linkerd control plane.
-
-(Note: if you’re using a GKE “private cluster”, there are some [extra steps required](https://linkerd.io/2.10/reference/cluster-configuration/#private-clusters) before you can proceed to the next step.)
-
-### Step 1: Install the CLI <a href="#step-1-install-the-cli" id="step-1-install-the-cli"></a>
-
-If this is your first time running Linkerd, you will need to download the `linkerd` command-line interface (CLI) onto your local machine. The CLI will allow you to interact with your Linkerd deployment.
-
-To install the CLI manually, run:
-
+### 1. Install the Linkerd CLI
 ```bash
 curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/install | sh
-```plaintext
-
-Be sure to follow the instructions to add it to your path.
-
-Alternatively, if you use [Homebrew](https://brew.sh/), you can install the CLI with `brew install linkerd`. You can also download the CLI directly via the [Linkerd releases page](https://github.com/linkerd/linkerd2/releases/).
-
-Once installed, verify the CLI is running correctly with:
-
-```bash
+export PATH=$PATH:$HOME/.linkerd2/bin
 linkerd version
-```plaintext
+```
 
-You should see the CLI version, and also `Server version: unavailable`. This is because you haven’t installed the control plane on your cluster. Don’t worry—we’ll fix that soon enough.
-
-### Step 2: Validate your Kubernetes cluster <a href="#step-2-validate-your-kubernetes-cluster" id="step-2-validate-your-kubernetes-cluster"></a>
-
-Kubernetes clusters can be configured in many different ways. Before we can install the Linkerd control plane, we need to check and validate that everything is configured correctly. To check that your cluster is ready to install Linkerd, run:
-
+### 2. Validate Your Cluster
 ```bash
 linkerd check --pre
-```plaintext
+```
 
-If there are any checks that do not pass, make sure to follow the provided links and fix those issues before proceeding.
-
-### Step 3: Install the control plane onto your cluster <a href="#step-3-install-the-control-plane-onto-your-cluster" id="step-3-install-the-control-plane-onto-your-cluster"></a>
-
-Now that you have the CLI running locally and a cluster that is ready to go, it’s time to install the control plane.
-
-The first step is to install the control plane core. To do this, run:
-
+### 3. Install the Control Plane
 ```bash
 linkerd install | kubectl apply -f -
-```plaintext
-
-The `linkerd install` command generates a Kubernetes manifest with all the core control plane resources. (Feel free to inspect the output.) Piping this manifest into `kubectl apply` then instructs Kubernetes to add those resources to your cluster.
-
-&#x20;**Note**
-
-Some control plane resources require cluster-wide permissions. If you are installing on a cluster where these permissions are restricted, you may prefer the alternative [multi-stage install](https://linkerd.io/2.10/tasks/install/#multi-stage-install) process, which will split these “sensitive” components into a separate, self-contained step which can be handed off to another party.
-
-Now let’s wait for the control plane to finish installing. Depending on the speed of your cluster’s Internet connection, this may take a minute or two. Wait for the control plane to be ready (and verify your installation) by running:
-
-```bash
 linkerd check
-```plaintext
+```
 
-Next, we’ll install some _extensions_. Extensions add non-critical but often useful functionality to Linkerd. For this guide, we will need:
-
-1. The **viz** extension, which will install an on-cluster metric stack; or
-2. The **buoyant-cloud** extension, which will connect to a hosted metrics stack.
-
-For this guide, you can install either or both. To install the viz extension, run:
-
+### 4. Install Extensions (Observability)
 ```bash
-linkerd viz install | kubectl apply -f - # install the on-cluster metrics stack
-```plaintext
-
-To install the buoyant-cloud extension, run:
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSfL https://buoyant.cloud/install | sh # get the installer
-linkerd buoyant install | kubectl apply -f - # connect to the hosted metrics stack
-```plaintext
-
-Once you’ve installed your extensions, let’s validate everything one last time:
-
-```bash
+linkerd viz install | kubectl apply -f -
 linkerd check
-```plaintext
+```
 
-Assuming everything is green, we’re ready for the next step!
-
-### Step 4: Explore Linkerd! <a href="#step-4-explore-linkerd" id="step-4-explore-linkerd"></a>
-
-With the control plane and extensions installed and running, we’re now ready to explore Linkerd! If you installed the viz extension, run:
-
+### 5. Explore the Dashboard
 ```bash
 linkerd viz dashboard &
-```plaintext
+```
 
-You should see a screen like this:
+---
 
-<figure><img src="https://linkerd.io/images/getting-started/viz-empty-dashboard.png" alt=""><figcaption></figcaption></figure>
-
-If you installed the buoyant-cloud extension, run:
-
+## Real-Life Example: GitOps with Linkerd and ArgoCD
+1. Store your Linkerd manifests and Helm values in Git.
+2. Define an ArgoCD Application:
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: linkerd
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/your-org/your-gitops-repo.git'
+    targetRevision: main
+    path: k8s/linkerd
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: linkerd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+```
+3. Apply with:
 ```bash
-linkerd buoyant dashboard &
-```plaintext
+kubectl apply -f linkerd-argocd-app.yaml
+```
 
-You should see a screen lke this:
+---
 
-<figure><img src="https://linkerd.io/images/getting-started/bcloud-empty-dashboard.png" alt=""><figcaption></figcaption></figure>
-
-Click around, explore, and have fun! One thing you’ll see is that, even if you don’t have any applications running on this cluster, you still have traffic! This is because Linkerd’s control plane components all have the proxy injected (i.e. the control plane runs on the data plane), so traffic between control plane compnments is also part of the mesh.
-
-### Step 5: Install the demo app <a href="#step-5-install-the-demo-app" id="step-5-install-the-demo-app"></a>
-
-To get a feel for how Linkerd would work for one of your services, you can install a demo application. The _emojivoto_ application is a standalone Kubernetes application that uses a mix of gRPC and HTTP calls to allow the users to vote on their favorite emojis.
-
-Install _emojivoto_ into the `emojivoto` namespace by running:
-
+## Demo App: Emojivoto
+Install the demo app:
 ```bash
 curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/emojivoto.yml | kubectl apply -f -
-```plaintext
-
-Before we mesh it, let’s take a look at the app. If you’re using [Docker Desktop](https://www.docker.com/products/docker-desktop) at this point you can visit [http://localhost](http://localhost/) directly. If you’re not using Docker Desktop, we’ll need to forward the `web-svc` service. To forward `web-svc` locally to port 8080, you can run:
-
-```bash
 kubectl -n emojivoto port-forward svc/web-svc 8080:80
-```plaintext
-
-Now visit [http://localhost:8080](http://localhost:8080/). Voila! The emojivoto app in all its glory.
-
-Clicking around, you might notice that some parts of _emojivoto_ are broken! For example, if you click on a doughnut emoji, you’ll get a 404 page. Don’t worry, these errors are intentional. (And we can use Linkerd to identify the problem. Check out the [debugging guide](https://linkerd.io/2.10/debugging-an-app/) if you’re interested in how to figure out exactly what is wrong.)
-
-Next, let’s add Linkerd to _emojivoto_ by running:
-
+```
+Inject Linkerd sidecars:
 ```bash
-kubectl get -n emojivoto deploy -o yaml \
-  | linkerd inject - \
-  | kubectl apply -f -
-```plaintext
-
-This command retrieves all of the deployments running in the `emojivoto` namespace, runs the manifest through `linkerd inject`, and then reapplies it to the cluster. The `linkerd inject` command adds annotations to the pod spec instructing Linkerd to “inject” the proxy as a container to the pod spec.
-
-As with `install`, `inject` is a pure text operation, meaning that you can inspect the input and output before you use it. Once piped into `kubectl apply`, Kubernetes will execute a rolling deploy and update each pod with the data plane’s proxies, all without any downtime.
-
-Congratulations! You’ve now added Linkerd to existing services! Just as with the control plane, it is possible to verify that everything worked the way it should with the data plane. To do this check, run:
-
-```bash
+kubectl get -n emojivoto deploy -o yaml | linkerd inject - | kubectl apply -f -
 linkerd -n emojivoto check --proxy
-```plaintext
+```
+
+---
+
+## Best Practices (2025)
+- Use GitOps (ArgoCD, Flux) for all Linkerd config and upgrades
+- Enable mTLS and monitor mesh health with Prometheus/Grafana
+- Use LLMs (Copilot, Claude) to generate and review mesh policies and manifests
+- Document mesh usage and onboarding for your team
+
+## Common Pitfalls
+- Not enabling mTLS (misses security benefits)
+- Manual changes outside Git (causes drift)
+- Not monitoring mesh resource usage
+
+---
+
+## References
+- [Linkerd Docs](https://linkerd.io/2.14/)
+- [Linkerd GitHub](https://github.com/linkerd/linkerd2)
+- [ArgoCD Docs](https://argo-cd.readthedocs.io/)
+- [Flux Docs](https://fluxcd.io/docs/)

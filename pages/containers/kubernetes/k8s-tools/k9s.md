@@ -1,21 +1,78 @@
-# K9s
+# K9s (2025)
 
-K9s is a command-line interface (CLI) tool designed to manage Kubernetes clusters. K9s provides a user-friendly interface for navigating and managing Kubernetes resources, making it easier for developers and system administrators to interact with Kubernetes clusters.
+K9s is a fast, terminal-based UI for managing Kubernetes clusters across all major cloud providers (AKS, EKS, GKE) and on-premises environments. It streamlines navigation, monitoring, and troubleshooting for engineers and DevOps teams.
 
-Real-life examples of use cases for K9s include:
+---
 
-1. Deployments: Developers can use K9s to view and manage Kubernetes deployments, allowing them to easily scale and update applications.
-2. Pods: System administrators can use K9s to view and manage Kubernetes pods, allowing them to monitor and troubleshoot application issues.
-3. ConfigMaps: Developers can use K9s to view and manage Kubernetes ConfigMaps, allowing them to manage application configuration data.
+## Installation
 
-The benefits of using K9s include:
+### Linux/WSL
+```bash
+curl -LO https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz
+sudo tar -xzf k9s_Linux_amd64.tar.gz -C /usr/local/bin k9s
+```
 
-1. Simplified Management: K9s provides a user-friendly interface for navigating and managing Kubernetes resources, reducing the complexity of managing Kubernetes clusters.
-2. Improved Productivity: K9s provides a streamlined experience for interacting with Kubernetes clusters, with features such as keyboard shortcuts and auto-completion.
-3. Enhanced Visibility: K9s provides a real-time view of Kubernetes resources, allowing developers and system administrators to quickly identify and troubleshoot issues.
-4. Customizable: K9s is highly customizable, allowing users to configure the interface to meet their specific needs.
-5. Open-Source: K9s is an open-source project with an active community of contributors, providing users with access to a wide range of features and support.
+### NixOS
+Add to your `configuration.nix`:
+```nix
+{ pkgs, ... }:
+{
+  environment.systemPackages = with pkgs; [ k9s ];
+}
+```
+Then run:
+```bash
+sudo nixos-rebuild switch
+```
 
-Overall, K9s is a powerful tool for managing Kubernetes clusters, providing a user-friendly interface for navigating and managing Kubernetes resources. By using K9s, developers and system administrators can improve productivity, enhance visibility, and simplify the management of Kubernetes clusters.
+---
 
-<figure><img src="https://fnjoin.com/img/fav-k8s-cli-tool/k9s-pods.png" alt=""><figcaption></figcaption></figure>
+## Real-Life DevOps Scenarios
+
+- **Multi-Cloud Management:** Use K9s to switch between AKS, EKS, and GKE contexts for troubleshooting and monitoring.
+- **Live Debugging:** Quickly view pod logs, events, and resource status in real time during incident response.
+- **Resource Scaling:** Scale deployments interactively without writing YAML or running multiple kubectl commands.
+- **ConfigMap/Secret Editing:** Edit ConfigMaps and Secrets directly from the UI for rapid configuration changes (with RBAC controls).
+- **LLM Integration:** Use Copilot/Claude to generate troubleshooting steps, then execute or verify them in K9s.
+
+---
+
+## Usage
+
+- Start K9s:
+  ```bash
+  k9s
+  ```
+- Switch context (multi-cloud):
+  Press `:ctx` and select the desired context (e.g., AKS, EKS, GKE)
+- Navigate resources:
+  Use arrow keys, `/` to filter, and `?` for help/shortcuts
+- View logs:
+  Select a pod and press `l`
+- Edit resources:
+  Select a resource and press `e`
+- Delete resources:
+  Select a resource and press `d`
+
+---
+
+## Best Practices (2025)
+- Use RBAC to restrict sensitive actions (editing/deleting resources)
+- Always verify the current context before making changes
+- Use K9s in conjunction with GitOps for safe, auditable changes
+- Regularly update K9s to get new features and bug fixes
+- Document custom K9s configurations for your team
+
+## Common Pitfalls
+- Accidentally editing or deleting resources in the wrong context
+- Not updating K9s, missing out on new Kubernetes API support
+- Over-relying on UI for changes that should be managed via IaC/GitOps
+
+---
+
+## References
+- [K9s GitHub](https://github.com/derailed/k9s)
+- [K9s Documentation](https://k9scli.io/)
+- [K9s Releases](https://github.com/derailed/k9s/releases)
+
+<figure><img src="https://fnjoin.com/img/fav-k8s-cli-tool/k9s-pods.png" alt="K9s UI screenshot"></figure>

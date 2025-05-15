@@ -1,16 +1,101 @@
-# Security Best Practise
+# Azure Security Best Practices (2025)
 
-Azure Security Best Practices refers to a set of guidelines and recommendations that are designed to help you secure your applications, data, and infrastructure on the Microsoft Azure cloud platform. By following these best practices, you can help protect your organization from security threats and ensure that your Azure environment is compliant with industry standards and regulations.
+Azure Security Best Practices are essential for protecting your applications, data, and infrastructure in the Microsoft Azure cloud. Following these guidelines helps defend against evolving threats and ensures compliance with industry standards.
 
-Here are some Azure Security Best Practices that you should consider:
+## 2025 Best Practices
 
-1. _**Use Azure Security Center: Azure Security Center provides a centralized dashboard for monitoring the security of your Azure resources. It can help you identify security threats and vulnerabilities and provide recommendations for how to mitigate them.**_
-2. _**Enable Multi-Factor Authentication (MFA): Enabling MFA can help prevent unauthorized access to your Azure resources by requiring users to provide a second form of authentication in addition to their password.**_
-3. _**Implement Network Security Groups (NSGs): NSGs allow you to control traffic to and from your Azure resources by creating security rules that allow or deny traffic based on its source, destination, and port.**_
-4. _**Use Role-Based Access Control (RBAC): RBAC allows you to control access to your Azure resources by assigning users and groups to roles that determine what actions they can take.**_
-5. _**Keep your Azure resources up to date: Regularly updating your Azure resources with the latest security patches and software updates can help prevent security vulnerabilities.**_
-6. _**Use Azure Key Vault: Azure Key Vault provides a secure way to store and manage cryptographic keys, certificates, and secrets that are used by your applications and services.**_
-7. _**Use Azure Backup: Azure Backup provides a simple and secure way to protect your data and applications on Azure by backing them up to the cloud.**_
-8. _**Enable Azure Active Directory (Azure AD) Identity Protection: Azure AD Identity Protection can help you detect and prevent identity-based attacks by analyzing user behavior and applying risk-based conditional access policies**_.
+1. **Adopt a Zero Trust Security Model**
+   - Assume breach, verify explicitly, and use least privilege access everywhere.
+   - Example: Use Conditional Access policies in Azure AD to enforce MFA and device compliance.
+   - [Zero Trust Guidance](https://learn.microsoft.com/en-us/security/zero-trust/)
 
-By following these best practices, you can help ensure that your Azure environment is secure and compliant with industry standards and regulations. It is important to regularly review and update your security practices to adapt to new threats and vulnerabilities.
+2. **Leverage Microsoft Defender for Cloud**
+   - Enable Defender for Cloud to get unified security management, threat protection, and compliance monitoring.
+   - Example:
+     ```bash
+     az security pricing create --name VirtualMachines --tier 'Standard'
+     ```
+   - [Defender for Cloud Docs](https://learn.microsoft.com/en-us/azure/defender-for-cloud/)
+
+3. **Use Managed Identities for Azure Resources**
+   - Avoid hardcoding credentials; use managed identities for secure, automated authentication.
+   - Example:
+     ```bash
+     az webapp identity assign --name myapp --resource-group mygroup
+     ```
+   - [Managed Identities Docs](https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/)
+
+4. **Implement Confidential Computing**
+   - Protect data in use with Azure Confidential VMs and services.
+   - [Confidential Computing Docs](https://learn.microsoft.com/en-us/azure/confidential-computing/)
+
+5. **Enforce Network Segmentation and Private Endpoints**
+   - Use Network Security Groups (NSGs), Azure Firewall, and private endpoints to restrict access.
+   - Example:
+     ```bash
+     az network private-endpoint create ...
+     ```
+   - [Private Link Docs](https://learn.microsoft.com/en-us/azure/private-link/)
+
+6. **Automate Security with Azure Policy and Blueprints**
+   - Enforce compliance and security baselines at scale.
+   - Example:
+     ```bash
+     az policy assignment create --policy "[BuiltIn] Audit VMs that do not use managed disks" ...
+     ```
+   - [Azure Policy Docs](https://learn.microsoft.com/en-us/azure/governance/policy/)
+
+7. **Monitor and Respond with Sentinel and Log Analytics**
+   - Centralize logs, set up alerts, and automate incident response.
+   - [Azure Sentinel Docs](https://learn.microsoft.com/en-us/azure/sentinel/)
+
+8. **Regularly Review Access and Activity**
+   - Use Privileged Identity Management (PIM) and access reviews to minimize standing privileges.
+   - [PIM Docs](https://learn.microsoft.com/en-us/azure/active-directory/privileged-identity-management/)
+
+9. **Encrypt Data Everywhere**
+   - Use Azure Key Vault for secrets, enable encryption at rest and in transit.
+   - Example:
+     ```bash
+     az keyvault create --name myvault --resource-group mygroup --location westeurope
+     ```
+   - [Key Vault Docs](https://learn.microsoft.com/en-us/azure/key-vault/)
+
+10. **Keep Resources Patched and Up to Date**
+    - Use Azure Update Manager and enable automatic OS and application patching.
+    - [Update Manager Docs](https://learn.microsoft.com/en-us/azure/update-manager/)
+
+## Example: Enforcing MFA and Conditional Access
+
+```bash
+# Enable Security Defaults (includes MFA)
+az ad sp update --id <appId> --set accountEnabled=true
+```
+Or use the Azure Portal: Azure Active Directory > Properties > Manage Security defaults.
+
+## Example: Creating a Private Endpoint for a Storage Account
+
+```bash
+az network private-endpoint create \
+  --name mystorage-pe \
+  --resource-group mygroup \
+  --vnet-name myvnet \
+  --subnet mysubnet \
+  --private-connection-resource-id \
+    $(az storage account show --name mystorage --query id -o tsv) \
+  --group-ids blob
+```
+
+## Changelog: Latest Azure Security Updates (2024-2025)
+
+- **2025-04:** Azure Update Manager GA for automated patching and compliance.
+- **2025-03:** Confidential Containers support in AKS (preview).
+- **2025-02:** Enhanced Defender for Cloud with AI-driven threat detection.
+- **2024-12:** Azure Policy integration with GitHub Actions for policy-as-code.
+- **2024-10:** Improved managed identity support for serverless and container apps.
+- **2024-08:** Sentinel automation rules for incident response GA.
+
+## References
+- [Azure Security Best Practices](https://learn.microsoft.com/en-us/azure/security/fundamentals/best-practices)
+- [Microsoft Defender for Cloud](https://learn.microsoft.com/en-us/azure/defender-for-cloud/)
+- [Azure Security Center Changelog](https://learn.microsoft.com/en-us/azure/defender-for-cloud/release-notes)

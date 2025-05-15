@@ -1,119 +1,155 @@
-# Nginx
+# NGINX Ingress Controller (2025)
 
-**f you have Helm,** you can deploy the ingress controller with the following command:
+NGINX is the most widely used ingress controller for Kubernetes, supporting advanced routing, TLS, and integration with all major clouds (AKS, EKS, GKE) and on-prem clusters. It is GitOps-friendly and production-proven.
+
+---
+
+## Why Use NGINX Ingress?
+- Mature, large community, and well-documented
+- Supports advanced routing, TLS, and authentication
+- Works with GitOps tools (ArgoCD, Flux) for declarative, auditable deployments
+- Integrates with cloud load balancers (AKS, EKS, GKE)
+- Highly customizable via Helm or YAML
+
+---
+
+## Installation (Helm)
 
 ```sh
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace ingress-nginx --create-namespace
-```plaintext
+```
 
-It will install the controller in the `ingress-nginx` namespace, creating that namespace if it doesn't already exist.
+- Idempotent: installs or upgrades the controller in the `ingress-nginx` namespace.
+- For all configurable values:
+  ```sh
+  helm show values ingress-nginx --repo https://kubernetes.github.io/ingress-nginx
+  ```
 
-Info
-
-This command is _idempotent_:
-
-* if the ingress controller is not installed, it will install it,
-* if the ingress controller is already installed, it will upgrade it.
-
-**If you want a full list of values that you can set, while installing with Helm,** then run:
-
-```shell
-helm show values ingress-nginx --repo https://kubernetes.github.io/ingress-nginx
-```plaintext
-
-**If you don't have Helm** or if you prefer to use a YAML manifest, you can run the following command instead:
+## Installation (YAML Manifest)
 
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/cloud/deploy.yaml
-```plaintext
+```
 
-Info
+- Nearly identical resources as Helm install.
+- For Kubernetes <1.19, see [version-specific manifests](https://kubernetes.github.io/ingress-nginx/deploy/#running-on-Kubernetes-versions-older-than-1.19).
 
-The YAML manifest in the command above was generated with `helm template`, so you will end up with almost the same resources as if you had used Helm to install the controller.
+---
 
-Attention
-
-If you are running an old version of Kubernetes (1.18 or earlier), please read [this paragraph](https://kubernetes.github.io/ingress-nginx/deploy/#running-on-Kubernetes-versions-older-than-1.19) for specific instructions. Because of api deprecations, the default manifest may not work on your cluster. Specific manifests for supported Kubernetes versions are available within a sub-folder of each provider.
-
-#### Pre-flight check[¶](https://kubernetes.github.io/ingress-nginx/deploy/#pre-flight-check) <a href="#pre-flight-check" id="pre-flight-check"></a>
-
-A few pods should start in the `ingress-nginx` namespace:
+## Pre-flight Check
 
 ```sh
 kubectl get pods --namespace=ingress-nginx
-```plaintext
-
-After a while, they should all be running. The following command will wait for the ingress controller pod to be up, running, and ready:
-
-```sh
 kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
   --timeout=120s
-```plaintext
+```
 
-#### Local testing[¶](https://kubernetes.github.io/ingress-nginx/deploy/#local-testing) <a href="#local-testing" id="local-testing"></a>
+---
 
-Let's create a simple web server and the associated service:
+## Local Testing Example
 
-```shell
+Deploy a demo web server and expose it:
+```sh
 kubectl create deployment demo --image=httpd --port=80
 kubectl expose deployment demo
-```plaintext
+```
 
-Then create an ingress resource. The following example uses a host that maps to `localhost`:
-
+Create an ingress resource (host maps to localhost):
 ```sh
 kubectl create ingress demo-localhost --class=nginx \
   --rule="demo.localdev.me/*=demo:80"
-```plaintext
+```
 
-Now, forward a local port to the ingress controller:
-
-```shell
+Port-forward to the ingress controller:
+```sh
 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80
-```plaintext
+```
 
-Info
-
-A note on DNS & network-connection. This documentation assumes that a user has awareness of the DNS and the network routing aspects involved in using ingress. The port-forwarding mentioned above, is the easiest way to demo the working of ingress. The "kubectl port-forward..." command above has forwarded the port number 8080, on the localhost's tcp/ip stack, where the command was typed, to the port number 80, of the service created by the installation of ingress-nginx controller. So now, the traffic sent to port number 8080 on localhost will reach the port number 80, of the ingress-controller's service. Port-forwarding is not for a production environment use-case. But here we use port-forwarding, to simulate a HTTP request, originating from outside the cluster, to reach the service of the ingress-nginx controller, that is exposed to receive traffic from outside the cluster.
-
-[This issue](https://github.com/kubernetes/ingress-nginx/issues/10014#issuecomment-1567791549described) shows a typical DNS problem and its solution.
-
-At this point, you can access your deployment using curl ;
-
+Test with curl:
 ```sh
 curl --resolve demo.localdev.me:8080:127.0.0.1 http://demo.localdev.me:8080
-```plaintext
+```
 
-You should see a HTML response containing text like **"It works!"**.
+---
 
-#### Online testing[¶](https://kubernetes.github.io/ingress-nginx/deploy/#online-testing) <a href="#online-testing" id="online-testing"></a>
+## Online Testing (Cloud LoadBalancer)
 
-If your Kubernetes cluster is a "real" cluster that supports services of type `LoadBalancer`, it will have allocated an external IP address or FQDN to the ingress controller.
-
-You can see that IP address or FQDN with the following command:
-
-```shell
-kubectl get service ingress-nginx-controller --namespace=ingress-nginx
-```plaintext
-
-It will be the `EXTERNAL-IP` field. If that field shows `<pending>`, this means that your Kubernetes cluster wasn't able to provision the load balancer (generally, this is because it doesn't support services of type `LoadBalancer`).
-
-Once you have the external IP address (or FQDN), set up a DNS record pointing to it. Then you can create an ingress resource. The following example assumes that you have set up a DNS record for `www.demo.io`:
-
-```shell
-kubectl create ingress demo --class=nginx \
-  --rule="www.demo.io/*=demo:80"
-```plaintext
-
-Alternatively, the above command can be rewritten as follows for the `--rule` command and below.
-
+Get the external IP:
 ```sh
-kubectl create ingress demo --class=nginx \
-  --rule www.demo.io/=demo:80
-```plaintext
+kubectl get service ingress-nginx-controller --namespace=ingress-nginx
+```
 
-You should then be able to see the "It works!" page when you connect to http://www.demo.io/. Congratulations, you are serving a public website hosted on a Kubernetes cluster! 🎉
+- Set up a DNS record for your domain to point to the external IP.
+- Create an ingress resource for your domain:
+  ```sh
+  kubectl create ingress demo --class=nginx \
+    --rule="www.demo.io/*=demo:80"
+  ```
+
+---
+
+## GitOps Example (ArgoCD)
+
+1. Store your ingress manifests in Git.
+2. Define an ArgoCD Application:
+   ```yaml
+   apiVersion: argoproj.io/v1alpha1
+   kind: Application
+   metadata:
+     name: nginx-ingress
+     namespace: argocd
+   spec:
+     project: default
+     source:
+       repoURL: 'https://github.com/your-org/your-gitops-repo.git'
+       targetRevision: main
+       path: k8s/ingress-nginx
+     destination:
+       server: 'https://kubernetes.default.svc'
+       namespace: ingress-nginx
+     syncPolicy:
+       automated:
+         prune: true
+         selfHeal: true
+   ```
+3. Apply with:
+   ```sh
+   kubectl apply -f nginx-ingress-argocd-app.yaml
+   ```
+
+---
+
+## Pros and Cons
+| Pros | Cons |
+|------|------|
+| Large community, mature | Can be complex to tune for high scale |
+| Advanced routing, TLS, auth | Some features require custom templates |
+| Works with all clouds | Default config may need hardening |
+| GitOps-friendly | |
+
+---
+
+## 2025 Best Practices
+- Use GitOps (ArgoCD, Flux) for all NGINX config and upgrades
+- Store all manifests and Helm values in Git
+- Enable RBAC and network policies for security
+- Use HTTPS and automatic certificate management
+- Monitor with Prometheus/Grafana
+- Use LLMs (Copilot, Claude) to generate and review ingress configs
+
+## Common Pitfalls
+- Exposing services without TLS
+- Manual changes outside Git (causes drift)
+- Not monitoring for sync errors or drift
+
+---
+
+## References
+- [NGINX Ingress Docs](https://kubernetes.github.io/ingress-nginx/)
+- [Helm Chart](https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx)
+- [ArgoCD Docs](https://argo-cd.readthedocs.io/)
+- [Flux Docs](https://fluxcd.io/docs/)

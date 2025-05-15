@@ -1,93 +1,135 @@
-# Kubernetes Pod Troubleshooting Commands
+# Kubernetes Pod Troubleshooting Commands (2025)
 
-**List all Pods in all Namespaces:** To get an overview of all pods across all namespaces, use the following command:
+This guide provides actionable commands and best practices for troubleshooting pods in Kubernetes clusters (AKS, EKS, GKE, and on-prem). Use these steps for real-life incident response and GitOps workflows.
 
+---
+
+## Common Troubleshooting Commands
+
+**List all Pods in all Namespaces:**
 ```sh
 kubectl get pods --all-namespaces
-```plaintext
+```
 
-**Check Resource Consumption:** To identify which pod is consuming the most memory or CPU resources, you can utilize the `kubectl top` command:
-
+**Check Resource Consumption:**
 ```sh
 kubectl top pods --all-namespaces
-```plaintext
+```
 
-**Describe a Pod:** To obtain detailed information about a specific pod, including its current status, events, and conditions, use the `kubectl describe pod` command:
-
+**Describe a Pod:**
 ```sh
 kubectl describe pod <pod-name> -n <namespace>
-```plaintext
+```
 
-**View Pod Logs:** To view the logs of a specific pod, you can employ the `kubectl logs` command:
-
-```shell
+**View Pod Logs:**
+```sh
 kubectl logs <pod-name> -n <namespace>
-```plaintext
+```
 
-**Follow Pod Logs:** If you want to continuously stream the logs of a pod in real-time, use the `-f` flag:
-
+**Follow Pod Logs (stream in real-time):**
 ```sh
 kubectl logs -f <pod-name> -n <namespace>
-```plaintext
+```
 
-**Exec into a Pod:** To execute a command directly within a running pod container, use the `kubectl exec` command:
-
-```shell
+**Exec into a Pod:**
+```sh
 kubectl exec -it <pod-name> -n <namespace> -- <command>
-```plaintext
+```
 
-**Get Events for a Pod:** To view the events associated with a particular pod, including creation, scheduling, and error events, use the `kubectl describe pod` command along with the `--events` flag:
-
-```shell
-kubectl describe pod <pod-name> -n <namespace> --events
-```plaintext
-
-**Check Pod Health:** To check the readiness and liveness probe status of a pod, you can inspect the `Conditions` section of the pod's description:
-
-```sh
-kubectl describe pod <pod-name> -n <namespace> | grep -i conditions
-```plaintext
-
-**Retrieve Pod IP and Node:** To obtain the IP address and node assignment of a pod, you can execute the following command:
-
-```sh
-kubectl get pod <pod-name> -n <namespace> -o wide
-```plaintext
-
-**Restart a Pod:** To restart a pod, you can delete and recreate it using the
-
-```sh
-kubectl delete pod <pod-name> -n <namespace>
-```plaintext
-
-**Check Pod Status:** To check the status of a pod, use the `kubectl get pod` command:
-
-```shell
-kubectl get pod <pod-name> -n <namespace> -o wide
-```plaintext
-
-**List Pod Events:** To list the events related to a pod, use the `kubectl get events` command and filter by the pod's name
-
+**Get Events for a Pod:**
 ```sh
 kubectl get events --field-selector involvedObject.name=<pod-name> -n <namespace>
-```plaintext
+```
 
-**Verify Pod Affinity/Anti-Affinity:** To validate if a pod is scheduled on a node based on affinity or anti-affinity rules, use the `kubectl describe pod` command and examine the `Node Affinity` section:
+**Check Pod Health (Readiness/Liveness):**
+```sh
+kubectl describe pod <pod-name> -n <namespace> | grep -i 'readiness\|liveness\|conditions'
+```
 
+**Retrieve Pod IP and Node:**
+```sh
+kubectl get pod <pod-name> -n <namespace> -o wide
+```
+
+**Restart a Pod:**
+```sh
+kubectl delete pod <pod-name> -n <namespace>
+```
+
+**Check Pod Status:**
+```sh
+kubectl get pod <pod-name> -n <namespace> -o wide
+```
+
+**List Pod Events (sorted):**
+```sh
+kubectl get events --field-selector involvedObject.name=<pod-name> -n <namespace> --sort-by='.metadata.creationTimestamp'
+```
+
+**Verify Pod Affinity/Anti-Affinity:**
 ```sh
 kubectl describe pod <pod-name> -n <namespace> | grep -i nodeaffinity
-```plaintext
+```
 
-**Check Resource Requests and Limits:** To view the resource requests and limits of a pod, inspect the `Resources` section of the pod's description:
-
+**Check Resource Requests and Limits:**
 ```sh
 kubectl describe pod <pod-name> -n <namespace> | grep -i resources
-```plaintext
+```
 
-**Identify Stuck Pods:** To identify stuck pods that are not transitioning to the desired state, use the following command to retrieve the pod’s events and examine the last event’s message:
-
+**Identify Stuck Pods:**
 ```sh
 kubectl get events --field-selector involvedObject.name=<pod-name> -n <namespace> --sort-by='.metadata.creationTimestamp' | tail -n 1
-```plaintext
+```
 
-**Conclusion:** Effectively troubleshooting Kubernetes pods is crucial for maintaining a healthy and stable cluster.
+---
+
+## Real-Life Troubleshooting Workflow
+1. **Identify the failing pod:**
+   ```sh
+   kubectl get pods -A | grep -i error
+   ```
+2. **Check pod status and events:**
+   ```sh
+   kubectl describe pod <pod-name> -n <namespace>
+   kubectl get events --field-selector involvedObject.name=<pod-name> -n <namespace>
+   ```
+3. **Inspect logs:**
+   ```sh
+   kubectl logs <pod-name> -n <namespace>
+   ```
+4. **Check resource usage:**
+   ```sh
+   kubectl top pod <pod-name> -n <namespace>
+   ```
+5. **Exec into the pod for deeper inspection:**
+   ```sh
+   kubectl exec -it <pod-name> -n <namespace> -- /bin/sh
+   ```
+6. **Review affinity, resource limits, and node assignment:**
+   ```sh
+   kubectl describe pod <pod-name> -n <namespace> | grep -i 'affinity\|resources\|node'
+   ```
+7. **If using GitOps:** Check if the manifest in Git matches the running pod. If not, investigate drift or failed syncs (ArgoCD/Flux dashboards).
+
+---
+
+## Best Practices (2025)
+- Always check pod events and logs before restarting or deleting pods
+- Use `kubectl get events` sorted by timestamp for recent issues
+- Validate resource requests/limits to avoid OOMKilled or throttling
+- Use LLMs (Copilot, Claude) to generate troubleshooting scripts or analyze logs
+- Document recurring issues and solutions in your team knowledge base
+
+## Common Pitfalls
+- Ignoring events (often contain the root cause)
+- Restarting pods without root cause analysis
+- Not checking for node-level issues (disk, network, taints)
+- Manual changes outside Git in GitOps-managed clusters
+
+---
+
+## References
+- [Kubernetes Troubleshooting Docs](https://kubernetes.io/docs/tasks/debug/)
+- [kubectl Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
+- [ArgoCD Troubleshooting](https://argo-cd.readthedocs.io/en/stable/operator-manual/troubleshooting/)
+- [Flux Troubleshooting](https://fluxcd.io/docs/faq/)
