@@ -156,6 +156,7 @@
 ## 🔐 Security & Compliance
 
 * [DevSecOps Overview](pages/security/README.md) - Security throughout the delivery pipeline
+* [DevSecOps Pipeline Security](pages/security/README.md) - Comprehensive pipeline security guide
 * [DevSecOps](pages/dev-secops/README.md) - Security-integrated development practices
   * [Real-life Examples](pages/dev-secops/real-life-examples.md) - Implementation case studies
   * [Scanning & Protection](pages/dev-secops/) - Automated security tooling
