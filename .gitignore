@@ -20,6 +20,10 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+.bun-global/
+bin/
+.npm-global
+gitbook/
 
 # GitBook plugin generated files
 book.pdf

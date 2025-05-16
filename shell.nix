@@ -4,7 +4,7 @@ in
   pkgs.mkShell {
     buildInputs = with pkgs; [
       # Core dependencies
-      nodejs_20
+      nodejs_24
       bun
 
       # Development tools
@@ -19,6 +19,10 @@ in
     ];
 
     shellHook = ''
+          # Ensure bin directory exists
+          mkdir -p $PWD/bin
+          export PATH=$PWD/bin:$PATH
+
           # Create local directories
           mkdir -p ./.npm-global
           mkdir -p ./.bun-global
@@ -26,60 +30,95 @@ in
           export BUN_INSTALL=$PWD/.bun-global
           export PATH=$NPM_CONFIG_PREFIX/bin:$BUN_INSTALL/bin:$PATH
 
-          # GitBook development functions
-          function gitbook-setup() {
-            echo "Setting up GitBook development environment..."
-            git clone https://github.com/gitbookIO/gitbook.git
-            cd gitbook
-            bun install
-            echo "✅ GitBook setup complete"
-          }
+          # Create setup script in bin directory
+          cat > $PWD/bin/setup << EOFSETUP
+      #!/usr/bin/env bash
+      echo "Setting up GitBook development environment..."
+      git clone https://github.com/gitbookIO/gitbook.git
+      cd gitbook
+      bun install
+      echo "✅ GitBook setup complete"
+      EOFSETUP
 
-          function gitbook-dev() {
-            echo "Starting GitBook development server..."
-            bun dev:v2
-          }
+          # Create dev script
+          cat > $PWD/bin/dev << EOFDEV
+      #!/usr/bin/env bash
+      cd gitbook
+      bun dev:v2
+      EOFDEV
 
-          function gitbook-format() {
-            echo "Formatting GitBook codebase..."
-            bun format
-          }
+          # Create format script
+          cat > $PWD/bin/gformat << EOFFORMAT
+      #!/usr/bin/env bash
+      cd gitbook
+      bun format
+      EOFFORMAT
 
-          function gitbook-lint() {
-            echo "Linting GitBook codebase..."
-            bun lint
-          }
+          # Create lint script
+          cat > $PWD/bin/glint << EOFLINT
+      #!/usr/bin/env bash
+      cd gitbook
+      bun lint
+      EOFLINT
 
-          # Markdown formatting functions
-          function fmt-md() {
-            echo "Formatting Markdown files..."
-            prettier --write "**/*.md"
-            echo "✅ Markdown formatting complete"
-          }
+          # Create markdown formatting scripts
+          cat > $PWD/bin/fmt << EOFFMT
+      #!/usr/bin/env bash
+      prettier --write "**/*.md"
+      EOFFMT
 
-          function lint-md() {
-            echo "Linting Markdown files..."
-            markdownlint "**/*.md"
-            echo "✅ Markdown linting complete"
-          }
+          cat > $PWD/bin/lint << EOFLINTMD
+      #!/usr/bin/env bash
+      markdownlint "**/*.md"
+      EOFLINTMD
 
-          function fmt-check() {
-            echo "Checking Markdown formatting..."
-            prettier --check "**/*.md"
-          }
+          cat > $PWD/bin/check << EOFCHECK
+      #!/usr/bin/env bash
+      prettier --check "**/*.md"
+      EOFCHECK
 
-          # Aliases
-          alias setup='gitbook-setup'
-          alias dev='gitbook-dev'
-          alias gformat='gitbook-format'
-          alias glint='gitbook-lint'
-          alias fmt='fmt-md'
-          alias lint='lint-md'
-          alias check='fmt-check'
+          # Create update script
+          cat > $PWD/bin/update << EOFUPDATE
+      #!/usr/bin/env bash
+      echo "Updating GitBook development environment..."
+      if [ -d "gitbook" ] && [ -d "gitbook/.git" ]; then
+        cd gitbook
+        git pull
+        bun install
+        echo "✅ GitBook update complete"
+      else
+        echo "❌ GitBook directory not properly initialized."
+        echo "   Consider running 'setup-force' to reinitialize."
+      fi
+      EOFUPDATE
+
+          # Create force setup script
+          cat > $PWD/bin/setup-force << EOFSETUPFORCE
+      #!/usr/bin/env bash
+      echo "Force setting up GitBook development environment..."
+      if [ -d "gitbook" ]; then
+        echo "Removing existing GitBook directory..."
+        rm -rf gitbook
+      fi
+      git clone https://github.com/gitbookIO/gitbook.git
+      cd gitbook
+      bun install
+      echo "✅ GitBook setup complete"
+      EOFSETUPFORCE
+
+          chmod +x $PWD/bin/setup
+          chmod +x $PWD/bin/setup-force
+          chmod +x $PWD/bin/update
+          chmod +x $PWD/bin/dev
+          chmod +x $PWD/bin/gformat
+          chmod +x $PWD/bin/glint
+          chmod +x $PWD/bin/fmt
+          chmod +x $PWD/bin/lint
+          chmod +x $PWD/bin/check
 
           # Create configuration files
           if [ ! -f .prettierrc ]; then
-            cat > .prettierrc <<EOF
+            cat > .prettierrc << EOFPRETTIER
       {
         "proseWrap": "preserve",
         "tabWidth": 2,
@@ -87,28 +126,28 @@ in
         "singleQuote": false,
         "printWidth": 100
       }
-      EOF
-            echo "Created .prettierrc configuration file"
+      EOFPRETTIER
           fi
 
           if [ ! -f .env.local ]; then
-            cat > .env.local <<EOF
+            cat > .env.local << EOFENV
       PORT=3000
       NODE_ENV=development
-      EOF
-            echo "Created .env.local configuration file"
+      EOFENV
           fi
 
           echo "GitBook Development Environment"
           echo ""
           echo "Available commands:"
-          echo "  setup    - Clone and setup GitBook repository"
-          echo "  dev      - Start development server"
-          echo "  gformat  - Format GitBook codebase"
-          echo "  glint    - Lint GitBook codebase"
-          echo "  fmt      - Format Markdown files"
-          echo "  lint     - Lint Markdown files"
-          echo "  check    - Check formatting"
+          echo "  setup       - Clone and setup GitBook repository ( only for empty gitbook )"
+          echo "  setup-force - Force setup (removes existing directory gitbook )"
+          echo "  update      - Update existing GitBook repository"
+          echo "  dev         - Start development server"
+          echo "  gformat     - Format GitBook codebase"
+          echo "  glint       - Lint GitBook codebase"
+          echo "  fmt         - Format Markdown files"
+          echo "  lint        - Lint Markdown files"
+          echo "  check       - Check formatting"
           echo ""
           echo "Development server will be available at:"
           echo "  http://localhost:3000/url/docs.gitbook.com"
