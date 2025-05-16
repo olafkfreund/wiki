@@ -121,13 +121,27 @@
 * [OpenShift](pages/best-practises/containers/openshift.md) - Red Hat's enterprise Kubernetes platform
 
 ## Service Mesh & Networking
+
 * [Service Mesh Implementation](pages/devops/service-mesh/implementation-guide.md)
 
 ## Architecture Patterns
+
 * [Data Mesh](pages/architecture/data-mesh/implementation-guide.md)
 * [Multi-Cloud Networking](pages/architecture/networking/multi-cloud-connectivity.md)
 * [Disaster Recovery](pages/architecture/disaster-recovery/implementation-guide.md)
 * [Chaos Engineering](pages/architecture/chaos-engineering/implementation-guide.md)
+
+## Edge Computing
+
+* [Implementation Guide](pages/architecture/edge-computing/implementation-guide.md)
+* [Serverless Edge](pages/architecture/edge-computing/serverless-edge.md)
+* [IoT Edge Patterns](pages/architecture/edge-computing/iot-edge-patterns.md)
+* [Real-Time Processing](pages/architecture/edge-computing/real-time-processing.md)
+* [Edge AI/ML](pages/architecture/edge-computing/edge-ai-deployment.md)
+* [Security Hardening](pages/architecture/edge-computing/security-hardening.md)
+* [Observability Patterns](pages/architecture/edge-computing/observability-patterns.md)
+* [Network Optimization](pages/architecture/edge-computing/network-optimization.md)
+* [Storage Patterns](pages/architecture/edge-computing/storage-patterns.md)
 
 ## 🔄 CI/CD & GitOps
 
@@ -218,6 +232,7 @@
 * [SIEM and SOAR](pages/need-to-know/siem-and-soar.md) - Security monitoring and automation
 
 ## Security Architecture
+
 * [Zero Trust Implementation](pages/security/zero-trust/implementation-guide.md)
   * [Identity Management](pages/security/zero-trust/implementation-guide.md#identity-management)
   * [Network Security](pages/security/zero-trust/implementation-guide.md#network-security)
