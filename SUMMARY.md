@@ -175,8 +175,11 @@
     * Pros and Cons
     * Comparison with alternatives
 * [GitOps](pages/devops/gitops/README.md)
-  * [Modern Practices](pages/devops/gitops/modern-practices.md)
-  * [Progressive Delivery](pages/devops/gitops/progressive-delivery.md)
+  * [Modern GitOps Practices](pages/devops/gitops/modern-practices.md)
+  * Flux
+    * [Overview](pages/devops/gitops/flux/README.md)
+    * [Progressive Delivery](pages/devops/gitops/flux/progressive-delivery.md)
+    * [Use GitOps with Flux, GitHub and AKS](pages/devops/gitops/flux/use-gitops-with-flux-github-and-aks-to-implement-ci-cd.md)
 
 ## ☁️ Cloud Platforms
 
