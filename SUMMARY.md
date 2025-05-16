@@ -271,6 +271,8 @@
 * [Project Documentation](pages/devops/documentation/projects-and-repositories.md) - Repository-level documentation
 * [Release Notes](pages/devops/documentation/create-release-notes-with-pipeline.md) - Automated change documentation
 * [Static Sites](pages/devops/documentation/how-to-create-a-static-website-for-your-documentation-based-on-mkdocs-and-mkdocs-material.md) - Documentation portal creation
+* [Documentation Templates](pages/devops/documentation/templates/repository-templates.md)
+* [Real-World Examples](pages/devops/documentation/examples/real-world-examples.md)
 
 ## 📋 Reference Materials
 

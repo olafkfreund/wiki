@@ -1,6 +1,8 @@
-# Create Release Notes with pipeline
+# Automated Release Notes Generation
 
-Create release notes with azure pipeline.
+This guide demonstrates how to generate release notes automatically using different CI/CD platforms.
+
+## Azure DevOps Pipeline
 
 ```yaml
 trigger: none
@@ -9,67 +11,119 @@ pr: none
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  artifactName: 'ReleaseNotes'
+  templatePath: './azure-pipelines/templates/release-notes-template.md'
+
 stages:
 - stage: GenerateReleaseNotes
   displayName: Generate Release Notes
   jobs:
     - job: GenerateReleaseNotes
-      displayName: Generate Release Notes
       steps:
-      # Generate Release Notes (Crossplatform)
-      # Description - Generates a release notes file in a format of your choice from the build or release history
-      - task: XplatGenerateReleaseNotes@2
-        displayName: Release Notes Generator
-        inputs: 
-           # Required arguments
-           outputfile: $(Build.ArtifactStagingDirectory)\ReleaseNotes.md
-           templateLocation: File
-           templatefile: ./azure-pipelines/templates/build-handlebars-template.md
-           inlinetemplate: 
-           delimiter: ':'
-           fieldEquality: =
-           anyFieldContent: '*'
-           dumpPayloadToConsole: false
-           dumpPayloadToFile: false
-           replaceFile: True
-           appendToFile: True
-           getParentsAndChildren: False
+      - task: XplatGenerateReleaseNotes@3
+        displayName: Generate Release Notes
+        inputs:
+          outputfile: '$(Build.ArtifactStagingDirectory)/ReleaseNotes.md'
+          templateLocation: 'File'
+          templatefile: $(templatePath)
+          dumpPayloadToConsole: false
+          dumpPayloadToFile: true
+          replaceFile: true
+          getParentsAndChildren: true
+          searchCrossProjectForPRs: true
+          githubRepository: ''
+          githubToken: ''
+          overrideExistingReleaseNotes: true
+          stopOnError: true
 
       - task: PublishPipelineArtifact@1
-        displayName: Publish Artifact
+        displayName: Publish Release Notes
         inputs:
-          targetPath: '$(Build.ArtifactStagingDirectory)\ReleaseNotes.md'
-          artifact: 'ReleaseNotes'
+          targetPath: '$(Build.ArtifactStagingDirectory)/ReleaseNotes.md'
+          artifact: $(artifactName)
           publishLocation: 'pipeline'
-```plaintext
 
-Included template for release notes.
+## GitHub Actions Workflow
 
-```markup
-# Notes for build 
-**Build Number**: {{buildDetails.id}}
-**Build Trigger PR Number**: {{lookup buildDetails.triggerInfo 'pr.number'}} 
+```yaml
+name: Generate Release Notes
 
-# Associated Pull Requests ({{pullRequests.length}})
-{{#forEach pullRequests}}
-{{#if isFirst}}### Associated Pull Requests (only shown if  PR) {{/if}}
-*  **{{this.pullRequestId}}** {{this.title}}
-{{/forEach}}
+on:
+  release:
+    types: [created]
 
-# Global list of WI ({{workItems.length}})
+jobs:
+  generate-release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Generate Release Notes
+        uses: github/generate-release-notes@v1
+        with:
+          previous-tag: ${{ github.event.release.target_commitish }}
+        
+      - name: Update Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: RELEASE_NOTES.md
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+## GitLab CI Pipeline
+
+```yaml
+generate_release_notes:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - |
+      release-cli create \
+        --name "Release $CI_COMMIT_TAG" \
+        --description "$(./scripts/generate-release-notes.sh)" \
+        --tag-name $CI_COMMIT_TAG \
+        --ref $CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_TAG
+```
+
+## Modern Release Notes Template
+
+```handlebars
+# Release Notes for {{buildDetails.buildNumber}}
+
+## 🚀 New Features
 {{#forEach workItems}}
-{{#if isFirst}}## Associated Work Items (only shown if  WI) {{/if}}
-*  **{{this.id}}**  {{lookup this.fields 'System.Title'}}
-  - **WIT** {{lookup this.fields 'System.WorkItemType'}} 
-  - **Tags** {{lookup this.fields 'System.Tags'}}
-  - **Assigned** {{#with (lookup this.fields 'System.AssignedTo')}} {{displayName}} {{/with}}
+{{#equals this.fields.System.WorkItemType 'Feature'}}
+- {{lookup this.fields 'System.Title'}}
+{{/equals}}
 {{/forEach}}
 
-# Global list of CS ({{commits.length}})
+## 🐛 Bug Fixes
+{{#forEach workItems}}
+{{#equals this.fields.System.WorkItemType 'Bug'}}
+- {{lookup this.fields 'System.Title'}}
+{{/equals}}
+{{/forEach}}
+
+## 🔄 Pull Requests
+{{#forEach pullRequests}}
+- [#{{this.pullRequestId}}] {{this.title}} (@{{this.createdBy.displayName}})
+{{/forEach}}
+
+## 📝 Commits
 {{#forEach commits}}
-{{#if isFirst}}### Associated commits  (only shown if CS) {{/if}}
-* ** ID{{this.id}}** 
-  -  **Message:** {{this.message}}
-  -  **Commited by:** {{this.author.displayName}} 
-{{/forEach}
-```plaintext
+- {{this.message}} ({{this.author.displayName}})
+{{/forEach}}
+
+## 📋 Work Items
+{{#forEach workItems}}
+- [{{this.id}}] {{lookup this.fields 'System.Title'}}
+  - Type: {{lookup this.fields 'System.WorkItemType'}}
+  - Status: {{lookup this.fields 'System.State'}}
+  - Assigned: {{#with (lookup this.fields 'System.AssignedTo')}}{{displayName}}{{/with}}
+{{/forEach}}
+
+---
+Generated on {{buildDetails.startTime}}
+Build ID: {{buildDetails.id}}
