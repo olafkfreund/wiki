@@ -343,3 +343,15 @@
 * [Tool Comparison](pages/reference/tool-comparison.md) - Feature analysis of DevOps tools
 * [Recommended Reading](pages/reference/reading.md) - Essential books and resources
 * [Troubleshooting Guide](pages/reference/troubleshooting.md) - Advanced issue resolution for DevOps/SRE
+
+## Platform Engineering
+
+* [Implementation Guide](pages/platform-engineering/implementation-guide.md)
+
+## FinOps
+
+* [Implementation Guide](pages/finops/implementation-guide.md)
+
+## AIOps
+
+* [LLMOps Guide](pages/aiops/llmops-guide.md)

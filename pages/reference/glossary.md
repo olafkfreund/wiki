@@ -1,9 +1,12 @@
-# DevOps and Cloud Glossary
+# DevOps and Cloud Glossary (2024+)
 
 ## A
 
 **Agile**
 : An iterative approach to software development and project management that emphasizes flexibility, customer feedback, and rapid delivery.
+
+**AIOps**
+: Application of artificial intelligence for IT operations, enhancing monitoring, incident response, and automation.
 
 **Ansible**
 : An open-source automation tool for configuration management, application deployment, and task automation.
@@ -29,6 +32,12 @@
 
 **CI/CD**
 : Continuous Integration and Continuous Delivery/Deployment - practices that automate software delivery processes.
+
+**CNAPP (Cloud-Native Application Protection Platform)**
+: Integrated security platform combining CSPM, CWPP, and KSPM capabilities for cloud-native applications.
+
+**CSPM (Cloud Security Posture Management)**
+: Continuous monitoring and assessment of cloud infrastructure security posture.
 
 **Containerization**
 : Packaging application code and dependencies together for consistent deployment across environments.
@@ -62,6 +71,12 @@
 
 **Feature Flag**
 : A software development technique that turns functionality on/off without deploying new code.
+
+**FinOps**
+: Cloud financial operations combining finance, technology, and business practices to manage and optimize cloud costs.
+
+**Flux**
+: A GitOps tool for Kubernetes that ensures clusters are configured as specified in Git.
 
 ## G
 
@@ -100,6 +115,9 @@
 **Load Balancer**
 : A device or service that distributes network traffic across multiple servers.
 
+**LLMOps**
+: Machine Learning Operations specifically focused on deploying and managing Large Language Models in production.
+
 **Logging**
 : The practice of recording events, processes, and outputs in a system.
 
@@ -119,10 +137,16 @@
 **OpenShift**
 : Red Hat's enterprise Kubernetes platform.
 
+**OpenTelemetry**
+: Open-source observability framework for cloud-native software, combining metrics, traces, and logs.
+
 ## P
 
 **Pipeline**
 : An automated sequence of processes for delivering software from development to production.
+
+**Platform Engineering**
+: The discipline of designing and building toolchains and workflows that enable self-service capabilities for software engineering organizations.
 
 **Pod**
 : The smallest deployable unit in Kubernetes that can contain one or more containers.
@@ -143,6 +167,12 @@
 **SRE (Site Reliability Engineering)**
 : A discipline that incorporates aspects of software engineering and applies them to infrastructure and operations problems.
 
+**SLSA (Supply Chain Levels for Software Artifacts)**
+: Security framework for ensuring software supply chain integrity.
+
+**Service Mesh**
+: Infrastructure layer for facilitating service-to-service communications between microservices.
+
 ## T
 
 **Terraform**
@@ -158,6 +188,14 @@
 
 **Version Control**
 : A system that records changes to files over time, enabling collaboration and rollback capabilities.
+
+## W
+
+**WebAssembly**
+: Binary instruction format for stack-based virtual machines, enabling high-performance web applications.
+
+**Wasm**
+: Shorthand for WebAssembly, used in edge computing and serverless contexts.
 
 ## Z
 
