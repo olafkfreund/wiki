@@ -1,10 +1,9 @@
 # Cloud Engineering & DevOps Knowledge Base
 
 * [Welcome!](README.md) - Your comprehensive guide to modern DevOps practices
-<!-- * [How to Use This Wiki](pages/how-to-use.md) - Navigation tips and content organization -->
+* [Quick Start Guide](pages/quick-starts/README.md) - Fast track to common DevOps tasks
 * [About Me](pages/about-me.md) - Professional background and expertise
 * [CV](pages/cv.md) - Professional experience and skills
-<!-- * [Quick Start Guides](pages/quick-starts/README.md) - Fast track to common DevOps tasks -->
 
 ## 🧠 DevOps & SRE Foundations
 
@@ -47,7 +46,6 @@
 
 ## 🛠️ Infrastructure as Code (IaC)
 
-<!-- * [IaC Overview](pages/iac/README.md) - Introduction to infrastructure automation -->
 * [Terraform](pages/terraform/README.md) - HashiCorp's multi-cloud infrastructure automation
   * [Getting Started](pages/terraform/install.md) - Installation and initial setup [BEGINNER]
   * [Cloud Integrations](pages/terraform/) - Provider-specific implementations
@@ -309,6 +307,7 @@
 * [Operating Systems](pages/devops/tools-to-install/) - Development platforms
   * [NixOS](pages/Nixos/README.md) - Declarative Linux distribution
     * [Installation](pages/Nixos/install.md) - Setup and configuration
+    * [Nix Language Guide](pages/Nixos/nix-language.md) - Deep dive into the Nix language
     * [DevEnv with Nix](pages/Nixos/devenv.md) - Development environment setup
     * [Cloud Deployments](pages/Nixos/nix-anywhere-cloud.md) - Cloud infrastructure management
   * [WSL2](pages/devops/tools-to-install/wsl2/README.md) - Windows Subsystem for Linux
