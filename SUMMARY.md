@@ -360,4 +360,4 @@
 
 ## Development Setup
 
-* [Development Setup](development/setup.md)
+* [Development Setup](pages/development/setup.md)
