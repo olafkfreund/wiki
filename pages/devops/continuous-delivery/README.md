@@ -141,6 +141,79 @@ Low code solutions have increased their participation in the applications and pr
 
 Here is a guide for [continuous deployment for Low Code Solutions](https://microsoft.github.io/code-with-engineering-playbook/continuous-delivery/low-code-solutions/low-code-solutions/).
 
+### Modern CD Practices (2024+)
+
+#### GitOps Approach
+
+* Infrastructure and application definitions as code
+* Git as single source of truth
+* Declarative descriptions
+* Software agents ensuring correctness
+* Tools:
+  * Flux CD
+  * Argo CD
+  * Azure GitOps
+  * AWS Proton
+
+#### Cloud-Native CD
+
+* Platform-specific deployment options:
+  * AWS ECS/EKS Deployments
+  * Azure Container Apps/AKS
+  * Google Cloud Run/GKE
+* Service Mesh Integration:
+  * Istio
+  * Linkerd
+  * AWS App Mesh
+* Progressive Delivery:
+  * Feature Flags
+  * A/B Testing
+  * Dark Launches
+
+#### Deployment Patterns
+
+* Blue/Green (Zero downtime)
+* Canary (Progressive rollout)
+* Rolling Updates
+* Traffic Shifting
+* Ring-based Deployment
+
+#### Modern Tools & Platforms
+
+* Container Orchestration:
+  * Kubernetes
+  * Amazon ECS
+  * Azure Container Apps
+* CD Platforms:
+  * Argo CD
+  * Flux CD
+  * Spinnaker
+  * Jenkins X
+* Testing:
+  * Chaos Engineering (Chaos Mesh, Litmus)
+  * Service Virtualization
+  * Contract Testing
+* Observability:
+  * OpenTelemetry
+  * Prometheus
+  * Grafana
+  * Cloud-native logging
+
+#### Security in CD
+
+* Supply Chain Security:
+  * Container scanning
+  * SBOM generation
+  * Image signing
+* Policy as Code:
+  * OPA/Gatekeeper
+  * AWS Organizations
+  * Azure Policy
+* Secret Management:
+  * HashiCorp Vault
+  * Cloud KMS
+  * Sealed Secrets
+
 ### References <a href="#references" id="references"></a>
 
 * [Continuous Delivery](https://www.continuousdelivery.com/) by Jez Humble, David Farley.

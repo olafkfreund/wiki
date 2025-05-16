@@ -4,7 +4,7 @@ Secrets Management refers to the way in which we protect configuration settings 
 
 We should assume any repo we work on may go public at any time and protect our secrets, even if the repo is initially private.
 
-### General Approach <a href="#general-approach" id="general-approach"></a>
+### General Approach
 
 The general approach is to keep secrets in separate configuration files that are not checked in to the repo. Add the files to the [.gitignore](https://git-scm.com/docs/gitignore) to prevent that they're checked in.
 
@@ -26,7 +26,7 @@ The care taken to protect our secrets applies both to how we get and store them,
 * Don't put them in reporting
 * Don't send them to other applications, as part of URLs, forms, or in any other way other than to make a request to the service that requires that secret
 
-### Enhanced-Security Applications <a href="#enhanced-security-applications" id="enhanced-security-applications"></a>
+### Enhanced-Security Applications
 
 The techniques outlined below provide _good_ security and a common pattern for a wide range of languages. They rely on the fact that Azure keeps application settings (the environment) encrypted until your app runs.
 
@@ -36,7 +36,7 @@ They do _not_ prevent secrets from existing in plaintext in memory at runtime. I
 
 Always rotate encryption keys on a regular basis.
 
-### Techniques for Secrets Management <a href="#techniques-for-secrets-management" id="techniques-for-secrets-management"></a>
+### Techniques for Secrets Management
 
 These techniques make the loading of secrets transparent to the developer.
 
@@ -44,7 +44,7 @@ These techniques make the loading of secrets transparent to the developer.
 
 Use the [`file`](https://learn.microsoft.com/en-us/dotnet/framework/configure-apps/file-schema/appsettings/appsettings-element-for-configuration) attribute of the appSettings element to load secrets from a local file.
 
-```json
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <appSettings file="..\..\secrets.config">
@@ -55,67 +55,67 @@ Use the [`file`](https://learn.microsoft.com/en-us/dotnet/framework/configure-ap
   </startup>
   …
 </configuration>
-```plaintext
+```
 
 Access secrets:
 
-```json
+```csharp
 static void Main(string[] args)
 {
     String mySecret = System.Configuration.ConfigurationManager.AppSettings["mySecret"];
 }
-```plaintext
+```
 
 When running in Azure, ConfigurationManager will load these settings from the process environment. We don't need to upload secrets files to the server or change any code.
 
-#### Node <a href="#node" id="node"></a>
+#### Node
 
 Store secrets in environment variables or in a `.env` file
 
 ```bash
 $ cat .env
 MY_SECRET=mySecret
-```plaintext
+```
 
 Use the [dotenv](https://www.npmjs.com/package/dotenv) package to load and access environment variables
 
-```json
+```javascript
 require('dotenv').config()
 let mySecret = process.env("MY_SECRET")
-```plaintext
+```
 
-#### Python <a href="#python" id="python"></a>
+#### Python
 
 Store secrets in environment variables or in a `.env` file
 
 ```bash
 $ cat .env
 MY_SECRET=mySecret
-```plaintext
+```
 
 Use the [dotenv](https://pypi.org/project/python-dotenv/) package to load and access environment variables
 
-```csharp
+```python
 import os
 from dotenv import load_dotenv
 
 
 load_dotenv()
 my_secret = os.getenv('MY_SECRET')
-```plaintext
+```
 
 Another good library for reading environment variables is `environs`
 
-```plaintext
+```python
 from environs import Env
 
 
 env = Env()
 env.read_env()
 my_secret = os.environ["MY_SECRET"]
-```plaintext
+```
 
-#### Databricks <a href="#databricks" id="databricks"></a>
+#### Databricks
 
 Databricks has the option of using dbutils as a secure way to retrieve credentials and not reveal them within the notebooks running on Databricks
 
@@ -125,3 +125,118 @@ The following steps lay out a clear pathway to creating new secrets and then uti
 2. [Get the Databricks personal access token](https://docs.databricks.com/api/latest/authentication.html#token-management)
 3. [Create a scope for the secrets](https://learn.microsoft.com/azure/databricks/security/secrets/secret-scopes)
 4. [Create secrets](https://learn.microsoft.com/azure/databricks/security/secrets/)
+
+### Modern Cloud-Native Secrets Management (2024+)
+
+#### Cloud Provider Solutions
+
+* AWS
+  * AWS Secrets Manager
+  * AWS Systems Manager Parameter Store
+  * AWS KMS for encryption
+* Azure
+  * Azure Key Vault
+  * Azure Managed HSM
+  * Azure App Configuration
+* Google Cloud
+  * Google Secret Manager
+  * Cloud KMS
+  * Berglas
+
+#### Container-Native Solutions
+
+* HashiCorp Vault
+  * Dynamic secrets
+  * Auto-rotation
+  * Multi-cloud support
+* Kubernetes Secrets
+  * Sealed Secrets
+  * External Secrets Operator
+  * CSI Secret Store Driver
+
+#### GitOps Integration
+
+* Mozilla SOPS
+* Argo CD Vault Plugin
+* Flux Secrets
+
+#### DevSecOps Best Practices
+
+* Secret Detection
+  * GitGuardian
+  * Gitleaks
+  * TruffleHog
+* Supply Chain Security
+  * Sigstore/Cosign
+  * SBOM generation
+  * Attestations
+* Zero Trust Approach
+  * Just-in-Time Access
+  * Short-lived credentials
+  * Service mesh integration
+
+#### Infrastructure as Code
+
+* Terraform Vault Provider
+* AWS Secrets Manager Provider
+* Azure Key Vault Provider
+* External Secrets management
+
+### Implementation Examples
+
+#### Kubernetes with External Secrets
+
+```yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: aws-secret
+spec:
+  refreshInterval: "15s"
+  secretStoreRef:
+    name: aws-secret-store
+    kind: SecretStore
+  target:
+    name: secret-to-be-created
+  data:
+    - secretKey: secret-key
+      remoteRef:
+        key: secret-path
+        property: secret-key
+```
+
+#### HashiCorp Vault with Terraform
+
+```hcl
+resource "vault_generic_secret" "example" {
+  path = "secret/my-secret"
+  
+  data_json = jsonencode({
+    username = "app-user"
+    password = random_password.password.result
+  })
+}
+```
+
+### Modern Security Controls
+
+#### Access Management
+
+* RBAC integration
+* Policy as Code (OPA)
+* Audit logging
+* MFA enforcement
+
+#### Automated Rotation
+
+* Scheduled rotation
+* Event-driven rotation
+* Rotation verification
+* Dependencies handling
+
+#### Monitoring & Alerting
+
+* Secret access monitoring
+* Usage patterns analysis
+* Anomaly detection
+* Compliance reporting

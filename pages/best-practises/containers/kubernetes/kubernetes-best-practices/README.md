@@ -16,7 +16,7 @@ spec:
   containers:
     - name: development01
     image: nginx
-```plaintext
+```
 
 ### Use Labels
 
@@ -39,7 +39,7 @@ spec:
      resources:
        limits:
         cpu: 1
-```plaintext
+```
 
 ### Readiness and Liveness Probes
 
@@ -62,7 +62,7 @@ livenessProbe:
        httpGet:
          path: /prodhealth
          port: 8080
-```plaintext
+```
 
 ### Security using RBAC and Firewall
 
@@ -79,7 +79,7 @@ rules:
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "list"]
-```plaintext
+```
 
 ### Set Resource Requests & Limits
 
@@ -103,7 +103,7 @@ containers:
         limits:                              
             memory: "256Mi"
             cpu: "800m"
-```plaintext
+```
 
 ### Audit Your Logs Regularly
 
@@ -113,7 +113,7 @@ You need to pass the parameter mentioned below while stating the kube-apiserver 
 
 ```yaml
 --audit-policy-file=/etc/kubernetes/audit-policy.yaml --audit-log-path=/var/log/audit.log
-```plaintext
+```
 
 ```yaml
 apiVersion: audit.k8s.io/v1
@@ -129,4 +129,112 @@ rules:
      resources:
      - group: ""
       resources: ["pods/log", "pods/status"]
-```plaintext
+```
+
+### Cloud-Native Security (2024+)
+
+#### Pod Security Standards
+* Enforce Pod Security Admission
+* Use Security Contexts
+* Implement Network Policies
+* Runtime Security with Falco
+
+#### Supply Chain Security
+* Container Image Signing
+* SBOM Management
+* Admission Controllers
+  * OPA/Gatekeeper
+  * Kyverno
+  * ValidatingWebhooks
+
+#### GitOps Practices
+* Declarative Deployments
+* Automated Reconciliation
+* Drift Detection
+* Progressive Delivery
+
+#### Modern Observability
+* OpenTelemetry Integration
+* Prometheus + Thanos
+* Grafana Loki
+* Jaeger/Tempo
+
+### Platform Engineering
+
+#### Developer Experience
+* Internal Developer Platform
+* Self-service Namespaces
+* Service Catalogs
+* Platform API
+
+#### Multi-cluster Management
+* Fleet Management
+* Cluster API
+* Virtual Clusters
+* Cross-cluster Services
+
+#### Cost Optimization
+* Spot Instances
+* Resource Quotas
+* HPA/VPA
+* FinOps Integration
+
+### Production Readiness
+
+#### High Availability
+* Pod Disruption Budgets
+* Topology Spread Constraints
+* Anti-affinity Rules
+* Load Balancing
+
+#### Disaster Recovery
+* Velero Backups
+* State Management
+* Cross-region Failover
+* Data Replication
+
+#### Compliance
+* Pod Security Standards
+* Network Policies
+* Audit Logging
+* RBAC/IAM Integration
+
+### Implementation Examples
+
+```yaml
+# Pod Security Context
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-pod
+spec:
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+  - name: app
+    image: my-app:latest
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+
+---
+# Network Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: api-allow
+spec:
+  podSelector:
+    matchLabels:
+      app: api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              environment: production
+```

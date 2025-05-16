@@ -1,66 +1,172 @@
-# Pod security
+# Kubernetes Pod Security (2024+)
 
-In Kubernetes, securityContext is a field that allows users to define security-related settings for a pod or container. These settings include things like user and group IDs, SELinux options, and Linux capabilities.
+## Pod Security Standards
 
-The importance of securityContext lies in its ability to help secure applications running in Kubernetes by enforcing best security practices. For example, setting a non-root user and group ID for a container can help prevent privilege escalation attacks.
+Kubernetes Pod Security Standards define three policies:
 
-Real-life examples of securityContext include:
+- Privileged: Unrestricted policy
+- Baseline: Minimally restrictive policy
+- Restricted: Highly restrictive policy for security-critical applications
 
-1. Setting a read-only file system for a container to prevent unauthorized modifications.
-2. Defining a specific SELinux context for a container to restrict its access to certain files and directories.
-3. Disabling privileged mode for a container to prevent it from accessing host resources.
+### Pod Security Admission Controller
 
-Overall, securityContext is an essential part of securing Kubernetes applications and should be carefully considered when designing pod manifests.
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: secure-namespace
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/audit: restricted
+```
 
-1. Setting a non-root user ID for a container:
+### Modern Security Context Examples
+
+1. Restricted Policy Compliant Pod:
 
 ```yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: my-pod
+  name: secure-pod
 spec:
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
   containers:
-  - name: my-container
-    image: my-image
+  - name: app
+    image: my-secure-app:latest
     securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
       runAsUser: 1000
-```plaintext
-
-In this example, the container is set to run as user ID 1000 instead of the default root user. This can help prevent privilege escalation attacks.
-
-2. Setting a read-only file system for a container:
-
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: my-pod
-spec:
-  containers:
-  - name: my-container
-    image: my-image
-    securityContext:
+      runAsGroup: 3000
       readOnlyRootFilesystem: true
-```plaintext
+      seccompProfile:
+        type: RuntimeDefault
+```
 
-In this example, the container is set to have a read-only file system, which can help prevent unauthorized modifications.
-
-3. Restricting a container's access to the host network:
+2. RuntimeClass Integration:
 
 ```yaml
+apiVersion: node.k8s.io/v1
+kind: RuntimeClass
+metadata:
+  name: gvisor
+handler: runsc
+
+---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: my-pod
+  name: gvisor-pod
 spec:
+  runtimeClassName: gvisor
   containers:
-  - name: my-container
-    image: my-image
-    securityContext:
-      hostNetwork: false
-```plaintext
+  - name: app
+    image: my-app:latest
+```
 
-In this example, the container is set to not use the host network, which can help prevent network attacks.
+### OPA/Gatekeeper Policy Examples
 
-These are just a few examples of how to use securityContext in a Kubernetes pod manifest. The key is to carefully consider the security implications of each setting and tailor them to the specific needs of your application.
+1. Require Non-Root Users:
+
+```yaml
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequireNonRootUser
+metadata:
+  name: require-non-root
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+```
+
+2. Enforce Security Context:
+
+```yaml
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: securitycontext
+spec:
+  crd:
+    spec:
+      names:
+        kind: SecurityContext
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package securitycontext
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          not container.securityContext.readOnlyRootFilesystem
+          msg := "Root filesystem must be read-only"
+        }
+```
+
+### Network Policy Examples
+
+Modern zero-trust network policy:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-specific-traffic
+spec:
+  podSelector:
+    matchLabels:
+      app: web
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          purpose: frontend
+    ports:
+    - protocol: TCP
+      port: 8080
+```
+
+### Best Practices for 2024+
+
+1. **Pod Security Standards Adoption**
+   - Enable Pod Security Admission controller
+   - Use "restricted" policy by default
+   - Implement exceptions only when necessary
+
+2. **Runtime Security**
+   - Use gVisor or kata-containers for isolation
+   - Enable SeccompProfile
+   - Implement Falco for runtime monitoring
+
+3. **Supply Chain Security**
+   - Sign container images
+   - Use cosign for verification
+   - Implement admission controllers
+
+4. **Zero Trust Implementation**
+   - Default deny network policies
+   - Explicit allow rules only
+   - Regular audit logging
+
+5. **Resource Constraints**
+   - Set CPU/Memory limits
+   - Configure OOM score
+   - Use resource quotas

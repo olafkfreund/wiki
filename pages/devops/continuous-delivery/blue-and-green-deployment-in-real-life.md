@@ -1,5 +1,25 @@
 # Blue and Green Deployment in real-life
 
+> **The DevOps Deployment Comedy Corner**
+>
+> ```ascii
+> Blue/Green Deployment Meeting:
+>
+> PM:     "How's the deployment going?"
+> Dev:    "Well, Blue works fine..."
+> Ops:    "And Green is ready..."
+> PM:     "So we're good to switch?"
+> Dev:    "Theoretically..."
+> Ops:    "Practically..."
+> Both:   "Maybe we should test it one more time?"
+> PM:     ¯\_(ツ)_/¯
+>
+> *3 hours and 15 coffee cups later*
+>
+> Monitor: [99.99% uptime achieved]
+> ```
+> *Remember: In DevOps, we don't have problems, we have "unplanned learning opportunities"*
+
 Suppose we have a PaymentService:v1.0.0 (that is called **Blue**) running on our kubernetes cluster:
 
 <figure><img src="https://miro.medium.com/v2/resize:fit:507/1*_lquSqjK90JCIUlOr5TUpw.png" alt="" height="420" width="507"><figcaption><p>PaymentService:v1.0.0 serving the users requests</p></figcaption></figure>

@@ -32,6 +32,19 @@
   * [Public Sector (UK/EU)](pages/devops/agile-development/senarios/public_sector.md)
   * [Energy Sector Edge Computing](pages/devops/agile-development/senarios/energy_sector.md)
 
+## DevOps Practices
+
+* [Platform Engineering](pages/devops/platform-engineering.md)
+* [FinOps](pages/devops/finops.md)
+* [Observability](pages/devops/observability/)
+  * [Modern Practices](pages/devops/observability/modern-practices.md)
+
+## 🚀 Modern DevOps Practices
+
+* [Infrastructure Testing](pages/devops/iac-testing.md)
+* [Modern Development](pages/devops/modern-development.md)
+* [Database DevOps](pages/devops/database-devops.md)
+
 ## 🛠️ Infrastructure as Code (IaC)
 
 <!-- * [IaC Overview](pages/iac/README.md) - Introduction to infrastructure automation -->
@@ -71,6 +84,10 @@
     * [GitHub Actions](group-1/bicep/bicep-with-github-actions.md) - GitHub workflow integration
     * [Azure Pipelines](group-1/bicep/integrate-bicep-with-azure-pipelines.md) - Azure DevOps integration
 
+## 💰 Cost Management & FinOps
+
+* [Cloud Cost Optimization](pages/devops/cloud-cost-optimization.md)
+
 ## 🐳 Containers & Orchestration
 
 * [Containerization Overview](pages/containers/README.md) - Introduction to container technology
@@ -85,7 +102,9 @@
   * [Core Concepts](pages/need-to-know/kubernetes/kubernetes-concepts.md) - Fundamental Kubernetes architecture
   * [Components](pages/need-to-know/kubernetes/kubernetes-components.md) - Cluster building blocks
   * [Best Practices](pages/best-practises/containers/kubernetes/kubernetes-best-practices/README.md) - Production implementation guidelines
-    * [Resource Limits](pages/best-practises/containers/kubernetes/kubernetes-best-practices/resource-limits/README.md) - Configuring CPU and memory constraints
+    * [Pod Security](pages/best-practises/containers/kubernetes/kubernetes-best-practices/pod-security.md)
+    * [Security Monitoring](pages/best-practises/containers/kubernetes/kubernetes-best-practices/security-monitoring.md)
+    * [Resource Limits](pages/best-practises/containers/kubernetes/kubernetes-best-practices/resource-limits/README.md)
   * [Advanced Features](pages/should-learn/kubernetes/) - Beyond the basics [ADVANCED]
     * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md) - Network traffic management
     * [Ingress Controllers](pages/should-learn/kubernetes/ingress-controllers/README.md) - External access management
@@ -101,6 +120,15 @@
   * [Virtual Clusters](pages/best-practises/containers/kubernetes/vcluster.md) - Nested Kubernetes clusters for multi-tenancy
 * [OpenShift](pages/best-practises/containers/openshift.md) - Red Hat's enterprise Kubernetes platform
 
+## Service Mesh & Networking
+* [Service Mesh Implementation](pages/devops/service-mesh/implementation-guide.md)
+
+## Architecture Patterns
+* [Data Mesh](pages/architecture/data-mesh/implementation-guide.md)
+* [Multi-Cloud Networking](pages/architecture/networking/multi-cloud-connectivity.md)
+* [Disaster Recovery](pages/architecture/disaster-recovery/implementation-guide.md)
+* [Chaos Engineering](pages/architecture/chaos-engineering/implementation-guide.md)
+
 ## 🔄 CI/CD & GitOps
 
 * [CI/CD Overview](pages/devops/ci-cd-platforms/README.md) - Automated build, test and deployment pipelines
@@ -108,6 +136,9 @@
 * [Continuous Delivery](pages/devops/continuous-delivery/README.md) - Reliable software release automation
   * [Deployment Strategies](pages/need-to-know/guide-to-blue-green-canary-and-rolling-deployments.md) - Progressive release methods
   * [Secrets Management](pages/devops/continuous-delivery/secrets-management.md) - Securing sensitive configuration data
+  * [Blue-Green Deployments](pages/devops/continuous-delivery/blue-and-green-deployment-in-real-life.md)
+  * [Deployment Metrics](pages/devops/continuous-delivery/deployment-metrics.md)
+  * [Progressive Delivery](pages/devops/continuous-delivery/progressive-delivery.md)
 * [CI/CD Platforms](pages/devops/ci-cd-platforms/) - Tool selection and implementation
   * [Azure DevOps](pages/azure-devops/README.md) - Microsoft's comprehensive DevOps platform
     * [Pipelines](pages/azure-devops/pipelines/README.md) - YAML-based CI/CD implementation
@@ -129,9 +160,9 @@
     * Installation guides
     * Pros and Cons
     * Comparison with alternatives
-* [GitOps](pages/devops/gitops/README.md) - Git-based infrastructure and application delivery
-  * [Flux](pages/devops/gitops/flux/README.md) - Kubernetes continuous delivery with GitOps
-  * [ArgoCD](pages/devops/ci-cd-platforms/argo-cd/README.md) - Declarative continuous delivery for Kubernetes
+* [GitOps](pages/devops/gitops/README.md)
+  * [Modern Practices](pages/devops/gitops/modern-practices.md)
+  * [Progressive Delivery](pages/devops/gitops/progressive-delivery.md)
 
 ## ☁️ Cloud Platforms
 
@@ -169,6 +200,10 @@
       * [Pipeline Configuration](pages/dev-secops/static-code-analysis/pipeline-config.md) - CI/CD integration
   * [CI/CD Security](pages/dev-secops/ci-cd-security.md) - Securing the deployment pipeline
   * [Secrets Rotation](pages/dev-secops/secrets-rotation/README.md) - Automated credential management
+* [Supply Chain Security](pages/dev-secops/supply-chain-security.md)
+  * [SLSA Framework](pages/dev-secops/supply-chain-security.md#slsa-framework-implementation)
+  * [Binary Authorization](pages/dev-secops/supply-chain-security.md#binary-authorization)
+  * [Artifact Signing](pages/dev-secops/supply-chain-security.md#artifact-signing)
 * [Security Best Practices](pages/devops/security/README.md) - Holistic security guidelines
   * [Threat Modeling](pages/devops/security/threat-modeling.md) - Structured risk assessment
   * [Kubernetes Security](pages/devops/security/kubernetes/README.md) - Container platform hardening
@@ -181,6 +216,12 @@
   * [CSA STAR](pages/need-to-know/cloud-compliance/csa-star.md) - Cloud security certification
 * [Security Frameworks](pages/need-to-know/public-cloud-security-frameworks/README.md) - Implementation methodologies
 * [SIEM and SOAR](pages/need-to-know/siem-and-soar.md) - Security monitoring and automation
+
+## Security Architecture
+* [Zero Trust Implementation](pages/security/zero-trust/implementation-guide.md)
+  * [Identity Management](pages/security/zero-trust/implementation-guide.md#identity-management)
+  * [Network Security](pages/security/zero-trust/implementation-guide.md#network-security)
+  * [Access Control](pages/security/zero-trust/implementation-guide.md#access-control)
 
 ## 🔍 Observability & Monitoring
 
@@ -204,6 +245,13 @@
 * [Fault Injection Testing](pages/devops/testing/fault-injection-testing.md) - Chaos engineering practice
 * [Integration Testing](pages/devops/testing/integration-testing.md) - Component interaction validation
 * [Smoke Testing](pages/devops/testing/smoke-testing.md) - Basic functionality verification
+
+## 🤖 AI Integration
+
+* [AIops Overview](pages/devops/aiops-integration.md)
+  * [Workflow Automation](pages/devops/aiops-integration.md#workflow-automation)
+  * [Predictive Analytics](pages/devops/aiops-integration.md#predictive-analytics)
+  * [Code Quality](pages/devops/aiops-integration.md#code-quality-enhancement)
 
 ## 🧠 AI & LLM Integration
 
