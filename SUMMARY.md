@@ -357,3 +357,7 @@
 ## AIOps
 
 * [LLMOps Guide](pages/aiops/llmops-guide.md)
+
+## Development Setup
+
+* [Development Setup](development/setup.md)

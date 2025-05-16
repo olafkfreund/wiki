@@ -1,67 +1,120 @@
-{pkgs ? import <nixpkgs> {}}:
-pkgs.mkShell {
-  buildInputs = with pkgs; [
-    # Use nodejs v20 which has better compatibility with GitBook CLI than v22+
-    nodejs_20
+{pkgs ? import <nixpkgs> {}}: let
+  bun = pkgs.bun;
+in
+  pkgs.mkShell {
+    buildInputs = with pkgs; [
+      # Core dependencies
+      nodejs_20
+      bun
 
-    # Markdown formatting and linting tools
-    nodePackages.prettier
-    nodePackages.markdownlint-cli
+      # Development tools
+      nodePackages.prettier
+      nodePackages.markdownlint-cli
+      nodePackages.typescript
+      nodePackages.typescript-language-server
 
-    # Optional: Include other tools you might need
-    git
-    gnumake # For the makefile commands
-  ];
+      # Build tools
+      git
+      gnumake
+    ];
 
-  shellHook = ''
-        # Create a local npm prefix directory
-        mkdir -p ./.npm-global
-        export NPM_CONFIG_PREFIX=$PWD/.npm-global
-        export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
+    shellHook = ''
+          # Create local directories
+          mkdir -p ./.npm-global
+          mkdir -p ./.bun-global
+          export NPM_CONFIG_PREFIX=$PWD/.npm-global
+          export BUN_INSTALL=$PWD/.bun-global
+          export PATH=$NPM_CONFIG_PREFIX/bin:$BUN_INSTALL/bin:$PATH
 
-        # Create helpful functions for formatting Markdown
-        function fmt-md() {
-          echo "Formatting Markdown files..."
-          prettier --write "**/*.md"
-          echo "✅ Markdown formatting complete"
-        }
+          # GitBook development functions
+          function gitbook-setup() {
+            echo "Setting up GitBook development environment..."
+            git clone https://github.com/gitbookIO/gitbook.git
+            cd gitbook
+            bun install
+            echo "✅ GitBook setup complete"
+          }
 
-        function lint-md() {
-          echo "Linting Markdown files..."
-          markdownlint "**/*.md"
-          echo "✅ Markdown linting complete"
-        }
+          function gitbook-dev() {
+            echo "Starting GitBook development server..."
+            bun dev:v2
+          }
 
-        function fmt-check() {
-          echo "Checking Markdown formatting..."
-          prettier --check "**/*.md"
-        }
+          function gitbook-format() {
+            echo "Formatting GitBook codebase..."
+            bun format
+          }
 
-        # Create local aliases for the commands
-        alias fmt='fmt-md'
-        alias lint='lint-md'
-        alias check='fmt-check'
+          function gitbook-lint() {
+            echo "Linting GitBook codebase..."
+            bun lint
+          }
 
-        # Create or update a .prettierrc file if it doesn't exist
-        if [ ! -f .prettierrc ]; then
-          cat > .prettierrc <<EOF
-    {
-      "proseWrap": "preserve",
-      "tabWidth": 2,
-      "useTabs": false,
-      "singleQuote": false,
-      "printWidth": 100
-    }
-    EOF
-          echo "Created .prettierrc configuration file"
-        fi
+          # Markdown formatting functions
+          function fmt-md() {
+            echo "Formatting Markdown files..."
+            prettier --write "**/*.md"
+            echo "✅ Markdown formatting complete"
+          }
 
-        echo "Node.js GitBook environment activated."
-        echo "Run 'npm install -g @gitbook/cli' to install GitBook CLI locally."
-        echo ""
-        echo "Markdown formatting commands:"
-        echo "  fmt      - Format all Markdown files"
-        echo "  lint     - Lint all Markdown files"
-        echo "  check    - Check formatting without modifying files"
-  '';
-}
+          function lint-md() {
+            echo "Linting Markdown files..."
+            markdownlint "**/*.md"
+            echo "✅ Markdown linting complete"
+          }
+
+          function fmt-check() {
+            echo "Checking Markdown formatting..."
+            prettier --check "**/*.md"
+          }
+
+          # Aliases
+          alias setup='gitbook-setup'
+          alias dev='gitbook-dev'
+          alias gformat='gitbook-format'
+          alias glint='gitbook-lint'
+          alias fmt='fmt-md'
+          alias lint='lint-md'
+          alias check='fmt-check'
+
+          # Create configuration files
+          if [ ! -f .prettierrc ]; then
+            cat > .prettierrc <<EOF
+      {
+        "proseWrap": "preserve",
+        "tabWidth": 2,
+        "useTabs": false,
+        "singleQuote": false,
+        "printWidth": 100
+      }
+      EOF
+            echo "Created .prettierrc configuration file"
+          fi
+
+          if [ ! -f .env.local ]; then
+            cat > .env.local <<EOF
+      PORT=3000
+      NODE_ENV=development
+      EOF
+            echo "Created .env.local configuration file"
+          fi
+
+          echo "GitBook Development Environment"
+          echo ""
+          echo "Available commands:"
+          echo "  setup    - Clone and setup GitBook repository"
+          echo "  dev      - Start development server"
+          echo "  gformat  - Format GitBook codebase"
+          echo "  glint    - Lint GitBook codebase"
+          echo "  fmt      - Format Markdown files"
+          echo "  lint     - Lint Markdown files"
+          echo "  check    - Check formatting"
+          echo ""
+          echo "Development server will be available at:"
+          echo "  http://localhost:3000/url/docs.gitbook.com"
+    '';
+
+    # Environment variables
+    NODE_ENV = "development";
+    LANG = "en_US.UTF-8";
+  }
