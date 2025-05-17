@@ -175,10 +175,24 @@
     * Comparison with alternatives
 * [GitOps](pages/devops/gitops/README.md)
   * [Modern GitOps Practices](pages/devops/gitops/modern-practices.md)
+  * [GitOps Patterns for Multi-Cloud (2025)](pages/devops/gitops/modern-gitops-patterns-2025.md)
   * Flux
     * [Overview](pages/devops/gitops/flux/README.md)
     * [Progressive Delivery](pages/devops/gitops/flux/progressive-delivery.md)
     * [Use GitOps with Flux, GitHub and AKS](pages/devops/gitops/flux/use-gitops-with-flux-github-and-aks-to-implement-ci-cd.md)
+
+## Source Control
+
+* [Source Control Overview](pages/devops/source-control/README.md) - Version control fundamentals and best practices
+* [Git Branching Strategies](pages/devops/source-control/git-branching-strategies.md) - Effective branching models for DevOps teams
+* [Component Versioning](pages/devops/source-control/component-versioning.md) - Versioning strategies for software components
+* [Kubernetes Manifest Versioning](pages/devops/source-control/kubernetes-manifest-versioning.md) - Version control for Kubernetes resources
+* [GitLab](pages/devops/source-control/gitlab/README.md)
+  * [GitLab Runner](pages/devops/source-control/gitlab/gitlab_runner.md)
+* [Creating a Fork](pages/devops/source-control/create-fork.md)
+* [Naming Branches](pages/devops/source-control/naming-branches.md)
+* [Pull Requests](pages/devops/source-control/pull-request.md)
+* [Integrating LLMs into Source Control Workflows](pages/devops/source-control/llm-integration.md)
 
 ## ☁️ Cloud Platforms
 
