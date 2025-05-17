@@ -1,24 +1,30 @@
 ---
-description: Setting up and using bicep for Azure Deployments
+description: Setting up and using Bicep for Azure Infrastructure as Code deployments
 ---
 
-# Bicep
+# Bicep - Azure Infrastructure as Code
 
----
+Bicep is Microsoft's domain-specific language (DSL) for deploying Azure resources declaratively. It provides a transparent abstraction over ARM templates with improved authoring experience, modularity, and enhanced type safety.
 
-## Changelog 2024–2025
+## Getting Started
 
-- **2025-04:** Bicep v0.21 released with improved module registry support and enhanced LLM integration for code suggestions.
-- **2025-03:** Native support for NixOS and WSL deployment scenarios in Azure CLI and Bicep tooling.
-- **2025-02:** Security scanning integration (Checkov, PSRule) now recommended by default in official docs.
-- **2025-01:** Bicep parameter files support environment variable substitution for CI/CD pipelines.
-- **2024-12:** Improved error messages and diagnostics in bicep build and az deployment what-if.
-- **2024-10:** Enhanced documentation for using Bicep with GitHub Actions and LLMs (Copilot, Claude).
-- **2024-08:** Bicep modules can now be published and consumed from private registries with RBAC.
+### Installation
 
----
+Install the Bicep CLI using Azure CLI:
 
-A Bicep file has the following elements.
+```bash
+# Install Bicep tools
+az bicep install
+
+# Verify installation
+az bicep version
+```
+
+For VS Code users, install the [Bicep extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-bicep) for syntax highlighting, validation, and IntelliSense.
+
+## Bicep File Structure
+
+A Bicep file consists of the following elements:
 
 ```bicep
 metadata <metadata-name> = ANY
@@ -42,9 +48,11 @@ module <module-symbolic-name> '<path-to-file>' = {
 }
 
 output <output-name> <output-data-type> = <output-value>
-```plaintext
+```
 
-The following example shows an implementation of these elements.
+## Basic Example
+
+The following example shows a Bicep file that creates a storage account and deploys a web app module:
 
 ```bicep
 metadata description = 'Creates a storage account and a web app'
@@ -78,85 +86,242 @@ module webModule './webApp.bicep' = {
     location: location
   }
 }
-```plaintext
-
----
-
-## 2025 Best Practices for Bicep
-- Use modules for reusable infrastructure patterns
-- Store Bicep files in version control (Git)
-- Use parameter files for environment-specific values
-- Validate templates with `bicep build` and `az deployment what-if`
-- Integrate security scanning (e.g., Checkov, PSRule)
-- Document parameters and outputs with decorators
-- Use LLMs (GitHub Copilot, Claude) for code suggestions and reviews
-
----
-
-## Step-by-Step: Deploying Bicep with Azure CLI
-
-### 1. Install Bicep CLI (Linux, WSL, NixOS)
-```bash
-# Install/update Azure CLI
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-az bicep install
-# Or upgrade
-az bicep upgrade
 ```
 
-### 2. Build and Validate Bicep
-```bash
-bicep build main.bicep
-az deployment sub what-if --location westeurope --template-file main.bicep
+## Deployment Scopes
+
+Bicep supports various deployment scopes:
+
+```bicep
+// Default is resourceGroup scope
+targetScope = 'resourceGroup'       // Deploy to a resource group
+targetScope = 'subscription'        // Deploy to a subscription
+targetScope = 'managementGroup'     // Deploy to a management group
+targetScope = 'tenant'              // Deploy to the tenant
 ```
 
-### 3. Deploy to Azure
-```bash
-az deployment group create \
-  --resource-group my-rg \
-  --template-file main.bicep \
-  --parameters storagePrefix=devops skuName=Standard_LRS
+## Practical Examples
+
+### Multi-Region Deployment
+
+```bicep
+// Define regions for deployment
+param regions array = [
+  'eastus'
+  'westus2'
+]
+
+// Deploy resources to each region
+@batchSize(1)
+module regionDeploy 'region-stack.bicep' = [for region in regions: {
+  name: 'region-deploy-${region}'
+  params: {
+    location: region
+    environment: environment
+  }
+}]
 ```
 
----
+### Secure Parameter Handling
 
-## Real-Life Example: Bicep in GitHub Actions
+```bicep
+@description('The admin username for the SQL server')
+param sqlAdminUsername string
+
+@secure()
+@description('The admin password for the SQL server')
+param sqlAdminPassword string
+
+resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
+  name: 'sql-${uniqueString(resourceGroup().id)}'
+  location: location
+  properties: {
+    administratorLogin: sqlAdminUsername
+    administratorLoginPassword: sqlAdminPassword
+    version: '12.0'
+  }
+}
+```
+
+### Conditional Deployment
+
+```bicep
+param deployStorage bool = true
+param storageName string
+param location string = resourceGroup().location
+
+resource storage 'Microsoft.Storage/storageAccounts@2022-09-01' = if (deployStorage) {
+  name: storageName
+  location: location
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+}
+```
+
+## Best Practices
+
+### 1. Modular Design Pattern
+
+Organize your deployments into reusable modules:
+
+```
+/bicep-project
+  /modules
+    /network
+      vnet.bicep
+      nsg.bicep
+    /compute
+      vm.bicep
+      vmss.bicep
+    /storage
+      storage.bicep
+  main.bicep
+  parameters.json
+```
+
+### 2. Use Parameter Files
+
+Create environment-specific parameter files:
+
+```json
+// dev.parameters.json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": {
+      "value": "dev"
+    },
+    "vmSize": {
+      "value": "Standard_D2s_v3"
+    }
+  }
+}
+```
+
+### 3. Resource Naming
+
+Use consistent naming conventions:
+
+```bicep
+// Define naming convention
+param prefix string
+param env string
+var storageName = '${prefix}storage${env}${uniqueString(resourceGroup().id)}'
+```
+
+### 4. Secret Management
+
+Store secrets in Azure Key Vault and reference them:
+
+```bicep
+resource kv 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
+  name: keyVaultName
+  scope: resourceGroup(keyVaultResourceGroup)
+}
+
+module webApp 'modules/webapp.bicep' = {
+  name: 'webAppDeployment'
+  params: {
+    name: webAppName
+    connectionString: kv.getSecret('DbConnectionString')
+  }
+}
+```
+
+## DevOps Integration
+
+### Azure Pipelines
 
 ```yaml
-name: Deploy Bicep
+# azure-pipelines.yml
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'your-azure-service-connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az bicep build --file main.bicep
+      az deployment group create \
+        --resource-group your-resource-group \
+        --template-file main.bicep \
+        --parameters @dev.parameters.json
+```
+
+### GitHub Actions
+
+```yaml
+# .github/workflows/deploy-bicep.yml
+name: Deploy Bicep Template
+
 on:
   push:
     branches: [ main ]
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Deploy Bicep
-        run: |
-          az bicep install
-          az deployment group create \
-            --resource-group my-rg \
-            --template-file main.bicep \
-            --parameters storagePrefix=devops
+    - uses: actions/checkout@v3
+    
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Deploy Bicep
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+        resourceGroupName: your-resource-group
+        template: ./main.bicep
+        parameters: ./dev.parameters.json
 ```
 
----
+## Linting and Validation
 
-## Using LLMs (Copilot, Claude) for Bicep
-- Use Copilot/Claude to generate Bicep modules, parameter files, and documentation
-- Example prompt: "Generate a Bicep module for an Azure Key Vault with RBAC enabled."
-- Always review and test LLM-generated code for security and compliance
+Validate your Bicep files before deployment:
 
----
+```bash
+# Validate a Bicep file
+az bicep build --file main.bicep
 
-## References
-- [Bicep Documentation](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/)
-- [Bicep Best Practices](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/best-practices)
-- [Bicep GitHub](https://github.com/Azure/bicep)
-- [Checkov](https://www.checkov.io/)
-- [PSRule for Azure](https://github.com/Azure/PSRule.Rules.Azure)
+# Preview changes (What-if)
+az deployment group what-if \
+  --resource-group your-resource-group \
+  --template-file main.bicep \
+  --parameters @dev.parameters.json
+```
+
+## Additional Resources
+
+- [Official Bicep Documentation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/)
+- [Bicep GitHub Repository](https://github.com/Azure/bicep)
+- [Bicep Playground](https://aka.ms/bicepdemo)
+- [Azure QuickStart Templates](https://github.com/Azure/azure-quickstart-templates)
+
+## See Also
+
+- [Bicep with GitHub Actions](bicep-with-github-actions.md)
+- [Integrate Bicep with Azure Pipelines](integrate-bicep-with-azure-pipelines.md)
+- [Bicep Template Specs](template-spec-for-bicep.md)
+- [Use Inline Scripts with Bicep](use-inline-scripts.md)
+
+## Related Topics
+
+- [Terraform](../../pages/terraform/README.md) - Alternative multi-cloud IaC solution
+- [Azure](../../pages/public-clouds/azure/README.md) - Microsoft's cloud platform that Bicep targets
+- [GitHub Actions Integration](bicep-with-github-actions.md) - Automating Bicep deployments with GitHub
+- [Azure Pipelines Integration](integrate-bicep-with-azure-pipelines.md) - CI/CD for Bicep with Azure DevOps
+- [Template Specs](template-spec-for-bicep.md) - Creating reusable infrastructure templates
+- [Inline Scripts](use-inline-scripts.md) - Advanced deployment techniques
+- [DevSecOps](../../pages/dev-secops/README.md) - Security integration for infrastructure code

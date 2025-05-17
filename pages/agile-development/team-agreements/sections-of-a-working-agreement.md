@@ -77,3 +77,61 @@ The Process Lead is responsible for leading any scrum or agile practices to enab
 * We always review existing PRs before starting work on a new task
 * We look through open PRs at the end of stand-up to make sure all PRs have reviewers.
 * We treat documentation as code and apply the same [standards to Markdown](https://microsoft.github.io/code-with-engineering-playbook/code-reviews/recipes/markdown/) as code
+
+### Infrastructure as Code <a href="#infrastructure-as-code" id="infrastructure-as-code"></a>
+
+* We treat infrastructure code with the same quality standards as application code
+* All infrastructure changes must be made through IaC (Terraform, Bicep, etc.) and never manually in cloud portals
+* Infrastructure code requires the same PR review process as application code
+* We maintain test environments that mirror production configurations as closely as possible
+* We document infrastructure architecture decisions through ADRs (Architecture Decision Records)
+* We follow the principle of immutable infrastructure: modify by replacing, not updating
+
+### Observability and Monitoring <a href="#observability-and-monitoring" id="observability-and-monitoring"></a>
+
+* We define and track Service Level Objectives (SLOs) for all critical services
+* All services must emit logs, metrics, and traces in standardized formats
+* We maintain dashboards for key services that visualize the four golden signals (latency, traffic, errors, and saturation)
+* We implement structured logging with consistent correlation IDs across service boundaries
+* Alert configurations are stored as code and version-controlled
+* We practice "monitor-driven development" - defining monitoring requirements during design phase
+
+### On-Call and Incident Response <a href="#on-call-and-incident-response" id="on-call-and-incident-response"></a>
+
+* Primary on-call rotation is weekly, from Monday 9AM to the following Monday 9AM
+* Secondary on-call provides backup when primary cannot be reached within 15 minutes
+* We use a severity classification system (SEV1-SEV4) to prioritize incidents
+* We conduct blameless postmortems for all SEV1/SEV2 incidents within 48 hours
+* All production incidents are documented with timeline, impact, root cause, and action items
+* We maintain an up-to-date runbook for common operational tasks and troubleshooting
+* Game Days are scheduled quarterly to test our incident response procedures
+
+### Security Practices <a href="#security-practices" id="security-practices"></a>
+
+* We implement security scanning in all CI/CD pipelines (SAST, DAST, SCA, secrets scanning)
+* We follow the principle of least privilege for all service accounts and IAM roles
+* Credentials are never stored in code repositories and are rotated regularly
+* We perform regular threat modeling as part of our design process
+* All data at rest and in transit is encrypted using industry-standard encryption
+* We conduct security reviews before deploying major changes to production
+* We maintain a vulnerability management process with defined SLAs for remediation
+
+### GitOps and Continuous Delivery <a href="#gitops-and-continuous-delivery" id="gitops-and-continuous-delivery"></a>
+
+* We follow GitOps principles - the Git repository is the source of truth for system configuration
+* We practice trunk-based development with short-lived feature branches
+* Our CI/CD pipelines include automated tests, security scans, and compliance checks
+* We implement progressive delivery using feature flags and canary deployments
+* Production deployments require automated smoke tests and validation
+* We maintain a deployment schedule and avoid high-risk changes during peak business hours
+* Deployment metrics (frequency, lead time, failure rate, MTTR) are tracked and reviewed monthly
+
+### AI and Automation Integration <a href="#ai-and-automation-integration" id="ai-and-automation-integration"></a>
+
+* We use LLM tools (GitHub Copilot, Claude, etc.) to assist with code and documentation generation
+* AI-generated code requires the same review process as human-written code
+* We prioritize automation of repetitive operational tasks and measure toil reduction
+* We implement AI-assisted anomaly detection in our monitoring systems
+* Automation scripts are treated as production code and follow the same quality standards
+* We maintain a backlog of automation opportunities prioritized by toil reduction potential
+* We use AI coding assistants responsibly and review all generated content for security and correctness

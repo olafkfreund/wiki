@@ -2,14 +2,16 @@
 description: >-
   The Kubernetes provider allows you to create Kubernetes resources directly
   with Bicep. Bicep can deploy anything that can be deployed with the Kubernetes
-  command-line client (kubectl) and a Kubernetes
+  command-line client (kubectl) using the Kubernetes API.
 ---
 
-# Kubernetes provider
+# Kubernetes Provider for Bicep
 
-### Enable the preview feature <a href="#enable-the-preview-feature" id="enable-the-preview-feature"></a>
+The Kubernetes provider in Bicep allows you to define and deploy Kubernetes resources directly alongside your Azure infrastructure. This feature bridges the gap between infrastructure provisioning and application deployment, enabling a unified IaC workflow.
 
-This preview feature can be enabled by configuring the [bicepconfig.json](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/bicep-config):thumbsup:
+## Enable the Extensibility Preview Feature
+
+The Kubernetes provider is currently available as a preview feature. To enable it, create a `bicepconfig.json` file in your project root with the following content:
 
 ```json
 {
@@ -17,23 +19,85 @@ This preview feature can be enabled by configuring the [bicepconfig.json](https:
     "extensibility": true
   }
 }
-```plaintext
+```
 
-The following sample imports the Kubernetes provider:
+## Basic Usage
+
+### Import the Kubernetes Provider
+
+To use the Kubernetes provider, first import it in your Bicep file:
 
 ```bicep
 @secure()
 param kubeConfig string
 
+// Import the Kubernetes provider
 import 'kubernetes@1.0.0' with {
-  namespace: 'default'
-  kubeConfig: kubeConfig
+  namespace: 'default'  // Default namespace for resources
+  kubeConfig: kubeConfig  // Kubernetes configuration
 } as k8s
-```plaintext
+```
 
-Take this example:
+### Creating Kubernetes Resources
 
-{% code overflow="wrap" lineNumbers="true" %}
+After importing the provider, you can create Kubernetes resources using the imported namespace:
+
+```bicep
+// Create a ConfigMap
+resource myConfigMap 'core/v1' = {
+  kind: 'ConfigMap'
+  metadata: {
+    name: 'my-config'
+  }
+  data: {
+    'key1': 'value1'
+    'key2': 'value2'
+  }
+}
+
+// Create a Deployment
+resource myDeployment 'apps/v1' = {
+  kind: 'Deployment'
+  metadata: {
+    name: 'my-app'
+  }
+  spec: {
+    replicas: 3
+    selector: {
+      matchLabels: {
+        app: 'my-app'
+      }
+    }
+    template: {
+      metadata: {
+        labels: {
+          app: 'my-app'
+        }
+      }
+      spec: {
+        containers: [
+          {
+            name: 'my-container'
+            image: 'nginx:latest'
+            ports: [
+              {
+                containerPort: 80
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+## End-to-End Example: AKS Cluster with Application Deployment
+
+This example demonstrates creating an AKS cluster and deploying an application to it in a single Bicep template.
+
+### 1. Create the AKS Cluster (main.bicep)
+
 ```bicep
 @description('The name of the Managed Cluster resource.')
 param clusterName string = 'aks101cluster'
@@ -94,143 +158,281 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-05-02-preview' = {
   }
 }
 
-output controlPlaneFQDN string = aks.properties.fqdn
-```plaintext
-{% endcode %}
-
-### Add the application definition: <a href="#add-the-application-definition" id="add-the-application-definition"></a>
-
-1. Create a file named `azure-vote.yaml` in the same folder as `main.bicep` with the following YAML definition:
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: azure-vote-back
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: azure-vote-back
-  template:
-    metadata:
-      labels:
-        app: azure-vote-back
-    spec:
-      nodeSelector:
-        "kubernetes.io/os": linux
-      containers:
-      - name: azure-vote-back
-        image: mcr.microsoft.com/oss/bitnami/redis:6.0.8
-        env:
-        - name: ALLOW_EMPTY_PASSWORD
-          value: "yes"
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 250m
-            memory: 256Mi
-        ports:
-        - containerPort: 6379
-          name: redis
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: azure-vote-back
-spec:
-  ports:
-  - port: 6379
-  selector:
-    app: azure-vote-back
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: azure-vote-front
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: azure-vote-front
-  template:
-    metadata:
-      labels:
-        app: azure-vote-front
-    spec:
-      nodeSelector:
-        "kubernetes.io/os": linux
-      containers:
-      - name: azure-vote-front
-        image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 250m
-            memory: 256Mi
-        ports:
-        - containerPort: 80
-        env:
-        - name: REDIS
-          value: "azure-vote-back"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: azure-vote-front
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-  selector:
-    app: azure-vote-front
-```plaintext
-
-2. Open azure-vote.bicep and add the following line at the end of the file to output the load balancer public IP:
-
-{% code overflow="wrap" %}
-```bicep
-output frontendIp string = coreService_azureVoteFront.status.loadBalancer.ingress[0].ip
-```plaintext
-{% endcode %}
-
-3. Before the `output` statement in `main.bicep`, add the following Bicep to reference the newly created `azure-vote.bicep` module:
-
-```bicep
+// Reference the Kubernetes application deployment module
 module kubernetes './azure-vote.bicep' = {
-  name: 'buildbicep-deploy'
+  name: 'kubernetes-app-deploy'
   params: {
     kubeConfig: aks.listClusterAdminCredential().kubeconfigs[0].value
   }
 }
-```plaintext
 
-4. At the bottom of `main.bicep`, add the following line to output the load balancer public IP:
+output controlPlaneFQDN string = aks.properties.fqdn
+output applicationIp string = kubernetes.outputs.frontendIp
+```
+
+### 2. Define the Application Resources (azure-vote.bicep)
 
 ```bicep
-output lbPublicIp string = kubernetes.outputs.frontendIpi
-```plaintext
+@secure()
+param kubeConfig string
 
-### Deploy the Bicep file <a href="#deploy-the-bicep-file" id="deploy-the-bicep-file"></a>
+// Import the Kubernetes provider
+import 'kubernetes@1.0.0' with {
+  namespace: 'default'
+  kubeConfig: kubeConfig
+} as k8s
 
-Using CLI:
+// Define Redis backend deployment
+resource redisDeployment 'apps/v1' = {
+  kind: 'Deployment'
+  metadata: {
+    name: 'azure-vote-back'
+  }
+  spec: {
+    replicas: 1
+    selector: {
+      matchLabels: {
+        app: 'azure-vote-back'
+      }
+    }
+    template: {
+      metadata: {
+        labels: {
+          app: 'azure-vote-back'
+        }
+      }
+      spec: {
+        nodeSelector: {
+          'kubernetes.io/os': 'linux'
+        }
+        containers: [
+          {
+            name: 'azure-vote-back'
+            image: 'mcr.microsoft.com/oss/bitnami/redis:6.0.8'
+            env: [
+              {
+                name: 'ALLOW_EMPTY_PASSWORD'
+                value: 'yes'
+              }
+            ]
+            resources: {
+              requests: {
+                cpu: '100m'
+                memory: '128Mi'
+              }
+              limits: {
+                cpu: '250m'
+                memory: '256Mi'
+              }
+            }
+            ports: [
+              {
+                containerPort: 6379
+                name: 'redis'
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
 
-{% code overflow="wrap" lineNumbers="true" %}
+// Redis service
+resource redisService 'core/v1' = {
+  kind: 'Service'
+  metadata: {
+    name: 'azure-vote-back'
+  }
+  spec: {
+    ports: [
+      {
+        port: 6379
+      }
+    ]
+    selector: {
+      app: 'azure-vote-back'
+    }
+  }
+}
+
+// Frontend deployment
+resource frontendDeployment 'apps/v1' = {
+  kind: 'Deployment'
+  metadata: {
+    name: 'azure-vote-front'
+  }
+  spec: {
+    replicas: 1
+    selector: {
+      matchLabels: {
+        app: 'azure-vote-front'
+      }
+    }
+    template: {
+      metadata: {
+        labels: {
+          app: 'azure-vote-front'
+        }
+      }
+      spec: {
+        nodeSelector: {
+          'kubernetes.io/os': 'linux'
+        }
+        containers: [
+          {
+            name: 'azure-vote-front'
+            image: 'mcr.microsoft.com/azuredocs/azure-vote-front:v1'
+            resources: {
+              requests: {
+                cpu: '100m'
+                memory: '128Mi'
+              }
+              limits: {
+                cpu: '250m'
+                memory: '256Mi'
+              }
+            }
+            ports: [
+              {
+                containerPort: 80
+              }
+            ]
+            env: [
+              {
+                name: 'REDIS'
+                value: 'azure-vote-back'
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+
+// Frontend service with LoadBalancer to expose the application
+resource frontendService 'core/v1' = {
+  kind: 'Service'
+  metadata: {
+    name: 'azure-vote-front'
+  }
+  spec: {
+    type: 'LoadBalancer'
+    ports: [
+      {
+        port: 80
+      }
+    ]
+    selector: {
+      app: 'azure-vote-front'
+    }
+  }
+}
+
+// Output the frontend service IP address
+output frontendIp string = frontendService.status.loadBalancer.ingress[0].ip
+```
+
+## Deployment Instructions
+
+### Using Azure CLI
+
 ```bash
+# Create a resource group
 az group create --name myResourceGroup --location eastus
-az deployment group create --resource-group myResourceGroup --template-file main.bicep --parameters clusterName=<cluster-name> dnsPrefix=<dns-previs> linuxAdminUsername=<linux-admin-username> sshRSAPublicKey='<ssh-key>'er
-```plaintext
-{% endcode %}
 
-Using Powershell:
+# Deploy the Bicep template
+az deployment group create \
+  --resource-group myResourceGroup \
+  --template-file main.bicep \
+  --parameters \
+      clusterName=myAksCluster \
+      dnsPrefix=myakscluster \
+      linuxAdminUsername=azureuser \
+      sshRSAPublicKey="$(cat ~/.ssh/id_rsa.pub)"
+```
 
-{% code overflow="wrap" lineNumbers="true" %}
+### Using PowerShell
+
 ```powershell
+# Create a resource group
 New-AzResourceGroup -Name myResourceGroup -Location eastus
-New-AzResourceGroupDeployment -ResourceGroupName myResourceGroup -TemplateFile ./main.bicep -clusterName=<cluster-name> -dnsPrefix=<dns-prefix> -linuxAdminUsername=<linux-admin-username> -sshRSAPublicKey="<ssh-key>"
-```plaintext
-{% endcode %}
+
+# Deploy the Bicep template
+New-AzResourceGroupDeployment `
+  -ResourceGroupName myResourceGroup `
+  -TemplateFile ./main.bicep `
+  -clusterName myAksCluster `
+  -dnsPrefix myakscluster `
+  -linuxAdminUsername azureuser `
+  -sshRSAPublicKey (Get-Content ~/.ssh/id_rsa.pub -Raw)
+```
+
+## Best Practices
+
+1. **Secure kubeConfig Handling**
+   - Always use the `@secure()` decorator for kubeConfig parameters
+   - Consider using Azure Key Vault to store and retrieve kubeConfig values
+
+2. **Resource Organization**
+   - Separate infrastructure (AKS) and application (Kubernetes resources) into different Bicep modules
+   - Use logical naming conventions for resources
+
+3. **Namespace Management**
+   - Use specific namespaces for different applications or environments
+   - Create namespaces explicitly in your Bicep files
+
+   ```bicep
+   resource namespace 'core/v1' = {
+     kind: 'Namespace'
+     metadata: {
+       name: 'my-application'
+     }
+   }
+   
+   // Then specify it when importing
+   import 'kubernetes@1.0.0' with {
+     namespace: namespace.metadata.name
+     kubeConfig: kubeConfig
+   } as k8s
+   ```
+
+4. **Configuration Management**
+   - Use ConfigMaps and Secrets for application configuration
+   - Consider parameter files for environment-specific values
+
+5. **Resource Dependencies**
+   - Use dependencies to ensure proper deployment order
+   - For example, make sure services are created after their deployments
+
+## Limitations and Considerations
+
+- The Kubernetes provider is in preview and subject to change
+- Complex Kubernetes objects might be easier to define using YAML and importing them
+- For large-scale Kubernetes deployments, consider dedicated tools like Helm
+- Using admin credentials in production environments is not recommended
+
+## Alternative Approach: Using YAML Files
+
+For complex Kubernetes manifests, you can use existing YAML files:
+
+```bicep
+@secure()
+param kubeConfig string
+
+import 'kubernetes@1.0.0' with {
+  namespace: 'default'
+  kubeConfig: kubeConfig
+} as k8s
+
+resource fromYaml 'core/v1' = {
+  kind: 'List'
+  apiVersion: 'v1'
+  items: loadYamlContent('kubernetes-manifests.yaml')
+}
+```
+
+## Conclusion
+
+The Kubernetes provider for Bicep enables DevOps teams to manage both Azure infrastructure and Kubernetes resources in a unified way, streamlining the deployment process and reducing the complexity of managing multiple toolchains.

@@ -59,3 +59,71 @@ Below, you can find some including, but not limited, topics many teams touch dur
 | Efficient Documentation | When is it necessary? Is it a prerequisite to complete tasks/PRs etc.?                                                                                                |
 | Definition of Fun       | How will we have fun for relaxing/enjoying the team spirit during the engagement?                                                                                     |
 
+### Team Manifesto for DevOps and SRE Engineers (2025 Standards) <a href="#manifesto-2025" id="manifesto-2025"></a>
+
+As DevOps and SRE practices continue to evolve, the team manifesto for 2025 should incorporate modern principles that address platform engineering, observability, security automation, and AI integration. Below are additional topics specifically tailored for DevOps/SRE teams:
+
+| Topic                      | What is it about?                                                                                                          |
+|----------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| Platform Engineering       | How does the team approach internal developer platforms? Which self-service capabilities are prioritized?                   |
+| Infrastructure as Code     | Which IaC tools are used (Terraform, Pulumi, CDK)? What are the standards for modules, testing, and documentation?          |
+| Observability Standards    | What constitutes proper instrumentation? SLO/SLI definitions, telemetry requirements, and alerting philosophy               |
+| Incident Response          | On-call expectations, incident classification, communication channels, and post-mortem requirements                         |
+| Security Automation        | How is security incorporated into pipelines? What scanning tools are mandatory? Remediation SLAs for vulnerabilities        |
+| Toil Reduction             | How to identify and prioritize automation opportunities, acceptable thresholds for manual work                              |
+| GitOps Practices           | Expectations around declarative configurations, drift detection, and reconciliation approaches                              |
+| AI/ML Integration          | How are AI tools (Copilot, LLM assistants) used in workflows? Boundaries for AI-generated code review and documentation     |
+| Cost Optimization          | FinOps practices, resource tagging standards, cost monitoring responsibilities, and optimization targets                    |
+| Release Cadence            | Deployment frequency expectations, progressive delivery approaches, feature flag usage                                      |
+| Collaboration with Product | Engagement model with product teams, how technical constraints are communicated, SRE engagement in product planning         |
+| Knowledge Sharing          | Internal documentation standards, runbook expectations, learning programs, and mentorship responsibilities                  |
+| Chaos Engineering          | Approach to resilience testing, failure injection practices, and learning from controlled experiments                       |
+
+### Team Manifesto Template for DevOps/SRE Teams (2025)
+
+Below is a sample template that DevOps and SRE teams can use as a starting point:
+
+```
+# OUR TEAM MANIFESTO
+
+## Our Values
+- We prioritize system reliability and user experience over new features
+- We automate repetitive work to focus on high-value engineering
+- We share ownership of production systems and on-call responsibilities
+- We learn from incidents without blame and continuously improve
+- We treat configuration as code and apply software engineering practices to infrastructure
+
+## Our Standards
+- All infrastructure changes go through code review and CI/CD pipelines
+- Observability is built-in from the start with logs, metrics, and traces
+- Security is everyone's responsibility and integrated into our workflows
+- We maintain SLOs for critical services and alert on burn rates
+- Documentation is kept updated as a primary artifact
+
+## Our Practices
+- Infrastructure changes are made through pull requests, never manually
+- We practice blameless postmortems after incidents
+- We run game days to test our resilience regularly
+- We rotate knowledge through pairing and documentation
+- We measure and reduce toil systematically
+
+## Our Tools
+[List team-approved tools for each category]
+```
+
+The modern DevOps/SRE team manifesto reflects the convergence of software engineering, operations, and product development while emphasizing automation, observability, and reliability as first-class concerns.
+
+### DevOps/SRE Facilitation Guide for Team Manifesto Sessions
+
+When facilitating a team manifesto session for DevOps/SRE teams, consider the following approach:
+
+1. **Pre-meeting preparation**: Send a survey to collect initial thoughts on key practices and values
+2. **Opening exercise**: Start with "What does reliability mean to us?" to center the conversation
+3. **Value mapping**: Identify the top 3-5 values that will drive technical decisions
+4. **Practice definition**: For each key practice area (IaC, Observability, etc.), define concrete standards
+5. **Tool consensus**: Agree on the toolchain that supports your practices, including version control, CI/CD, monitoring
+6. **Decision-making framework**: Define how technical decisions are made, particularly for architecture changes
+7. **Review and refine**: Consolidate the document to a single page and review as a team
+
+The resulting manifesto should be concise enough to reference daily while containing enough detail to guide technical decisions.
+

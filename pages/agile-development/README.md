@@ -40,6 +40,7 @@ Agile is a set of principles and practices for software development that emphasi
 ---
 
 ## Best Practices (2025)
+
 - Keep feedback loops short—automate testing and deployment.
 - Use Infrastructure as Code (Terraform, Bicep) for reproducible environments.
 - Integrate LLMs for documentation, code review, and backlog management.
@@ -47,6 +48,7 @@ Agile is a set of principles and practices for software development that emphasi
 - Measure outcomes (not just outputs): focus on customer value and business impact.
 
 ## Common Pitfalls
+
 - Over-reliance on tools without team collaboration.
 - Neglecting technical debt and refactoring.
 - Failing to adapt processes as the team or product evolves.
@@ -54,6 +56,7 @@ Agile is a set of principles and practices for software development that emphasi
 ---
 
 ## References
+
 - [Agile Manifesto](http://agilemanifesto.org/)
 - [Azure DevOps Agile Tools](https://learn.microsoft.com/en-us/azure/devops/boards/?view=azure-devops)
 - [Scrum Guide 2020](https://scrumguides.org/)

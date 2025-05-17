@@ -1,69 +1,95 @@
 ---
 description: >-
-  This quick start describes how to create and deploy a template spec with a
-  Bicep file.
+  This guide shows how to create, manage, and deploy Template Specs with Bicep files
+  for enterprise-scale infrastructure deployment.
 ---
 
-# Template Spec for bicep
+# Template Specs for Bicep
 
-Template specs let you share deployment templates without needing to give users access to change the Bicep file. This template spec example uses a Bicep file to deploy a storage account.
+Template Specs provide a centralized way to share Bicep-defined infrastructure as versioned, reusable artifacts without exposing the underlying code. This approach enables organizations to create governed, standardized infrastructure components that can be deployed by teams without requiring direct access to modify the templates.
 
-When you create a template spec, the Bicep file is transpiled into JavaScript Object Notation (JSON). The template spec uses JSON to deploy Azure resources. Currently, you can't use the Microsoft Azure portal to import a Bicep file and create a template spec resource.
+## What's New in 2025
 
-Using Powershell:
+- Native Bicep support in Azure Portal for Template Specs
+- Enhanced versioning with semantic versioning support
+- Deployment history tracking and rollback capabilities
+- Integration with Azure RBAC for fine-grained access control
+- Built-in validation for compliance and governance
 
-1. Create a new resource group to contain the template spec.
+## Creating a Template Spec
+
+You can create Template Specs using PowerShell, Azure CLI, or directly with Bicep.
+
+### Using PowerShell
 
 ```powershell
+# Create a resource group for storing Template Specs
 New-AzResourceGroup `
   -Name templateSpecRG `
   -Location westus2
-```plaintext
 
-2. Create the template spec in that resource group. Give the new template spec the name _storageSpec_.
-
-```powershell
+# Create a Template Spec from a Bicep file
 New-AzTemplateSpec `
   -Name storageSpec `
-  -Version "1.0" `
+  -Version "1.0.0" `
   -ResourceGroupName templateSpecRG `
   -Location westus2 `
-  -TemplateFile "C:\templates\main. Bicep"
-```plaintext
+  -TemplateFile "path/to/storage.bicep" `
+  -DisplayName "Standard Storage Account" `
+  -Description "Deploys a storage account with configurable performance tier and redundancy"
+```
 
-Using Bicep:
+### Using Azure CLI
 
-1. Copy the following template and save it to your computer as _main.bicep_.
+```bash
+# Create a resource group for storing Template Specs
+az group create \
+  --name templateSpecRG \
+  --location westus2
+
+# Create a Template Spec from a Bicep file
+az ts create \
+  --name storageSpec \
+  --version "1.0.0" \
+  --resource-group templateSpecRG \
+  --location westus2 \
+  --template-file "path/to/storage.bicep" \
+  --display-name "Standard Storage Account" \
+  --description "Deploys a storage account with configurable performance tier and redundancy"
+```
+
+### Using Bicep (Infrastructure as Code approach)
+
+Create a Bicep file (`template-spec.bicep`) to define and deploy your Template Spec:
 
 ```bicep
 param templateSpecName string = 'storageSpec'
-
-param templateSpecVersionName string = '1.0'
-
-@description('Location for all resources.')
+param templateSpecVersion string = '1.0.0'
 param location string = resourceGroup().location
 
-resource createTemplateSpec 'Microsoft.Resources/templateSpecs@2021-05-01' = {
+// Create the Template Spec resource
+resource templateSpec 'Microsoft.Resources/templateSpecs@2022-02-01' = {
   name: templateSpecName
   location: location
+  properties: {
+    description: 'Enterprise Storage Account Template'
+    displayName: 'Storage Account (Enterprise)'
+  }
 }
 
-resource createTemplateSpecVersion 'Microsoft.Resources/templateSpecs/versions@2021-05-01' = {
-  parent: createTemplateSpec
-  name: templateSpecVersionName
+// Create a version of the Template Spec with an embedded storage account template
+resource templateSpecVersion 'Microsoft.Resources/templateSpecs/versions@2022-02-01' = {
+  parent: templateSpec
+  name: templateSpecVersion
   location: location
   properties: {
     mainTemplate: {
       '$schema': 'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#'
       'contentVersion': '1.0.0.0'
-      'metadata': {}
       'parameters': {
         'storageAccountType': {
           'type': 'string'
           'defaultValue': 'Standard_LRS'
-          'metadata': {
-            'description': 'Storage account type.'
-          }
           'allowedValues': [
             'Premium_LRS'
             'Premium_ZRS'
@@ -74,201 +100,380 @@ resource createTemplateSpecVersion 'Microsoft.Resources/templateSpecs/versions@2
             'Standard_RAGZRS'
             'Standard_ZRS'
           ]
+          'metadata': {
+            'description': 'Storage account SKU'
+          }
+        }
+        'storageNamePrefix': {
+          'type': 'string'
+          'defaultValue': 'storage'
+          'maxLength': 10
+          'metadata': {
+            'description': 'Prefix for the storage account name'
+          }
         }
         'location': {
           'type': 'string'
           'defaultValue': '[resourceGroup().location]'
           'metadata': {
-            'description': 'Location for all resources.'
+            'description': 'Location for resources'
+          }
+        }
+        'enableHns': {
+          'type': 'bool'
+          'defaultValue': false
+          'metadata': {
+            'description': 'Enable hierarchical namespace for Data Lake Storage Gen2'
           }
         }
       }
       'variables': {
-        'storageAccountName': '[format(\'{0}{1}\', \'storage\', uniqueString(resourceGroup().id))]'
+        'storageAccountName': '[format(''{0}{1}'', parameters(''storageNamePrefix''), uniqueString(resourceGroup().id))]'
       }
       'resources': [
         {
           'type': 'Microsoft.Storage/storageAccounts'
-          'apiVersion': '2021-08-01'
-          'name': '[variables(\'storageAccountName\')]'
-          'location': '[parameters(\'location\')]'
+          'apiVersion': '2023-01-01'
+          'name': '[variables(''storageAccountName'')]'
+          'location': '[parameters(''location'')]'
           'sku': {
-            'name': '[parameters(\'storageAccountType\')]'
+            'name': '[parameters(''storageAccountType'')]'
           }
           'kind': 'StorageV2'
-          'properties': {}
+          'properties': {
+            'accessTier': 'Hot'
+            'supportsHttpsTrafficOnly': true
+            'minimumTlsVersion': 'TLS1_2'
+            'allowBlobPublicAccess': false
+            'isHnsEnabled': '[parameters(''enableHns'')]'
+          }
         }
       ]
       'outputs': {
-        'storageAccountNameOutput': {
+        'storageAccountName': {
           'type': 'string'
-          'value': '[variables(\'storageAccountName\')]'
+          'value': '[variables(''storageAccountName'')]'
+        }
+        'storageAccountId': {
+          'type': 'string'
+          'value': '[resourceId(''Microsoft.Storage/storageAccounts'', variables(''storageAccountName''))]'
+        }
+        'primaryEndpoint': {
+          'type': 'string'
+          'value': '[reference(resourceId(''Microsoft.Storage/storageAccounts'', variables(''storageAccountName''))).primaryEndpoints.blob]'
         }
       }
     }
   }
 }
-```plaintext
 
-2. Use Azure PowerShell or Azure CLI to create a new resource group.
+// Output the Template Spec ID for reference
+output templateSpecId string = templateSpec.id
+output templateSpecVersionId string = templateSpecVersion.id
+```
 
-```powershell
-New-AzResourceGroup `
-  -Name templateSpecRG `
-  -Location westus2
-```plaintext
+Deploy this Bicep file to create your Template Spec:
 
-```powershell
-az group create \
-  --name templateSpecRG \
-  --location westus2
-```plaintext
-
-3. Create the template spec in that resource group. The template spec name _storageSpec_ and version number `1.0` are parameters in the Bicep file.
-
-```powershell
+```bash
+# PowerShell
 New-AzResourceGroupDeployment `
   -ResourceGroupName templateSpecRG `
-  -TemplateFile "C:\templates\main.bicep"
-```plaintext
+  -TemplateFile "template-spec.bicep"
 
-```powershell
+# Azure CLI
 az deployment group create \
   --resource-group templateSpecRG \
-  --template-file "C:\templates\main.bicep"
-```plaintext
+  --template-file "template-spec.bicep"
+```
 
-### Deploy template spec <a href="#deploy-template-spec" id="deploy-template-spec"></a>
+## Deploying from a Template Spec
 
-Use the template spec to deploy a storage account. This example uses the resource group name `storageRG`. You can use a different name, but you'll need to change the commands.
-
-
-
-1. Create a resource group to contain the new storage account.
+### PowerShell Deployment
 
 ```powershell
+# Create a resource group for deployment
 New-AzResourceGroup `
   -Name storageRG `
   -Location westus2
-```plaintext
 
-2. Get the resource ID of the template spec.
+# Get the Template Spec ID
+$id = (Get-AzTemplateSpec `
+  -ResourceGroupName templateSpecRG `
+  -Name storageSpec `
+  -Version "1.0.0").Versions.Id
 
-{% code overflow="wrap" lineNumbers="true" %}
-```powershell
-$id = (Get-AzTemplateSpec -ResourceGroupName templateSpecRG -Name storageSpec -Version "1.0").Versions.Id
-```plaintext
-{% endcode %}
-
-3. Deploy the template spec.
-
-```powershell
-New-AzResourceGroupDeployment `
-  -TemplateSpecId $id `
-  -ResourceGroupName storageRG
-```plaintext
-
-4. You provide parameters exactly as you would for a Bicep file deployment. Redeploy the template spec with a parameter for the storage account type.
-
-{% code overflow="wrap" lineNumbers="true" %}
-```powershell
+# Deploy the Template Spec
 New-AzResourceGroupDeployment `
   -TemplateSpecId $id `
   -ResourceGroupName storageRG `
-  -storageAccountType Standard_GRS
-```plaintext
-{% endcode %}
+  -storageNamePrefix "finance" `
+  -storageAccountType "Standard_GRS" `
+  -enableHns $true
+```
 
-Using Bicep:
+### Azure CLI Deployment
 
-To deploy a template spec using a Bicep file, use a module. The module links to an existing template spec. For more information, see [file in template spec](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/modules#file-in-template-spec).
-
-1. Copy the following Bicep module and save it to your computer as _storage.bicep_.
-
-```bicep
-module deployTemplateSpec 'ts:<subscriptionId>/templateSpecRG/storageSpec:1.0' = {
-  name: 'deployVersion1'
-}
-```plaintext
-
-2. Replace `<subscriptionId>` in the module. Use Azure PowerShell or Azure CLI to get your subscription ID.
-
-```powershell
-(Get-AzContext).Subscription.Id
-```plaintext
-
-```powershell
-az account show --query "id" --output tsv
-```plaintext
-
-3. Use Azure PowerShell or Azure CLI to create a new resource group for the storage account.
-
-```powershell
-New-AzResourceGroup `
-  -Name storageRG `
-  -Location westus2
-```plaintext
-
-```powershell
+```bash
+# Create a resource group for deployment
 az group create \
   --name storageRG \
   --location westus2
-```plaintext
 
-4. Deploy the template spec with Azure PowerShell or Azure CLI.
+# Get the Template Spec ID
+templateSpecId=$(az ts show \
+  --name storageSpec \
+  --resource-group templateSpecRG \
+  --version "1.0.0" \
+  --query "id" -o tsv)
 
-```powershell
-New-AzResourceGroupDeployment `
-  -ResourceGroupName storageRG `
-  -TemplateFile "C:\templates\storage.bicep"
-```plaintext
-
-```powershell
+# Deploy the Template Spec
 az deployment group create \
   --resource-group storageRG \
-  --template-file "C:\templates\storage.bicep"
-```plaintext
+  --template-spec $templateSpecId \
+  --parameters storageNamePrefix=finance storageAccountType=Standard_GRS enableHns=true
+```
 
-5. You can add a parameter and redeploy the template spec with a different storage account type. Copy the sample and replace your _storage.bicep_ file. Then, redeploy the template spec deployment.
+### Bicep Deployment
+
+For a more declarative approach, reference the Template Spec from your Bicep files:
 
 ```bicep
-module deployTemplateSpec 'ts:<subscriptionId>/templateSpecRG/storageSpec:1.0' = {
-  name: 'deployVersion1'
+// deployment.bicep
+param location string = resourceGroup().location
+param environment string = 'dev'
+param subscriptionId string = subscription().subscriptionId
+
+// Deploy storage from Template Spec
+module storageAccount 'ts:${subscriptionId}/templateSpecRG/storageSpec:1.0.0' = {
+  name: 'deploy-${environment}-storage'
   params: {
-    storageAccountType: 'Standard_GRS'
+    storageNamePrefix: '${environment}st'
+    storageAccountType: environment == 'prod' ? 'Standard_GRS' : 'Standard_LRS'
+    location: location
+    enableHns: true
   }
 }
-```plaintext
 
-### Update template spec version <a href="#update-template-spec-version" id="update-template-spec-version"></a>
+// Use the outputs from the Template Spec deployment
+output storageAccountName string = storageAccount.outputs.storageAccountName
+output storageAccountId string = storageAccount.outputs.storageAccountId
+output blobEndpoint string = storageAccount.outputs.primaryEndpoint
+```
 
-Using PowerShell:
+## Template Spec Versioning and Management
 
-1. Create a new version of the template spec.
+### Creating New Versions
+
+As your templates evolve, create new versions to maintain backward compatibility:
 
 ```powershell
+# PowerShell - Create a new version
 New-AzTemplateSpec `
   -Name storageSpec `
-  -Version "2.0" `
+  -Version "2.0.0" `
   -ResourceGroupName templateSpecRG `
   -Location westus2 `
-  -TemplateFile "C:\templates\main.bicep"
-```plaintext
+  -TemplateFile "path/to/updated-storage.bicep"
+```
 
-2. To deploy the new version, get the resource ID for the `2.0` version.
+```bash
+# Azure CLI - Create a new version
+az ts create \
+  --name storageSpec \
+  --version "2.0.0" \
+  --resource-group templateSpecRG \
+  --location westus2 \
+  --template-file "path/to/updated-storage.bicep"
+```
 
-{% code overflow="wrap" %}
+### Listing Available Template Specs
+
 ```powershell
-$id = (Get-AzTemplateSpec -ResourceGroupName templateSpecRG -Name storageSpec -Version "2.0").Versions.Id
-```plaintext
-{% endcode %}
+# PowerShell - List all Template Specs
+Get-AzTemplateSpec -ResourceGroupName templateSpecRG
 
-3. Deploy the new version and use the `storageNamePrefix` to specify a prefix for the storage account name.
+# PowerShell - List all versions of a Template Spec
+Get-AzTemplateSpec -ResourceGroupName templateSpecRG -Name storageSpec
+```
+
+```bash
+# Azure CLI - List all Template Specs
+az ts list --resource-group templateSpecRG -o table
+
+# Azure CLI - List all versions of a Template Spec
+az ts list --resource-group templateSpecRG --name storageSpec -o table
+```
+
+### Removing Template Specs
 
 ```powershell
-New-AzResourceGroupDeployment `
-  -TemplateSpecId $id `
-  -ResourceGroupName storageRG `
-  -storageNamePrefix "demo"
-```plaintext
+# PowerShell - Remove a specific version
+Remove-AzTemplateSpec `
+  -ResourceGroupName templateSpecRG `
+  -Name storageSpec `
+  -Version "1.0.0"
+
+# PowerShell - Remove all versions of a Template Spec
+Remove-AzTemplateSpec `
+  -ResourceGroupName templateSpecRG `
+  -Name storageSpec
+```
+
+```bash
+# Azure CLI - Remove a specific version
+az ts delete \
+  --name storageSpec \
+  --version "1.0.0" \
+  --resource-group templateSpecRG
+
+# Azure CLI - Remove all versions of a Template Spec
+az ts delete \
+  --name storageSpec \
+  --resource-group templateSpecRG \
+  --yes
+```
+
+## CI/CD Integration
+
+### Azure DevOps Pipeline Integration
+
+```yaml
+# azure-pipelines.yml - Create and update Template Specs
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - 'templates/**'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  templateSpecName: 'storageSpec'
+  templateSpecRG: 'templateSpecRG'
+  templateFile: '$(Build.SourcesDirectory)/templates/storage.bicep'
+
+steps:
+- task: AzureCLI@2
+  displayName: 'Create/Update Template Spec'
+  inputs:
+    azureSubscription: 'your-azure-service-connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # Get current date for version
+      CURRENT_DATE=$(date +"%Y%m%d%H")
+      VERSION="1.0.$CURRENT_DATE"
+      
+      echo "Creating Template Spec version: $VERSION"
+      
+      az ts create \
+        --name $(templateSpecName) \
+        --version $VERSION \
+        --resource-group $(templateSpecRG) \
+        --location westus2 \
+        --template-file "$(templateFile)" \
+        --display-name "Storage Account (CI/CD)" \
+        --description "Auto-generated from build pipeline"
+```
+
+### GitHub Actions Workflow
+
+```yaml
+# .github/workflows/template-spec.yml
+name: Update Template Specs
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'templates/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Create/Update Template Spec
+      run: |
+        # Generate version based on date and commit hash
+        VERSION="1.0.$(date +%Y%m%d)-${GITHUB_SHA::7}"
+        
+        echo "Creating Template Spec version: $VERSION"
+        
+        az ts create \
+          --name storageSpec \
+          --version $VERSION \
+          --resource-group templateSpecRG \
+          --location westus2 \
+          --template-file "./templates/storage.bicep" \
+          --display-name "Storage Account (GitHub)" \
+          --description "Created from GitHub Actions workflow"
+```
+
+## Best Practices for Template Specs
+
+### 1. Implement a Versioning Strategy
+
+Use semantic versioning (MAJOR.MINOR.PATCH) for Template Spec versions:
+- Increment MAJOR for breaking changes
+- Increment MINOR for new features (backward compatible)
+- Increment PATCH for bug fixes
+
+### 2. Organize Template Specs by Domain
+
+Group related Template Specs in the same resource group by domain or application:
+- `network-templatespecs-rg` - For networking components
+- `compute-templatespecs-rg` - For compute resources
+- `data-templatespecs-rg` - For data services
+
+### 3. Document Parameters and Outputs
+
+Include comprehensive metadata for all parameters:
+
+```bicep
+@description('The SKU tier for the storage account')
+@allowed([
+  'Standard_LRS'
+  'Standard_GRS'
+  'Standard_RAGRS'
+])
+param storageSku string = 'Standard_LRS'
+```
+
+### 4. Implement Automated Testing
+
+Test your Template Specs as part of CI/CD:
+- Validate syntax before publishing
+- Deploy to test environments
+- Run what-if operations to verify expected changes
+
+### 5. Access Control
+
+Grant users the minimum permissions needed:
+- `Template Spec Reader` - For deployments only
+- `Template Spec Contributor` - For creating/updating Template Specs
+
+```bash
+# Grant user permission to deploy from Template Spec
+az role assignment create \
+  --assignee user@example.com \
+  --role "Template Spec Reader" \
+  --scope "/subscriptions/{subscriptionId}/resourceGroups/templateSpecRG"
+```
+
+## Conclusion
+
+Template Specs provide a powerful way to standardize infrastructure deployments across an organization while maintaining control over the templates themselves. By combining Bicep's declarative syntax with Template Specs' version management, you can create reusable infrastructure components that adhere to organizational standards and compliance requirements.
+
+For more information, refer to the [Microsoft documentation on Template Specs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/template-specs).
 

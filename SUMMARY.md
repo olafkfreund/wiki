@@ -71,16 +71,16 @@
     * [GitHub Actions](pages/terraform/cicd/github-actions.md) - GitHub-based automation workflows
     * [Azure Pipelines](pages/terraform/cicd/azure-pipelines.md) - Azure DevOps integration
     * [GitLab CI](pages/terraform/cicd/gitlab-ci.md) - GitLab-based deployment pipelines
-* [Bicep](group-1/bicep/README.md) - Azure-native infrastructure as code language
-  * [Getting Started](group-1/bicep/getting-started.md) - First steps with Bicep [BEGINNER]
-  * [Template Specs](group-1/bicep/template-spec-for-bicep.md) - Creating reusable infrastructure templates
-  * [Best Practices](group-1/bicep/best-practices.md) - Guidelines for effective Bicep implementations
-  * [Modules](group-1/bicep/modules.md) - Building reusable components [INTERMEDIATE]
-  * [Examples](group-1/bicep/examples.md) - Sample implementations for common scenarios
-  * [Advanced Features](group-1/bicep/use-inline-scripts.md) - Using inline scripts and extensions
-  * [CI/CD Integration](group-1/bicep/) - Automating Bicep deployments
-    * [GitHub Actions](group-1/bicep/bicep-with-github-actions.md) - GitHub workflow integration
-    * [Azure Pipelines](group-1/bicep/integrate-bicep-with-azure-pipelines.md) - Azure DevOps integration
+* [Bicep](pages/bicep/README.md) - Azure-native infrastructure as code language
+  * [Getting Started](pages/bicep/getting-started.md) - First steps with Bicep [BEGINNER]
+  * [Template Specs](pages/bicep/template-spec-for-bicep.md) - Creating reusable infrastructure templates
+  * [Best Practices](pages/bicep/best-practices.md) - Guidelines for effective Bicep implementations
+  * [Modules](pages/bicep/modules.md) - Building reusable components [INTERMEDIATE]
+  * [Examples](pages/bicep/examples.md) - Sample implementations for common scenarios
+  * [Advanced Features](pages/bicep/use-inline-scripts.md) - Using inline scripts and extensions
+  * [CI/CD Integration](pages/bicep/) - Automating Bicep deployments
+    * [GitHub Actions](pages/bicep/bicep-with-github-actions.md) - GitHub workflow integration
+    * [Azure Pipelines](pages/bicep/integrate-bicep-with-azure-pipelines.md) - Azure DevOps integration
 
 ## 💰 Cost Management & FinOps
 
@@ -151,6 +151,7 @@
   * [Blue-Green Deployments](pages/devops/continuous-delivery/blue-and-green-deployment-in-real-life.md)
   * [Deployment Metrics](pages/devops/continuous-delivery/deployment-metrics.md)
   * [Progressive Delivery](pages/devops/continuous-delivery/progressive-delivery.md)
+  * [Release Management for DevOps/SRE (2025)](pages/devops/continuous-delivery/release-management-2025.md) - Modern release practices and patterns
 * [CI/CD Platforms](pages/devops/ci-cd-platforms/) - Tool selection and implementation
   * [Azure DevOps](pages/azure-devops/README.md) - Microsoft's comprehensive DevOps platform
     * [Pipelines](pages/azure-devops/pipelines/README.md) - YAML-based CI/CD implementation
