@@ -4,6 +4,7 @@
 * [Quick Start Guide](pages/quick-starts/README.md) - Fast track to common DevOps tasks
 * [About Me](pages/about-me.md) - Professional background and expertise
 * [CV](pages/cv.md) - Professional experience and skills
+* [Contribute](CONTRIBUTING.MD) - How to contribute
 
 ## 🧠 DevOps & SRE Foundations
 
@@ -362,6 +363,7 @@
 
 * [Glossary](pages/reference/glossary.md) - DevOps and cloud terminology
 * [Tool Comparison](pages/reference/tool-comparison.md) - Feature analysis of DevOps tools
+* [Tool Decision Guides](pages/reference/tool-decision-guides.md) - Decision trees and migration guides for tool selection
 * [Recommended Reading](pages/reference/reading.md) - Essential books and resources
 * [Troubleshooting Guide](pages/reference/troubleshooting.md) - Advanced issue resolution for DevOps/SRE
 

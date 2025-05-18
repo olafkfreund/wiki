@@ -14,6 +14,7 @@ Thank you for considering contributing to this DevOps knowledge base! This docum
 
 - Use ATX-style headers (`#` for h1, `##` for h2, etc.)
 - Use fenced code blocks with language specification:
+
   ```bash
   # This is a bash code block
   ```plaintext
