@@ -1,191 +1,138 @@
-# Java
+# Java for DevOps & SRE (2025)
 
-Java is a high-level, class-based, object-oriented programming language designed to be platform-independent through its "Write Once, Run Anywhere" philosophy.
+Java remains a core language for enterprise DevOps and SRE teams, powering cloud-native microservices, automation tools, and CI/CD pipelines across AWS, Azure, and GCP. Its mature ecosystem, JVM portability, and robust frameworks make it ideal for building scalable, observable, and secure applications.
 
-## Overview
+## Why DevOps & SREs Should Learn Java
 
-Java runs on the Java Virtual Machine (JVM), which allows code to run on any device that has a JVM installed, regardless of the underlying architecture.
+- **Cloud-Native**: Java frameworks (Spring Boot, Quarkus, Micronaut) are optimized for Kubernetes, Docker, and serverless deployments.
+- **Observability**: Strong support for metrics (Micrometer, Prometheus), distributed tracing (OpenTelemetry, Jaeger), and logging (SLF4J, Logback).
+- **CI/CD Integration**: Java projects integrate seamlessly with GitHub Actions, Azure Pipelines, and GitLab CI/CD.
+- **Cross-Platform**: JVM runs on Linux, NixOS, WSL, and all major clouds.
+- **LLM Integration**: Java can call LLM APIs (OpenAI, Azure OpenAI) for automation, code review, and incident summarization.
 
-## Pros
+## Real-Life DevOps & SRE Examples
 
-- Platform independence
-- Strong ecosystem and libraries
-- Excellent documentation
-- Large community support
-- Enterprise-grade security
-- Automatic memory management
-- Rich set of development tools
-- Strong typing and compile-time checking
-
-## Cons
-
-- Verbose syntax compared to modern languages
-- Higher memory consumption
-- Slower startup time compared to native applications
-- Complex build systems for beginners
-- Can be overly complex for simple tasks
-
-## Setup Guide
-
-### Linux (Ubuntu/Debian)
-
-```bash
-# Install OpenJDK
-sudo apt update
-sudo apt install openjdk-17-jdk
-```
-
-### WSL
-
-```bash
-# Same as Linux installation
-sudo apt update
-sudo apt install openjdk-17-jdk
-```
-
-### NixOS 
-
-```nix
-# Add to configuration.nix
-environment.systemPackages = with pkgs; [
-  jdk17
-  maven
-  gradle
-];
-```
-
-## Development Tools
-
-1. **Build Tools:**
-   - Maven
-   - Gradle
-   - Ant (legacy)
-
-2. **IDEs:**
-   - IntelliJ IDEA
-   - Eclipse
-   - VS Code with Java extensions
-
-## Real-Life Example
-
-Here's a simple Spring Boot REST API example:
+### 1. Spring Boot REST API with Health Checks
 
 ```java
-// filepath: HelloWorldController.java
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-public class HelloWorldController {
-    
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello, DevOps World!";
+public class HealthController {
+    @GetMapping("/health")
+    public String health() {
+        return "OK";
     }
 }
 ```
 
-### Project Structure Example
+### 2. Dockerfile for Cloud-Native Java App
 
-```plaintext
-my-java-project/
-├── src/
-│   ├── main/
-│   │   └── java/
-│   │       └── com/
-│   │           └── example/
-│   │               └── Application.java
-│   └── test/
-│       └── java/
-├── pom.xml
-└── README.md
-```
-
-### Maven Build File Example
-
-```xml
-// filepath: pom.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0">
-    <modelVersion>4.0.0</modelVersion>
-    
-    <groupId>com.example</groupId>
-    <artifactId>demo-project</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    
-    <properties>
-        <java.version>17</java.version>
-        <spring-boot.version>3.1.0</spring-boot.version>
-    </properties>
-</project>
-```
-
-## Building and Running
-
-### Command Line Compilation
-
-```bash
-# Compile a single file
-javac HelloWorld.java
-
-# Run the compiled class
-java HelloWorld
-
-# Build with Maven
-mvn clean install
-
-# Run Spring Boot application
-mvn spring-boot:run
-```
-
-## Best Practices
-
-1. **Code Organization:**
-   - Follow package naming conventions
-   - Use meaningful class and method names
-   - Implement proper exception handling
-
-2. **Performance:**
-   - Use StringBuilder for string concatenation
-   - Implement proper resource cleanup
-   - Use collection frameworks appropriately
-
-3. **Testing:**
-   - Write unit tests using JUnit
-   - Implement integration tests
-   - Use mocking frameworks when needed
-
-## Common Tools for DevOps
-
-1. **Containerization:**
 ```dockerfile
-FROM openjdk:17-slim
+FROM eclipse-temurin:17-jre-alpine
 COPY target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 ```
 
-2. **CI/CD Pipeline Example (GitHub Actions):**
+### 3. Prometheus Metrics with Micrometer
+
+```java
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@RestController
+public class MetricsController {
+    private final MeterRegistry registry;
+    public MetricsController(MeterRegistry registry) {
+        this.registry = registry;
+    }
+    @GetMapping("/custom-metric")
+    public String customMetric() {
+        registry.counter("custom_requests_total").increment();
+        return "Metric incremented!";
+    }
+}
+```
+
+### 4. CI/CD Pipeline (GitHub Actions)
+
 ```yaml
-name: Java CI
+name: Java CI/CD
 on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '17'
       - name: Build with Maven
         run: mvn clean install
+      - name: Run Tests
+        run: mvn test
+      - name: Build Docker Image
+        run: docker build -t myorg/myapp:${{ github.sha }} .
 ```
 
-## Monitoring and Observability
+### 5. LLM Integration for Incident Summaries
 
-- Use Spring Actuator for health checks
-- Implement logging with SLF4J/Logback
-- Use Prometheus and Grafana for metrics
-- Implement distributed tracing with Jaeger or Zipkin
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
-Remember to update the SUMMARY.md file to include this new Java guide in your wiki structure.
+public class LLMIntegration {
+    public static void main(String[] args) throws Exception {
+        String logContents = "Example incident log contents";
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.openai.com/v1/chat/completions"))
+            .header("Authorization", "Bearer sk-...")
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString("{" +
+                "\"model\":\"gpt-4\"," +
+                "\"messages\":[{" +
+                    "\"role\":\"system\",\"content\":\"Summarize this incident log for SREs.\"},{" +
+                    "\"role\":\"user\",\"content\":\"" + logContents + "\"}]}"))
+            .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+    }
+}
+```
 
+## Best Practices (2025)
+
+- Use Spring Boot or Quarkus for cloud-native microservices
+- Containerize apps with multi-stage Dockerfiles
+- Expose health and metrics endpoints for observability
+- Integrate with CI/CD for automated testing and deployment
+- Store secrets in environment variables or secret managers
+- Use OpenTelemetry for distributed tracing
+- Write unit and integration tests (JUnit, Testcontainers)
+
+## Common Pitfalls
+
+- Hardcoding credentials in code or configs
+- Not exposing health/metrics endpoints
+- Ignoring JVM resource limits in containers
+- Overlooking dependency updates (use Dependabot or Renovate)
+- Not monitoring application logs and metrics
+
+## References
+
+- [Spring Boot Docs](https://spring.io/projects/spring-boot)
+- [Micrometer Metrics](https://micrometer.io/)
+- [OpenTelemetry Java](https://opentelemetry.io/docs/instrumentation/java/)
+- [GitHub Actions for Java](https://github.com/actions/setup-java)
+- [OpenAI Java SDK](https://github.com/TheoKanning/openai-java)
+
+---
+
+> **Java Joke:**
+> Why did the SRE refuse to use Java for their scripts? Too many exceptions in production!

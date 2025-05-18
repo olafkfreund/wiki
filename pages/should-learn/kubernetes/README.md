@@ -21,8 +21,8 @@ Kubernetes is an open-source platform for automating deployment, scaling, and op
 ## What You'll Learn
 
 This section covers:
+
 - Kubernetes architecture and components
 - How to deploy applications using Kubernetes
 - Troubleshooting common issues
 - Advanced Kubernetes features and patterns
-

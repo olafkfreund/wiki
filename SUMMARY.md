@@ -376,3 +376,54 @@
 ## Development Setup
 
 * [Development Setup](pages/development/setup.md)
+
+## Should Learn
+
+* [Should Learn](pages/should-learn/README.md)
+  * [Linux](pages/should-learn/linux.md)
+    * [Commands](pages/should-learn/linux/commands/README.md)
+    * [OS](pages/should-learn/linux/os/README.md)
+      * [Bash Shortcuts Every Linux User Needs to Know](pages/should-learn/linux/os/how-to-avoid-multiple-sudo-commands-in-one-liners/bash-shortcuts-every-linux-user-needs-to-know.md)
+    * [Services](pages/should-learn/linux/services/README.md)
+  * [Terraform](pages/terraform/README.md) - HashiCorp's multi-cloud infrastructure automation
+  * [Getting Started](pages/terraform/install.md) - Installation and initial setup [BEGINNER]
+  * [Cloud Integrations](pages/terraform/) - Provider-specific implementations
+    * [Azure Scenarios](pages/terraform/azure-scenarios.md) - Azure resource management patterns
+    * [AWS Scenarios](pages/terraform/aws-scenarios.md) - AWS deployment strategies
+    * [GCP Scenarios](pages/terraform/gcp-scenarios.md) - Google Cloud automation patterns
+  * [Testing and Validation](pages/terraform/testing/) - Ensuring infrastructure quality
+    * [Unit Testing](pages/terraform/testing/unit-testing.md) - Testing individual resources
+    * [Integration Testing](pages/terraform/testing/integration-testing.md) - Testing resource interactions
+    * [End-to-End Testing](pages/terraform/testing/e2e-testing.md) - Testing complete infrastructure
+    * [Terratest Guide](pages/terraform/testing/terratest.md) - Go-based testing framework
+  * [Best Practices](pages/terraform/best-practices/) - Production-ready implementation strategies
+    * [State Management](pages/terraform/best-practices/state-management.md) - Remote state and locking [ADVANCED]
+    * [Security](pages/terraform/best-practices/security.md) - Securing infrastructure code
+    * [Code Organization](pages/terraform/best-practices/code-organization.md) - Project structure and modules
+    * [Performance](pages/terraform/best-practices/performance.md) - Optimizing deployment speed
+  * [Tools & Utilities](pages/terraform/tools/) - Enhancing the Terraform workflow
+    * [Terraform Docs](pages/terraform/tools/terraform-docs.md) - Automated documentation generation
+    * [TFLint](pages/terraform/tools/tflint.md) - Static code analysis and linting
+    * [Checkov](pages/terraform/tools/checkov.md) - Policy-as-code scanning
+    * [Terrascan](pages/terraform/tools/terrascan.md) - Security vulnerability scanning
+  * [CI/CD Integration](pages/terraform/cicd/) - Automating infrastructure deployment
+    * [GitHub Actions](pages/terraform/cicd/github-actions.md) - GitHub-based automation workflows
+    * [Azure Pipelines](pages/terraform/cicd/azure-pipelines.md) - Azure DevOps integration
+    * [GitLab CI](pages/terraform/cicd/gitlab-ci.md) - GitLab-based deployment pipelines
+  * [Bicep](pages/bicep/README.md) - Azure-native infrastructure as code language
+    * [Getting Started](pages/bicep/getting-started.md) - First steps with Bicep [BEGINNER]
+    * [Template Specs](pages/bicep/template-spec-for-bicep.md) - Creating reusable infrastructure templates
+    * [Best Practices](pages/bicep/best-practices.md) - Guidelines for effective Bicep implementations
+    * [Modules](pages/bicep/modules.md) - Building reusable components [INTERMEDIATE]
+    * [Examples](pages/bicep/examples.md) - Sample implementations for common scenarios
+    * [Advanced Features](pages/bicep/use-inline-scripts.md) - Using inline scripts and extensions
+    * [CI/CD Integration](pages/bicep/) - Automating Bicep deployments
+      * [GitHub Actions](pages/bicep/bicep-with-github-actions.md) - GitHub workflow integration
+      * [Azure Pipelines](pages/bicep/integrate-bicep-with-azure-pipelines.md) - Azure DevOps integration
+  * [Kubernetes](pages/should-learn/kubernetes/tools/README.md)
+    * [kubectl](pages/should-learn/kubernetes/kubectl.md)
+  * [Ansible](pages/should-learn/ansible.md)
+  * [Puppet](pages/should-learn/puppet.md)
+  * [Java](pages/should-learn/java.md)
+  * [Rust](pages/should-learn/rust.md)
+  * [Azure CLI](pages/should-learn/az-cli/README.md)

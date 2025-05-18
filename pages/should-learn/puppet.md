@@ -1,10 +1,10 @@
 # Puppet
 
-Puppet is an open-source configuration management tool that helps automate the provisioning and management of IT infrastructure using a declarative, model-driven approach.
+Puppet is a leading open-source configuration management tool, widely used by DevOps and SRE teams to automate provisioning, enforce compliance, and manage cloud and on-premises infrastructure at scale.
 
-## Overview
+## Overview (2025)
 
-Puppet uses a master-agent architecture where configurations are defined as code (Infrastructure as Code) and automatically enforced across the infrastructure. It follows a declarative approach where you specify the desired state of your systems, and Puppet ensures that state is maintained.
+Puppet enables Infrastructure as Code (IaC) using a declarative, model-driven approach. It supports hybrid and multi-cloud environments (AWS, Azure, GCP), integrates with CI/CD pipelines, and is ideal for large-scale, compliance-driven operations.
 
 ## Pros
 
@@ -26,7 +26,7 @@ Puppet uses a master-agent architecture where configurations are defined as code
 - Ruby dependency
 - Can be overkill for small infrastructures
 
-## Installation and Setup
+## Installation and Setup (2025)
 
 ### Linux (Ubuntu/Debian)
 
@@ -72,159 +72,83 @@ sudo apt install puppet-agent
 }
 ```
 
-## Real-Life Examples
+## Real-Life DevOps & SRE Examples
 
-### Basic Node Configuration
+### 1. Enforcing Compliance Across Cloud VMs
 
 ```puppet
-node 'webserver' {
-  class { 'nginx':
-    manage_repo    => true,
-    service_ensure => running,
-  }
-
-  nginx::resource::server { 'example.com':
-    listen_port => 80,
-    www_root    => '/var/www/example',
-  }
+node /^web\d+\.prod\.aws\.example\.com$/ {
+  include profile::base
+  include profile::cloudwatch_agent
+  include profile::cis_hardening
 }
 ```
 
-### Cloud Infrastructure Management
-
-#### AWS Example
+### 2. Automated User Management (SRE)
 
 ```puppet
-class profile::aws {
-  ec2_instance { 'web_server':
-    ensure    => running,
-    region    => 'us-west-2',
-    image_id  => 'ami-0123456789',
-    instance_type => 't2.micro',
-    tags      => {
-      'Environment' => 'production',
-      'Role'        => 'webserver'
-    }
-  }
-
-  route53_record { 'www.example.com':
-    ensure => present,
-    zone   => 'example.com',
-    type   => 'A',
-    ttl    => 300,
-    values => ['10.0.0.1']
-  }
+users::user { 'devops_engineer':
+  ensure     => present,
+  uid        => '1050',
+  groups     => ['sudo', 'docker'],
+  ssh_keys   => ['ssh-rsa AAAA...'],
+  managehome => true,
 }
 ```
 
-#### Azure Example
+### 3. Multi-Cloud Resource Tagging (AWS & Azure)
 
 ```puppet
-azure_resource_group { 'production-rg':
-  ensure   => present,
-  location => 'westus2',
+# AWS EC2 Tagging
+aws_tag { 'Environment':
+  resource_id => 'i-0abcd1234',
+  value       => 'production',
 }
 
-azure_vm { 'web-vm':
-  ensure              => present,
-  resource_group     => 'production-rg',
-  location           => 'westus2',
-  size               => 'Standard_B1s',
-  image              => 'Ubuntu:18.04-LTS:latest',
-  admin_username     => 'adminuser',
-  admin_password     => 'Password123!',
-  network_interface  => 'web-vm-nic'
+# Azure VM Tagging
+azure_vm_tag { 'web-vm':
+  resource_group => 'prod-rg',
+  tags           => { 'Owner' => 'SRE', 'CostCenter' => '1234' },
 }
 ```
 
-## Best Practices
-
-1. **Code Organization:**
-   - Use the roles and profiles pattern
-   - Keep modules focused and single-purpose
-   - Use version control for your Puppet code
-   - Implement proper testing
-
-2. **Security:**
-   - Use Hiera for sensitive data
-   - Implement proper certificate management
-   - Regular security audits
-   - Follow the principle of least privilege
-
-3. **Performance:**
-   - Optimize agent run intervals
-   - Use PuppetDB for stored configurations
-   - Implement proper caching strategies
-   - Regular performance monitoring
-
-## Common Workflows
-
-### Certificate Management
-
-```bash
-# On Puppet master
-puppetserver ca list
-puppetserver ca sign --certname agent.example.com
-
-# On Puppet agent
-puppet ssl clean
-puppet agent -t
-```
-
-### Module Development
-
-```puppet
-# Basic module structure
-my_module/
-├── manifests/
-│   ├── init.pp
-│   └── params.pp
-├── templates/
-├── files/
-├── lib/
-├── spec/
-└── metadata.json
-```
-
-## Integration with DevOps Tools
-
-### CI/CD Pipeline Example (GitHub Actions)
+### 4. Integrating Puppet with CI/CD (GitHub Actions)
 
 ```yaml
-name: Puppet CI
+name: Puppet Validate & Deploy
 on: [push]
 jobs:
-  validate:
+  puppet:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run puppet-lint
+      - name: Validate Puppet code
         run: |
           gem install puppet-lint
           puppet-lint manifests/
-      - name: Run rspec tests
+      - name: Deploy with r10k
         run: |
-          bundle install
-          bundle exec rake spec
+          gem install r10k
+          r10k deploy environment -p
 ```
 
-### Monitoring Integration
+## Best Practices for DevOps & SRE (2025)
 
-```puppet
-class profile::monitoring {
-  class { 'prometheus::node_exporter':
-    extra_options => '--collector.systemd'
-  }
+- Use roles/profiles for code organization
+- Integrate Puppet runs with CI/CD pipelines
+- Store secrets in Hiera or external vaults
+- Monitor agent runs and failures (e.g., with Prometheus)
+- Use resource collectors for dynamic infrastructure
+- Test modules with rspec-puppet and puppet-lint
+- Prefer declarative over imperative code
 
-  class { 'grafana':
-    cfg => {
-      server => {
-        domain => 'monitoring.example.com'
-      }
-    }
-  }
-}
-```
+## Common Pitfalls
+
+- Not using version control for manifests
+- Hardcoding secrets in code
+- Ignoring resource dependencies (ordering)
+- Not monitoring agent failures
+- Overusing exec resources (prefer native types)
 
 ## Troubleshooting
 
@@ -251,4 +175,9 @@ Common issues and their solutions:
 - [Puppet Forge](https://forge.puppet.com)
 - [Community Support](https://puppet.com/community)
 - [Puppet Learning VM](https://puppet.com/try-puppet/puppet-learning-vm)
+
+---
+
+> **Puppet Joke:**
+> Why did the SRE break up with Puppet? Too many strings attached!
 

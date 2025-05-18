@@ -1,3 +1,125 @@
+# Rust for DevOps & SRE (2025)
+
+Rust is a modern systems programming language focused on safety, concurrency, and performance. It's increasingly used by DevOps and SRE teams for building high-performance tools, cloud-native services, and automation scripts across AWS, Azure, and GCP.
+
+## Why DevOps & SREs Should Learn Rust
+- **Cloud-Native Tooling**: Many Kubernetes, container, and observability tools (e.g., kubelet, vector, ripgrep) are written in Rust for speed and safety.
+- **Performance Automation**: Rust is ideal for writing fast, reliable CLI tools, custom operators, and microservices for cloud automation.
+- **Security**: Rust's memory safety eliminates entire classes of vulnerabilities common in C/C++ tools.
+- **Cross-Platform**: Easily targets Linux, NixOS, WSL, and cloud environments.
+
+## Real-Life Examples
+
+### 1. Fast Log Processor for SREs
+```rust
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+
+fn main() {
+    let file = File::open("/var/log/syslog").unwrap();
+    let reader = BufReader::new(file);
+    for line in reader.lines() {
+        let l = line.unwrap();
+        if l.contains("ERROR") {
+            println!("{}", l);
+        }
+    }
+}
+```
+
+### 2. Kubernetes Operator (using kube-rs)
+```rust
+use kube::{Client, api::Api};
+use k8s_openapi::api::core::v1::Pod;
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let client = Client::try_default().await?;
+    let pods: Api<Pod> = Api::default_namespaced(client);
+    for p in pods.list(&Default::default()).await?.items {
+        println!("Pod: {}", p.metadata.name.unwrap_or_default());
+    }
+    Ok(())
+}
+```
+
+### 3. AWS Lambda in Rust
+```rust
+use lambda_runtime::{handler_fn, Context, Error};
+use serde_json::Value;
+
+async fn function(event: Value, _: Context) -> Result<Value, Error> {
+    Ok(event)
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Error> {
+    let func = handler_fn(function);
+    lambda_runtime::run(func).await?;
+    Ok(())
+}
+```
+
+## Installation Guide (2025)
+
+### Linux (Ubuntu/Debian)
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+```
+
+### NixOS
+```nix
+# Add to configuration.nix
+environment.systemPackages = with pkgs; [
+  rustc
+  cargo
+  rustfmt
+  rust-analyzer
+];
+```
+
+### Windows Subsystem for Linux (WSL)
+```bash
+sudo apt update
+sudo apt install build-essential
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+## DevOps Development Environment
+- **VS Code Extensions**: rust-analyzer, CodeLLDB, crates
+- **Essential Tools**:
+```bash
+rustup component add rustfmt  # Formatter
+rustup component add clippy   # Linter
+cargo install cargo-edit      # Dependency management
+```
+
+## Best Practices (2025)
+- Use Rust for performance-critical automation and cloud-native tools
+- Prefer async runtimes (tokio, async-std) for network/cloud apps
+- Write integration tests for cloud APIs
+- Use CI/CD (GitHub Actions, GitLab CI) to build/test Rust projects
+- Pin dependencies in Cargo.toml
+- Document public APIs and automation scripts
+
+## Common Pitfalls
+- Overengineering simple automation (sometimes Bash/Python is enough)
+- Not handling errors with Result/Option
+- Ignoring cross-compilation for cloud targets
+- Forgetting to use clippy/rustfmt for code quality
+
+## References
+- [The Rust Book](https://doc.rust-lang.org/book/)
+- [kube-rs](https://kube.rs/)
+- [AWS Lambda Rust Runtime](https://github.com/awslabs/aws-lambda-rust-runtime)
+- [Rust for DevOps](https://dev.to/tag/rustdevops)
+
+---
+
+> **Rust Joke:**
+> Why did the DevOps engineer love Rust? Because it never let their memory leaks escape into production!
+
 # Rust
 
 ## Introduction

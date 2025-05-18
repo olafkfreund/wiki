@@ -5,13 +5,24 @@ description: >-
   command-line client (kubectl) using the Kubernetes API.
 ---
 
-# Kubernetes Provider for Bicep
+# Kubernetes Provider for Bicep (2025)
 
-The Kubernetes provider in Bicep allows you to define and deploy Kubernetes resources directly alongside your Azure infrastructure. This feature bridges the gap between infrastructure provisioning and application deployment, enabling a unified IaC workflow.
+The Kubernetes provider in Bicep lets you define and deploy Kubernetes resources directly alongside your Azure infrastructure. This enables unified, end-to-end IaC workflows for DevOps and SRE teams managing both cloud and Kubernetes environments.
+
+---
+
+## Why Use the Kubernetes Provider?
+
+- **Unified IaC**: Manage Azure and Kubernetes resources in a single Bicep template
+- **Automation**: Integrate with CI/CD (GitHub Actions, Azure Pipelines) for full-stack deployments
+- **Security**: Use `@secure()` for sensitive kubeConfig values and integrate with Azure Key Vault
+- **Modularity**: Separate infra and app layers with Bicep modules
+
+---
 
 ## Enable the Extensibility Preview Feature
 
-The Kubernetes provider is currently available as a preview feature. To enable it, create a `bicepconfig.json` file in your project root with the following content:
+The Kubernetes provider is in preview. Enable it by adding a `bicepconfig.json` to your project root:
 
 ```json
 {
@@ -21,26 +32,23 @@ The Kubernetes provider is currently available as a preview feature. To enable i
 }
 ```
 
+---
+
 ## Basic Usage
 
 ### Import the Kubernetes Provider
-
-To use the Kubernetes provider, first import it in your Bicep file:
 
 ```bicep
 @secure()
 param kubeConfig string
 
-// Import the Kubernetes provider
 import 'kubernetes@1.0.0' with {
-  namespace: 'default'  // Default namespace for resources
-  kubeConfig: kubeConfig  // Kubernetes configuration
+  namespace: 'default'
+  kubeConfig: kubeConfig
 } as k8s
 ```
 
 ### Creating Kubernetes Resources
-
-After importing the provider, you can create Kubernetes resources using the imported namespace:
 
 ```bicep
 // Create a ConfigMap
@@ -92,9 +100,92 @@ resource myDeployment 'apps/v1' = {
 }
 ```
 
-## End-to-End Example: AKS Cluster with Application Deployment
+---
 
-This example demonstrates creating an AKS cluster and deploying an application to it in a single Bicep template.
+## Real-Life DevOps & SRE Examples
+
+### 1. Deploy a Namespace, ConfigMap, and Deployment
+
+```bicep
+resource myNamespace 'core/v1' = {
+  kind: 'Namespace'
+  metadata: {
+    name: 'devops-apps'
+  }
+}
+
+import 'kubernetes@1.0.0' with {
+  namespace: myNamespace.metadata.name
+  kubeConfig: kubeConfig
+} as k8s
+
+resource myConfigMap 'core/v1' = {
+  kind: 'ConfigMap'
+  metadata: {
+    name: 'app-config'
+  }
+  data: {
+    'ENV': 'production'
+    'LOG_LEVEL': 'info'
+  }
+}
+
+resource myDeployment 'apps/v1' = {
+  kind: 'Deployment'
+  metadata: {
+    name: 'nginx-app'
+  }
+  spec: {
+    replicas: 2
+    selector: {
+      matchLabels: {
+        app: 'nginx-app'
+      }
+    }
+    template: {
+      metadata: {
+        labels: {
+          app: 'nginx-app'
+        }
+      }
+      spec: {
+        containers: [
+          {
+            name: 'nginx'
+            image: 'nginx:1.25.0'
+            envFrom: [
+              {
+                configMapRef: {
+                  name: 'app-config'
+                }
+              }
+            ]
+            ports: [
+              {
+                containerPort: 80
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+### 2. Load YAML Manifests from File
+
+```bicep
+resource fromYaml 'core/v1' = {
+  kind: 'List'
+  apiVersion: 'v1'
+  items: loadYamlContent('k8s-manifests.yaml')
+}
+```
+
+---
+
+## End-to-End Example: AKS Cluster with App Deployment
 
 ### 1. Create the AKS Cluster (main.bicep)
 
@@ -334,6 +425,8 @@ resource frontendService 'core/v1' = {
 output frontendIp string = frontendService.status.loadBalancer.ingress[0].ip
 ```
 
+---
+
 ## Deployment Instructions
 
 ### Using Azure CLI
@@ -369,70 +462,55 @@ New-AzResourceGroupDeployment `
   -sshRSAPublicKey (Get-Content ~/.ssh/id_rsa.pub -Raw)
 ```
 
-## Best Practices
+---
 
-1. **Secure kubeConfig Handling**
-   - Always use the `@secure()` decorator for kubeConfig parameters
-   - Consider using Azure Key Vault to store and retrieve kubeConfig values
+## Best Practices (2025)
 
-2. **Resource Organization**
-   - Separate infrastructure (AKS) and application (Kubernetes resources) into different Bicep modules
-   - Use logical naming conventions for resources
+- Use `@secure()` for kubeConfig and secrets
+- Separate infra and app layers with Bicep modules
+- Use parameter files for environment-specific values
+- Validate with `az bicep build` and test with `az deployment group what-if`
+- Use logical namespaces for multi-tenant clusters
+- Store kubeConfig in Azure Key Vault for production
 
-3. **Namespace Management**
-   - Use specific namespaces for different applications or environments
-   - Create namespaces explicitly in your Bicep files
+---
 
-   ```bicep
-   resource namespace 'core/v1' = {
-     kind: 'Namespace'
-     metadata: {
-       name: 'my-application'
-     }
-   }
-   
-   // Then specify it when importing
-   import 'kubernetes@1.0.0' with {
-     namespace: namespace.metadata.name
-     kubeConfig: kubeConfig
-   } as k8s
-   ```
+## Common Pitfalls
 
-4. **Configuration Management**
-   - Use ConfigMaps and Secrets for application configuration
-   - Consider parameter files for environment-specific values
+- Using admin kubeConfig in production (prefer service accounts)
+- Not validating resource dependencies (use `dependsOn`)
+- Overloading a single template with too many resources
+- Not using YAML for complex or custom CRDs
 
-5. **Resource Dependencies**
-   - Use dependencies to ensure proper deployment order
-   - For example, make sure services are created after their deployments
+---
 
-## Limitations and Considerations
+## CI/CD Integration Example (GitHub Actions)
 
-- The Kubernetes provider is in preview and subject to change
-- Complex Kubernetes objects might be easier to define using YAML and importing them
-- For large-scale Kubernetes deployments, consider dedicated tools like Helm
-- Using admin credentials in production environments is not recommended
-
-## Alternative Approach: Using YAML Files
-
-For complex Kubernetes manifests, you can use existing YAML files:
-
-```bicep
-@secure()
-param kubeConfig string
-
-import 'kubernetes@1.0.0' with {
-  namespace: 'default'
-  kubeConfig: kubeConfig
-} as k8s
-
-resource fromYaml 'core/v1' = {
-  kind: 'List'
-  apiVersion: 'v1'
-  items: loadYamlContent('kubernetes-manifests.yaml')
-}
+```yaml
+- name: Deploy Infra and K8s Resources
+  run: |
+    az deployment group create \
+      --resource-group myResourceGroup \
+      --template-file main.bicep \
+      --parameters kubeConfig="${{ secrets.KUBECONFIG }}"
 ```
 
-## Conclusion
+---
 
-The Kubernetes provider for Bicep enables DevOps teams to manage both Azure infrastructure and Kubernetes resources in a unified way, streamlining the deployment process and reducing the complexity of managing multiple toolchains.
+## Azure & Bicep Jokes
+
+> **Bicep Joke:** Why did the SRE use Bicep for Kubernetes? To flex on YAML!
+
+> **Azure Joke:** Why did the pod love Azure? It always had a resource group to hang out in!
+
+---
+
+## References
+
+- [Bicep Kubernetes Provider Docs](https://learn.microsoft.com/azure/azure-resource-manager/bicep/kubernetes-extensibility)
+- [AKS Documentation](https://learn.microsoft.com/azure/aks/)
+- [Bicep Official Docs](https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
+
+---
+
+> **Search Tip:** Use keywords like `bicep kubernetes`, `aks`, `namespace`, `configmap`, or `ci/cd` to quickly find relevant examples and best practices.

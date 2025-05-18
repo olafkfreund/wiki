@@ -1,64 +1,56 @@
-# yq
+# yq for DevOps & SRE (2025)
 
-a lightweight and portable command-line YAML, JSON and XML processor. `yq` uses [jq](https://github.com/stedolan/jq) like syntax but works with yaml files as well as json, xml, properties, csv and tsv. It doesn't yet support everything `jq` does - but it does support the most common operations and functions, and more is being added continuously.
+yq is a lightweight, portable command-line YAML, JSON, and XML processor. It is essential for DevOps and SRE engineers working with Kubernetes, Terraform, Ansible, and CI/CD pipelines across AWS, Azure, GCP, Linux, NixOS, and WSL environments.
 
-yq is written in go - so you can download a dependency free binary for your platform and you are good to go! If you prefer there are a variety of package managers that can be used as well as Docker and Podman, all listed below.
+## Why Use yq in DevOps & SRE?
+- **Automate YAML/JSON edits**: Update Kubernetes manifests, Terraform variables, and CI/CD configs programmatically.
+- **Bulk Operations**: Apply changes across multiple files for GitOps, policy enforcement, or compliance.
+- **CI/CD Integration**: Use yq in GitHub Actions, Azure Pipelines, or GitLab CI/CD for validation, patching, and templating.
+- **Cloud-Native**: Works seamlessly with cloud IaC and configuration workflows.
 
-### Quick Usage Guide
+## Real-Life Examples
 
-Read a value:
-
+### 1. Update Image Tag in All Kubernetes Deployments
 ```sh
-yq '.a.b[0].c' file.yaml
-```plaintext
+grep -rl 'image:' ./k8s | xargs -I{} yq -i '.spec.template.spec.containers[0].image = "nginx:1.25.0"' {}
+```
 
-Pipe from STDIN:
-
+### 2. Extract All Resource Limits for Audit
 ```sh
-yq '.a.b[0].c' < file.yaml
-```plaintext
+find ./manifests -name '*.yaml' | xargs -I{} yq '.spec.template.spec.containers[].resources.limits' {}
+```
 
-Update a yaml file, inplace
+### 3. Patch a Value in a CI/CD Pipeline (GitHub Actions)
+```yaml
+- name: Patch image tag in deployment
+  run: yq -i '.spec.template.spec.containers[0].image = "myrepo/app:${{ github.sha }}"' k8s/deployment.yaml
+```
 
+### 4. Merge Multiple YAML Files for GitOps
 ```sh
-yq -i '.a.b[0].c = "cool"' file.yaml
-```plaintext
+yq ea '. as $item ireduce ({}; . * $item )' overlays/*.yml > merged.yaml
+```
 
-Update using environment variables
-
-```shell
-NAME=mike yq -i '.a.b[0].c = strenv(NAME)' file.yaml
-```plaintext
-
-Merge multiple files
-
-```shell
-# note the use of `ea` to evaluate all the files at once
-# instead of in sequence
-yq ea '. as $item ireduce ({}; . * $item )' path/to/*.yml
-```plaintext
-
-Multiple updates to a yaml file
-
+### 5. Use Environment Variables for Dynamic Values
 ```sh
-yq -i '
-  .a.b[0].c = "cool" |
-  .x.y.z = "foobar" |
-  .person.name = strenv(NAME)
-' file.yaml
-```plaintext
+export VERSION=1.2.3
+yq -i '.app.version = strenv(VERSION)' values.yaml
+```
 
-Convert JSON to YAML
+## Best Practices (2025)
+- Always validate YAML after edits: `kubectl apply --dry-run=client -f file.yaml`
+- Use yq in CI/CD for repeatable, automated changes
+- Document yq commands in README or pipeline logs
+- Prefer explicit paths to avoid accidental overwrites
+- Use yq with version control for traceability
 
-```plaintext
-yq -Poy sample.json
-```plaintext
+## Common Pitfalls
+- Overwriting files without backup (`-i` is destructive)
+- Not validating YAML after bulk edits
+- Using ambiguous paths (be specific to avoid wrong fields)
+- Forgetting to quote strings with special characters
 
-See the [documentation](https://mikefarah.gitbook.io/yq/) for more examples.
-
-Take a look at the discussions for [common questions](https://github.com/mikefarah/yq/discussions/categories/q-a), and [cool ideas](https://github.com/mikefarah/yq/discussions/categories/show-and-tell)
-
-### Install
+## Install
 
 #### [Download the latest binary](https://github.com/mikefarah/yq/releases/latest)
 
@@ -240,3 +232,8 @@ See [https://mikefarah.gitbook.io/yq/usage/github-action](https://mikefarah.gitb
 ```sh
 go install github.com/mikefarah/yq/v4@latest
 ```plaintext
+
+---
+
+> **yq Joke:**
+> Why did the SRE love yq? Because it could fix YAML faster than they could break it!

@@ -1,114 +1,136 @@
-# How to create Kubernetes YAML files
+# How to Create Kubernetes YAML Files (2025)
 
-### Create vs generate <a href="#6480" id="6480"></a>
+Creating and managing Kubernetes YAML files is a core DevOps and SRE skill. YAML defines your infrastructure, deployments, and policies across AWS, Azure, GCP, and on-prem clusters. This guide covers practical, real-world approaches and tools for engineers.
 
-Initially, you might be tempted to generate as much of the boilerplate as possible. My recommendation is, don’t! Especially if you are new to Kubernetes or YAML, experiment, copy-paste from [Kubernetes docs](https://kubernetes.io/), but don’t use generators on day one.
+---
 
-Once you are familiar with the basics, progressively add tools that will make your life easier. There is good news; you will understand the basics pretty fast.
+## Create vs Generate
 
-A good way to know if you are familiar enough with the YAML content of a specific resource if it is getting, well … boring. From here now, you should dive headfirst into the world of generators and helpers to keep your sanity and make your life easier.
+When starting out, avoid over-relying on generators. Instead, copy-paste from [Kubernetes docs](https://kubernetes.io/) and experiment. This builds foundational knowledge. Once you find writing YAML repetitive, introduce tools to automate and scale your workflow.
 
-### 1 YQ <a href="#0e2a" id="0e2a"></a>
+**Best Practice:**
+- Learn the structure of core resources (Pod, Deployment, Service, ConfigMap, Secret).
+- Use generators only after you understand the basics.
 
-The first tool I want to talk about is [yq](https://mikefarah.gitbook.io/yq/). Yq is not a Kubernetes specific, it’s rather a “jack of all trades” of YAML. Learning this tool will help you query and manipulate YAML files directly from the command line. It helps with tasks, such as:
+---
 
-* filtering YAML file for a specific value, for example retrieving an image name from a deployment file
+## 1. yq: YAML Command-Line Power
 
-Selecting values from YAML files is useful, but mastering yq will help mostly with bulk operations on multiple files and more complex transformations.
+[yq](https://mikefarah.gitbook.io/yq/) is a must-have for DevOps/SREs. It lets you query, filter, and modify YAML files directly from the CLI. Example:
 
-### 2 Kubectl <a href="#5490" id="5490"></a>
+```bash
+yq e '.spec.template.spec.containers[0].image' deployment.yaml
+```
 
-It is easy to get started with generating YAML files for most of the resources with [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/). You can use “ — dry-run=client -oyaml > yaml\_file.yaml” flag on the “[kubectl create](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#create)” or “[kubectl run](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#run)” commands to generate most of the resources.
+**Use Cases:**
+- Extracting image names for vulnerability scanning
+- Bulk updating resource limits across manifests
+- Merging multiple YAML files for GitOps pipelines
 
-For example, to generate a YAML file for an nginx pod you can run:
+---
 
-`kubectl run nginx — image=nginx — port=8080 — env=env=DEV — labels=app=nginx,owner=user — privileged=false — dry-run=client -oyaml > nginx-pod.yaml`
+## 2. kubectl: Generate and Clean Up YAML
 
-This command will generate the following YAML:
+[kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) can generate YAML for most resources. Use `--dry-run=client -o yaml` to scaffold manifests:
 
-<figure><img src="https://miro.medium.com/v2/resize:fit:700/1*EpfZuoar_dvKTmY4tdTVuQ.png" alt="" height="952" width="700"><figcaption><p>YAML generated with kubectl</p></figcaption></figure>
+```bash
+kubectl run nginx --image=nginx --port=8080 --env=env=DEV --labels=app=nginx,owner=user --dry-run=client -o yaml > nginx-pod.yaml
+```
 
-The file needs to be cleaned a bit, but it is a good starting point.
+**Tip:** Clean up the generated YAML before using in production. Remove unnecessary fields and add comments for clarity.
 
-Now you could create a deployment using:
+**Real-Life Example:**
+- Use `kubectl create deployment my-dep --image=nginx --dry-run=client -o yaml > deployment.yaml`
+- Use `yq` to merge or update fields as needed for automation.
 
-`kubectl create deployment my-dep — image=nginx — dry-run=client -oyaml > deployment.yaml`
+---
 
-and use yq to merge the two files.
+## 3. Kompose: Docker Compose to Kubernetes
 
-This process can get complicated fast, but it’s easy to use shell scripts to automate most of the tasks.
+If you have a `docker-compose.yaml`, use [kompose](https://kompose.io/) to convert it to Kubernetes manifests:
 
-Using the combination of kubectl and yq is great for starting a simple one-off project as well as help automate things in between.
+```bash
+kompose convert -f docker-compose.yaml -o k8s-manifests/
+```
 
-If you are interested in kubectl tips & tricks, I have a growing list of useful commands in [this gist](https://gist.github.com/Piotr1215/443fb83c89958139f0c67ec70b111da2).
+**Best Practice:**
+- Review and adjust generated manifests for production readiness (resource requests, probes, labels).
 
-### 3 Docker-compose <a href="#a60f" id="a60f"></a>
+---
 
-Do you have a docker-compose.yaml file in your project? Generating Kubernetes manifests from the docker-compose file is possible using a tool called [kompose](https://kompose.io/).
+## 4. VS Code Plugins for YAML
 
-Let’s see this in action. We will use a docker-compose file from the [awesome-compose repository](https://github.com/docker/awesome-compose.git).
+- [Kubernetes Templates](https://marketplace.visualstudio.com/items?itemName=lunuan.kubernetes-templates): Quickly scaffold resources with snippets.
+- [YAML by Red Hat](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml): Adds schema validation and smart completion.
 
-Here is a sample docker-compose file:
-
-<figure><img src="https://miro.medium.com/v2/resize:fit:700/1*W3zj5z7VoWi5ExLeoO4okg.png" alt="" height="1323" width="700"><figcaption><p>Source: Awesome-Compose repo</p></figcaption></figure>
-
-Now, let’s generate Kubernetes manifests using **kompose:**
-
-This command takes the docker-compose as input and outputs generated Kubernetes YAML into the k8s-manifests folder.
-
-<figure><img src="https://miro.medium.com/v2/resize:fit:700/1*us9TWhvWm_3mD7D-hsqIvw.png" alt="" height="412" width="700"><figcaption><p>kompose generated files</p></figcaption></figure>
-
-Using kompose is a good option if you already have a docker-compose file. There are often tweaks needed, but it takes you one step closer to having a decent starting point.
-
-### 4 VS Code with plugins <a href="#b63a" id="b63a"></a>
-
-VS Code has 2 plugins that help with creating YAML files. Big thanks to&#x20;
-
-[Avi Nehama](https://medium.com/u/e64e9bb3065b?source=post\_page-----abb8426eeb45--------------------------------) for suggesting it.
-
-[Kubernetes Templates](https://marketplace.visualstudio.com/items?itemName=lunuan.kubernetes-templates)
-
-The template enables quick scaffolding of any Kubernetes resource.
-
-Create yaml file, start typing the name of Kubernetes resource and hit TAB to insert a template. Keep cycling with TAB to fill the names in the required fields.
-
-<figure><img src="https://miro.medium.com/v2/resize:fit:700/1*LBCL0Fy99sLKHyj15TXwFg.png" alt="" height="684" width="700"><figcaption></figcaption></figure>
-
-[YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)
-
-This extension from Red Hat runs a YAML server in the background and adds context aware smart completion to any Kubernetes resource.
-
-Remember to activate it in the settings and reload VS Code. Add this line to the settings to enable Kubernetes completion on all YAML files.
-
-```yaml
+**Setup:**
+```json
 "yaml.schemas": {
   "Kubernetes": "*.yaml"
 }
-```plaintext
+```
 
-<figure><img src="https://miro.medium.com/v2/resize:fit:700/1*ssv7K5es5evjKC6-DVHJUw.png" alt="" height="387" width="700"><figcaption></figcaption></figure>
+---
 
-### 5 CDK8s <a href="#74e3" id="74e3"></a>
+## 5. CDK8s: YAML as Code
 
-Moving on from command line to programming territory. If you have to author a lot of YAML, but happen to know Python, Typescript, JavaScript, Java or Go, you can harness the power of a programming language to make the process of writing YAML much easier.
+[CDK8s](https://cdk8s.io/) lets you define Kubernetes manifests using Python, TypeScript, Java, or Go. This is ideal for large, repeatable, or parameterized deployments.
 
-Introducing [CDK8s](https://cdk8s.io/)
+**Example (Python):**
+```python
+from constructs import Construct
+from cdk8s import App, Chart
+from imports.k8s import KubeDeployment
 
-> **cdk8s** is an open-source software development framework for defining Kubernetes applications and reusable abstractions using familiar programming languages and rich object-oriented APIs. **cdk8s** apps synthesize into standard Kubernetes manifests which can be applied to any Kubernetes cluster.
+class MyChart(Chart):
+    def __init__(self, scope: Construct, id: str):
+        super().__init__(scope, id)
+        KubeDeployment(self, 'nginx',
+            spec={
+                'replicas': 2,
+                'template': {
+                    'spec': {
+                        'containers': [{
+                            'name': 'nginx',
+                            'image': 'nginx:latest'
+                        }]
+                    }
+                }
+            })
 
-CDK8s works by exposing Kubernetes resources objects and using an object called constructs to further abstract and automate YAML files creation.
+app = App()
+MyChart(app, "nginx-chart")
+app.synth()
+```
 
-The real power behind this approach is the ability to:
+---
 
-* create reusable components and abstractions that capture your requirements
-* use native programming language constructs to automate, test and validate the process of creating YAML
+## 6. NAML: Go-Based Manifest Generation
 
-### 6 NAML <a href="#01dc" id="01dc"></a>
+[NAML](https://github.com/kris-nova/naml) lets you define and install Kubernetes resources using Go code. Great for Go-centric teams who want to avoid YAML.
 
-If you happen to know Go and don’t like YAML at all and want to avoid it at all costs, this project might be something for you!
+---
 
-A very interesting approach designed by&#x20;
+## Best Practices (2025)
+- Use version control (Git) for all YAML files
+- Validate YAML with `kubectl apply --dry-run=client -f file.yaml`
+- Use comments and clear labels/annotations
+- Parameterize with Kustomize or Helm for multi-environment deployments
+- Integrate YAML linting in CI/CD pipelines
 
-[Kris Nova](https://medium.com/u/158602cec861?source=post\_page-----abb8426eeb45--------------------------------) ([Github profile](https://github.com/kris-nova)) is a Go-centric tool called naml which works by creating Kubernetes manifests directly in Go and installing them on the cluster via CLI install command.
+## Common Pitfalls
+- Blindly using generated YAML without review
+- Not specifying resource requests/limits
+- Hardcoding secrets in YAML (use Kubernetes Secrets or external vaults)
+- Ignoring schema validation errors
 
-This tool can produce YAML similarly to CKD8s but works only with Go.
+## References
+- [Kubernetes Official Docs](https://kubernetes.io/docs/)
+- [yq Documentation](https://mikefarah.gitbook.io/yq/)
+- [Kompose Docs](https://kompose.io/)
+- [CDK8s Docs](https://cdk8s.io/docs/latest/)
+
+---
+
+> **YAML Joke:**
+> Why did the DevOps engineer break up with YAML? Too many unresolved issues with indentation!
