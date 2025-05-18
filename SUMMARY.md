@@ -4,7 +4,7 @@
 * [Quick Start Guide](pages/quick-starts/README.md) - Fast track to common DevOps tasks
 * [About Me](pages/about-me.md) - Professional background and expertise
 * [CV](pages/cv.md) - Professional experience and skills
-* [Contribute](CONTRIBUTING.MD) - How to contribute
+* [Contribute](CONTRIBUTING.md) - How to contribute
 
 ## 🧠 DevOps & SRE Foundations
 
