@@ -321,10 +321,14 @@
 * [DevOps Tools](pages/devops-tools/README.md) - Specialized engineering tools
 * [Operating Systems](pages/devops/tools-to-install/) - Development platforms
   * [NixOS](pages/Nixos/README.md) - Declarative Linux distribution
-    * [Installation](pages/Nixos/install.md) - Setup and configuration
-    * [Nix Language Guide](pages/Nixos/nix-language.md) - Deep dive into the Nix language
-    * [DevEnv with Nix](pages/Nixos/devenv.md) - Development environment setup
-    * [Cloud Deployments](pages/Nixos/nix-anywhere-cloud.md) - Cloud infrastructure management
+    * [Install NixOS: PC, Mac, WSL](pages/Nixos/install.md)
+    * [Nix Language Deep Dive](pages/Nixos/nix-language.md)
+    * [NixOS Generators: Azure & QEMU](pages/Nixos/nixos-generators-azure-qemu.md)
+    * [Deploying NixOS to Cloud (nix-anywhere)](pages/Nixos/nix-anywhere-cloud.md)
+    * [Dev Environments: devenv](pages/Nixos/devenv.md)
+    * [Dev Environments: devenv for Node.js & K8s](pages/Nixos/devenv-nodejs-k8s.md)
+    * [Dev Environments: Devbox for K8s](pages/Nixos/devbox-k8s.md)
+    * [Fleet Management: Colmena](pages/Nixos/colmena-fleet.md)
   * [WSL2](pages/devops/tools-to-install/wsl2/README.md) - Windows Subsystem for Linux
     * [Distributions](pages/devops/tools-to-install/wsl2/rhel-in-wsl2.md) - Linux variants for WSL
     * [Terminal Setup](pages/devops/tools-to-install/wsl2/make-your-terminal-devops-and-kubernetes-friendly.md) - CLI environment optimization
