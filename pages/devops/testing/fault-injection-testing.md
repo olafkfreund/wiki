@@ -18,6 +18,8 @@ Fault injection methods are a way to increase coverage and validate software rob
   * _Example tests:_ [Fuzzing](https://owasp.org/www-community/Fuzzing) provides invalid, unexpected, or random data as input we can assess the level of protocol stability of a component.
 * **Infrastructure** - Outages, networking issues, hardware failures.
   * _Example tests:_ Using different methods to cause fault in the underlying infrastructure such as Shut down virtual machine (VM) instances, crash processes, expire certificates, introduce network latency, etc. This level of testing relies on statistical metrics observations over time and measuring the deviations of its observed behavior during fault, or its recovery time.
+* **Cloud-Native Applications** - Microservice failures, container orchestration issues, auto-scaling errors.
+  * _Example tests:_ Targeted pod termination, network policy restrictions, resource throttling, and service mesh fault injection.
 
 ### How to Use <a href="#how-to-use" id="how-to-use"></a>
 
@@ -29,6 +31,8 @@ Fault injection methods are a way to increase coverage and validate software rob
 * **Error** - That part of the system state that may cause a subsequent failure.
 * **Failure** - An event that occurs when the delivered service deviates from correct state.
 * **Fault-Error-Failure cycle** - A key mechanism in dependability: A fault may cause an error. An error may cause further errors within the system boundary; therefore each new error acts as a fault. When error states are observed at the system boundary, they are termed failures. (Modeled by [Laprie/Avizienis](https://www.nasa.gov/pdf/636745main\_day\_3-algirdas\_avizienis.pdf))
+* **Blast Radius** - The scope of impact that a fault might have on the system or users.
+* **Game Day** - A scheduled exercise where teams deliberately inject faults into production systems under controlled conditions.
 
 **Fault Injection Testing Basics**
 
@@ -50,6 +54,198 @@ Automated fault injection coverage in a CI pipeline promotes a [Shift-Left](http
 * Execute existing end-to-end scenario tests (such as integration or stress tests), which are augmented with fault injection.
 * Write regression and acceptance tests based on issues that were found and fixed or based on resolved service incidents.
 * Ad-hoc (manual) validations of fault in the dev environment for new features.
+
+**Cloud-Native Fault Injection Patterns**
+
+Modern cloud-native applications run in complex, distributed environments and require specialized fault injection approaches:
+
+1. **Infrastructure Layer**
+   * Terminate or restart compute instances (VMs, containers)
+   * Simulate region or availability zone failures
+   * Introduce network partitioning between zones or regions
+   * Exhaust resources (CPU, memory, disk) on nodes
+
+2. **Platform Layer**
+   * Corrupt or delay API responses from cloud services
+   * Simulate cloud provider throttling
+   * Introduce latency in managed service interactions
+   * Force failover of managed databases or cache services
+
+3. **Application Layer**
+   * Inject errors into service-to-service communication
+   * Degrade performance of specific microservices
+   * Simulate partial failures in distributed transactions
+   * Force circuit breaker activation in resilience patterns
+
+**Multi-Cloud Fault Injection Examples**
+
+Fault injection approaches vary slightly between cloud providers:
+
+**AWS:**
+```yaml
+# AWS FIS (Fault Injection Simulator) experiment template example
+{
+  "description": "API throttling test on Lambda functions",
+  "targets": {
+    "throttleFunction": {
+      "resourceType": "aws:lambda:function",
+      "resourceTags": {
+        "Application": "payment-processor"
+      },
+      "filters": [
+        {
+          "path": "State",
+          "values": [ "Active" ]
+        }
+      ]
+    }
+  },
+  "actions": {
+    "throttleAPI": {
+      "actionId": "aws:lambda:throttle-invocation",
+      "parameters": {
+        "duration": "PT5M"
+      },
+      "targets": {
+        "functions": "throttleFunction"
+      }
+    }
+  },
+  "stopConditions": [
+    {
+      "source": "aws:cloudwatch:alarm",
+      "value": "arn:aws:cloudwatch:us-east-1:123456789012:alarm:HighErrorRate"
+    }
+  ],
+  "roleArn": "arn:aws:iam::123456789012:role/FISExperimentRole"
+}
+```
+
+**Azure:**
+```yaml
+# Azure Chaos Studio experiment template example
+{
+  "properties": {
+    "steps": [
+      {
+        "name": "Terminate AKS Pods",
+        "branches": [
+          {
+            "name": "Kill Pods",
+            "actions": [
+              {
+                "type": "continuous",
+                "name": "urn:csci:microsoft:kubernetes:pod-chaos:latest",
+                "parameters": [
+                  {
+                    "key": "jsonSpec",
+                    "value": "{\"action\":\"pod-delete\",\"mode\":\"fixed\",\"selector\":{\"namespaces\":[\"api-services\"],\"labels\":{\"app\":\"payment-api\"}},\"count\":2}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**GCP:**
+```yaml
+# Example using Chaos Mesh on GKE
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: payment-api-network-delay
+  namespace: chaos-testing
+spec:
+  action: delay
+  mode: one
+  selector:
+    namespaces:
+      - payment-services
+    labelSelectors:
+      app: "payment-gateway"
+  delay:
+    latency: "200ms"
+    correlation: "25"
+    jitter: "50ms"
+  duration: "5m"
+```
+
+**LLM-Assisted Resilience Testing**
+
+Large Language Models (LLMs) can enhance fault injection testing in several ways:
+
+1. **Automated Scenario Generation**
+   * LLMs can analyze system architecture diagrams and generate targeted fault scenarios
+   * They can identify non-obvious failure modes by examining system dependencies
+
+2. **Intelligent Test Creation**
+   * Generate Chaos Mesh or Litmus Chaos experiments based on architecture descriptions
+   * Create targeted fault injection scenarios for specific application concerns
+
+3. **Root Cause Analysis**
+   * Process observability data during fault injection to identify cascading failures
+   * Correlate metrics, logs, and traces to understand failure propagation
+
+Here's an example of using an LLM to generate infrastructure fault scenarios:
+
+```python
+# Example script using OpenAI to generate infrastructure fault scenarios
+import openai
+import json
+import yaml
+
+# Set your OpenAI API key here
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def generate_fault_scenarios(system_description):
+    """Generate fault scenarios based on system description."""
+    prompt = f"""
+    Based on the following system description, generate 3 realistic fault injection scenarios 
+    that would test the system's resilience. For each scenario, include:
+    1. The component or service being targeted
+    2. The type of fault to inject
+    3. The expected impact
+    4. How to measure resilience
+    5. A Kubernetes YAML for Litmus or Chaos Mesh to implement this test
+    
+    System description:
+    {system_description}
+    
+    Format your response as JSON.
+    """
+    
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are a DevOps engineer specializing in chaos engineering and fault injection testing."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.7
+    )
+    
+    return json.loads(response.choices[0].message['content'])
+
+# Example usage
+system = """
+Our application is a microservices-based payment processing system deployed on Kubernetes with the following components:
+- payment-api (3 replicas): Frontend API that receives payment requests from customers
+- transaction-service (2 replicas): Validates and processes transactions
+- fraud-detection (2 replicas): Analyzes transactions for fraudulent activity
+- payment-db (PostgreSQL): Stores transaction data with a primary and read replica
+- redis-cache (3 node cluster): Caches user session and transaction data
+- message-queue (Kafka, 3 brokers): Handles asynchronous processing of events
+"""
+
+scenarios = generate_fault_scenarios(system)
+print(yaml.dump(scenarios))
+```
+
+This would generate targeted fault scenarios that you can implement in your testing pipeline.
 
 **Fault injection testing in the release cycle**
 

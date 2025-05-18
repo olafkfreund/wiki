@@ -1,64 +1,135 @@
 # Load Testing
 
-"_Load testing is performed to determine a system's behavior under both normal and anticipated peak load conditions._" - [Load testing - Wikipedia](https://en.wikipedia.org/wiki/Load\_testing)
+_Load testing is performed to determine a system's behavior under both normal and anticipated peak load conditions._ — [Load testing - Wikipedia](https://en.wikipedia.org/wiki/Load_testing)
 
-A load test is designed to determine how a system behaves under expected normal and peak workloads. Specifically its main purpose is to confirm if a system can handle the expected load level. Depending on the target system this could be concurrent users, requests per second or data size.
+Load testing evaluates how a system performs under expected and peak workloads. Its main goal is to confirm the system can handle real-world traffic, such as concurrent users, requests per second, or data volume, without performance degradation.
 
-### Why Load Testing <a href="#why-load-testing" id="why-load-testing"></a>
+---
 
-The main objective is to prove the system can behave normally under the expected normal load before releasing it to production. The criteria which defines "behave normally" will depend on your target, this may be as simple as "the system remains available", but it could also include meeting a response time SLA or error rate.
+> **Nerdy Joke:**
+> Why did the server go to therapy after load testing?
+> Because it couldn't handle the pressure and needed to process its requests!
 
-Additionally, the results of a load test can also be used as data to help with capacity planning and calculating scalability.
+---
 
-### Load Testing Design Blocks <a href="#load-testing-design-blocks" id="load-testing-design-blocks"></a>
+## Why Load Testing
 
-There are a number of basic component which are required to carry out a load test.
+- **Validate reliability:** Ensure the system remains available and responsive under normal and peak loads.
+- **Meet SLAs:** Confirm response times, error rates, and throughput meet business requirements.
+- **Capacity planning:** Use results to inform scaling decisions and infrastructure investments.
+- **Identify bottlenecks:** Detect performance issues before production.
 
-1. In order to have meaningful results the system needs to be tested in a production-like environment with a network and hardware which closely resembles the expected deployment environment.
-2. The load test will consist of a module which simulates user activity. Of course the composition of this "user activity" will vary based on the type of application being tested. For example, an e-commerce website might simulate user browsing and purchasing items, but an IoT data ingestion pipeline would simulate a stream of device readings. Please ensure the simulation is as close to real activity as possible, and consider not just volume but also patterns and variability. For example, if the simulator data is too uniform or predictable, then cache/hit ratios may impact your results.
-3. The load test will be initiated from a component external to the target system which can control the amount of load applied. This can be a single agent, but may need to scaled to multiple agents in order to achieve higher levels of activity.
-4. Although not required to run a load test, it is advisable to have monitoring and/or logging in place to be able to measure the impact of the test and discover potential bottlenecks.
+## Key Components of Load Testing
 
-### Applying the Load Testing <a href="#applying-the-load-testing" id="applying-the-load-testing"></a>
+1. **Production-like environment:** Test in an environment that closely matches production (network, hardware, cloud region, etc.).
+2. **Realistic user simulation:** Simulate user activity that mirrors real-world usage patterns (e.g., browsing, purchasing, API calls, IoT data ingestion). Avoid overly uniform or predictable data to ensure accurate cache and hit ratio results.
+3. **Scalable load generation:** Use one or more agents to generate the required load. For large-scale tests, distribute agents across regions or cloud providers.
+4. **Comprehensive monitoring:** Integrate monitoring and logging to capture system metrics (CPU, memory, network, latency, error rates) and identify bottlenecks.
 
-#### Planning <a href="#planning" id="planning"></a>
+## Load Testing Workflow
 
-1. **Identify key scenarios to measure** - Gather these scenarios from Product Owner, they should provide a representative sample of real world traffic.
-2. **Determine expected normal and peak load for the scenarios** - Determine a load level such as concurrent users or requests per second to find the size of the load test you will run.
-3. **Identify success criteria metrics** - These may be on testing side such as response time and error rate, or they may be on the system side such as CPU and memory usage.
-4. **Select the right tool** - Many frameworks exist for load testing so consider if features and limitations are suitable for your needs. (Some popular tools are listed below).
+### 1. Planning
 
-#### Execution <a href="#execution" id="execution"></a>
+- **Identify critical scenarios:** Work with stakeholders to select representative user journeys and API calls.
+- **Define load profiles:** Determine normal and peak loads (e.g., 500 concurrent users, 1000 RPS).
+- **Set success criteria:** Establish thresholds for response time, error rate, resource utilization, and throughput.
+- **Select tools:** Choose a load testing tool that fits your stack and requirements (see below).
 
-It is recommended to use an existing testing framework (see below). These tools will provide a method of both specifying the user activity scenarios and how to execute those at load. It is common to slowly ramp up to your desired load to better replicate real world behavior. Once you have reached your defined workload, maintain this level long enough to see if your system stabilizes. To finish up the test you should also ramp to see record how the system slows down as well.
+### 2. Test Design & Execution
 
-You should also consider the origin of your load test traffic. Depending on the scope of the target system you may want to initiate from a different location to better replicate real world traffic such as from a different region.
+- **Script user scenarios:** Use your chosen tool to define realistic workflows.
+- **Ramp up gradually:** Start with low load, increase to target, and hold steady to observe system behavior. Optionally, ramp down to observe recovery.
+- **Distribute load:** For global systems, generate load from multiple regions to simulate real user traffic.
+- **Monitor in real time:** Track system and application metrics during the test.
 
-**Note:** Before starting please be aware of any restrictions on your network such as DDOS protection where you may need to notify a network administrator or apply for an exemption.
+### 3. Analysis & Reporting
 
-#### Further Testing <a href="#further-testing" id="further-testing"></a>
+- **Analyze results:** Compare metrics against success criteria. Look for slow responses, errors, resource saturation, and scaling issues.
+- **Identify root causes:** Use logs, traces, and monitoring dashboards to pinpoint bottlenecks.
+- **Document findings:** Summarize results, highlight issues, and recommend improvements.
 
-After completing your load test you should be set up to continue on to additional related testing such as;
+### 4. Follow-up Testing
 
-* **Soak Testing** - Also known as **Endurance Testing**. Performing a load test over an extended period of time to ensure long term stability.
-* **Stress Testing** - Gradually increasing the load to find the limits of the system and identify the maximum capacity.
-* **Spike Testing** - Introduce a sharp short-term increase into the load scenarios.
-* **Scalability Testing** - Re-testing of a system as your expand horizontally or vertically to measure how it scales.
+- **Soak (Endurance) Testing:** Run load tests over extended periods to detect memory leaks and stability issues.
+- **Stress Testing:** Increase load beyond peak to find system limits and failure points.
+- **Spike Testing:** Introduce sudden load surges to test resilience.
+- **Scalability Testing:** Re-test after scaling infrastructure to validate improvements.
 
-### Load Testing Frameworks and Tools <a href="#load-testing-frameworks-and-tools" id="load-testing-frameworks-and-tools"></a>
+## Modern Load Testing Tools (2025)
 
-Here are a few popular load testing frameworks you may consider, and the languages used to define your scenarios.
+| Tool                | Language      | Cloud/CI Integration         | Notes                                  |
+|---------------------|--------------|------------------------------|----------------------------------------|
+| Azure Load Testing  | JMeter/YAML  | Azure DevOps, GitHub Actions | Managed, supports private endpoints    |
+| AWS Distributed Load Testing | JMeter | AWS CodePipeline, CLI        | Scalable, integrates with CloudWatch   |
+| Google Cloud DLT    | JMeter       | Cloud Build, CLI             | Managed, integrates with GCP metrics   |
+| k6                  | JavaScript   | All major CI/CD, Kubernetes  | Modern, cloud-native, Grafana Cloud    |
+| Locust              | Python       | All major CI/CD, Docker      | Flexible, distributed, Pythonic        |
+| Artillery           | JavaScript   | Node.js, CI/CD, AWS Lambda   | Lightweight, serverless support        |
+| Gatling             | Scala/Java   | Jenkins, GitHub Actions      | High performance, detailed reports     |
+| JMeter              | Java         | All major CI/CD, CLI         | Mature, extensible, large ecosystem    |
+| NBomber             | C#/F#        | .NET, CI/CD                  | .NET-native, integrates with test runners |
 
-* **Azure Load Testing** ([https://learn.microsoft.com/en-us/azure/load-testing/](https://learn.microsoft.com/en-us/azure/load-testing/)) - Managed platform for running load tests on Azure. It allows to run and monitor tests automatically, source secrets from the KeyVault, generate traffic at scale, and load test Azure private endpoints. In the simple case, it executes load tests with HTTP GET traffic to a given endpoint. For the more complex cases, you can upload your own **JMeter scenarios**.
-* **JMeter** ([https://github.com/apache/jmeter](https://github.com/apache/jmeter)) - Has built in patterns to test without coding, but can be extended with Java.
-* **Artillery** ([https://artillery.io/](https://artillery.io/)) - Write your scenarios in Javascript, executes a node application.
-* **Gatling** ([https://gatling.io/](https://gatling.io/)) - Write your scenarios in Scala with their DSL.
-* **Locust** ([https://locust.io/](https://locust.io/)) - Write your scenarios in Python using the concept of concurrent user activity.
-* **K6** ([https://k6.io/](https://k6.io/)) - Write your test scenarios in Javascript, available as open source or as SaaS.
-* **NBomber** ([https://nbomber.com/](https://nbomber.com/)) - Write your test scenarios in C# or F#, available integration with test runners (NUnit/xUnit).
+**Tip:** For cloud-native systems, prefer tools that support distributed execution, containerization, and integration with cloud monitoring (e.g., Prometheus, Grafana, CloudWatch).
 
-### Conclusion <a href="#conclusion" id="conclusion"></a>
+## Example: k6 Load Test Script
 
-A load test is critical step to understand if a target system will be reliable under the expected real world traffic.
+```javascript
+import http from 'k6/http';
+import { check, sleep } from 'k6';
 
-Of course, it's only as good as your ability to predict the expected load, so it's important to follow up with other further testing to truly understand how your system behaves in different situations.
+export let options = {
+  stages: [
+    { duration: '2m', target: 50 },   // Ramp-up
+    { duration: '5m', target: 200 },  // Peak load
+    { duration: '2m', target: 0 },    // Ramp-down
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)<500'], // 95% of requests < 500ms
+    http_req_failed: ['rate<0.01'],   // <1% errors
+  },
+};
+
+export default function () {
+  const res = http.get('https://api.example.com/health');
+  check(res, {
+    'status is 200': (r) => r.status === 200,
+  });
+  sleep(1);
+}
+```
+
+## Example: Azure Load Testing YAML
+
+```yaml
+# azure-load-test.yaml
+resources:
+  - name: load-test
+    type: Microsoft.LoadTestService/loadTests
+    properties:
+      description: "API Load Test"
+      loadTestConfig:
+        engineInstances: 2
+        testPlan: "loadtest.jmx"
+      secrets:
+        - name: "endpoint"
+          value: "https://api.example.com"
+```
+
+## Best Practices (2025)
+
+- **Automate load tests in CI/CD:** Run load tests on every major release using GitHub Actions, Azure Pipelines, or your preferred CI/CD tool.
+- **Use Infrastructure as Code:** Provision test environments with Terraform or ARM/Bicep templates for consistency.
+- **Monitor everything:** Integrate with Prometheus, Grafana, CloudWatch, or Azure Monitor for real-time insights.
+- **Test from multiple regions:** Use cloud-based agents to simulate global traffic patterns.
+- **Leverage LLMs:** Use LLMs to generate test scenarios, analyze logs, and suggest optimizations.
+- **Document and iterate:** Keep detailed records of test results and continuously refine your scenarios.
+
+## References
+- [Azure Load Testing Documentation](https://learn.microsoft.com/en-us/azure/load-testing/)
+- [k6 Documentation](https://k6.io/docs/)
+- [AWS Distributed Load Testing](https://aws.amazon.com/solutions/implementations/distributed-load-testing-on-aws/)
+- [Google Cloud DLT](https://cloud.google.com/solutions/distributed-load-testing-using-kubernetes)
+
+---
+
+Load testing is essential for ensuring your system can handle real-world traffic and scale reliably. By following modern best practices and leveraging cloud-native tools, you can confidently deliver performant, resilient applications.

@@ -52,6 +52,228 @@ The goal of Spike testing is to validate that a software system can respond well
 
 Chaos testing or Chaos engineering is the practice of experimenting on a system to build confidence that the system can withstand turbulent conditions in production. Its goal is to identify weaknesses before they manifest system wide. Developers often implement fallback procedures for service failure. Chaos testing arbitrarily shuts down different parts of the system to validate that fallback procedures function correctly.
 
+### Cloud-Native Performance Testing
+
+When testing cloud-native applications, several additional considerations come into play:
+
+#### Container Performance Testing
+
+Monitor container-specific metrics:
+
+```yaml
+# Example Kubernetes metrics using Prometheus queries
+# Container CPU Usage
+sum(rate(container_cpu_usage_seconds_total{container!=""}[5m])) by (container)
+
+# Container Memory Usage
+sum(container_memory_usage_bytes{container!=""}) by (container)
+
+# Container Network I/O
+sum(rate(container_network_receive_bytes_total[5m])) by (pod)
+sum(rate(container_network_transmit_bytes_total[5m])) by (pod)
+```
+
+#### Kubernetes-Based Load Testing
+
+Example using k6 in a Kubernetes cluster:
+
+```yaml
+# k6-load-test.yaml
+apiVersion: k6.io/v1alpha1
+kind: K6
+metadata:
+  name: k6-sample
+spec:
+  parallelism: 3
+  script:
+    configMap:
+      name: k6-test-script
+      file: test.js
+  runner:
+    image: loadimpact/k6:latest
+    env:
+      - name: K6_OUT
+        value: influxdb=http://influxdb:8086/k6
+```
+
+#### Cloud Provider Load Testing Services
+
+Examples for different cloud providers:
+
+**Azure Load Testing:**
+```yaml
+# azure-load-test.yaml
+resources:
+  - name: load-test
+    type: Microsoft.LoadTestService/loadTests
+    properties:
+      description: "Production load test"
+      loadTestConfig:
+        engineInstances: 1
+        testPlan: "loadtest.jmx"
+      secrets:
+        - name: "endpoint"
+          value: "https://api.example.com"
+```
+
+**AWS CloudWatch Synthetics:**
+```javascript
+// canary.js
+const synthetics = require('Synthetics');
+const log = require('SyntheticsLogger');
+
+const apiCanaryBlueprint = async function () {
+    const url = 'https://api.example.com/health';
+    const response = await synthetics.executeHttpStep(
+        'Verify API Health',
+        url,
+        {
+            includeResponseHeaders: true,
+            includeRequestHeaders: true
+        }
+    );
+    
+    const responseCode = response.statusCode;
+    if (responseCode !== 200) {
+        throw `Failed with response code: ${responseCode}`;
+    }
+};
+
+exports.handler = async () => {
+    return await apiCanaryBlueprint();
+};
+```
+
+### Modern Performance Testing Tools
+
+#### Load Testing Tools
+
+| Tool | Best For | Cloud Integration |
+|------|----------|------------------|
+| k6 | Modern cloud-native applications | Grafana Cloud, any Kubernetes |
+| Apache JMeter | Enterprise applications | Azure Load Testing, AWS Marketplace |
+| Artillery | Microservices | AWS Lambda, Azure Functions |
+| Gatling | Scala/Java applications | Jenkins, AWS CodeBuild |
+| Locust | Python-based systems | Google Cloud Load Testing |
+
+#### Example k6 Script for Modern Applications:
+
+```javascript
+// performance-test.js
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+import { Rate } from 'k6/metrics';
+
+const errorRate = new Rate('errors');
+
+export const options = {
+  stages: [
+    { duration: '5m', target: 100 },  // Ramp up
+    { duration: '10m', target: 100 }, // Stay at peak
+    { duration: '5m', target: 0 },    // Ramp down
+  ],
+  thresholds: {
+    http_req_duration: ['p(95)<500'], // 95% requests must complete below 500ms
+    errors: ['rate<0.1'],             // Error rate must be less than 10%
+  },
+};
+
+export default function () {
+  const response = http.get('https://api.example.com/users');
+  
+  check(response, {
+    'is status 200': (r) => r.status === 200,
+    'response time < 500ms': (r) => r.timings.duration < 500,
+  });
+  
+  errorRate.add(response.status !== 200);
+  sleep(1);
+}
+```
+
+### Cloud-Native Monitoring Integration
+
+Add examples of integrating performance testing with cloud monitoring:
+
+```yaml
+# prometheus-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: app-monitor
+spec:
+  selector:
+    matchLabels:
+      app: your-app
+  endpoints:
+  - port: metrics
+    interval: 15s
+    path: /metrics
+```
+
+```yaml
+# grafana-dashboard.yaml
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: performance-dashboard
+spec:
+  json: |
+    {
+      "title": "Application Performance",
+      "panels": [
+        {
+          "title": "Response Time",
+          "type": "graph",
+          "datasource": "Prometheus",
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+              "legendFormat": "P95 Response Time"
+            }
+          ]
+        }
+      ]
+    }
+```
+
+### Automated Performance Testing in CI/CD
+
+Add example of GitHub Actions workflow for automated performance testing:
+
+```yaml
+# .github/workflows/performance-test.yml
+name: Performance Testing
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  performance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install k6
+        run: |
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+      
+      - name: Run Performance Tests
+        run: k6 run tests/performance/load-test.js
+      
+      - name: Archive test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-test-results
+          path: k6-summary.json
+```
+
 ### Performance monitor metrics <a href="#performance-monitor-metrics" id="performance-monitor-metrics"></a>
 
 When executing the various types of testing approaches, whether it is stress, endurance, spike, or chaos testing, it is important to capture various metrics to see how the system performs.

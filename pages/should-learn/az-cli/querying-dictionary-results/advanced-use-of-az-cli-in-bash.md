@@ -1,50 +1,131 @@
 # Advanced use of az-cli in bash
 
-#### Using If Then Else to determine if variable is null <a href="#using-if-then-else-to-determine-if-variable-is-null" id="using-if-then-else-to-determine-if-variable-is-null"></a>
+This page demonstrates advanced Bash and Zsh scripting techniques for managing Azure resources with az-cli. All examples assume you have Azure CLI installed and authenticated.
+
+---
+
+## Bash Examples
+
+### If-Then-Else: Check if Variable is Null
 
 ```bash
-if [ $resourceGroup != '' ]; then
-   echo $resourceGroup
+if [ -n "$resourceGroup" ]; then
+   echo "$resourceGroup"
 else
-   resourceGroup="msdocs-learn-bash-$randomIdentifier"
+   resourceGroup="msdocs-learn-bash-$RANDOM"
 fi
-```plaintext
+```
 
-#### Using If Then to create or delete a resource group <a href="#using-if-then-to-create-or-delete-a-resource-group" id="using-if-then-to-create-or-delete-a-resource-group"></a>
+### If-Then: Create or Delete a Resource Group
+
+Create if not exists:
 
 ```bash
-if [ $(az group exists --name $resourceGroup) = false ]; then 
-   az group create --name $resourceGroup --location "$location" 
+if [ "$(az group exists --name "$resourceGroup")" = false ]; then 
+   az group create --name "$resourceGroup" --location "$location"
 else
-   echo $resourceGroup
+   echo "$resourceGroup already exists."
 fi
-```plaintext
+```
+
+Delete if exists:
 
 ```bash
-if [ $(az group exists --name $resourceGroup) = true ]; then 
-   az group delete --name $resourceGroup -y # --no-wait
+if [ "$(az group exists --name "$resourceGroup")" = true ]; then 
+   az group delete --name "$resourceGroup" -y # --no-wait
 else
-   echo The $resourceGroup resource group does not exist
+   echo "The $resourceGroup resource group does not exist."
 fi
-```plaintext
+```
 
-#### Using Grep to determine if a resource group exists, and create the resource group if it does not <a href="#using-grep-to-determine-if-a-resource-group-exists-and-create-the-resource-group-if-it-does-not" id="using-grep-to-determine-if-a-resource-group-exists-and-create-the-resource-group-if-it-does-not"></a>
-
-{% code fullWidth="true" %}
-```bash
-az group list --output tsv | grep $resourceGroup -q || az group create --name $resourceGroup --location "$location"
-```plaintext
-{% endcode %}
-
-#### Using CASE statement to determine if a resource group exists, and create the resource group if it does not <a href="#using-case-statement-to-determine-if-a-resource-group-exists-and-create-the-resource-group-if-it-doe" id="using-case-statement-to-determine-if-a-resource-group-exists-and-create-the-resource-group-if-it-doe"></a>
+### Grep: Create Resource Group if Not Exists
 
 ```bash
-var=$(az group list --query "[? contains(name, '$resourceGroup')].name" --output tsv)
-case $resourceGroup in
-$var)
-echo The $resourceGroup resource group already exists.;;
-*)
-az group create --name $resourceGroup --location "$location";;
+az group list --output tsv | grep -q "$resourceGroup" || az group create --name "$resourceGroup" --location "$location"
+```
+
+### Case Statement: Create Resource Group if Not Exists
+
+```bash
+var=$(az group list --query "[?name=='$resourceGroup'].name" --output tsv)
+case "$resourceGroup" in
+  $var)
+    echo "The $resourceGroup resource group already exists." ;;
+  *)
+    az group create --name "$resourceGroup" --location "$location" ;;
 esac
-```plaintext
+```
 
+---
+
+## Zsh Examples & Configuration
+
+Zsh syntax is nearly identical to Bash for these use cases. Ensure variables are quoted and use parameter expansion for null checks.
+
+### If-Then-Else: Check if Variable is Null
+
+```zsh
+if [[ -n "$resourceGroup" ]]; then
+  echo "$resourceGroup"
+else
+  resourceGroup="msdocs-learn-zsh-$RANDOM"
+fi
+```
+
+### If-Then: Create or Delete a Resource Group
+
+Create if not exists:
+
+```zsh
+if [[ "$(az group exists --name "$resourceGroup")" == false ]]; then
+  az group create --name "$resourceGroup" --location "$location"
+else
+  echo "$resourceGroup already exists."
+fi
+```
+
+Delete if exists:
+
+```zsh
+if [[ "$(az group exists --name "$resourceGroup")" == true ]]; then
+  az group delete --name "$resourceGroup" -y # --no-wait
+else
+  echo "The $resourceGroup resource group does not exist."
+fi
+```
+
+### Grep: Create Resource Group if Not Exists
+
+```zsh
+az group list --output tsv | grep -q "$resourceGroup" || az group create --name "$resourceGroup" --location "$location"
+```
+
+### Case Statement: Create Resource Group if Not Exists
+
+```zsh
+var=$(az group list --query "[?name=='$resourceGroup'].name" --output tsv)
+case "$resourceGroup" in
+  $var)
+    echo "The $resourceGroup resource group already exists." ;;
+  *)
+    az group create --name "$resourceGroup" --location "$location" ;;
+esac
+```
+
+---
+
+## Best Practices
+
+- Always quote variables to prevent word splitting and globbing.
+- Use `-n`/`-z` for null checks in Bash/Zsh.
+- Use `--output tsv` for scripting to simplify parsing.
+- Prefer `[[ ... ]]` for conditionals in Zsh.
+- Use `$RANDOM` for unique resource group names in scripts.
+
+---
+
+## References
+
+- [Azure CLI Documentation](https://learn.microsoft.com/en-us/cli/azure/)
+- [Bash Reference](https://www.gnu.org/software/bash/manual/bash.html)
+- [Zsh Reference](https://zsh.sourceforge.io/Doc/)

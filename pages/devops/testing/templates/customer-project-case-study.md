@@ -1,37 +1,132 @@
-# \~Customer Project\~ Case Study
+# ~Customer Project~ Case Study
 
-### Background <a href="#background" id="background"></a>
+---
 
-Describe the customer and business requirements with the explicit problem statement.
+## Background
 
-### System Under Test (SUT) <a href="#system-under-test-sut" id="system-under-test-sut"></a>
+Provide a concise summary of the customer, their business requirements, and the explicit problem statement. For example:
 
-Include the system's conceptual architecture and highlight the architecture components that were included in the E2E testing.
+> **Example:**
+> A fintech client required a scalable, secure payment processing platform on AWS, with strict compliance and high availability. The main challenge was ensuring end-to-end reliability across microservices and third-party integrations.
 
-### Problems and Limitations <a href="#problems-and-limitations" id="problems-and-limitations"></a>
+---
 
-Describe about the problems of the overall SUT solution that prevented from testing specific (or any) part of the solution. Describe limitation of the testing tools and framework(s) used in this implementation
+## System Under Test (SUT)
 
-### E2E Testing Framework and Tools <a href="#e2e-testing-framework-and-tools" id="e2e-testing-framework-and-tools"></a>
+Describe the conceptual architecture. Include a diagram if possible.
 
-Describe what testing framework and/or tools were used to implement E2E testing in the SUT.
+- **Cloud Provider:** (e.g., AWS, Azure, GCP)
+- **Key Components:**
+  - API Gateway
+  - Microservices (ECS/EKS/AKS/GKE)
+  - Databases (RDS, CosmosDB, Cloud SQL)
+  - Message Queues (SQS, Service Bus, Pub/Sub)
+  - Third-party APIs
 
-### Test Cases <a href="#test-cases" id="test-cases"></a>
+> **Tip:** Highlight which components were included in E2E testing.
 
-Describe the E2E test cases were created to E2E test the SUT
+---
 
-### Test Metrics <a href="#test-metrics" id="test-metrics"></a>
+## Problems and Limitations
 
-Describe any architecture solution were used to monitor, observe and track the various service states that were used as the E2E testing metrics. Also, include the list of test cases were build to measure the progress of E2E testing.
+- List any blockers that prevented full E2E coverage (e.g., unavailable test data, third-party sandbox limitations).
+- Note limitations of tools/frameworks (e.g., lack of support for async workflows, limited cloud integration).
 
-### E2E Testing Architecture <a href="#e2e-testing-architecture" id="e2e-testing-architecture"></a>
+---
 
-Describe any testing architecture were built to run E2E testing.
+## E2E Testing Framework and Tools
 
-### E2E Testing Implementation (Code samples) <a href="#e2e-testing-implementation-code-samples" id="e2e-testing-implementation-code-samples"></a>
+- **Frameworks:** Cypress, Playwright, Selenium, REST Assured, Postman, k6, etc.
+- **CI/CD:** GitHub Actions, Azure Pipelines, GitLab CI/CD
+- **IaC/Provisioning:** Terraform, Ansible
+- **Cloud Integrations:** AWS CodeBuild, Azure DevOps, GCP Cloud Build
 
-Include sample test cases and their implementation in the programming language of choice. Include any common reusable code implementation blocks that could be leveraged in the future project's E2E testing implementation.
+> **Best Practice:** Use containerized test runners for consistency across environments.
 
-### E2E Testing Reporting and Results <a href="#e2e-testing-reporting-and-results" id="e2e-testing-reporting-and-results"></a>
+---
 
-Include sample of E2E testing reports and results obtained from the E2E testing runs in this project.
+## Test Cases
+
+- List key E2E scenarios (e.g., user registration, payment flow, error handling, failover, scaling events).
+- For each, specify:
+  - Preconditions
+  - Steps
+  - Expected outcomes
+
+---
+
+## Test Metrics
+
+- **Monitoring:** Cloud-native tools (CloudWatch, Azure Monitor, GCP Operations Suite)
+- **Metrics:**
+  - Response time
+  - Error rate
+  - Throughput
+  - Resource utilization (CPU, memory)
+- **Test Progress:**
+  - Number of tests passed/failed
+  - Coverage percentage
+
+---
+
+## E2E Testing Architecture
+
+- Describe the test execution environment (e.g., ephemeral test environments via Terraform, Docker Compose, or Kubernetes).
+- Diagram or list how tests are triggered (e.g., on PR, nightly, pre-release).
+- Note use of mocks/stubs for unavailable dependencies.
+
+---
+
+## E2E Testing Implementation (Code samples)
+
+> **Example: Playwright (TypeScript) API Test**
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('User can register and login', async ({ request }) => {
+  const register = await request.post('/api/register', { data: { user: 'alice', pass: 'secret' } });
+  expect(register.ok()).toBeTruthy();
+  const login = await request.post('/api/login', { data: { user: 'alice', pass: 'secret' } });
+  expect(login.ok()).toBeTruthy();
+});
+```
+
+> **Reusable Terraform Block for Test Environment**
+
+```hcl
+resource "aws_db_instance" "test_db" {
+  allocated_storage    = 20
+  engine              = "postgres"
+  instance_class      = "db.t3.micro"
+  name                = "testdb"
+  username            = var.db_user
+  password            = var.db_pass
+  skip_final_snapshot = true
+}
+```
+
+---
+
+## E2E Testing Reporting and Results
+
+- Include sample test reports (e.g., JUnit XML, Allure, HTML dashboards).
+- Summarize key findings (e.g., pass rate, critical failures, performance bottlenecks).
+- Example:
+
+```text
+E2E Test Summary:
+- Total: 120
+- Passed: 117
+- Failed: 3
+- Avg. Response Time: 320ms
+- Error Rate: 0.8%
+```
+
+---
+
+> **Best Practices:**
+> - Automate E2E tests in CI/CD pipelines
+> - Use cloud-native monitoring for real-time feedback
+> - Parameterize test data and environments
+> - Integrate LLMs for test case generation and log analysis

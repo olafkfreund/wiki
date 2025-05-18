@@ -2,6 +2,13 @@
 
 Put a 2-3 sentence overview about the test technique here.
 
+---
+
+> **Testing Joke:**
+> Why do testers always have great parties? Because they know how to break the ice and find all the edge cases!
+
+---
+
 ### When To Use <a href="#when-to-use" id="when-to-use"></a>
 
 #### Problem Addressed <a href="#problem-addressed" id="problem-addressed"></a>

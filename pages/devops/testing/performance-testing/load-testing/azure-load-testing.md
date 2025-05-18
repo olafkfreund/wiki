@@ -1,6 +1,10 @@
 # Azure Load Testing
 
-The following YAML snippet shows how to pass the secret to the [Load Testing GitHub action](https://github.com/marketplace/actions/azure-load-testing):
+Azure Load Testing is a managed service for running large-scale load tests on your applications and APIs. It integrates seamlessly with GitHub Actions, Azure Pipelines, and supports secure secret management for sensitive data like API tokens.
+
+## Passing Secrets in GitHub Actions
+
+The following YAML snippet shows how to securely pass a secret (such as an API token) to the [Azure Load Testing GitHub Action](https://github.com/marketplace/actions/azure-load-testing):
 
 ```yaml
 - name: 'Azure Load Testing'
@@ -10,17 +14,19 @@ The following YAML snippet shows how to pass the secret to the [Load Testing Git
     loadtestResource: 'MyTest'
     resourceGroup: 'loadtests-rg'
     secrets: |
-    [
+      [
         {
-        "name": "appToken",
-        "value": "${{ secrets.MY_SECRET }}"
+          "name": "appToken",
+          "value": "${{ secrets.MY_SECRET }}"
         }
-    ]
-```plaintext
+      ]
+```
 
-The following YAML snippet shows how to pass the secret to the [Azure Pipelines task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/test/azure-load-testing):
+## Passing Secrets in Azure Pipelines
 
-```yml
+The following YAML snippet shows how to pass a secret to the [Azure Pipelines Load Testing task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/test/azure-load-testing):
+
+```yaml
 - task: AzureLoadTest@1
   inputs:
     azureSubscription: 'MyAzureLoadTestingRG'
@@ -29,10 +35,42 @@ The following YAML snippet shows how to pass the secret to the [Azure Pipelines 
     resourceGroup: 'loadtests-rg'
     secrets: |
       [
-          {
+        {
           "name": "appToken",
           "value": "$(mySecret)"
-          }
+        }
       ]
-```plaintext
+```
+
+---
+
+## Real-Life Example: Secure API Load Test
+
+Suppose you want to load test a production API that requires an authentication token. Store the token in Azure Key Vault or your CI/CD secrets store, and reference it as shown above. This ensures your secrets are never hardcoded or exposed in your repository.
+
+**Best Practice:** Always use secret variables and never commit sensitive values to source control.
+
+---
+
+## Load Testing ASCII Art
+
+```
+        .-"""-.
+       /       \
+      |  (o) (o) |
+      |    ^    |
+      |  '-'  |
+      +-------+
+     /  LOAD   \
+    /  TESTING  \
+   +------------+
+   |  PRESSURE! |
+   +------------+
+```
+
+*"If your server starts making this face, it might be time to scale up!"*
+
+---
+
+For more details, see the [official Azure Load Testing documentation](https://learn.microsoft.com/en-us/azure/load-testing/).
 
