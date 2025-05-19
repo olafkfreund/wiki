@@ -200,6 +200,11 @@
 * [Cloud Strategy](pages/public-clouds/README.md) - Multi-cloud and platform selection guidelines
 * [Azure](pages/public-clouds/azure/README.md) - Microsoft's cloud computing platform
   * [Best Practices](pages/public-clouds/azure/best-practise/README.md) - Architecture and implementation guidelines
+    - [Azure Best Practices Overview](pages/public-clouds/azure/best-practise/README.md)
+    - [Azure Architecture Best Practices](pages/public-clouds/azure/best-practise/architecture-best-practises.md)
+    - [Azure Naming Standards](pages/public-clouds/azure/best-practise/azure-naming-standards.md)
+    - [Azure Tags](pages/public-clouds/azure/best-practise/azure-tags.md)
+    - [Azure Security Best Practices](pages/public-clouds/azure/best-practise/security-best-practise.md)
   * [Landing Zones](pages/public-clouds/azure/azure-landing-zone/README.md) - Enterprise-scale foundation architecture
   * [Services](pages/public-clouds/azure/services/README.md) - Key platform capabilities
     * [Azure Active Directory (AAD)](pages/public-clouds/azure/services/aad.md)
