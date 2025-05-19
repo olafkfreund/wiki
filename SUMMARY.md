@@ -453,8 +453,8 @@
 
 ## Cloud Migration
 
-* [AWS to Azure Migration Guide](pages/cloud-migration/aws-azure.md)
-* [Azure to AWS Migration Guide](pages/cloud-migration/azure-aws.md)
-* [GCP to Azure Migration Guide](pages/cloud-migration/gcp-azure.md)
-* [AWS to GCP Migration Guide](pages/cloud-migration/aws-gcp.md)
-* [GCP to AWS Migration Guide](pages/cloud-migration/gcp-aws.md)
+* [AWS to Azure](pages/cloud-migration/aws-azure.md)
+* [Azure to AWS](pages/cloud-migration/azure-aws.md)
+* [GCP to Azure](pages/cloud-migration/gcp-azure.md)
+* [AWS to GCP](pages/cloud-migration/aws-gcp.md)
+* [GCP to AWS](pages/cloud-migration/gcp-aws.md)
