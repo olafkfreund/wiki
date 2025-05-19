@@ -36,13 +36,17 @@ In a GitHub Actions workflow to deploy Azure Container Apps (requires the `conta
 ## Best Practices
 
 - **Keep extensions up to date:**
+
   ```bash
   az extension update --name <extension-name>
   ```
+
 - **Remove unused extensions:**
+
   ```bash
   az extension remove --name <extension-name>
   ```
+
 - **Check for compatibility issues** after major Azure CLI upgrades.
 
 ## Common Pitfalls
@@ -51,6 +55,7 @@ In a GitHub Actions workflow to deploy Azure Container Apps (requires the `conta
 - Extensions may require specific Azure CLI versions—check compatibility before upgrading.
 
 ## References
+
 - [Official Azure CLI Extensions Documentation](https://learn.microsoft.com/en-us/cli/azure/azure-cli-extensions-overview)
 - [List of All Extensions](https://learn.microsoft.com/en-us/cli/azure/azure-cli-extensions-list)
 

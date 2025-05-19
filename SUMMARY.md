@@ -470,6 +470,7 @@
   * [Java](pages/should-learn/java.md)
   * [Rust](pages/should-learn/rust.md)
   * [Azure CLI](pages/should-learn/az-cli/README.md)
+    * [Azure Cli extensions available](pages/should-learn/az-cli/available-azure-cli-extensions.md)
 
 ## 📖 Documentation Best Practices
 

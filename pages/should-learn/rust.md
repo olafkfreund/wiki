@@ -3,6 +3,7 @@
 Rust is a modern systems programming language focused on safety, concurrency, and performance. It's increasingly used by DevOps and SRE teams for building high-performance tools, cloud-native services, and automation scripts across AWS, Azure, and GCP.
 
 ## Why DevOps & SREs Should Learn Rust
+
 - **Cloud-Native Tooling**: Many Kubernetes, container, and observability tools (e.g., kubelet, vector, ripgrep) are written in Rust for speed and safety.
 - **Performance Automation**: Rust is ideal for writing fast, reliable CLI tools, custom operators, and microservices for cloud automation.
 - **Security**: Rust's memory safety eliminates entire classes of vulnerabilities common in C/C++ tools.
@@ -11,6 +12,7 @@ Rust is a modern systems programming language focused on safety, concurrency, an
 ## Real-Life Examples
 
 ### 1. Fast Log Processor for SREs
+
 ```rust
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -28,6 +30,7 @@ fn main() {
 ```
 
 ### 2. Kubernetes Operator (using kube-rs)
+
 ```rust
 use kube::{Client, api::Api};
 use k8s_openapi::api::core::v1::Pod;
@@ -44,6 +47,7 @@ async fn main() -> anyhow::Result<()> {
 ```
 
 ### 3. AWS Lambda in Rust
+
 ```rust
 use lambda_runtime::{handler_fn, Context, Error};
 use serde_json::Value;
@@ -63,12 +67,14 @@ async fn main() -> Result<(), Error> {
 ## Installation Guide (2025)
 
 ### Linux (Ubuntu/Debian)
+
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 ```
 
 ### NixOS
+
 ```nix
 # Add to configuration.nix
 environment.systemPackages = with pkgs; [
@@ -80,6 +86,7 @@ environment.systemPackages = with pkgs; [
 ```
 
 ### Windows Subsystem for Linux (WSL)
+
 ```bash
 sudo apt update
 sudo apt install build-essential
@@ -87,8 +94,10 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 ## DevOps Development Environment
+
 - **VS Code Extensions**: rust-analyzer, CodeLLDB, crates
 - **Essential Tools**:
+
 ```bash
 rustup component add rustfmt  # Formatter
 rustup component add clippy   # Linter
@@ -96,6 +105,7 @@ cargo install cargo-edit      # Dependency management
 ```
 
 ## Best Practices (2025)
+
 - Use Rust for performance-critical automation and cloud-native tools
 - Prefer async runtimes (tokio, async-std) for network/cloud apps
 - Write integration tests for cloud APIs
@@ -104,12 +114,14 @@ cargo install cargo-edit      # Dependency management
 - Document public APIs and automation scripts
 
 ## Common Pitfalls
+
 - Overengineering simple automation (sometimes Bash/Python is enough)
 - Not handling errors with Result/Option
 - Ignoring cross-compilation for cloud targets
 - Forgetting to use clippy/rustfmt for code quality
 
 ## References
+
 - [The Rust Book](https://doc.rust-lang.org/book/)
 - [kube-rs](https://kube.rs/)
 - [AWS Lambda Rust Runtime](https://github.com/awslabs/aws-lambda-rust-runtime)
@@ -123,9 +135,11 @@ cargo install cargo-edit      # Dependency management
 # Rust
 
 ## Introduction
+
 Rust is a systems programming language that focuses on safety, concurrency, and performance. It provides memory safety without garbage collection and thread safety without data races.
 
 ## Key Features
+
 - 🔒 Memory safety without garbage collection
 - 🔄 Concurrency without data races
 - 🚀 Zero-cost abstractions
@@ -133,6 +147,7 @@ Rust is a systems programming language that focuses on safety, concurrency, and 
 - 🛠️ Cross-platform development
 
 ## Pros
+
 1. **Memory Safety**
    - Compile-time memory management
    - No null pointer dereferences
@@ -149,6 +164,7 @@ Rust is a systems programming language that focuses on safety, concurrency, and 
    - Documentation generator (rustdoc)
 
 ## Cons
+
 1. **Learning Curve**
    - Strict compiler
    - Complex ownership model
@@ -165,12 +181,14 @@ Rust is a systems programming language that focuses on safety, concurrency, and 
 ## Installation Guide
 
 ### Linux (Ubuntu/Debian)
+
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 ```
 
 ### NixOS
+
 ```nix
 # Add to configuration.nix
 environment.systemPackages = with pkgs; [
@@ -182,6 +200,7 @@ environment.systemPackages = with pkgs; [
 ```
 
 ### Windows Subsystem for Linux (WSL)
+
 ```bash
 # Install build essentials first
 sudo apt update
@@ -194,11 +213,13 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ## Development Environment Setup
 
 ### VS Code Extensions
+
 - rust-analyzer: Intelligent Rust language support
 - CodeLLDB: Debugging support
 - crates: Dependency management
 
 ### Essential Tools
+
 ```bash
 # Install common tools
 rustup component add rustfmt  # Code formatter
@@ -210,6 +231,7 @@ cargo install cargo-edit     # Dependency management
 ## Real-Life Examples
 
 ### 1. HTTP Server
+
 ```rust
 use actix_web::{web, App, HttpResponse, HttpServer};
 
@@ -229,6 +251,7 @@ async fn main() -> std::io::Result<()> {
 ```
 
 To run:
+
 ```bash
 cargo new my_server
 cd my_server
@@ -239,6 +262,7 @@ cargo run
 ```
 
 ### 2. System Monitor
+
 ```rust
 use sysinfo::{System, SystemExt};
 
@@ -256,6 +280,7 @@ fn main() {
 ```
 
 To run:
+
 ```bash
 cargo new system_monitor
 cd system_monitor
@@ -266,6 +291,7 @@ cargo run
 ```
 
 ### 3. Concurrent File Processing
+
 ```rust
 use tokio::fs;
 use futures::stream::{StreamExt};
@@ -296,6 +322,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 ```
 
 To run:
+
 ```bash
 cargo new file_processor
 cd file_processor
@@ -309,6 +336,7 @@ cargo run
 ## Building and Testing
 
 ### Debug Build
+
 ```bash
 cargo build        # Debug build
 cargo run         # Build and run
@@ -316,12 +344,14 @@ cargo test        # Run tests
 ```
 
 ### Release Build
+
 ```bash
 cargo build --release  # Optimized build
 cargo run --release   # Run optimized build
 ```
 
 ### Cross-Compilation
+
 ```bash
 # Add target
 rustup target add x86_64-unknown-linux-musl
@@ -373,4 +403,3 @@ cargo build --target x86_64-unknown-linux-musl
    - [Rust Forum](https://users.rust-lang.org/)
    - [This Week in Rust](https://this-week-in-rust.org/)
    - [/r/rust](https://reddit.com/r/rust)
-

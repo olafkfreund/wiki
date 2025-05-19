@@ -13,6 +13,7 @@ Python is a top choice for DevOps and SRE engineers working across AWS, Azure, a
 ## Real-Life Examples
 
 ### 1. AWS EC2 Instance Automation (boto3)
+
 ```python
 import boto3
 
@@ -29,6 +30,7 @@ print(f'Launched instance: {instance[0].id}')
 ```
 
 ### 2. Azure VM Creation (Azure SDK)
+
 ```python
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.compute import ComputeManagementClient
@@ -106,6 +108,7 @@ compute_client.virtual_machines.create_or_update(
 ```
 
 ### 3. GCP Cloud Storage Bucket Creation (google-cloud-storage)
+
 ```python
 from google.cloud import storage
 
@@ -115,6 +118,7 @@ print(f'Created bucket: {bucket.name}')
 ```
 
 ### 4. Integrating LLMs for Automated Change Summaries
+
 ```python
 import openai
 
@@ -130,6 +134,7 @@ print(response['choices'][0]['message']['content'])
 ```
 
 ### 5. CI/CD Pipeline Step (GitHub Actions)
+
 ```yaml
 - name: Run Python deployment script
   run: |
@@ -137,6 +142,7 @@ print(response['choices'][0]['message']['content'])
 ```
 
 ## Best Practices (2025)
+
 - Use virtual environments (venv, pipenv) for dependency management
 - Store secrets securely (AWS Secrets Manager, Azure Key Vault, GCP Secret Manager)
 - Write idempotent scripts for infrastructure changes
@@ -145,6 +151,7 @@ print(response['choices'][0]['message']['content'])
 - Test automation code with pytest or unittest
 
 ## Common Pitfalls
+
 - Hardcoding credentials in scripts
 - Not handling API rate limits or errors
 - Ignoring dependency pinning (requirements.txt)
@@ -152,6 +159,7 @@ print(response['choices'][0]['message']['content'])
 - Not using version control for automation scripts
 
 ## References
+
 - [Python Official Docs](https://docs.python.org/3/)
 - [boto3 AWS SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 - [Azure SDK for Python](https://learn.microsoft.com/python/azure/)

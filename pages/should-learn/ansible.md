@@ -7,6 +7,7 @@ description: Ansible for DevOps & SRE (2025)
 Ansible is a leading open-source automation tool for managing cloud and on-premises infrastructure. Its agentless, YAML-based approach makes it ideal for DevOps and SRE teams working across AWS, Azure, GCP, Linux, NixOS, and WSL environments.
 
 ## Why Use Ansible in DevOps & SRE?
+
 - **Cloud Automation**: Provision and configure resources on AWS, Azure, and GCP using official modules.
 - **Idempotent Deployments**: Ensure consistent, repeatable infrastructure changes.
 - **Agentless**: No software required on managed nodes (uses SSH/WinRM).
@@ -16,6 +17,7 @@ Ansible is a leading open-source automation tool for managing cloud and on-premi
 ## Real-Life Examples
 
 ### 1. Multi-Cloud VM Provisioning (AWS & Azure)
+
 ```yaml
 - hosts: localhost
   connection: local
@@ -52,6 +54,7 @@ Ansible is a leading open-source automation tool for managing cloud and on-premi
 ```
 
 ### 2. Automated Patch Management (Linux)
+
 ```yaml
 - hosts: linux_servers
   become: yes
@@ -63,6 +66,7 @@ Ansible is a leading open-source automation tool for managing cloud and on-premi
 ```
 
 ### 3. Kubernetes Manifest Deployment
+
 ```yaml
 - hosts: localhost
   tasks:
@@ -73,6 +77,7 @@ Ansible is a leading open-source automation tool for managing cloud and on-premi
 ```
 
 ### 4. Integrating with GitHub Actions
+
 ```yaml
 # .github/workflows/ansible-deploy.yml
 name: Ansible Deploy
@@ -89,6 +94,7 @@ jobs:
 ```
 
 ### 5. LLM Integration for Change Summaries
+
 ```python
 import openai
 
@@ -104,6 +110,7 @@ print(summary['choices'][0]['message']['content'])
 ```
 
 ## Best Practices (2025)
+
 - Use roles and playbooks for modular, reusable code
 - Store secrets in Ansible Vault or cloud secret managers
 - Integrate Ansible runs with CI/CD pipelines
@@ -113,6 +120,7 @@ print(summary['choices'][0]['message']['content'])
 - Document all playbooks and roles
 
 ## Common Pitfalls
+
 - Hardcoding credentials in playbooks
 - Not using idempotent modules (avoid shell/command when possible)
 - Ignoring error handling (use `ignore_errors` judiciously)
@@ -120,6 +128,7 @@ print(summary['choices'][0]['message']['content'])
 - Overusing `become` without need
 
 ## References
+
 - [Ansible Docs](https://docs.ansible.com/)
 - [Ansible Galaxy](https://galaxy.ansible.com/)
 - [AWS Ansible Collection](https://docs.ansible.com/ansible/latest/collections/amazon/aws/)
