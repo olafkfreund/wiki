@@ -342,59 +342,59 @@
 ## 🧠 AI & LLM Integration
 
 * [Overview](pages/llm/README.md) - AI applications in DevOps workflows
-* [Claude](pages/llm/claude/README.md) - Anthropic's large language model
-  * [Installation Guide](pages/llm/claude/claude-installation.md) - Setup and configuration
-  * [Project Guides](pages/llm/claude/claude-project-guide.md) - Implementation strategies
-  * [MCP Server Setup](pages/llm/claude/mcp-server-setup.md) - Multi-Claude Protocol implementation
-  * [LLM Comparison](pages/llm/claude/llm-modules-comparison.md) - Feature and capability analysis
-* [Ollama](pages/llm/ollama/README.md) - Local LLM deployment solution
-  * [Installation Guide](pages/llm/ollama/installation.md) - Platform-specific setup
-  * [Configuration](pages/llm/ollama/configuration.md) - Customization and optimization
-  * [Models and Fine-tuning](pages/llm/ollama/models.md) - Available model options
-  * [DevOps Usage](pages/llm/ollama/devops-usage.md) - Automation integrations
-  * [Docker Setup](pages/llm/ollama/docker-setup.md) - Containerized deployment
-  * [GPU Setup](pages/llm/ollama/gpu-setup.md) - Hardware acceleration configuration
-  * [Open WebUI](pages/llm/ollama/open-webui.md) - Browser-based interface
-* [Copilot](pages/llm/copilot/README.md) - GitHub's AI programming assistant
-  * [Installation Guide](pages/llm/copilot/installation.md) - Setup and licensing
-  * [VS Code Integration](pages/llm/copilot/vscode-integration.md) - Editor productivity features
-  * [CLI Usage](pages/llm/copilot/cli-usage.md) - Command-line capabilities
-* [Gemini](pages/llm/gemini/README.md) - Google's multimodal AI model
-  * [Installation Guides](pages/llm/gemini/) - Platform-specific setup
-    * [Linux Installation](pages/llm/gemini/installation-linux.md) - Standard Linux deployment
-    * [WSL Installation](pages/llm/gemini/installation-wsl.md) - Windows Subsystem for Linux setup
-    * [NixOS Installation](pages/llm/gemini/installation-nixos.md) - NixOS package configuration
-  * [Gemini 2.5 Features](pages/llm/gemini/gemini-2-5-features.md) - Latest model capabilities
-  * [Roles and Agents](pages/llm/gemini/roles-and-agents.md) - Specialized assistants
-  * [NotebookML Guide](pages/llm/gemini/notebookml-guide.md) - Jupyter integration
-  * [Cloud Infrastructure Deployment](pages/llm/gemini/cloud-infrastructure-deployment.md) - Production implementation
-  * [Summary](pages/llm/gemini/summary.md) - Key takeaways and best practices
+  * [Claude](pages/llm/claude/README.md) - Anthropic's large language model
+    * [Installation Guide](pages/llm/claude/claude-installation.md) - Setup and configuration
+    * [Project Guides](pages/llm/claude/claude-project-guide.md) - Implementation strategies
+    * [MCP Server Setup](pages/llm/claude/mcp-server-setup.md) - Multi-Claude Protocol implementation
+    * [LLM Comparison](pages/llm/claude/llm-modules-comparison.md) - Feature and capability analysis
+  * [Ollama](pages/llm/ollama/README.md) - Local LLM deployment solution
+    * [Installation Guide](pages/llm/ollama/installation.md) - Platform-specific setup
+    * [Configuration](pages/llm/ollama/configuration.md) - Customization and optimization
+    * [Models and Fine-tuning](pages/llm/ollama/models.md) - Available model options
+    * [DevOps Usage](pages/llm/ollama/devops-usage.md) - Automation integrations
+    * [Docker Setup](pages/llm/ollama/docker-setup.md) - Containerized deployment
+    * [GPU Setup](pages/llm/ollama/gpu-setup.md) - Hardware acceleration configuration
+    * [Open WebUI](pages/llm/ollama/open-webui.md) - Browser-based interface
+  * [Copilot](pages/llm/copilot/README.md) - GitHub's AI programming assistant
+    * [Installation Guide](pages/llm/copilot/installation.md) - Setup and licensing
+    * [VS Code Integration](pages/llm/copilot/vscode-integration.md) - Editor productivity features
+    * [CLI Usage](pages/llm/copilot/cli-usage.md) - Command-line capabilities
+  * [Gemini](pages/llm/gemini/README.md) - Google's multimodal AI model
+    * [Installation Guides](pages/llm/gemini/) - Platform-specific setup
+      * [Linux Installation](pages/llm/gemini/installation-linux.md) - Standard Linux deployment
+      * [WSL Installation](pages/llm/gemini/installation-wsl.md) - Windows Subsystem for Linux setup
+      * [NixOS Installation](pages/llm/gemini/installation-nixos.md) - NixOS package configuration
+    * [Gemini 2.5 Features](pages/llm/gemini/gemini-2-5-features.md) - Latest model capabilities
+    * [Roles and Agents](pages/llm/gemini/roles-and-agents.md) - Specialized assistants
+    * [NotebookML Guide](pages/llm/gemini/notebookml-guide.md) - Jupyter integration
+    * [Cloud Infrastructure Deployment](pages/llm/gemini/cloud-infrastructure-deployment.md) - Production implementation
+    * [Summary](pages/llm/gemini/summary.md) - Key takeaways and best practices
 
 ## 💻 Development Environment
 
-* [Tools Overview](pages/devops/tools-to-install/README.md) - Essential development utilities
+<!-- * [Tools Overview](pages/devops/tools-to-install/README.md) - Essential development utilities -->
 * [DevOps Tools](pages/devops-tools/README.md) - Specialized engineering tools
-* [Operating Systems](pages/devops/tools-to-install/) - Development platforms
-  * [NixOS](pages/Nixos/README.md) - Declarative Linux distribution
-    * [Install NixOS: PC, Mac, WSL](pages/Nixos/install.md)
-    * [Nix Language Deep Dive](pages/Nixos/nix-language.md)
-    * [Nix Language Fundamentals](pages/Nixos/Nix/README.md) - Core concepts of the Nix language
-      * [Nix Functions and Techniques](pages/Nixos/Nix/nix-functions.md) - Advanced function patterns
-      * [Building Packages with Nix](pages/Nixos/Nix/building-packages.md) - Package creation guide
-      * [NixOS Configuration Patterns](pages/Nixos/Nix/nixos-patterns.md) - System architecture patterns
-      * [Flakes: The Future of Nix](pages/Nixos/Nix/flakes.md) - Next-gen dependency management
-    * [NixOS Generators: Azure & QEMU](pages/Nixos/nixos-generators-azure-qemu.md)
-  * [WSL2](pages/devops/tools-to-install/wsl2/README.md) - Windows Subsystem for Linux
-    * [Distributions](pages/devops/tools-to-install/wsl2/rhel-in-wsl2.md) - Linux variants for WSL
-    * [Terminal Setup](pages/devops/tools-to-install/wsl2/make-your-terminal-devops-and-kubernetes-friendly.md) - CLI environment optimization
-* [Editor Environments](pages/devops/tools-to-install/) - Code editing tools
-  * [VS Code](pages/devops/tools-to-install/visual-studio-code.md) - Microsoft's extensible editor
-  * [LunarVim](pages/devops/tools-to-install/lunarvim/README.md) - Neovim-based IDE
-* [CLI Tools](pages/should-learn/README.md) - Command-line utilities
-  * [Azure CLI](pages/should-learn/az-cli/README.md) - Azure resource management
-  * [PowerShell](pages/devops/tools-to-install/powershell/README.md) - Cross-platform automation shell
-  * [Linux Commands](pages/should-learn/linux/commands/README.md) - Essential command-line operations
-  * [YAML Tools](pages/should-learn/yaml/README.md) - Configuration file manipulation
+  * [Operating Systems](pages/devops/tools-to-install/) - Development platforms
+    * [NixOS](pages/Nixos/README.md) - Declarative Linux distribution
+      * [Install NixOS: PC, Mac, WSL](pages/Nixos/install.md)
+      * [Nix Language Deep Dive](pages/Nixos/nix-language.md)
+      * [Nix Language Fundamentals](pages/Nixos/Nix/README.md) - Core concepts of the Nix language
+        * [Nix Functions and Techniques](pages/Nixos/Nix/nix-functions.md) - Advanced function patterns
+        * [Building Packages with Nix](pages/Nixos/Nix/building-packages.md) - Package creation guide
+        * [NixOS Configuration Patterns](pages/Nixos/Nix/nixos-patterns.md) - System architecture patterns
+        * [Flakes: The Future of Nix](pages/Nixos/Nix/flakes.md) - Next-gen dependency management
+      * [NixOS Generators: Azure & QEMU](pages/Nixos/nixos-generators-azure-qemu.md)
+    * [WSL2](pages/devops/tools-to-install/wsl2/README.md) - Windows Subsystem for Linux
+      * [Distributions](pages/devops/tools-to-install/wsl2/rhel-in-wsl2.md) - Linux variants for WSL
+      * [Terminal Setup](pages/devops/tools-to-install/wsl2/make-your-terminal-devops-and-kubernetes-friendly.md) - CLI environment optimization
+  * [Editor Environments](pages/devops/tools-to-install/) - Code editing tools
+    * [VS Code](pages/devops/tools-to-install/visual-studio-code.md) - Microsoft's extensible editor
+    * [LunarVim](pages/devops/tools-to-install/lunarvim/README.md) - Neovim-based IDE
+  * [CLI Tools](pages/should-learn/README.md) - Command-line utilities
+    * [Azure CLI](pages/should-learn/az-cli/README.md) - Azure resource management
+    * [PowerShell](pages/devops/tools-to-install/powershell/README.md) - Cross-platform automation shell
+    * [Linux Commands](pages/should-learn/linux/commands/README.md) - Essential command-line operations
+    * [YAML Tools](pages/should-learn/yaml/README.md) - Configuration file manipulation
 
 ## 📚 Programming Languages
 
