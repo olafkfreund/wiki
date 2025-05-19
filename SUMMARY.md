@@ -450,9 +450,11 @@
   * [Java](pages/should-learn/java.md)
   * [Rust](pages/should-learn/rust.md)
   * [Azure CLI](pages/should-learn/az-cli/README.md)
-  * Cloud Migration
-    * [AWS to Azure Migration Guide](pages/cloud-migration/aws-azure.md)
-    * [Azure to AWS Migration Guide](pages/cloud-migration/azure-aws.md)
-    * [GCP to Azure Migration Guide](pages/cloud-migration/gcp-azure.md)
-    * [AWS to GCP Migration Guide](pages/cloud-migration/aws-gcp.md)
-    * [GCP to AWS Migration Guide](pages/cloud-migration/gcp-aws.md)
+
+## Cloud Migration
+
+* [AWS to Azure Migration Guide](pages/cloud-migration/aws-azure.md)
+* [Azure to AWS Migration Guide](pages/cloud-migration/azure-aws.md)
+* [GCP to Azure Migration Guide](pages/cloud-migration/gcp-azure.md)
+* [AWS to GCP Migration Guide](pages/cloud-migration/aws-gcp.md)
+* [GCP to AWS Migration Guide](pages/cloud-migration/gcp-aws.md)
