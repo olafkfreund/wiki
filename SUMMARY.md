@@ -202,6 +202,19 @@
   * [Best Practices](pages/public-clouds/azure/best-practise/README.md) - Architecture and implementation guidelines
   * [Landing Zones](pages/public-clouds/azure/azure-landing-zone/README.md) - Enterprise-scale foundation architecture
   * [Services](pages/public-clouds/azure/services/README.md) - Key platform capabilities
+    * [Azure Active Directory (AAD)](pages/public-clouds/azure/services/aad.md)
+    * [Azure Monitor](pages/public-clouds/azure/services/monitor.md)
+    * [Azure Key Vault](pages/public-clouds/azure/services/key-vault.md)
+    * [Azure Service Bus](pages/public-clouds/azure/services/service-bus.md)
+    * [Azure DNS](pages/public-clouds/azure/services/dns.md)
+    * [Azure App Service](pages/public-clouds/azure/services/app-service.md)
+    * [Azure Batch](pages/public-clouds/azure/services/batch.md)
+    * [Azure Machine Learning](pages/public-clouds/azure/services/machine-learning.md)
+    * [Azure OpenAI Service](pages/public-clouds/azure/services/openai.md)
+    * [Azure Cognitive Services](pages/public-clouds/azure/services/cognitive-services.md)
+    * [Azure Kubernetes Service (AKS)](pages/public-clouds/azure/services/aks.md)
+    * [Azure Databricks](pages/public-clouds/azure/services/databricks.md)
+    * [Azure SQL Database](pages/public-clouds/azure/services/sql.md)
   * [Monitoring](pages/public-clouds/azure/monitoring/README.md) - Azure-native observability solutions
   * [Administration Tools](pages/public-clouds/azure/) - Platform management interfaces
     * [Azure PowerShell](pages/azure-powershell/README.md) - PowerShell-based automation
@@ -211,6 +224,17 @@
   * [Authentication](pages/public-clouds/aws/authentication.md) - IAM and access management
   * [Best Practices](pages/public-clouds/aws/best-practices.md) - Well-Architected implementation guidance
   * [Tips & Tricks](pages/public-clouds/aws/tips-and-tricks.md) - Efficiency improvements
+  * [Services](pages/public-clouds/aws/services/README.md) - Key platform offerings
+    * [AWS IAM (Identity and Access Management)](pages/public-clouds/aws/services/iam.md)
+    * [Amazon CloudWatch](pages/public-clouds/aws/services/cloudwatch.md)
+    * [Amazon SNS (Simple Notification Service)](pages/public-clouds/aws/services/sns.md)
+    * [Amazon SQS (Simple Queue Service)](pages/public-clouds/aws/services/sqs.md)
+    * [Amazon Route 53](pages/public-clouds/aws/services/route53.md)
+    * [AWS Elastic Beanstalk](pages/public-clouds/aws/services/elastic-beanstalk.md)
+    * [AWS Batch](pages/public-clouds/aws/services/batch.md)
+    * [Amazon SageMaker](pages/public-clouds/aws/services/sagemaker.md)
+    * [Amazon Bedrock](pages/public-clouds/aws/services/bedrock.md)
+    * [Amazon Comprehend](pages/public-clouds/aws/services/comprehend.md)
 * [Google Cloud](pages/public-clouds/gcp/README.md) - Google's cloud platform
   * [Services](pages/public-clouds/gcp/services/README.md) - Key platform offerings
     * [Cloud CDN](pages/public-clouds/gcp/services/cloud-cdn.md)

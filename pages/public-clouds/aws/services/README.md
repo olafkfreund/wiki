@@ -31,6 +31,28 @@ This section contains detailed guides for deploying and managing common AWS serv
 
 - [Amazon VPC (Virtual Private Cloud)](vpc.md) - Isolated cloud resources
 - [Amazon CloudFront](cloudfront.md) - Content delivery network
+- [Amazon Route 53](route53.md) - DNS and domain management
+
+## Security & Identity Services
+
+- [AWS IAM (Identity and Access Management)](iam.md) - User and permissions management
+
+## Monitoring & Messaging Services
+
+- [Amazon CloudWatch](cloudwatch.md) - Monitoring and observability
+- [Amazon SNS (Simple Notification Service)](sns.md) - Pub/sub messaging
+- [Amazon SQS (Simple Queue Service)](sqs.md) - Managed message queues
+
+## Application Services
+
+- [AWS Elastic Beanstalk](elastic-beanstalk.md) - Platform as a Service (PaaS)
+- [AWS Batch](batch.md) - Batch computing at scale
+
+## GenAI & ML Services
+
+- [Amazon SageMaker](sagemaker.md) - Machine learning platform
+- [Amazon Bedrock](bedrock.md) - Generative AI foundation models
+- [Amazon Comprehend](comprehend.md) - Natural language processing
 
 ## Each guide includes:
 

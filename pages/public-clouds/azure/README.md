@@ -8,7 +8,6 @@
 - [Azure Monitoring](monitoring/README.md) - Observability solutions for Azure
 - [Azure CLI](../../az-cli/README.md) - Command-line management interface
 - [Azure PowerShell](../../azure-powershell/README.md) - PowerShell-based automation
-- [Bicep](../../../group-1/bicep/README.md) - Native Azure infrastructure as code
 - [Terraform Azure](../../terraform/azure-scenarios.md) - Managing Azure with Terraform
 - [Azure DevOps](../../azure-devops/README.md) - Microsoft's DevOps platform
 
