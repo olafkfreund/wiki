@@ -261,6 +261,14 @@
     * [BigQuery](pages/public-clouds/gcp/services/bigquery.md)
     * [VPC (Virtual Private Cloud)](pages/public-clouds/gcp/services/vpc.md)
 
+## Cloud Migration
+
+* [AWS to Azure](pages/cloud-migration/aws-azure.md)
+* [Azure to AWS](pages/cloud-migration/azure-aws.md)
+* [GCP to Azure](pages/cloud-migration/gcp-azure.md)
+* [AWS to GCP](pages/cloud-migration/aws-gcp.md)
+* [GCP to AWS](pages/cloud-migration/gcp-aws.md)
+
 ## 🔐 Security & Compliance
 
 * [DevSecOps Overview](pages/security/README.md) - Security throughout the delivery pipeline
@@ -396,23 +404,6 @@
 * [Java](pages/should-learn/java.md) - Enterprise application development
 * [Rust](pages/should-learn/rust.md) - High-performance systems programming
 
-## 📖 Documentation Best Practices
-
-* [Documentation Strategy](pages/devops/documentation/README.md) - Comprehensive documentation approach
-* [Project Documentation](pages/devops/documentation/projects-and-repositories.md) - Repository-level documentation
-* [Release Notes](pages/devops/documentation/create-release-notes-with-pipeline.md) - Automated change documentation
-* [Static Sites](pages/devops/documentation/how-to-create-a-static-website-for-your-documentation-based-on-mkdocs-and-mkdocs-material.md) - Documentation portal creation
-* [Documentation Templates](pages/devops/documentation/templates/repository-templates.md)
-* [Real-World Examples](pages/devops/documentation/examples/real-world-examples.md)
-
-## 📋 Reference Materials
-
-* [Glossary](pages/reference/glossary.md) - DevOps and cloud terminology
-* [Tool Comparison](pages/reference/tool-comparison.md) - Feature analysis of DevOps tools
-* [Tool Decision Guides](pages/reference/tool-decision-guides.md) - Decision trees and migration guides for tool selection
-* [Recommended Reading](pages/reference/reading.md) - Essential books and resources
-* [Troubleshooting Guide](pages/reference/troubleshooting.md) - Advanced issue resolution for DevOps/SRE
-
 ## Platform Engineering
 
 * [Implementation Guide](pages/platform-engineering/implementation-guide.md)
@@ -480,10 +471,19 @@
   * [Rust](pages/should-learn/rust.md)
   * [Azure CLI](pages/should-learn/az-cli/README.md)
 
-## Cloud Migration
+## 📖 Documentation Best Practices
 
-* [AWS to Azure](pages/cloud-migration/aws-azure.md)
-* [Azure to AWS](pages/cloud-migration/azure-aws.md)
-* [GCP to Azure](pages/cloud-migration/gcp-azure.md)
-* [AWS to GCP](pages/cloud-migration/aws-gcp.md)
-* [GCP to AWS](pages/cloud-migration/gcp-aws.md)
+* [Documentation Strategy](pages/devops/documentation/README.md) - Comprehensive documentation approach
+* [Project Documentation](pages/devops/documentation/projects-and-repositories.md) - Repository-level documentation
+* [Release Notes](pages/devops/documentation/create-release-notes-with-pipeline.md) - Automated change documentation
+* [Static Sites](pages/devops/documentation/how-to-create-a-static-website-for-your-documentation-based-on-mkdocs-and-mkdocs-material.md) - Documentation portal creation
+* [Documentation Templates](pages/devops/documentation/templates/repository-templates.md)
+* [Real-World Examples](pages/devops/documentation/examples/real-world-examples.md)
+
+## 📋 Reference Materials
+
+* [Glossary](pages/reference/glossary.md) - DevOps and cloud terminology
+* [Tool Comparison](pages/reference/tool-comparison.md) - Feature analysis of DevOps tools
+* [Tool Decision Guides](pages/reference/tool-decision-guides.md) - Decision trees and migration guides for tool selection
+* [Recommended Reading](pages/reference/reading.md) - Essential books and resources
+* [Troubleshooting Guide](pages/reference/troubleshooting.md) - Advanced issue resolution for DevOps/SRE
