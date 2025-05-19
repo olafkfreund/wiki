@@ -213,7 +213,24 @@
   * [Tips & Tricks](pages/public-clouds/aws/tips-and-tricks.md) - Efficiency improvements
 * [Google Cloud](pages/public-clouds/gcp/README.md) - Google's cloud platform
   * [Services](pages/public-clouds/gcp/services/README.md) - Key platform offerings
-* [Private Cloud](pages/private-cloud.md) - On-premises implementations
+    * [Cloud CDN](pages/public-clouds/gcp/services/cloud-cdn.md)
+    * [Cloud DNS](pages/public-clouds/gcp/services/cloud-dns.md)
+    * [Cloud Load Balancing](pages/public-clouds/gcp/services/cloud-load-balancing.md)
+    * [Google Kubernetes Engine (GKE)](pages/public-clouds/gcp/services/gke.md)
+    * [Cloud Run](pages/public-clouds/gcp/services/cloud-run.md)
+    * [Artifact Registry](pages/public-clouds/gcp/services/artifact-registry.md)
+    * [Compute Engine](pages/public-clouds/gcp/services/compute-engine.md)
+    * [Cloud Functions](pages/public-clouds/gcp/services/cloud-functions.md)
+    * [App Engine](pages/public-clouds/gcp/services/app-engine.md)
+    * [Cloud Storage](pages/public-clouds/gcp/services/cloud-storage.md)
+    * [Persistent Disk](pages/public-clouds/gcp/services/persistent-disk.md)
+    * [Filestore](pages/public-clouds/gcp/services/filestore.md)
+    * [Cloud SQL](pages/public-clouds/gcp/services/cloud-sql.md)
+    * [Cloud Spanner](pages/public-clouds/gcp/services/cloud-spanner.md)
+    * [Firestore](pages/public-clouds/gcp/services/firestore.md)
+    * [Bigtable](pages/public-clouds/gcp/services/bigtable.md)
+    * [BigQuery](pages/public-clouds/gcp/services/bigquery.md)
+    * [VPC (Virtual Private Cloud)](pages/public-clouds/gcp/services/vpc.md)
 
 ## 🔐 Security & Compliance
 
