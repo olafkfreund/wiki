@@ -90,34 +90,34 @@
 ## 🐳 Containers & Orchestration
 
 * [Containerization Overview](pages/containers/README.md) - Introduction to container technology
-* [Docker](pages/best-practises/containers/docker/README.md) - Container runtime and tooling
-  * [Dockerfile Best Practices](pages/best-practises/containers/docker/dockerfile.md) - Efficient and secure container images
-  * [Docker Compose](pages/best-practises/containers/docker/docker-compose.md) - Multi-container application management
-* [Kubernetes](pages/containers/kubernetes/README.md) - Production-grade container orchestration
-  * [CLI Tools](pages/containers/kubernetes/) - Essential command-line utilities
-    * [Kubectl](pages/containers/kubernetes/kubectl.md) - Primary Kubernetes control tool
-    * [Kubens](pages/containers/kubernetes/kubens.md) - Namespace switching utility
-    * [Kubectx](pages/containers/kubernetes/kubectx.md) - Context switching utility
-  * [Core Concepts](pages/need-to-know/kubernetes/kubernetes-concepts.md) - Fundamental Kubernetes architecture
-  * [Components](pages/need-to-know/kubernetes/kubernetes-components.md) - Cluster building blocks
-  * [Best Practices](pages/best-practises/containers/kubernetes/kubernetes-best-practices/README.md) - Production implementation guidelines
-    * [Pod Security](pages/best-practises/containers/kubernetes/kubernetes-best-practices/pod-security.md)
-    * [Security Monitoring](pages/best-practises/containers/kubernetes/kubernetes-best-practices/security-monitoring.md)
-    * [Resource Limits](pages/best-practises/containers/kubernetes/kubernetes-best-practices/resource-limits/README.md)
-  * [Advanced Features](pages/should-learn/kubernetes/) - Beyond the basics [ADVANCED]
-    * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md) - Network traffic management
-    * [Ingress Controllers](pages/should-learn/kubernetes/ingress-controllers/README.md) - External access management
-      * [NGINX](pages/should-learn/kubernetes/ingress-controllers/nginx.md) - NGINX-based ingress
-      * [Traefik](pages/should-learn/kubernetes/ingress-controllers/traefik.md) - Cloud-native edge router
-      * [Kong](pages/should-learn/kubernetes/ingress-controllers/kong.md) - API gateway implementation
-      * [Gloo Edge](pages/should-learn/kubernetes/ingress-controllers/gloo-edge.md) - Next-gen API gateway
-  * [Troubleshooting](pages/should-learn/kubernetes/troubleshooting/README.md) - Diagnosing and resolving common issues
-    * [Pod Troubleshooting Commands](pages/should-learn/kubernetes/troubleshooting/kubernetes-pod-troubleshooting-commands.md) - Essential diagnostic tools
-  * [Enterprise Architecture](pages/best-practises/containers/kubernetes/enterprise-scale-architecture.md) - Large-scale multi-cloud Kubernetes designs [ADVANCED]
-  * [Health Management](pages/best-practises/containers/kubernetes/health-management.md) - Monitoring and maintaining cluster health [ADVANCED]
-  * [Security & Compliance](pages/best-practises/containers/kubernetes/security-and-compliance.md) - Securing enterprise Kubernetes deployments [ADVANCED]
-  * [Virtual Clusters](pages/best-practises/containers/kubernetes/vcluster.md) - Nested Kubernetes clusters for multi-tenancy
-* [OpenShift](pages/best-practises/containers/openshift.md) - Red Hat's enterprise Kubernetes platform
+  * [Docker](pages/best-practises/containers/docker/README.md) - Container runtime and tooling
+    * [Dockerfile Best Practices](pages/best-practises/containers/docker/dockerfile.md) - Efficient and secure container images
+    * [Docker Compose](pages/best-practises/containers/docker/docker-compose.md) - Multi-container application management
+  * [Kubernetes](pages/containers/kubernetes/README.md) - Production-grade container orchestration
+    * [CLI Tools](pages/containers/kubernetes/) - Essential command-line utilities
+      * [Kubectl](pages/containers/kubernetes/kubectl.md) - Primary Kubernetes control tool
+      * [Kubens](pages/containers/kubernetes/kubens.md) - Namespace switching utility
+      * [Kubectx](pages/containers/kubernetes/kubectx.md) - Context switching utility
+    * [Core Concepts](pages/need-to-know/kubernetes/kubernetes-concepts.md) - Fundamental Kubernetes architecture
+    * [Components](pages/need-to-know/kubernetes/kubernetes-components.md) - Cluster building blocks
+    * [Best Practices](pages/best-practises/containers/kubernetes/kubernetes-best-practices/README.md) - Production implementation guidelines
+      * [Pod Security](pages/best-practises/containers/kubernetes/kubernetes-best-practices/pod-security.md)
+      * [Security Monitoring](pages/best-practises/containers/kubernetes/kubernetes-best-practices/security-monitoring.md)
+      * [Resource Limits](pages/best-practises/containers/kubernetes/kubernetes-best-practices/resource-limits/README.md)
+    * [Advanced Features](pages/should-learn/kubernetes/) - Beyond the basics [ADVANCED]
+      * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md) - Network traffic management
+      * [Ingress Controllers](pages/should-learn/kubernetes/ingress-controllers/README.md) - External access management
+        * [NGINX](pages/should-learn/kubernetes/ingress-controllers/nginx.md) - NGINX-based ingress
+        * [Traefik](pages/should-learn/kubernetes/ingress-controllers/traefik.md) - Cloud-native edge router
+        * [Kong](pages/should-learn/kubernetes/ingress-controllers/kong.md) - API gateway implementation
+        * [Gloo Edge](pages/should-learn/kubernetes/ingress-controllers/gloo-edge.md) - Next-gen API gateway
+    * [Troubleshooting](pages/should-learn/kubernetes/troubleshooting/README.md) - Diagnosing and resolving common issues
+      * [Pod Troubleshooting Commands](pages/should-learn/kubernetes/troubleshooting/kubernetes-pod-troubleshooting-commands.md) - Essential diagnostic tools
+    * [Enterprise Architecture](pages/best-practises/containers/kubernetes/enterprise-scale-architecture.md) - Large-scale multi-cloud Kubernetes designs [ADVANCED]
+    * [Health Management](pages/best-practises/containers/kubernetes/health-management.md) - Monitoring and maintaining cluster health [ADVANCED]
+    * [Security & Compliance](pages/best-practises/containers/kubernetes/security-and-compliance.md) - Securing enterprise Kubernetes deployments [ADVANCED]
+    * [Virtual Clusters](pages/best-practises/containers/kubernetes/vcluster.md) - Nested Kubernetes clusters for multi-tenancy
+  * [OpenShift](pages/best-practises/containers/openshift.md) - Red Hat's enterprise Kubernetes platform
 
 ## Service Mesh & Networking
 
@@ -133,14 +133,14 @@
 ## Edge Computing
 
 * [Implementation Guide](pages/architecture/edge-computing/implementation-guide.md)
-* [Serverless Edge](pages/architecture/edge-computing/serverless-edge.md)
-* [IoT Edge Patterns](pages/architecture/edge-computing/iot-edge-patterns.md)
-* [Real-Time Processing](pages/architecture/edge-computing/real-time-processing.md)
-* [Edge AI/ML](pages/architecture/edge-computing/edge-ai-deployment.md)
-* [Security Hardening](pages/architecture/edge-computing/security-hardening.md)
-* [Observability Patterns](pages/architecture/edge-computing/observability-patterns.md)
-* [Network Optimization](pages/architecture/edge-computing/network-optimization.md)
-* [Storage Patterns](pages/architecture/edge-computing/storage-patterns.md)
+  * [Serverless Edge](pages/architecture/edge-computing/serverless-edge.md)
+  * [IoT Edge Patterns](pages/architecture/edge-computing/iot-edge-patterns.md)
+  * [Real-Time Processing](pages/architecture/edge-computing/real-time-processing.md)
+  * [Edge AI/ML](pages/architecture/edge-computing/edge-ai-deployment.md)
+  * [Security Hardening](pages/architecture/edge-computing/security-hardening.md)
+  * [Observability Patterns](pages/architecture/edge-computing/observability-patterns.md)
+  * [Network Optimization](pages/architecture/edge-computing/network-optimization.md)
+  * [Storage Patterns](pages/architecture/edge-computing/storage-patterns.md)
 
 ## 🔄 CI/CD & GitOps
 
@@ -185,15 +185,15 @@
 ## Source Control
 
 * [Source Control Overview](pages/devops/source-control/README.md) - Version control fundamentals and best practices
-* [Git Branching Strategies](pages/devops/source-control/git-branching-strategies.md) - Effective branching models for DevOps teams
-* [Component Versioning](pages/devops/source-control/component-versioning.md) - Versioning strategies for software components
-* [Kubernetes Manifest Versioning](pages/devops/source-control/kubernetes-manifest-versioning.md) - Version control for Kubernetes resources
-* [GitLab](pages/devops/source-control/gitlab/README.md)
-  * [GitLab Runner](pages/devops/source-control/gitlab/gitlab_runner.md)
-* [Creating a Fork](pages/devops/source-control/create-fork.md)
-* [Naming Branches](pages/devops/source-control/naming-branches.md)
-* [Pull Requests](pages/devops/source-control/pull-request.md)
-* [Integrating LLMs into Source Control Workflows](pages/devops/source-control/llm-integration.md)
+  * [Git Branching Strategies](pages/devops/source-control/git-branching-strategies.md) - Effective branching models for DevOps teams
+  * [Component Versioning](pages/devops/source-control/component-versioning.md) - Versioning strategies for software components
+  * [Kubernetes Manifest Versioning](pages/devops/source-control/kubernetes-manifest-versioning.md) - Version control for Kubernetes resources
+  * [GitLab](pages/devops/source-control/gitlab/README.md)
+    * [GitLab Runner](pages/devops/source-control/gitlab/gitlab_runner.md)
+  * [Creating a Fork](pages/devops/source-control/create-fork.md)
+  * [Naming Branches](pages/devops/source-control/naming-branches.md)
+  * [Pull Requests](pages/devops/source-control/pull-request.md)
+  * [Integrating LLMs into Source Control Workflows](pages/devops/source-control/llm-integration.md)
 
 ## ☁️ Cloud Platforms
 
@@ -272,35 +272,35 @@
 ## 🔐 Security & Compliance
 
 * [DevSecOps Overview](pages/security/README.md) - Security throughout the delivery pipeline
-* [DevSecOps Pipeline Security](pages/security/README.md) - Comprehensive pipeline security guide
-* [DevSecOps](pages/dev-secops/README.md) - Security-integrated development practices
-  * [Real-life Examples](pages/dev-secops/real-life-examples.md) - Implementation case studies
-  * [Scanning & Protection](pages/dev-secops/) - Automated security tooling
-    * [Dependency Scanning](pages/dev-secops/dependency-and-container-scanning.md) - Supply chain security
-    * [Credential Scanning](pages/dev-secops/credential-scanning/README.md) - Secret detection and prevention
-    * [Container Security Scanning](pages/dev-secops/container-security-scanning.md) - Container image analysis
-    * [Static Code Analysis](pages/dev-secops/static-code-analysis/README.md) - Code quality and security
-      * [Best Practices](pages/dev-secops/static-code-analysis/best-practices.md) - Effective implementation
-      * [Tool Integration Guide](pages/dev-secops/static-code-analysis/tool-integration.md) - Setup instructions
-      * [Pipeline Configuration](pages/dev-secops/static-code-analysis/pipeline-config.md) - CI/CD integration
-  * [CI/CD Security](pages/dev-secops/ci-cd-security.md) - Securing the deployment pipeline
-  * [Secrets Rotation](pages/dev-secops/secrets-rotation/README.md) - Automated credential management
-* [Supply Chain Security](pages/dev-secops/supply-chain-security.md)
-  * [SLSA Framework](pages/dev-secops/supply-chain-security.md#slsa-framework-implementation)
-  * [Binary Authorization](pages/dev-secops/supply-chain-security.md#binary-authorization)
-  * [Artifact Signing](pages/dev-secops/supply-chain-security.md#artifact-signing)
-* [Security Best Practices](pages/devops/security/README.md) - Holistic security guidelines
-  * [Threat Modeling](pages/devops/security/threat-modeling.md) - Structured risk assessment
-  * [Kubernetes Security](pages/devops/security/kubernetes/README.md) - Container platform hardening
-* [SecOps](pages/secops/README.md) - Security operations and management
-* [Zero Trust Model](pages/need-to-know/zero-trust-model/README.md) - Modern security architecture
-* [Cloud Compliance](pages/need-to-know/cloud-compliance/README.md) - Regulatory frameworks and standards
-  * [ISO/IEC 27001:2022](pages/need-to-know/cloud-compliance/iso-iec-27001-2022.md) - Information security management
-  * [ISO 22301:2019](pages/need-to-know/cloud-compliance/iso-22301-2019.md) - Business continuity planning
-  * [PCI DSS](pages/need-to-know/cloud-compliance/pci-dss.md) - Payment card industry compliance
-  * [CSA STAR](pages/need-to-know/cloud-compliance/csa-star.md) - Cloud security certification
-* [Security Frameworks](pages/need-to-know/public-cloud-security-frameworks/README.md) - Implementation methodologies
-* [SIEM and SOAR](pages/need-to-know/siem-and-soar.md) - Security monitoring and automation
+  * [DevSecOps Pipeline Security](pages/security/README.md) - Comprehensive pipeline security guide
+  * [DevSecOps](pages/dev-secops/README.md) - Security-integrated development practices
+    * [Real-life Examples](pages/dev-secops/real-life-examples.md) - Implementation case studies
+    * [Scanning & Protection](pages/dev-secops/) - Automated security tooling
+      * [Dependency Scanning](pages/dev-secops/dependency-and-container-scanning.md) - Supply chain security
+      * [Credential Scanning](pages/dev-secops/credential-scanning/README.md) - Secret detection and prevention
+      * [Container Security Scanning](pages/dev-secops/container-security-scanning.md) - Container image analysis
+      * [Static Code Analysis](pages/dev-secops/static-code-analysis/README.md) - Code quality and security
+        * [Best Practices](pages/dev-secops/static-code-analysis/best-practices.md) - Effective implementation
+        * [Tool Integration Guide](pages/dev-secops/static-code-analysis/tool-integration.md) - Setup instructions
+        * [Pipeline Configuration](pages/dev-secops/static-code-analysis/pipeline-config.md) - CI/CD integration
+    * [CI/CD Security](pages/dev-secops/ci-cd-security.md) - Securing the deployment pipeline
+    * [Secrets Rotation](pages/dev-secops/secrets-rotation/README.md) - Automated credential management
+  * [Supply Chain Security](pages/dev-secops/supply-chain-security.md)
+    * [SLSA Framework](pages/dev-secops/supply-chain-security.md#slsa-framework-implementation)
+    * [Binary Authorization](pages/dev-secops/supply-chain-security.md#binary-authorization)
+    * [Artifact Signing](pages/dev-secops/supply-chain-security.md#artifact-signing)
+  * [Security Best Practices](pages/devops/security/README.md) - Holistic security guidelines
+    * [Threat Modeling](pages/devops/security/threat-modeling.md) - Structured risk assessment
+    * [Kubernetes Security](pages/devops/security/kubernetes/README.md) - Container platform hardening
+  * [SecOps](pages/secops/README.md) - Security operations and management
+  * [Zero Trust Model](pages/need-to-know/zero-trust-model/README.md) - Modern security architecture
+  * [Cloud Compliance](pages/need-to-know/cloud-compliance/README.md) - Regulatory frameworks and standards
+    * [ISO/IEC 27001:2022](pages/need-to-know/cloud-compliance/iso-iec-27001-2022.md) - Information security management
+    * [ISO 22301:2019](pages/need-to-know/cloud-compliance/iso-22301-2019.md) - Business continuity planning
+    * [PCI DSS](pages/need-to-know/cloud-compliance/pci-dss.md) - Payment card industry compliance
+    * [CSA STAR](pages/need-to-know/cloud-compliance/csa-star.md) - Cloud security certification
+  * [Security Frameworks](pages/need-to-know/public-cloud-security-frameworks/README.md) - Implementation methodologies
+  * [SIEM and SOAR](pages/need-to-know/siem-and-soar.md) - Security monitoring and automation
 
 ## Security Architecture
 
@@ -312,25 +312,25 @@
 ## 🔍 Observability & Monitoring
 
 * [Observability Fundamentals](pages/devops/observability/README.md) - Unified monitoring approach
-* [Logging](pages/devops/observability/logging/README.md) - Log collection and analysis strategies
-* [Metrics](pages/devops/observability/metrics.md) - Quantitative system measurements
-* [Tracing](pages/devops/observability/tracing.md) - Distributed transaction monitoring
-* [Dashboards](pages/devops/observability/dashboard.md) - Visualization and reporting
-* [SLOs and SLAs](pages/need-to-know/understanding-sli-slo-and-sla.md) - Service level objectives and agreements
-* [Observability as Code](pages/devops/observability/observability-as-code.md) - Automated monitoring setup
-* [Pipeline Observability](pages/devops/observability/observability-of-ci-cd-pipelines.md) - CI/CD process insights
+  * [Logging](pages/devops/observability/logging/README.md) - Log collection and analysis strategies
+  * [Metrics](pages/devops/observability/metrics.md) - Quantitative system measurements
+  * [Tracing](pages/devops/observability/tracing.md) - Distributed transaction monitoring
+  * [Dashboards](pages/devops/observability/dashboard.md) - Visualization and reporting
+  * [SLOs and SLAs](pages/need-to-know/understanding-sli-slo-and-sla.md) - Service level objectives and agreements
+  * [Observability as Code](pages/devops/observability/observability-as-code.md) - Automated monitoring setup
+  * [Pipeline Observability](pages/devops/observability/observability-of-ci-cd-pipelines.md) - CI/CD process insights
 
 ## 🧪 Testing Strategies
 
 * [Testing Overview](pages/devops/testing/README.md) - Comprehensive quality assurance approach
-* [Modern Testing Approaches](pages/need-to-know/testing/README.md) - Cloud-native validation techniques
-* [End-to-End Testing](pages/need-to-know/testing/end-to-end-testing/README.md) - Complete system validation
-* [Unit Testing](pages/need-to-know/testing/unit-testing.md) - Component-level verification
-* [Performance Testing](pages/devops/testing/performance-testing/README.md) - System capability assessment
-  * [Load Testing](pages/devops/testing/performance-testing/load-testing/README.md) - Capacity verification
-* [Fault Injection Testing](pages/devops/testing/fault-injection-testing.md) - Chaos engineering practice
-* [Integration Testing](pages/devops/testing/integration-testing.md) - Component interaction validation
-* [Smoke Testing](pages/devops/testing/smoke-testing.md) - Basic functionality verification
+  * [Modern Testing Approaches](pages/need-to-know/testing/README.md) - Cloud-native validation techniques
+  * [End-to-End Testing](pages/need-to-know/testing/end-to-end-testing/README.md) - Complete system validation
+  * [Unit Testing](pages/need-to-know/testing/unit-testing.md) - Component-level verification
+  * [Performance Testing](pages/devops/testing/performance-testing/README.md) - System capability assessment
+    * [Load Testing](pages/devops/testing/performance-testing/load-testing/README.md) - Capacity verification
+  * [Fault Injection Testing](pages/devops/testing/fault-injection-testing.md) - Chaos engineering practice
+  * [Integration Testing](pages/devops/testing/integration-testing.md) - Component interaction validation
+  * [Smoke Testing](pages/devops/testing/smoke-testing.md) - Basic functionality verification
 
 ## 🤖 AI Integration
 
