@@ -5,6 +5,7 @@ Traefik is a modern, cloud-native ingress controller for Kubernetes, supporting 
 ---
 
 ## Why Use Traefik?
+
 - Simple, dynamic configuration (CRDs, YAML, Helm)
 - Native support for Let's Encrypt, mTLS, and advanced routing
 - Works with GitOps tools (ArgoCD, Flux) for declarative, auditable deployments
@@ -16,16 +17,19 @@ Traefik is a modern, cloud-native ingress controller for Kubernetes, supporting 
 ## Installation (Helm)
 
 **Requirements:**
+
 - Kubernetes 1.16+
 - Helm 3.9+
 
 Add the Traefik Helm repo:
+
 ```bash
 helm repo add traefik https://traefik.github.io/charts
 helm repo update
 ```
 
 Install Traefik in a dedicated namespace:
+
 ```bash
 kubectl create ns traefik-v2
 helm install --namespace=traefik-v2 traefik traefik/traefik
@@ -36,12 +40,14 @@ helm install --namespace=traefik-v2 traefik traefik/traefik
 ## GitOps Setup Example (ArgoCD)
 
 **1. Add Traefik Helm chart to your Git repo:**
+
 ```yaml
 # apps/traefik/values.yaml
 # (customize as needed)
 ```
 
 **2. Define an ArgoCD Application:**
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -67,6 +73,7 @@ spec:
 ```
 
 **3. Apply the Application:**
+
 ```bash
 kubectl apply -f traefik-argocd-app.yaml
 ```
@@ -76,12 +83,15 @@ kubectl apply -f traefik-argocd-app.yaml
 ## Exposing the Traefik Dashboard
 
 **Port-forward (default, secure):**
+
 ```bash
 kubectl port-forward -n traefik-v2 $(kubectl get pods -n traefik-v2 -l app.kubernetes.io/name=traefik -o name | head -n1) 9000:9000
 ```
+
 Access at: [http://127.0.0.1:9000/dashboard/](http://127.0.0.1:9000/dashboard/)
 
 **IngressRoute CRD Example:**
+
 ```yaml
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
@@ -126,6 +136,7 @@ http:
 ---
 
 ## Pros and Cons
+
 | Pros | Cons |
 |------|------|
 | Easy dynamic config (CRDs, Helm) | Fewer built-in policies than NGINX |
@@ -137,6 +148,7 @@ http:
 ---
 
 ## 2025 Best Practices
+
 - Use GitOps (ArgoCD, Flux) for all Traefik config and upgrades
 - Store all manifests and Helm values in Git (version control)
 - Use RBAC and network policies to secure Traefik
@@ -145,6 +157,7 @@ http:
 - Use LLMs (Copilot, Claude) to generate and review IngressRoute and middleware configs
 
 ## Common Pitfalls
+
 - Exposing the dashboard publicly (security risk)
 - Not enabling HTTPS by default
 - Manual changes outside Git (causes drift in GitOps)
@@ -153,6 +166,7 @@ http:
 ---
 
 ## References
+
 - [Traefik Helm Chart](https://github.com/traefik/traefik-helm-chart)
 - [Traefik Docs](https://doc.traefik.io/traefik/)
 - [ArgoCD Docs](https://argo-cd.readthedocs.io/)

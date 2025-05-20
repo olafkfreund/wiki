@@ -5,6 +5,7 @@ A service mesh is an infrastructure layer that manages service-to-service commun
 ---
 
 ## Why Use a Service Mesh?
+
 - **Traffic Management:** Fine-grained control over routing, retries, timeouts, and circuit breaking
 - **Security:** mTLS encryption, service authentication, and policy enforcement
 - **Observability:** Distributed tracing, metrics, and logging for all service traffic
@@ -14,6 +15,7 @@ A service mesh is an infrastructure layer that manages service-to-service commun
 ---
 
 ## Pros and Cons
+
 | Pros | Cons |
 |------|------|
 | Enhanced security (mTLS, RBAC) | Added complexity and resource overhead |
@@ -78,6 +80,7 @@ spec:
 ---
 
 ## Best Practices (2025)
+
 - Start with a minimal mesh (e.g., Linkerd or Istio demo profile) and scale up
 - Use GitOps (ArgoCD, Flux) to manage mesh configuration and CRDs
 - Monitor mesh health with Prometheus, Grafana, and Jaeger
@@ -85,6 +88,7 @@ spec:
 - Document mesh usage and onboarding for your team
 
 ## Common Pitfalls
+
 - Overcomplicating the mesh with too many features at once
 - Not monitoring mesh resource usage (can impact cluster performance)
 - Failing to secure the mesh dashboard and control plane
@@ -93,10 +97,10 @@ spec:
 ---
 
 ## References
+
 - [Istio Docs](https://istio.io/latest/docs/)
 - [Linkerd Docs](https://linkerd.io/2.14/overview/)
 - [Consul Connect](https://www.consul.io/docs/connect)
 - [AWS App Mesh](https://docs.aws.amazon.com/app-mesh/latest/userguide/)
 - [Azure Service Mesh](https://learn.microsoft.com/en-us/azure/aks/open-service-mesh-about)
 - [Anthos Service Mesh](https://cloud.google.com/anthos/service-mesh/docs)
-

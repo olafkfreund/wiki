@@ -1,153 +1,157 @@
 # kubectl
 
-**Kubectl** is the command line configuration tool to interact with Kubernetes clusters using Kubernetes API server. kubectl allows users to create, inspect, update, and delete Kubernetes objects.
+`kubectl` is the primary command-line tool for interacting with Kubernetes clusters. It allows you to deploy applications, inspect and manage cluster resources, and view logs. Mastery of `kubectl` is essential for DevOps engineers working with AWS EKS, Azure AKS, GCP GKE, NixOS, and WSL environments.
 
-**Kubectl Characteristics**
+---
 
-* Kubectl can be pronounced as “cube CTL”, “kube control”, “cube cuttle”
-* It is a is a robust CLI that runs commands against the Kubernetes cluster and controls the cluster manager
-* kubectl is known as the swiss army knife of container orchestration and management
-* kubectl is designed to make this process more comfortable and straightforward
-* kubectl allows users to create, inspect, update, and delete Kubernetes objects
-* Every Kubernetes command has an API endpoint, and kubectl’s primary purpose is to carry out HTTP requests to the API.
+## Installation
 
-**Most Common Kubectl Commands:**
+**macOS (Homebrew):**
 
-**Cluster Management:** A Kubernetes cluster is a set of nodes that run containerized applications. It allows containers to run across multiple machines and environments: virtual, physical, cloud-based, and on-premises. Following kubectl commands can be used to manage a cluster
+```bash
+brew install kubectl
+```
 
-* **kubectl cluster-info** : Display endpoint information about the master and services in the cluster
-* **kubectl version** : Display the Kubernetes version running on the client and server
-* **kubectl config view** : Get the configuration of the cluster
-* **kubectl api-resource** : List the API resources that are available
-* **kubectl api-versions** : List the API versions that are available
-* **kubectl get all –all -namespaces :** List everything
+**Linux (Debian/Ubuntu):**
 
-**Listing Resources:** Kubernetes resources also known as Kubernetes objects associated to a specific namespace, you can either use individual kubectl get command to list down each resource one by one, or you can list down all the resources in a Kubernetes namespace by running a single command. Following are the list of commands to get the resources information.
+```bash
+sudo apt-get update && sudo apt-get install -y kubectl
+```
 
-* **kubectl get namespaces** : Generate a plain-text list of all namespaces:
-* **kubectl get pods** : Generate a plain-text list of all pods
-* **kubectl get pods -o wide** : Generate a detailed plain-text list of all pods
-* **kubectl get pods–field-selector=spec. nodeName=\[server-name]** : Generate a list of all pods running on a particular node server
-* **kubectl get replicationcontroller \[replication-controller-name]** : List a specific replication controller in plain text
-* **kubectl get replicationcontroller, services :** Generate a plain-text list of all replication controllers and services
+**NixOS (declarative):**
+Add to your `/etc/nixos/configuration.nix`:
 
-**Daemonsets :** A Daemonset ensures that all (or some) Nodes run a copy of a Pod. As nodes are added to the cluster, Pods are added to them. As nodes are removed from the cluster, those Pods are garbage collected. Deleting a **DaemonSet** will clean up the Pods it created.
+```nix
+environment.systemPackages = with pkgs; [ kubectl ];
+```
 
-* **kubectl get daemonset** : List one or more daemonsets
-* **kubectl edit daemonset \<daemonset\_name**> : Edit and update the definition of one or more daemonset
-* **kubectl delete daemonset \<daemonset\_name>** : Delete a daemonset
-* **kubectl create daemonset \<daemonset\_name>** : Create a new daemonset
-* **kubectl rollout daemonset** : Manage the rollout of a daemonset
-* **kubectl describe ds \<daemonset\_name> -n \<namespace\_name>** : Display the detailed state of daemonsets within a namespace
+Then run:
 
-**Deployments :** A **Kubernetes Deployment** is used to tell **Kubernetes** how to create or modify instances of the pods that hold a containerized application. **Deployments** can scale the number of replica pods, enable rollout of updated code in a controlled manner, or roll back to an earlier **deployment** version if necessary.
+```sh
+sudo nixos-rebuild switch
+```
 
-* **kubectl get deployment** : List one or more deployments
-* **kubectl describe deployment \<deployment\_name>** : Display the detailed state of one or more deployments
-* **kubectl edit deployment \<deployment\_name>** : Edit and update the definition of one or more deployment on the server
-* **kubectl create deployment \<deployment\_name>** : Create one a new deployment
-* **kubectl delete deployment \<deployment\_name>** : Delete deployments
-* **kubectl rollout status deployment \<deployment\_name>** : See the rollout status of a deployment
+**Windows (WSL):**
+Install via Chocolatey or manually download the binary from the [official docs](https://kubernetes.io/docs/tasks/tools/).
 
-**Events:** Kubernetes **events** are objects that show you what is happening inside a cluster, such as what decisions were made by the scheduler or why some pods were evicted from the node. **Events** are the first thing to look at for application, as well as infrastructure operations when something is not working as expected. Following are the kubectl commands to get the events.
+---
 
-* **kubectl get events** : List recent events for all resources in the system
-* **kubectl get events –field-selector type=Warning** : List Warnings only
-* **kubectl get events –field-selector involvedObject.kind!=Pod** : List events but exclude Pod events
-* **kubectl get events –field-selector involvedObject.kind=Node, involvedObject.name=\<node\_name>** : Pull events for a single node with a specific name
-* **kubectl get events –field-selector type!=Normal** : Filter out normal events from a list of events
+## Quick Reference: Common kubectl Commands
 
-**Logs :** Kubernets logs commands can be used to monitor, logging and debugging the pods.
+### Cluster Management
 
-* **kubectl logs \<pod\_name>** : Print the logs for a pod
-* **kubectl logs –since=1h \<pod\_name>** : Print the logs for the last hour for a pod
-* **kubectl logs –tail=20 \<pod\_name>** : Get the most recent 20 lines of logs
-* **kubectl logs -f \<service\_name> \[-c <$container>]** : Get logs from a service and optionally select which container
-* **kubectl logs -f \<pod\_name>** : Print the logs for a pod and follow new logs
-* **kubectl logs -c \<container\_name> \<pod\_name>** : Print the logs for a container in a pod
-* **kubectl logs \<pod\_name> pod.log** : Output the logs for a pod into a file named ‘pod.log’
-* **kubectl logs –previous \<pod\_name>** : View the logs for a previously failed pod
+- `kubectl cluster-info` – Show cluster endpoints
+- `kubectl version` – Show client/server versions
+- `kubectl config view` – Show kubeconfig
+- `kubectl get all --all-namespaces` – List all resources in all namespaces
 
-**Namespaces :** Namespaces are **Kubernetes objects** which partition a single Kubernetes cluster into multiple **virtual clusters**. Each **Kubernetes namespace** provides the scope for Kubernetes Names it contains; which means that using the combination of an object name and a Namespace, each object gets an **unique identity** across the cluster.
+### Resource Listing
 
-* **kubectl create namespace \<namespace\_name>** : Create namespace \<name>
-* **kubectl get namespace \<namespace\_name>** : List one or more namespaces
-* **kubectl describe namespace \<namespace\_name>** : Display the detailed state of one or more namespace
-* **kubectl delete namespace \<namespace\_name>** : Delete a namespace
-* **kubectl edit namespace \<namespace\_name>** : Edit and update the definition of a namespace
-* **kubectl top namespace \<namespace\_name>** : Display Resource (CPU/Memory/Storage) usage for a namespace
+- `kubectl get namespaces` – List all namespaces
+- `kubectl get pods` – List all pods in current namespace
+- `kubectl get pods -o wide` – Detailed pod info
+- `kubectl get pods --field-selector=spec.nodeName=<node>` – Pods on a node
+- `kubectl get rc,services` – List replication controllers and services
 
-**Node Operations:** A Node is a **worker machine** in Kubernetes and may be either a virtual or a physical machine, depending on the cluster. Each **Node** is managed by the control plane. A Node can have **multiple pods**, and the Kubernetes control plane automatically handles scheduling the pods across the Nodes in the **cluster**. Following commands can be used for Node Operations.
+### Deployments & Rollouts
 
-* **kubectl taint node \<node\_name>** : Update the taints on one or more nodes
-* **kubectl get node** : List one or more nodes
-* **kubectl delete node \<node\_name>** : Delete a node or multiple nodes
-* **kubectl top node** : Display Resource usage (CPU/Memory/Storage) for nodes
-* **kubectl describe nodes | grep Allocated -A 5** : Resource allocation per node
-* **kubectl get pods -o wide | grep \<node\_name>** : Pods running on a node
-* **kubectl annotate node \<node\_name>** : Annotate a node
-* **kubectl cordon node \<node\_name>** : Mark a node as unschedulable
-* **kubectl uncordon node \<node\_name>** : Mark node as schedulable
-* **kubectl drain node \<node\_name>** : Drain a node in preparation for maintenance
-* **kubectl label node** : Add or update the labels of one or more nodes
+- `kubectl get deployment` – List deployments
+- `kubectl describe deployment <name>` – Deployment details
+- `kubectl edit deployment <name>` – Edit deployment
+- `kubectl create deployment <name> --image=<image>` – Create deployment
+- `kubectl delete deployment <name>` – Delete deployment
+- `kubectl rollout status deployment <name>` – Rollout status
+- `kubectl rollout history deployment/<name>` – Rollout history
+- `kubectl rollout undo deployment/<name>` – Rollback deployment
+- `kubectl rollout restart deployment/<name>` – Restart deployment
 
-**Pods :** Pods are the atomic unit on the Kubernetes platform. When we create a Deployment on Kubernetes, it creates Pods with containers inside them. Each Pod is tied to the Node where it is scheduled and remains there until termination or deletion or restarted. Following kubectl command can be used for Pods Operations.
+### Pods
 
-* **kubectl get pod** : List one or more pods
-* **kubectl delete pod \<pod\_name>** : Delete a pod
-* **kubectl create pod \<pod\_name>** : Create a pod
-* **kubectl exec \<pod\_name> -c \<container\_name> \<command>** : Execute a command against a container in a pod
-* **kubectl exec -it \<pod\_name> /bin/sh** : Get interactive shell on a a single-container pod
-* **kubectl top pod** : Display Resource usage (CPU/Memory/Storage) for pods
-* **kubectl describe pod \<pod\_name>** : Display the detailed state of a pods
-* **kubectl annotate pod \<pod\_name> \<annotation>** : Add or update the annotations of a pod
-* **kubectl label pod \<pod\_name>** : Add or update the label of a pod
+- `kubectl get pod` – List pods
+- `kubectl describe pod <name>` – Pod details
+- `kubectl logs <pod>` – Pod logs
+- `kubectl logs -f <pod>` – Follow logs
+- `kubectl exec -it <pod> -- /bin/sh` – Shell into pod
+- `kubectl delete pod <name>` – Delete pod
 
-**Replication Controllers and ReplicaSets**
+### Namespaces
 
-* **kubectl get rc** : List the replication controllers
-* **kubectl get rc –namespace=”\<namespace\_name>”** : List the replication controllers by namespace
-* **kubectl get replicasets** : List ReplicaSets
-* **kubectl describe replicasets \<replicaset\_name>** : Display the detailed state of one or more ReplicaSets
-* **kubectl scale –replicas=\[x]** : Scale a ReplicaSet
+- `kubectl create namespace <name>` – Create namespace
+- `kubectl get namespace` – List namespaces
+- `kubectl describe namespace <name>` – Namespace details
+- `kubectl delete namespace <name>` – Delete namespace
 
-**Secrets:** A **Kubernets Secret** is an object that contains a small amount of sensitive data such as a **password**, a token, or **a key**. Such information might otherwise be put in a Pod specification or in an image. Users can create Secrets and the system also creates some Secrets using following kubectl commands.
+### Nodes
 
-* **kubectl create secret** : Create a secret
-* **kubectl get secrets** : List secrets
-* **kubectl describe secrets** : List details about secrets
-* **kubectl delete secret \<secret\_name>** : Delete a secret
+- `kubectl get nodes` – List nodes
+- `kubectl describe node <name>` – Node details
+- `kubectl cordon <node>` – Mark node unschedulable
+- `kubectl drain <node>` – Prepare node for maintenance
+- `kubectl uncordon <node>` – Mark node schedulable
+- `kubectl top node` – Node resource usage
 
-**Services and Service Accounts:** A **Kubernetes service** is a logical abstraction for a deployed group of pods in a cluster (which all perform the same function) and Service accounts are used to provide an identity for pods. Pods that want to interact with the API server will authenticate with a particular service account.
+### DaemonSets
 
-* **kubectl get services :** List one or more services
-* **kubectl describe services :** Display the detailed state of a service
-* **kubectl expose deployment \[deployment\_name] :** Expose a replication controller, service, deployment or pod as a new Kubernetes service
-* **kubectl edit services :** Edit and update the definition of one or more services
-* **kubectl get serviceaccounts :** List service accounts
-* **kubectl describe serviceaccounts :** Display the detailed state of one or more service accounts
-* **kubectl replace serviceaccount :** Replace a service account
-* **kubectl delete serviceaccount \<service\_account\_name> :** Delete a service account
-* **kubectl get pod |grep -P ‘\s+(\[1–9]+)\\/\1\s+’** : List Pods in Ready Status
-* **kubectl get pod |grep -Pv ‘\s+(\[1–9]+)\\/\1\s+’** : List Pods which are not Ready/Pending status
-* **kubectl get pods -n namespacesort - -sort by=.metadata.creationTimestamp** : List Pods by Deployment timestamp (add -A for live listing)
-* **kubectl get deployment -n namespace -o=jsonpath=”{range .items\[\*]}{‘\n’}{.metadata.name}{‘:\t’}{range .spec.template.spec.containers\[\*]}{.image}{‘, ‘}{end}{end}”** : List deployment Artifact/ Images in current namespace.
-* **kubectl get deployment \<deployment\_name> -o=jsonpath=’{$.spec.template.spec.containers\[:1].image}’ :** Get Image version of current deployment.
-* **kubectl get pod \<mutlti\_conatiner\_pod> -o go-template=’\{{range .status.containerStatuses\}}\{{printf “%s:\n%s\n\n” .name .lastState.terminated.message\}}\{{end\}}’** : List last terminated Status
-* **kubectl logs \<pod\_name> \<conatiner\_name> -n namespace - -previous / kubectl logs - -previous ${POD\_NAME} ${CONTAINER\_NAME}** **:** List logs of previous state
-* **kubectl logs - -selector app=\<app\_name> - -container \<conatiner\_name>** : Multi Pod logs
-* **kubectl -n logs -f deployment/ - -all-containers=true - -since=10m** : list logs for last 10 mis
-* **kubectl rollout history deployment/app** : Inspect the history of your Deployment
-* **kubectl rollout undo deployment/app - -to-revision=2** : Rollback to a specific version
-* **kubectl rollout undo deployment/\<deployment\_name>** : Rollback deployment to last version.
-* **kubectl rollout restart -n namespace deployment/\<deployment\_name>:** Restart deployment.
-* **kubectl describe pod | grep ‘Name:\\| Limits\\| Requests\\| cpu:\\| memory’** : List Memory and CPU limit of pod, replace pod with deployment to list deployment wise resource limits.
-* **kubectl delete pod - -selector=project.app=\<app\_name> -n namespace** : Delete multiple pods with single command for a deployment.
-* **kubectl delete pod \<pod\_name> -n namespace - -grace-period=0 - -force** : Force delete the pod
-* **Kubectl top pod** : List down Pod resources CPU and Memory
-* **kubectl top pod \<pod\_name> - -containers** : List Container wise resource usage
-* **Kubectl top node** : List Node resource usage.
-* **kubectl exec -it \<pod\_name> sh :** Shell into the pod
-* **kubectl exec -it \<pod\_name> - -/bin/bash** : bash into the pod
-* **kubectl edit ingress \<ingress\_name>** -n namespace : edit ingress file
-* **kubectl create secret generic \<secret\_name> - -from-literal=Key=value - -from-literal=Key=User:** create a secret file at cluster level and keep adding - -from=literal for all Key values. example **kubectl create secret generic \<secret\_name> - -from-literal=DB\_name=ExampleDB - -from-literal=DB\_password=Ahdgakah**
+- `kubectl get daemonset` – List daemonsets
+- `kubectl describe ds <name> -n <namespace>` – DaemonSet details
+- `kubectl edit daemonset <name>` – Edit DaemonSet
+- `kubectl delete daemonset <name>` – Delete DaemonSet
+
+### Events
+
+- `kubectl get events` – List events
+- `kubectl get events --field-selector type=Warning` – List warnings
+
+### Logs
+
+- `kubectl logs <pod>` – Pod logs
+- `kubectl logs -c <container> <pod>` – Container logs
+- `kubectl logs --since=1h <pod>` – Last hour logs
+- `kubectl logs --tail=20 <pod>` – Last 20 lines
+- `kubectl logs --previous <pod>` – Previous pod logs
+
+### Services & Service Accounts
+
+- `kubectl get services` – List services
+- `kubectl describe service <name>` – Service details
+- `kubectl expose deployment <name>` – Expose as service
+- `kubectl get serviceaccounts` – List service accounts
+- `kubectl describe serviceaccount <name>` – Service account details
+
+### Secrets
+
+- `kubectl create secret generic <name> --from-literal=key=value` – Create secret
+- `kubectl get secrets` – List secrets
+- `kubectl describe secret <name>` – Secret details
+- `kubectl delete secret <name>` – Delete secret
+
+---
+
+## Real-World DevOps Example: Rolling Update
+
+```bash
+kubectl set image deployment/myapp myapp=nginx:1.25.0
+kubectl rollout status deployment/myapp
+kubectl rollout undo deployment/myapp
+```
+
+---
+
+## Best Practices
+
+- Use `kubectl --context` and `--namespace` to avoid mistakes in multi-cluster/multi-namespace environments
+- Use `kubectl explain <resource>` to discover resource fields
+- Use `kubectl apply -f <file.yaml>` for declarative resource management
+- Integrate `kubectl` with CI/CD (GitHub Actions, Azure Pipelines, GitLab CI)
+- Use [kubectx/kubens](./kubectx-or-kubens.md) for fast context/namespace switching
+- Never run destructive commands (`delete`, `drain`) without double-checking the context/namespace
+
+---
+
+## References
+
+- [kubectl Cheat Sheet (Kubernetes.io)](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
+- [kubectl Official Docs](https://kubernetes.io/docs/reference/generated/kubectl/)
+- [kubectl on NixOS](https://search.nixos.org/packages?channel=unstable&show=kubectl)
+
+> **Tip:** Use shell aliases and prompt tools (e.g., kube-ps1) to display current context/namespace and avoid costly mistakes.

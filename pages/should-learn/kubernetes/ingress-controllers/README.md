@@ -5,6 +5,7 @@ Ingress controllers are specialized Kubernetes resources that manage external ac
 ---
 
 ## Why Use an Ingress Controller?
+
 - **Consolidate access:** Manage all external traffic through a single entry point.
 - **TLS termination:** Handle SSL/TLS at the ingress layer.
 - **Path and host-based routing:** Route traffic based on URL paths or hostnames.
@@ -14,6 +15,7 @@ Ingress controllers are specialized Kubernetes resources that manage external ac
 ---
 
 ## How Ingress Controllers Work
+
 1. **Deploy an ingress controller** (e.g., NGINX, Traefik, Kong, Gloo Edge) as a pod in your cluster.
 2. **Create Ingress resources** that define routing rules (host/path to service mapping).
 3. The ingress controller watches for Ingress resources and configures itself to route traffic accordingly.
@@ -27,12 +29,14 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 ```
 
 **Verify deployment:**
+
 ```sh
 kubectl get pods -n ingress-nginx
 kubectl get svc -n ingress-nginx
 ```
 
 **Sample Ingress resource:**
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -59,6 +63,7 @@ spec:
 ---
 
 ## Best Practices
+
 - Use a managed ingress controller (e.g., AWS ALB Ingress, Azure Application Gateway) for production workloads.
 - Always enable TLS for secure communication.
 - Use path and host-based routing to organize microservices.
@@ -68,6 +73,7 @@ spec:
 ---
 
 ## Common Pitfalls
+
 - Not exposing the ingress controller service (type: LoadBalancer or NodePort).
 - Missing DNS records for host-based routing.
 - Forgetting to update firewall/network security group rules.
@@ -76,9 +82,9 @@ spec:
 ---
 
 ## References
+
 - [Kubernetes Ingress Controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
 - [NGINX Ingress Controller Docs](https://kubernetes.github.io/ingress-nginx/)
 - [Traefik Ingress Controller](https://doc.traefik.io/traefik/providers/kubernetes-ingress/)
 - [Kong Ingress Controller](https://docs.konghq.com/kubernetes-ingress-controller/latest/introduction/)
 - [Gloo Edge Ingress Controller](https://docs.solo.io/gloo-edge/latest/guides/)
-

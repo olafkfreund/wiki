@@ -1,64 +1,61 @@
 # Kong
 
-### Features
+Kong is a cloud-native, open-source API gateway and Kubernetes ingress controller. It provides advanced routing, security, and observability features for microservices and APIs. Kong is widely used in AWS, Azure, GCP, and hybrid environments for managing north-south traffic, API management, and integrating legacy and modern workloads.
 
-* **Ingress routing** Use [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) resources to configure Kong.
-* **Enhanced API management using plugins** Use a wide array of [plugins](https://docs.konghq.com/hub/) to monitor, transform and protect your traffic.
-* **Native gRPC support** Proxy gRPC traffic and gain visibility into it using Kong's plugins.
-* **Health checking and Load-balancing** Load balance requests across your pods and supports active & passive health-checks.
-* **Request/response transformations** Use plugins to modify your requests/responses on the fly.
-* **Authentication** Protect your services using authentication methods of your choice.
-* **Declarative configuration for Kong** Configure all of Kong using CRDs in Kubernetes and manage Kong declaratively.
-* **Gateway Discovery** Monitors your Kong Gateways and pushes configuration to all replicas.
+---
 
-Setting up Kong for Kubernetes is as simple as:
+## Key Features
+
+- **Ingress routing:** Use [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) resources to configure Kong for HTTP, HTTPS, and gRPC traffic.
+- **API management with plugins:** Monitor, transform, secure, and rate-limit traffic using [Kong plugins](https://docs.konghq.com/hub/).
+- **Native gRPC support:** Proxy and secure gRPC traffic with full plugin support.
+- **Health checking & load balancing:** Distribute requests across pods with active and passive health checks.
+- **Request/response transformations:** Modify traffic on the fly using plugins.
+- **Authentication:** Protect services with JWT, OAuth2, key-auth, and more.
+- **Declarative configuration:** Manage Kong using Kubernetes CRDs for GitOps and automation.
+- **Gateway Discovery:** Monitor and push config to all Kong Gateway replicas.
+
+---
+
+## Installation
+
+**YAML (quick start):**
 
 ```sh
-# using YAMLs
-$ kubectl apply -f https://raw.githubusercontent.com/Kong/kubernetes-ingress-controller/latest/deploy/single/all-in-one-dbless.yaml
+kubectl apply -f https://raw.githubusercontent.com/Kong/kubernetes-ingress-controller/latest/deploy/single/all-in-one-dbless.yaml
+```
 
-# or using Helm
-$ helm repo add kong https://charts.konghq.com
-$ helm repo update
+**Helm (recommended for production):**
 
-# Helm 3
-$ helm install kong/kong --generate-name --set ingressController.installCRDs=false
-```plaintext
+```sh
+helm repo add kong https://charts.konghq.com
+helm repo update
+helm install kong/kong --generate-name --set ingressController.installCRDs=false
+```
 
-Once installed, set an environment variable, $PROXY\_IP with the External IP address of the `demo-kong-proxy` service in `kong` namespace:
+---
+
+## Real-Life Example: Exposing a Microservice with Kong
+
+### 1. Set the Kong Proxy IP
+
+Get the external IP of the Kong proxy service:
 
 ```sh
 export PROXY_IP=$(kubectl get -o jsonpath="{.status.loadBalancer.ingress[0].ip}" service -n kong demo-kong-proxy)
-```plaintext
+```
 
-### Testing connectivity to Kong Gateway <a href="#testing-connectivity-to-kong-gateway" id="testing-connectivity-to-kong-gateway"></a>
-
-This guide assumes that `PROXY_IP` environment variable is set to contain the IP address or URL pointing to Kong Gateway. If you’ve not done so, follow one of the [deployment guides](https://docs.konghq.com/kubernetes-ingress-controller/2.10.x/deployment/overview) to configure this environment variable.
-
-If everything is setup correctly, making a request to Kong Gateway should return back a HTTP `404 Not Found` status code:
+### 2. Test Kong Gateway Connectivity
 
 ```sh
 curl -i $PROXY_IP
-```plaintext
+```
 
-Response:
+Expected: HTTP 404 Not Found (no route configured yet)
 
-```sh
-HTTP/1.1 404 Not Found
-Content-Type: application/json; charset=utf-8
-Connection: keep-alive
-Content-Length: 48
-X-Kong-Response-Latency: 0
-Server: kong/3.0.0
+### 3. Deploy an Upstream HTTP Application
 
-{"message":"no Route matched with those values"}
-```plaintext
-
-This is expected since Kong Gateway doesn’t know how to proxy the request yet.
-
-### Deploy an upstream HTTP application <a href="#deploy-an-upstream-http-application" id="deploy-an-upstream-http-application"></a>
-
-To proxy requests, you need an upstream application to proxy to. Deploying this echo server provides a simple application that returns information about the Pod it’s running in:
+Deploy a simple echo server:
 
 ```sh
 echo "
@@ -70,14 +67,6 @@ metadata:
   name: echo
 spec:
   ports:
-  - port: 1025
-    name: tcp
-    protocol: TCP
-    targetPort: 1025
-  - port: 1026
-    name: udp
-    protocol: TCP
-    targetPort: 1026
   - port: 1027
     name: http
     protocol: TCP
@@ -96,10 +85,8 @@ spec:
   selector:
     matchLabels:
       app: echo
-  strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: echo
     spec:
@@ -108,41 +95,10 @@ spec:
         name: echo
         ports:
         - containerPort: 1027
-        env:
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          - name: POD_IP
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
-        resources: {}
 " | kubectl apply -f -
-```plaintext
+```
 
-Response:
-
-```sh
-service/echo created
-deployment.apps/echo created
-```plaintext
-
-### Create a configuration group <a href="#create-a-configuration-group" id="create-a-configuration-group"></a>
-
-Ingress and Gateway APIs controllers need a configuration that indicates which set of routing configuration they should recognize. This allows multiple controllers to coexist in the same cluster. Before creating individual routes, you need to create a class configuration to associate routes with:
-
-IngressGateway APIs
-
-Official distributions of Kong Ingress Controller come with a `kong` IngressClass by default. If `kubectl get ingressclass kong` does not return a `not found` error, you can skip this command.
+### 4. Create an IngressClass (if needed)
 
 ```sh
 echo "
@@ -153,21 +109,11 @@ metadata:
 spec:
   controller: ingress-controllers.konghq.com/kong
 " | kubectl apply -f -
-```plaintext
+```
 
-Response:
+### 5. Add Routing Configuration
 
-```sh
-ingressclass.networking.k8s.io/kong configured
-```plaintext
-
-Kong Ingress Controller recognizes the `kong` IngressClass and `konghq.com/kic-gateway-controller` GatewayClass by default. Setting the `CONTROLLER_INGRESS_CLASS` or `CONTROLLER_GATEWAY_API_CONTROLLER_NAME` environment variable to another value overrides these defaults.
-
-### Add routing configuration <a href="#add-routing-configuration" id="add-routing-configuration"></a>
-
-Create routing configuration to proxy `/echo` requests to the echo server:
-
-IngressGateway APIs
+Create an Ingress to route /echo to the echo service:
 
 ```sh
 echo "
@@ -191,116 +137,19 @@ spec:
             port:
               number: 1027
 " | kubectl apply -f -
-```plaintext
+```
 
-Response:
-
-```sh
-ingress.networking.k8s.io/echo created
-```plaintext
-
-Test the routing rule:
+Test the route:
 
 ```sh
 curl -i http://kong.example/echo --resolve kong.example:80:$PROXY_IP
-```plaintext
+```
 
-Response:
+---
 
-```sh
-HTTP/1.1 200 OK
-Content-Type: text/plain; charset=utf-8
-Content-Length: 140
-Connection: keep-alive
-Date: Fri, 21 Apr 2023 12:24:55 GMT
-X-Kong-Upstream-Latency: 0
-X-Kong-Proxy-Latency: 1
-Via: kong/3.2.2
+## Real-Life Example: Securing and Rate-Limiting with Plugins
 
-Welcome, you are connected to node docker-desktop.
-Running on Pod echo-7f87468b8c-tzzv6.
-In namespace default.
-With IP address 10.1.0.237.
-...
-```plaintext
-
-If everything is deployed correctly, you should see the above response. This verifies that Kong Gateway can correctly route traffic to an application running inside Kubernetes.
-
-### Add TLS configuration <a href="#add-tls-configuration" id="add-tls-configuration"></a>
-
-The routing configuration can include a certificate to present when clients connect over HTTPS. This is not required, as Kong Gateway will serve a default certificate if it cannot find another, but including TLS configuration along with routing configuration is typical.
-
-First, create a test certificate for the `kong.example` hostname using one of the following commands:
-
-OpenSSL 1.1.1OpenSSL 0.9.8
-
-```sh
-openssl req -subj '/CN=kong.example' -new -newkey rsa:2048 -sha256 \
-  -days 365 -nodes -x509 -keyout server.key -out server.crt \
-  -addext "subjectAltName = DNS:kong.example" \
-  -addext "keyUsage = digitalSignature" \
-  -addext "extendedKeyUsage = serverAuth" 2> /dev/null;
-  openssl x509 -in server.crt -subject -noout
-```plaintext
-
-Response:
-
-```sh
-subject=CN = kong.example
-```plaintext
-
-Older OpenSSL versions, including the version provided with OS X Monterey, require using the alternative version of this command.
-
-Then, create a Secret containing the certificate:
-
-```shell
-kubectl create secret tls kong.example --cert=./server.crt --key=./server.key
-```plaintext
-
-Response:
-
-```shell
-secret/kong.example created
-```plaintext
-
-Finally, update your routing configuration to use this certificate:
-
-IngressGateway APIs
-
-```sh
-kubectl patch --type json ingress echo -p='[{
-    "op":"add",
-	"path":"/spec/tls",
-	"value":[{
-        "hosts":["kong.example"],
-		"secretName":"kong.example"
-    }]
-}]'
-```plaintext
-
-Response:
-
-```sh
-ingress.networking.k8s.io/echo patched
-
-```plaintext
-
-After, requests will serve the configured certificate:
-
-```sh
-curl -ksv https://kong.example/echo --resolve kong.example:443:$PROXY_IP 2>&1 | grep -A1 "certificate:"
-```plaintext
-
-Response:
-
-```sh
-* Server certificate:
-*  subject: CN=kong.example
-```plaintext
-
-### Using plugins in Kong <a href="#using-plugins-in-kong" id="using-plugins-in-kong"></a>
-
-Setup a KongPlugin resource:
+### 1. Enable a Plugin (e.g., Correlation ID)
 
 ```sh
 echo "
@@ -313,35 +162,15 @@ config:
   echo_downstream: true
 plugin: correlation-id
 " | kubectl apply -f -
-```plaintext
+```
 
-Response:
-
-```shell
-kongplugin.configuration.konghq.com/request-id created
-```plaintext
-
-Update your route configuration to use the new plugin:
-
-IngressGateway APIs
-
-```plaintext
-kubectl annotate ingress echo konghq.com/plugins=request-id
-```plaintext
-
-Response:
+Annotate the Ingress to use the plugin:
 
 ```sh
-ingress.networking.k8s.io/echo annotated
-```plaintext
+kubectl annotate ingress echo konghq.com/plugins=request-id
+```
 
-Requests that match the `echo` Ingress or HTTPRoute now include a `my-request-id` header with a unique ID in both their request headers upstream and their response headers downstream.
-
-### Using plugins on Services <a href="#using-plugins-on-services" id="using-plugins-on-services"></a>
-
-Kong can also apply plugins to Services. This allows you execute the same plugin configuration on all requests to that Service, without configuring the same plugin on multiple Ingresses.
-
-Create a KongPlugin resource:
+### 2. Enable Rate Limiting on a Service
 
 ```sh
 echo "
@@ -355,59 +184,37 @@ config:
   policy: local
 plugin: rate-limiting
 " | kubectl apply -f -
-```plaintext
+```
 
-Response:
+Annotate the Service:
 
 ```sh
-kongplugin.configuration.konghq.com/rl-by-ip created
-```plaintext
-
-Next, apply the `konghq.com/plugins` annotation to the Kubernetes Service that needs rate-limiting:
-
-```plaintext
 kubectl annotate service echo konghq.com/plugins=rl-by-ip
-```plaintext
+```
 
-Response:
+Test the rate limit:
 
 ```sh
-service/echo annotated
-```plaintext
-
-Kong will now enforce a rate limit to requests proxied to this Service:
-
-```plaintext
 curl -i http://kong.example/echo --resolve kong.example:80:$PROXY_IP
-```plaintext
+```
 
-Response:
+---
 
-```shell
-HTTP/1.1 200 OK
-Content-Type: text/plain; charset=UTF-8
-Transfer-Encoding: chunked
-Connection: keep-alive
-X-RateLimit-Remaining-Minute: 4
-RateLimit-Limit: 5
-RateLimit-Remaining: 4
-RateLimit-Reset: 13
-X-RateLimit-Limit-Minute: 5
-Date: Thu, 10 Nov 2022 22:47:47 GMT
-Server: echoserver
-my-request-id: ea87894d-7f97-4710-84ae-cbc608bb8107#3
-X-Kong-Upstream-Latency: 1
-X-Kong-Proxy-Latency: 1
-Via: kong/3.1.1
+## Best Practices
 
+- Use Helm for repeatable, versioned Kong deployments
+- Store all configuration (Helm values, CRDs, plugins) in Git for GitOps
+- Use plugins for authentication, rate limiting, and observability
+- Monitor Kong and application health with Prometheus/Grafana
+- Restrict external access with network policies and firewalls
 
+---
 
-Hostname: echo-fc6fd95b5-6lqnc
+## References
 
-Pod Information:
-	node name:	kind-control-plane
-	pod name:	echo-fc6fd95b5-6lqnc
-	pod namespace:	default
-	pod IP:	10.244.0.9
-...
-```plaintext
+- [Kong Ingress Controller Docs](https://docs.konghq.com/kubernetes-ingress-controller/latest/)
+- [Kong Plugins Hub](https://docs.konghq.com/hub/)
+- [Kong GitHub](https://github.com/Kong/kubernetes-ingress-controller)
+- [Kubernetes Ingress Controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
+
+> **Tip:** Integrate Kong with CI/CD (GitHub Actions, ArgoCD, Flux) for automated API gateway and ingress management in multi-cloud environments.

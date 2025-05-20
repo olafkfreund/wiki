@@ -1,92 +1,80 @@
 # Contour
 
-### Install Contour and Envoy <a href="#install-contour-and-envoy" id="install-contour-and-envoy"></a>
+Contour is a high-performance, cloud-native ingress controller for Kubernetes, built on Envoy Proxy. It is widely used in AWS, Azure, GCP, and hybrid environments for advanced HTTP/HTTPS routing, TLS termination, and integration with the Gateway API. Contour supports both traditional Ingress and modern Gateway API resources, making it a flexible choice for DevOps teams.
 
-#### Option 1: YAML <a href="#option-1-yaml" id="option-1-yaml"></a>
+---
 
-Run the following to install Contour:
+## Installation Options
 
-```bash
-$ kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
-```plaintext
+### Option 1: YAML (Quick Start)
 
-Verify the Contour pods are ready by running the following:
+Install Contour and Envoy using the official YAML manifest:
 
 ```bash
-$ kubectl get pods -n projectcontour -o wide
-```plaintext
+kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
+```
 
-You should see the following:
-
-* 2 Contour pods each with status **Running** and 1/1 **Ready**
-* 1+ Envoy pod(s), each with the status **Running** and 2/2 **Ready**
-
-#### Option 2: Helm <a href="#option-2-helm" id="option-2-helm"></a>
-
-This option requires [Helm to be installed locally](https://helm.sh/docs/intro/install/).
-
-Add the bitnami chart repository (which contains the Contour chart) by running the following:
+Verify the Contour pods are ready:
 
 ```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-```plaintext
+kubectl get pods -n projectcontour -o wide
+```
 
-Install the Contour chart by running the following:
+You should see:
 
-```bash
-$ helm install my-release bitnami/contour --namespace projectcontour --create-namespace
-```plaintext
+- 2 Contour pods (Running, 1/1 Ready)
+- 1+ Envoy pods (Running, 2/2 Ready)
 
-Verify Contour is ready by running:
+### Option 2: Helm (Recommended for Production)
 
-```bash
-$ kubectl -n projectcontour get po,svc
-```plaintext
-
-You should see the following:
-
-* 1 instance of pod/my-release-contour-contour with status **Running** and 1/1 **Ready**
-* 1+ instance(s) of pod/my-release-contour-envoy with each status **Running** and 2/2 **Ready**
-* 1 instance of service/my-release-contour
-* 1 instance of service/my-release-contour-envoy
-
-#### Option 3: Contour Gateway Provisioner (beta) <a href="#option-3-contour-gateway-provisioner-beta" id="option-3-contour-gateway-provisioner-beta"></a>
-
-The Gateway provisioner watches for the creation of [Gateway API](https://gateway-api.sigs.k8s.io/) `Gateway` resources, and dynamically provisions Contour+Envoy instances based on the `Gateway's` spec. Note that although the provisioning request itself is made via a Gateway API resource (`Gateway`), this method of installation still allows you to use _any_ of the supported APIs for defining virtual hosts and routes: `Ingress`, `HTTPProxy`, or Gateway API’s `HTTPRoute` and `TLSRoute`. In fact, this guide will use an `Ingress` resource to define routing rules, even when using the Gateway provisioner for installation.
-
-Deploy the Gateway provisioner:
+Install with Helm for versioned, repeatable deployments:
 
 ```bash
-$ kubectl apply -f https://projectcontour.io/quickstart/contour-gateway-provisioner.yaml
-```plaintext
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install my-release bitnami/contour --namespace projectcontour --create-namespace
+```
 
-Verify the Gateway provisioner deployment is available:
+Verify Contour and Envoy:
 
 ```bash
-$ kubectl -n projectcontour get deployments
-NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
-contour-gateway-provisioner   1/1     1            1           1m
-```plaintext
+kubectl -n projectcontour get po,svc
+```
 
-Create a GatewayClass:
+You should see:
 
-```shell
-kubectl apply -f - <<EOF
-kind: GatewayClass
+- pod/my-release-contour-contour (Running, 1/1 Ready)
+- pod/my-release-contour-envoy (Running, 2/2 Ready)
+- service/my-release-contour, service/my-release-contour-envoy
+
+### Option 3: Contour Gateway Provisioner (Gateway API)
+
+Provision Contour+Envoy dynamically using the Gateway API:
+
+```bash
+kubectl apply -f https://projectcontour.io/quickstart/contour-gateway-provisioner.yaml
+```
+
+Verify the deployment:
+
+```bash
+kubectl -n projectcontour get deployments
+```
+
+Create a GatewayClass and Gateway:
+
+```yaml
+# GatewayClass
 apiVersion: gateway.networking.k8s.io/v1beta1
+kind: GatewayClass
 metadata:
   name: contour
 spec:
   controllerName: projectcontour.io/gateway-controller
-EOF
-```plaintext
-
-Create a Gateway:
-
-```shell
-kubectl apply -f - <<EOF
-kind: Gateway
+---
+# Gateway
 apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
 metadata:
   name: contour
   namespace: projectcontour
@@ -99,73 +87,87 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-EOF
-```plaintext
+```
 
-Verify the `Gateway` is available (it may take up to a minute to become available):
-
-```bash
-$ kubectl -n projectcontour get gateways
-NAME        CLASS     ADDRESS         READY   AGE
-contour     contour                   True    27s
-```plaintext
-
-Verify the Contour pods are ready by running the following:
+Apply with:
 
 ```bash
-$ kubectl -n projectcontour get pods
-```plaintext
+kubectl apply -f gateway.yaml
+```
 
-You should see the following:
+Verify Gateway and pods:
 
-* 2 Contour pods each with status **Running** and 1/1 **Ready**
-* 1+ Envoy pod(s), each with the status **Running** and 2/2 **Ready**
+```bash
+kubectl -n projectcontour get gateways
+kubectl -n projectcontour get pods
+```
 
-### Test it out! <a href="#test-it-out" id="test-it-out"></a>
+---
 
-Congratulations, you have installed Contour and Envoy! Let’s install a web application workload and get some traffic flowing to the backend.
+## Real-Life Example: Exposing a Web Application
 
-To install [httpbin](https://httpbin.org/), run the following:
+### 1. Deploy a Sample App (httpbin)
 
 ```bash
 kubectl apply -f https://projectcontour.io/examples/httpbin.yaml
-```plaintext
+```
 
-Verify the pods and service are ready by running:
+Verify resources:
 
 ```bash
 kubectl get po,svc,ing -l app=httpbin
-```plaintext
+```
 
-You should see the following:
+You should see:
 
-* 3 instances of pods/httpbin, each with status **Running** and 1/1 **Ready**
-* 1 service/httpbin CLUSTER-IP listed on port 80
-* 1 Ingress on port 80
+- 3 pods/httpbin (Running, 1/1 Ready)
+- 1 service/httpbin (port 80)
+- 1 Ingress (port 80)
 
-**NOTE**: the Helm install configures Contour to filter Ingress and HTTPProxy objects based on the `contour` IngressClass name. If using Helm, ensure the Ingress has an ingress class of `contour` with the following:
+### 2. Set IngressClass (if using Helm)
 
 ```bash
 kubectl patch ingress httpbin -p '{"spec":{"ingressClassName": "contour"}}'
-```plaintext
+```
 
-Now we’re ready to send some traffic to our sample application, via Contour & Envoy.
+### 3. Port-Forward to Envoy (for local testing)
 
-_Note, for simplicity and compatibility across all platforms we’ll use `kubectl port-forward` to get traffic to Envoy, but in a production environment you would typically use the Envoy service’s address._
+```bash
+# YAML install
+kubectl -n projectcontour port-forward service/envoy 8888:80
+# Helm install
+kubectl -n projectcontour port-forward service/my-release-contour-envoy 8888:80
+# Gateway provisioner
+kubectl -n projectcontour port-forward service/envoy-contour 8888:80
+```
 
-Port-forward from your local machine to the Envoy service:
+### 4. Test the Application
 
-```shell
-# If using YAML
-$ kubectl -n projectcontour port-forward service/envoy 8888:80
+In a browser or with curl:
 
-# If using Helm
-$ kubectl -n projectcontour port-forward service/my-release-contour-envoy 8888:80
+```bash
+curl http://local.projectcontour.io:8888/
+```
 
-# If using the Gateway provisioner
-$ kubectl -n projectcontour port-forward service/envoy-contour 8888:80
-```plaintext
+You should see the httpbin home page.
 
-In a browser or via `curl`, make a request to [http://local.projectcontour.io:8888](http://local.projectcontour.io:8888/) (note, `local.projectcontour.io` is a public DNS record resolving to 127.0.0.1 to make use of the forwarded port). You should see the `httpbin` home page.
+---
 
-Congratulations, you have installed Contour, deployed a backend application, created an `Ingress` to route traffic to the application, and successfully accessed the app with Contour!
+## Best Practices
+
+- Use Helm for production and GitOps workflows
+- Store all manifests and Helm values in Git
+- Use Gateway API for future-proof, flexible routing
+- Monitor Contour and Envoy with Prometheus/Grafana
+- Restrict external access with network policies and firewalls
+
+---
+
+## References
+
+- [Contour Official Docs](https://projectcontour.io/docs/)
+- [Contour GitHub](https://github.com/projectcontour/contour)
+- [Gateway API](https://gateway-api.sigs.k8s.io/)
+- [Kubernetes Ingress Controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
+
+> **Tip:** Integrate Contour with CI/CD (GitHub Actions, ArgoCD, Flux) for automated ingress and API gateway management in multi-cloud environments.

@@ -1,18 +1,46 @@
 # K8s — Kustomize
 
-## What is Kustomize <a href="#2561" id="2561"></a>
+Kustomize is a native Kubernetes configuration management tool that enables DevOps engineers to customize raw, template-free YAML files for multiple environments (dev, staging, prod) without duplicating or forking manifests. It is built into `kubectl` (v1.14+) and is widely used across AWS, Azure, GCP, NixOS, and CI/CD pipelines.
 
-Kustomize provides a solution for customizing K8s resource configuration free from templates and DSLs. It lets you customize raw, template-free YAML files for multiple purposes, leaving the original YAML untouched and usable as is. Kustomize can also patch `kubernetes style` API objects.
+---
 
-Kustomize uses overlays for K8s manifests to add, remove, or update configuration options without forking. What Kustomize does is take a K8s template, patch it with specified changes in **`kustomization.yaml`**, and then deploy it to Kubernetes.
+## Why Use Kustomize?
 
-### Features of Kustomize: <a href="#e600" id="e600"></a>
+- **Declarative overlays:** Manage environment-specific changes (replicas, image tags, labels) without editing base YAML files.
+- **No templates:** Works directly with YAML, avoiding the complexity of templating engines.
+- **Built-in to kubectl:** No extra dependencies for most Kubernetes users.
+- **Cloud-native:** Used in GitOps, ArgoCD, Flux, and CI/CD workflows.
 
-* Helps customizing config files in a template free way.
-* Provides a number of handy methods like generators to make customization easier.
-* Uses patches to introduce environment specific changes on existing standard config file without disturbing it.
+---
 
-## Kustomize Example <a href="#04fc" id="04fc"></a>
+## Installation
+
+**kubectl (v1.14+):**
+Kustomize is built-in:
+
+```sh
+kubectl kustomize ./path/to/overlay
+```
+
+**Standalone (Linux/macOS/NixOS):**
+
+- [Official releases](https://github.com/kubernetes-sigs/kustomize/releases)
+- **NixOS (declarative):**
+  Add to `/etc/nixos/configuration.nix`:
+
+  ```nix
+  environment.systemPackages = with pkgs; [ kustomize ];
+  ```
+
+  Then run:
+
+  ```sh
+  sudo nixos-rebuild switch
+  ```
+
+---
+
+## Basic Example: Image Tag Overlay
 
 Let’s first take a look at one example of how to use Kustomize, to give a taste of how it works and why we need it.
 
@@ -29,7 +57,7 @@ $ tree
 1 directory, 3 files
 
 0 directories, 2 files
-```plaintext
+```
 
 We already familiar with the `nginx` Deployment and Service file, let’s focus on the `kustomization.yml` file:
 
@@ -44,7 +72,7 @@ images:
 resources:
 - nginx_deploy.yml
 - nginx_service.yml
-```plaintext
+```
 
 As you can see from the above file content, we set a new tag for the **nginx** image, and sets which **`resources`** to apply the settings to. As `Service` does not have images, `Kustomize` will only apply to the `Deployment`, but since we will need `Service` in the later steps, so we are setting it anyway.
 
@@ -87,7 +115,7 @@ spec:
       - image: nginx:1.21.0
         imagePullPolicy: IfNotPresent
         name: nginx
-```plaintext
+```
 
 As you can see from the above output, Kustomize generated `Service` and `Deployment` content. If you pay attention, the contents of **`Service`** did not change, but the contents of Deployment changed.
 
@@ -98,7 +126,7 @@ containers:
 - name: nginx
   image: nginx:1.20.0
   imagePullPolicy: IfNotPresent
-```plaintext
+```
 
 compare with the output from `kustomize` command output:
 
@@ -107,11 +135,13 @@ containers:
 - name: nginx
   image: nginx:1.21.0
   imagePullPolicy: IfNotPresent
-```plaintext
+```
 
 we see that **`image: nginx:1.20.0`** got changed to **`— image: nginx:1.21.0`**, as was specified in the **kustomization.yml** file. Without updating the `nginx_deploy.yml` file, we can change the image tag during deployment.
 
-## Deploy to Multi Envs <a href="#bd69" id="bd69"></a>
+---
+
+## Multi-Environment Overlays (Dev, Prod, etc.)
 
 kustomize encourages defining multiple variants - e.g. dev, staging and prod, as overlays on a common base. It’s possible to create an additional overlay to compose these variants together — just declare the overlays as the bases of a new kustomization.
 
@@ -120,11 +150,11 @@ This is also a means to apply a common label or annotation across the variants, 
 Let’s demo how to use kustomize in overlays. First, still in our `sample-app` folder, let’s define a common base directory:
 
 ```sh
-$ pwd
-$ /home/txu/sample-app
-$ mkdir base
-$ cd base
-```plaintext
+pwd
+/home/txu/sample-app
+mkdir base
+cd base
+```
 
 Now in the `base` directory, let’s create `kustomization.yml` with the following content:
 
@@ -133,7 +163,7 @@ $ vim kustomization.yaml
 # kustomization.yaml contents
 resources:
 - pod.yml
-```plaintext
+```
 
 The `pod.yml` file:
 
@@ -149,16 +179,16 @@ spec:
   containers:
   - name: nginx
     image: nginx:latest
-```plaintext
+```
 
-### Dev Overlay <a href="#27d5" id="27d5"></a>
+### Dev Overlay
 
 Let’s make a `dev` variant overlaying `base` :
 
 ```sh
-$ mkdir dev
-$ cd dev
-```plaintext
+mkdir dev
+cd dev
+```
 
 Create a kustomize file in `dev` :
 
@@ -168,26 +198,26 @@ $ vim kustomization.yml
 resources:
 - ./../base
 namePrefix: dev-
-```plaintext
+```
 
-### Production Overlay <a href="#c4c0" id="c4c0"></a>
+### Production Overlay
 
 Similar to `dev` overlaying, let’s create a `prod` variant overlaying `base` :
 
 ```sh
-$ mkdir prod
-$ cd prod
-```plaintext
+mkdir prod
+cd prod
+```
 
-Create a kustomize file in `dev` :
+Create a kustomize file in `prod` :
 
 ```sh
-$ vim kustomization.yal 
+$ vim kustomization.yml 
 # kustomization.yaml contents
 resources:
 - ./../base
 namePrefix: prod-
-```plaintext
+```
 
 Now at project root level, define a kustomize file:
 
@@ -195,9 +225,9 @@ Now at project root level, define a kustomize file:
 # kustomization.yaml contents
 resources:
 - ./dev
-- ./production
+- ./prod
 namePrefix: cluster-a-
-```plaintext
+```
 
 The entire app structure looks like:
 
@@ -214,7 +244,7 @@ $ tree
     └── kustomization.yml
 
 3 directories, 5 files
-```plaintext
+```
 
 Now let’s build the final output:
 
@@ -241,14 +271,61 @@ spec:
   containers:
   - image: nginx:latest
     name: nginx
-```plaintext
+```
 
-## Kustomize vs Helm <a href="#df8e" id="df8e"></a>
+---
 
-Compare the Helm, which is a “Templating Engine”, kustomize is an “Overlay Engine”. With Helm (templating engine) you create a boilerplate example of your application, then you abstract away contents with known filters and within these abstractions you provide references to variables.
+## Real-World DevOps Example: Multi-Cloud GitOps
 
-Kustomize built into kubectl as of version 1.14, which means it is native in K8s. However, you can also install it independently. With Kustomize users can manage any number of K8s configurations, each with its distinct customization, using the declarative approach. It allows developers to define multiple versions of an application and manage them in sub-directories. The base directory contains the common configurations, while sub-directories contain version-specific patches.
+Suppose you manage clusters in AWS EKS, Azure AKS, and GCP GKE. Use Kustomize overlays for each environment:
 
-<figure><img src="https://miro.medium.com/v2/resize:fit:700/0*eJefeGKJ20PH-_52.png" alt="" height="483" width="700"><figcaption></figcaption></figure>
+```
+├── base
+│   ├── deployment.yaml
+│   └── kustomization.yaml
+├── overlays
+│   ├── aws
+│   │   └── kustomization.yaml
+│   ├── azure
+│   │   └── kustomization.yaml
+│   └── gcp
+│       └── kustomization.yaml
+```
 
-\
+Each overlay can patch image tags, resource limits, or add cloud-specific labels. Deploy with:
+
+```sh
+kubectl apply -k overlays/aws
+kubectl apply -k overlays/azure
+kubectl apply -k overlays/gcp
+```
+
+---
+
+## Kustomize vs Helm
+
+- **Kustomize:** Overlay engine, no templates, built into kubectl, great for environment overlays and GitOps.
+- **Helm:** Templating engine, supports variables and charts, better for complex parameterization and packaging.
+
+**Best Practice:** Use Kustomize for overlays and environment-specific changes; use Helm for reusable application packaging.
+
+---
+
+## Best Practices
+
+- Store base and overlays in version control (Git)
+- Use overlays for environment-specific changes (replicas, image tags, secrets)
+- Integrate Kustomize with CI/CD (GitHub Actions, ArgoCD, Flux)
+- Validate output with `kubectl kustomize` before applying
+- Avoid duplicating YAML—use patches and generators
+
+---
+
+## References
+
+- [Kustomize Official Docs](https://kubectl.docs.kubernetes.io/references/kustomize/)
+- [Kustomize GitHub](https://github.com/kubernetes-sigs/kustomize)
+- [Kustomize on NixOS](https://search.nixos.org/packages?channel=unstable&show=kustomize)
+- [Kustomize vs Helm](https://kubectl.docs.kubernetes.io/guides/config_management/)
+
+> **Tip:** Use Kustomize overlays for safe, repeatable multi-environment deployments in cloud-native and GitOps workflows.
