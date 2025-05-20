@@ -1,123 +1,143 @@
 ---
 description: >-
   To use Terraform commands against your Azure subscription, you must first
-  authenticate Terraform to that subscription. This article covers some common
-  scenarios for authenticating to Azure.
+  authenticate Terraform to that subscription. This article covers common
+  DevOps scenarios for authenticating to Azure securely and reproducibly.
 ---
 
 # Authenticate Terraform to Azure
 
-Using bash:
+To use Terraform with Azure, you must authenticate Terraform to your Azure subscription. The recommended approach for automation and CI/CD is to use a Service Principal with RBAC. Below are step-by-step instructions for both Bash (Azure CLI) and PowerShell workflows, with real-life DevOps tips.
 
-1. To create a service principal, sign in to Azure. A
-2.  If you're creating a service principal from Git Bash, set the `MSYS_NO_PATHCONV` environment variable. (This step isn't necessary if you're using Cloud Shell.)
+---
 
-    BashCopy
-3.
+## Bash (Azure CLI): Create a Service Principal for Terraform
 
-    ```bash
-    export MSYS_NO_PATHCONV=1    
-    ```plaintext
+1. **Sign in to Azure:**
 
-    **Key points:**
+   ```bash
+   az login
+   ```
 
-    * You can set the `MSYS_NO_PATHCONV` environment variable globally (for all terminal sessions) or locally (for just the current session). As creating a service principal isn't something you do often, the sample sets the value for the current session. To set this environment variable globally, add the setting to the `~/.bashrc` file.
-4. To create a service principal, run [az ad sp create-for-rbac](https://learn.microsoft.com/en-us/cli/azure/ad/sp?#az-ad-sp-create-for-rbac).
+2. **(If using Git Bash on Windows)** set the environment variable to avoid path conversion issues:
 
-Azure CLICopy
+   ```bash
+   export MSYS_NO_PATHCONV=1
+   ```
 
-{% code overflow="wrap" lineNumbers="true" %}
-```bash
-az ad sp create-for-rbac --name <service_principal_name> --role Contributor --scopes /subscriptions/<subscription_id>
-```plaintext
-{% endcode %}
+   > *Tip:* Add this to your `~/.bashrc` for persistent use.
 
-1. **Key points:**
-   * You can replace the `<service-principal-name>` with a custom name for your environment or omit the parameter entirely. If you omit the parameter, the service principal name is generated based on the current date and time.
-   * Upon successful completion, `az ad sp create-for-rbac` displays several values. The `appId`, `password`, and `tenant` values are used in the next step.
-   * The password can't be retrieved if lost. As such, you should store your password in a safe place.&#x20;
-   * For this article, a service principal with a **Contributor** role is being used. For more information about Role-Based Access Control (RBAC) roles.
-   * The output from creating the service principal includes sensitive credentials. Be sure that you don't include these credentials in your code or check the credentials into your source control.
+3. **Create a Service Principal with Contributor role:**
 
-Using Powershell:
+   ```bash
+   az ad sp create-for-rbac --name <service_principal_name> --role Contributor --scopes /subscriptions/<subscription_id>
+   ```
 
-1. Open a PowerShell prompt.
-2. Run [Connect-AzAccount](https://learn.microsoft.com/en-us/powershell/module/az.accounts/Connect-AzAccount).
+   - Replace `<service_principal_name>` and `<subscription_id>` as needed.
+   - The output will include `appId`, `password`, and `tenant`—**store these securely** (e.g., Azure Key Vault, GitHub Actions secrets).
 
-PowerShellCopy
+   > **Best Practice:** Never commit credentials to source control. Use environment variables or secret managers in CI/CD.
 
-```powershell
-Connect-AzAccount
-```plaintext
+4. **Configure Terraform to use the Service Principal:**
+   Add these variables to your environment or your CI/CD pipeline:
 
-**Key points:**
+   ```bash
+   export ARM_CLIENT_ID="<appId>"
+   export ARM_CLIENT_SECRET="<password>"
+   export ARM_SUBSCRIPTION_ID="<subscription_id>"
+   export ARM_TENANT_ID="<tenant>"
+   ```
 
-* Upon successful sign in, `Connect-AzAccount` displays information about the default subscription.
-* Make note of the `TenantId` as it's needed to use the service principal.
+   Or use a [Terraform provider block](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs#argument-reference):
 
-1. To confirm the current Azure subscription, run [Get-AzContext](https://learn.microsoft.com/en-us/powershell/module/az.accounts/get-azcontext).
+   ```hcl
+   provider "azurerm" {
+     features {}
+     client_id       = var.client_id
+     client_secret   = var.client_secret
+     subscription_id = var.subscription_id
+     tenant_id       = var.tenant_id
+   }
+   ```
 
+---
 
+## PowerShell: Create a Service Principal for Terraform
 
-PowerShellCopy
+1. **Open a PowerShell prompt and sign in:**
 
-```powershell
-Get-AzContext
-```plaintext
+   ```powershell
+   Connect-AzAccount
+   ```
 
-1. To view all enabled Azure subscriptions for the logged-in Microsoft account, run [Get-AzSubscription](https://learn.microsoft.com/en-us/powershell/module/az.accounts/get-azsubscription).
+2. **Check your current subscription:**
 
-Azure CLICopy
+   ```powershell
+   Get-AzContext
+   ```
 
-```azurecli
-Get-AzSubscription
-```plaintext
+3. **List all available subscriptions:**
 
-1. To use a specific Azure subscription, run [Set-AzContext](https://learn.microsoft.com/en-us/powershell/module/az.accounts/set-azcontext).
+   ```powershell
+   Get-AzSubscription
+   ```
 
-PowerShellCopy
+4. **Set the active subscription (if needed):**
 
-```powershell
-Set-AzContext -Subscription "<subscription_id_or_subscription_name>"
-```plaintext
+   ```powershell
+   Set-AzContext -Subscription "<subscription_id_or_subscription_name>"
+   ```
 
-**Key points:**
+5. **Create a Service Principal with Contributor role:**
 
-* Replace the `<subscription_id_or_subscription_name>` placeholder with the ID or name of the subscription you want to use.
+   ```powershell
+   $sp = New-AzADServicePrincipal -DisplayName <service_principal_name> -Role "Contributor"
+   $appId = $sp.AppId
+   $password = $sp.PasswordCredentials.SecretText
+   $tenantId = (Get-AzContext).Tenant.Id
+   ```
 
-1. Run [New-AzADServicePrincipal](https://learn.microsoft.com/en-us/powershell/module/az.resources/new-azadserviceprincipal) to create a new service principal.
+   - Store `$appId`, `$password`, and `$tenantId` securely for use in Terraform.
 
-PowerShellCopy
+---
 
-```powershell
-$sp = New-AzADServicePrincipal -DisplayName <service_principal_name> -Role "Contributor"
-```plaintext
+## Real-Life DevOps Example: GitHub Actions with Azure
 
-**Key points:**
+Store your Service Principal credentials as GitHub Actions secrets, then use them in your workflow:
 
-* You can replace the `<service-principal-name>` with a custom name for your environment or omit the parameter entirely. If you omit the parameter, the service principal name is generated based on the current date and time.
-* The **Contributor** role is being used. For more information about Role-Based Access Control (RBAC) roles.
+```yaml
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform init
+      - run: terraform apply -auto-approve
+```
 
-1. Display the service principal ID.
+---
 
-PowerShellCopy
+## Best Practices
 
-```powershell
-$sp.AppId
-```plaintext
+- Use a dedicated Service Principal per environment (dev, staging, prod)
+- Grant only the minimum RBAC permissions needed
+- Store credentials in a secure secret manager (Azure Key Vault, GitHub/Azure DevOps secrets)
+- Rotate Service Principal credentials regularly
+- Never commit credentials to source control
 
-**Key points:**
+---
 
-* Make note of the service principal application ID as it's needed to use the service principal.
+## References
 
-1. Get the autogenerated password to text.
+- [Terraform Azure Provider Docs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret)
+- [Azure CLI: az ad sp create-for-rbac](https://learn.microsoft.com/en-us/cli/azure/ad/sp#az-ad-sp-create-for-rbac)
+- [Azure PowerShell: New-AzADServicePrincipal](https://learn.microsoft.com/en-us/powershell/module/az.resources/new-azadserviceprincipal)
+- [GitHub Actions: Azure Login](https://github.com/Azure/login)
 
-PowerShellCopy
-
-```powershell
-$sp.PasswordCredentials.SecretText
-```plaintext
-
-1. **Key points:**
-   * Make note of the password as it's needed to use the service principal.
-   * The password can't be retrieved if lost. As such, you should store your password in a safe place. If you forget your password, you can [reset the service principal credentials](https://learn.microsoft.com/en-us/powershell/azure/create-azure-service-principal-azureps#reset-credentials).
+> **Tip:** For fully automated pipelines, use Terraform Cloud or GitHub Actions with OIDC for passwordless authentication to Azure.

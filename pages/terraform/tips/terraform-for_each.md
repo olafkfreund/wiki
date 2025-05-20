@@ -1,104 +1,12 @@
-# Terraform For\_each
+# Terraform for_each, count, and for Expressions
 
-### Using Terraform Count
+Terraform provides several ways to create multiple resources dynamically, which is essential for scalable, cloud-agnostic DevOps workflows across AWS, Azure, and GCP. The most common patterns are `count`, `for_each`, and `for` expressions. Below are real-life, production-ready examples and best practices.
 
-The example below uses the `count` meta-argument to loop through a list of storage account names and create a storage account with the name specified for each.
+---
 
-The name argument uses the `count.index` expression to access the current index of the loop (starting from 0) and select the storage account name from the `storage_account_names` list using the index. The rest of the arguments are the same for each storage account.
+## Using `count` (Index-Based Iteration)
 
-```hcl
-variable "storage_account_names" {
-  type    = list(string)
-  default = ["jackuksstr001", "jackuksstr002", "jackuksstr003"]
-}
-
-resource "azurerm_resource_group" "example" {
-  name     = "storage-rg"
-  location = "UK South"
-}
-
-resource "azurerm_storage_account" "my_storage" {
-  count                    = length(var.storage_account_names)
-  name                     = var.storage_account_names[count.index]
-  resource_group_name      = azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-}
-```plaintext
-
-### Using Terraform For\_each
-
-The example below uses a `for_each` loop to iterate through a list of the same storage account names and create a storage account with the name specified for each. The rest of the arguments are the same for each storage account.
-
-The result will be the same as the example using `count` above.
-
-```hcl
-variable "storage_account_names" {
-  type    = list(string)
-  default = ["jackuksstr001", "jackuksstr002", "jackuksstr003"]
-}
-
-resource "azurerm_resource_group" "example" {
-  name     = "storage-rg"
-  location = "UK South"
-}
-
-resource "azurerm_storage_account" "my_storage" {
-  for_each                 = toset(var.storage_account_names)
-  name                     = each.value
-  resource_group_name      = azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-}
-```plaintext
-
-### Using the For Expression
-
-The example below builds on the previous one and shows how to output a list of storage account IDs from the given list. The `for` expression is used to iterate over the `storage_account_names` list and retrieve the ID for each storage account instance with the corresponding name.
-
-```hcl
-variable "storage_account_names" {
-  type    = list(string)
-  default = ["jackuksstr001", "jackuksstr002", "jackuksstr003"]
-}
-
-resource "azurerm_resource_group" "example" {
-  name     = "storage-rg"
-  location = "UK South"
-}
-
-resource "azurerm_storage_account" "my_storage" {
-  for_each                 = toset(var.storage_account_names)
-  name                     = each.value
-  resource_group_name      = azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-}
-
-output "storage_account_names" {
-  value = [
-    for storage in var.storage_account_names:
-    azurerm_storage_account.my_storage.example[storage].id
-  ]
-}
-```plaintext
-
-### The For Expression With If Clause
-
-A `for` expression can also include an `if` clause to filter elements from the source variable, producing a value with fewer elements than the source value, and is commonly used to split lists based on a condition.
-
-The syntax looks like the below:
-
-```hcl
-[for VAR in COLLECTION: IF CONDITION_EXPRESSION: VAR]
-```plaintext
-
-`VAR` is the name of the variable that represents each item in the collection, `COLLECTION` is the collection to be filtered, and `CONDITION_EXPRESSION` is the boolean expression that determines whether each item should be included in the filtered collection.
-
-In the example below, we use the `for` expression with the `if` condition to output a list of storage account names that have the `account_replication_type` set to `GRS`. This example will output the three storage account names provided in the `storage_account_names` variable, as they will all have their `account_replication_type` set to `GRS`.
+Use `count` to create resources from a list, referencing each item by its index. This is simple but less flexible for complex objects or maps.
 
 ```hcl
 variable "storage_account_names" {
@@ -119,53 +27,115 @@ resource "azurerm_storage_account" "my_storage" {
   account_tier             = "Standard"
   account_replication_type = "GRS"
 }
+```
 
+---
+
+## Using `for_each` (Keyed Iteration)
+
+Use `for_each` to iterate over a set, map, or list (converted to a set). This is preferred for named resources, as it allows referencing by key and is more robust for updates.
+
+```hcl
+variable "storage_account_names" {
+  type    = list(string)
+  default = ["jackuksstr001", "jackuksstr002", "jackuksstr003"]
+}
+
+resource "azurerm_resource_group" "example" {
+  name     = "storage-rg"
+  location = "UK South"
+}
+
+resource "azurerm_storage_account" "my_storage" {
+  for_each                 = toset(var.storage_account_names)
+  name                     = each.value
+  resource_group_name      = azurerm_resource_group.example.name
+  location                 = azurerm_resource_group.example.location
+  account_tier             = "Standard"
+  account_replication_type = "GRS"
+}
+```
+
+---
+
+## Using the `for` Expression (List/Map Comprehension)
+
+Use `for` expressions to transform or filter lists/maps, or to output values from resources created with `for_each` or `count`.
+
+```hcl
+resource "azurerm_storage_account" "my_storage" {
+  for_each                 = toset(var.storage_account_names)
+  name                     = each.value
+  resource_group_name      = azurerm_resource_group.example.name
+  location                 = azurerm_resource_group.example.location
+  account_tier             = "Standard"
+  account_replication_type = "GRS"
+}
+
+output "storage_account_ids" {
+  value = [for name in var.storage_account_names : azurerm_storage_account.my_storage[name].id]
+}
+```
+
+---
+
+## Filtering with `for` and `if` (Conditional Comprehension)
+
+You can filter resources or outputs using an `if` clause in a `for` expression.
+
+```hcl
 locals {
-  grs_storage_accounts = [for sa in azurerm_storage_account.my_storage: sa if sa.account_replication_type == "GRS"]
+  grs_storage_accounts = [for sa in azurerm_storage_account.my_storage : sa if sa.account_replication_type == "GRS"]
 }
 
 output "grs_storage_account_names" {
-  value = [for sa in local.grs_storage_accounts: sa.name]
+  value = [for sa in local.grs_storage_accounts : sa.name]
 }
-```plaintext
+```
 
-### The For\_each Expression With If Clause
+---
 
-The `if` clause can be used to conditionally include or exclude certain expressions based on a boolean condition.
+## Conditional Arguments in Resources
 
-The syntax for using the `if` clause in an expression is as follows:
+Use conditionals to set resource arguments dynamically (e.g., for multi-environment or multi-cloud deployments):
 
 ```hcl
-${condition ? true_value : false_value}
-```plaintext
-
-In the example below, we use the `if` condition to set the `account_replication_type` to `GRS` if the `environment` variable is set to `prod` , if it is not, then the `account_replication_type` will be set to `LRS` .
-
-Because the default value for the `environment` variable is set to `prod` in the below example, the three storage accounts created using the `for_each` loop will all have their `account_replication_type`set to `GRS`.
-
-```hcl
-variable "storage_account_names" {
-  type    = list(string)
-  default = ["jackuksstr001", "jackuksstr002", "jackuksstr003"]
-}
-
 variable "environment" {
   default = "prod"
 }
 
-resource "azurerm_resource_group" "example" {
-  name     = "storage-rg"
-  location = "UK South"
-}
-
 resource "azurerm_storage_account" "my_storage" {
   for_each                 = toset(var.storage_account_names)
   name                     = each.value
   resource_group_name      = azurerm_resource_group.example.name
   location                 = azurerm_resource_group.example.location
   account_tier             = "Standard"
-  account_replication_type = "${var.environment == "prod" ? "GRS" : "LRS"}"
+  account_replication_type = var.environment == "prod" ? "GRS" : "LRS"
 }
-```plaintext
+```
 
-### Key
+---
+
+## Best Practices
+- Use `for_each` for named resources and maps; use `count` for simple lists.
+- Use `for` expressions for output transformation and filtering.
+- Always use unique keys with `for_each` to avoid resource drift.
+- Prefer `for_each` for cloud resources that may be updated or deleted individually.
+- Use conditionals for multi-cloud, multi-environment, or feature-flagged deployments.
+
+---
+
+## References
+- [Terraform: for_each vs count](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each)
+- [Terraform for Expressions](https://developer.hashicorp.com/terraform/language/expressions/for)
+- [Terraform Conditionals](https://developer.hashicorp.com/terraform/language/expressions/conditionals)
+
+> **Tip:** Use these patterns to keep your Terraform code DRY, scalable, and cloud-agnostic—especially in CI/CD and multi-cloud DevOps workflows.
+
+---
+
+## Add to SUMMARY.md
+
+```markdown
+- [Terraform for_each, count, and for Expressions](pages/terraform/tips/terraform-for_each.md)
+```

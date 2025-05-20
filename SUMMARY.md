@@ -51,6 +51,11 @@
   * [Getting Started](pages/terraform/install.md) - Installation and initial setup [BEGINNER]
   * [Cloud Integrations](pages/terraform/) - Provider-specific implementations
     * [Azure Scenarios](pages/terraform/azure-scenarios.md) - Azure resource management patterns
+      * [Azure Authetication](pages/terraform/authenticate-terraform-to-azure/README.md) - Authentication
+        * [Service Principal](pages/terraform/authenticate-terraform-to-azure/service-principal-for-terraform.md) - Service principal
+        * [Service Principal in  block](pages/terraform/authenticate-terraform-to-azure/specify-service-principal-credentials-in-a-terraform-provider-block.md) - Provider block
+        * [Service Principal in env](pages/terraform/authenticate-terraform-to-azure/specify-service-principal-credentials-in-environment-variables.md) - Environment variables for authentication
+    * [AWS Scenarios](pages/terraform/aws-scenarios.md) - AWS resource management patterns
     * [AWS Scenarios](pages/terraform/aws-scenarios.md) - AWS deployment strategies
     * [GCP Scenarios](pages/terraform/gcp-scenarios.md) - Google Cloud automation patterns
   * [Testing and Validation](pages/terraform/testing/) - Ensuring infrastructure quality

@@ -1,47 +1,91 @@
 # Conditional Expressions
 
-If you are used to traditional programming languages such as C#, Python, Java, etc., you’ll be familiar with the concept of _if / else_ statements. Terraform has no _if or else_ statement but instead uses ternary conditional operators.
+Conditional expressions in Terraform allow you to implement logic similar to _if/else_ statements found in languages like Python, C#, or Java. Instead of traditional if/else, Terraform uses a ternary operator for concise, inline decisions—ideal for cloud infrastructure automation.
 
-The syntax of a conditional expression is as follows:
+---
+
+## Syntax
 
 ```hcl
 condition ? true_val : false_val
-```plaintext
+```
 
-A _conditional expression_ uses the value of a boolean expression to select one of two values. This expression evaluates to `true_val` if the value of `condition`is true, and otherwise, to `false_val`. This is the equivalent of an _If_-statement.
+- If `condition` is true, the result is `true_val`.
+- If `condition` is false, the result is `false_val`.
 
-In Terraform, this logic is particularly useful when fed into the [`count`](https://spacelift.io/blog/terraform-count-for-each) statement to deploy multiple of resources. In Terraform, deploying 0 resources is also fine if the condition is not met.
+---
 
-### Example 1
+## Real-Life DevOps Examples
 
-For example, the statement below checks if the variable `var.server`is set to “UbuntuServer”. If it is true, then `count = 0` and will be deployed zero times. If it is set to anything else, then `count = 1`, and the resource will be deployed 1 time.
+### 1. Conditional Resource Creation (e.g., Multi-Cloud)
 
-Note that Terraform does support traditional logical, equality, and comparison operators such as `==` (equal to) or `!=` (not equal to) `&&` (and), etc. [These operators](https://spacelift.io/blog/terraform-functions-expressions-loops) can be added together to make more complex conditionals.
-
-```hcl
-count = var.server == "UbuntuServer" ? 0 : 1
-```plaintext
-
-### Example 2
-
-Another common use of conditional expressions is to define defaults to replace invalid values. The example below checks if the variable `var.server` is an empty string. If it is, then the value is “MicrosoftWindowsServer”. If not, then it is the actual value of `var.server` .
+Deploy an Azure resource only if the environment is set to `azure`:
 
 ```hcl
-var.server != "" ? var.server : "MicrosoftWindowsServer"
-```plaintext
+resource "azurerm_resource_group" "main" {
+  count    = var.cloud == "azure" ? 1 : 0
+  name     = "devops-rg"
+  location = "westeurope"
+}
+```
 
-### Example 3
+### 2. Default Value Fallback
 
-When creating a conditional expression, the two result types can be of any type. In the example below, we have an _integer_ of 100 if the condition is true, and a _string_ “UbuntuServer” if the condition is false.
-
-```hcl
-var.server ? 100 : "UbuntuServer"
-```plaintext
-
-However, this can cause confusion as Terraform will attempt to find a type that they can both convert to and make those conversions automatically if so. In the above case, both can be converted to a String.
-
-To avoid this, writing the condition with a specific conversion function is recommended (see below using the `toString` function):
+Set a default VM image if none is provided:
 
 ```hcl
-var.server ? tostring(100) : "UbuntuServer"
-```plaintext
+locals {
+  vm_image = var.image_id != "" ? var.image_id : "ubuntu-22-04-lts"
+}
+```
+
+### 3. Conditional Output for Multi-Provider Deployments
+
+Output a value only if a resource exists:
+
+```hcl
+output "azure_rg_name" {
+  value       = azurerm_resource_group.main[0].name
+  description = "Name of the Azure resource group (if created)"
+  condition   = var.cloud == "azure"
+}
+```
+
+### 4. Type Consistency in Conditionals
+
+Always ensure both results are the same type to avoid errors:
+
+```hcl
+locals {
+  instance_count = var.enable_app ? 3 : 0
+  # If mixing types, use conversion:
+  instance_type  = var.use_large ? tostring(4) : "standard"
+}
+```
+
+---
+
+## Best Practices
+
+- Use conditionals for resource `count`, `for_each`, and variable defaults.
+- Always match types on both sides of the conditional.
+- Avoid deeply nested conditionals for readability.
+- Use [Terraform functions](https://developer.hashicorp.com/terraform/language/functions) for complex logic.
+
+---
+
+## References
+
+- [Terraform: Conditionals](https://developer.hashicorp.com/terraform/language/expressions/conditionals)
+- [Terraform Functions & Expressions](https://spacelift.io/blog/terraform-functions-expressions-loops)
+- [Terraform Count and For Each](https://spacelift.io/blog/terraform-count-for-each)
+
+> **Tip:** Use conditionals to keep your Terraform code DRY and cloud-agnostic—especially in multi-cloud and CI/CD scenarios.
+
+---
+
+## Add to SUMMARY.md
+
+```markdown
+- [Conditional Expressions](pages/terraform/tips/conditional-expressions.md)
+```
