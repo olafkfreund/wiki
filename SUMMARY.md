@@ -198,6 +198,11 @@
 ## ☁️ Cloud Platforms
 
 * [Cloud Strategy](pages/public-clouds/README.md) - Multi-cloud and platform selection guidelines
+  * [AWS to Azure](pages/cloud-migration/aws-azure.md)
+  * [Azure to AWS](pages/cloud-migration/azure-aws.md)
+  * [GCP to Azure](pages/cloud-migration/gcp-azure.md)
+  * [AWS to GCP](pages/cloud-migration/aws-gcp.md)
+  * [GCP to AWS](pages/cloud-migration/gcp-aws.md)
 * [Azure](pages/public-clouds/azure/README.md) - Microsoft's cloud computing platform
   * [Best Practices](pages/public-clouds/azure/best-practise/README.md) - Architecture and implementation guidelines
     * [Azure Best Practices Overview](pages/public-clouds/azure/best-practise/README.md)
@@ -260,11 +265,6 @@
     * [Bigtable](pages/public-clouds/gcp/services/bigtable.md)
     * [BigQuery](pages/public-clouds/gcp/services/bigquery.md)
     * [VPC (Virtual Private Cloud)](pages/public-clouds/gcp/services/vpc.md)
-* [AWS to Azure](pages/cloud-migration/aws-azure.md)
-* [Azure to AWS](pages/cloud-migration/azure-aws.md)
-* [GCP to Azure](pages/cloud-migration/gcp-azure.md)
-* [AWS to GCP](pages/cloud-migration/aws-gcp.md)
-* [GCP to AWS](pages/cloud-migration/gcp-aws.md)
 
 ## 🔐 Security & Compliance
 
