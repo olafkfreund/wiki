@@ -111,15 +111,14 @@
       * [Resource Limits](pages/best-practises/containers/kubernetes/kubernetes-best-practices/resource-limits/README.md)
     * [Advanced Features](pages/should-learn/kubernetes/) - Beyond the basics [ADVANCED]
       * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md) - Network traffic management
+        * [Istio](pages/should-learn/kubernetes/service-mesh/istio.md) - Istio
+        * [Linkerd](pages/should-learn/kubernetes/service-mesh/linkerd.md) - Linkerd
       * [Ingress Controllers](pages/should-learn/kubernetes/ingress-controllers/README.md) - External access management
         * [NGINX](pages/should-learn/kubernetes/ingress-controllers/nginx.md) - NGINX-based ingress
         * [Traefik](pages/should-learn/kubernetes/ingress-controllers/traefik.md) - Cloud-native edge router
         * [Kong](pages/should-learn/kubernetes/ingress-controllers/kong.md) - API gateway implementation
         * [Gloo Edge](pages/should-learn/kubernetes/ingress-controllers/gloo-edge.md) - Next-gen API gateway
         * [Contour](pages/should-learn/kubernetes/ingress-controllers/contour.md) - API/Ingress
-    * [Service Mesh](pages/should-learn/kubernetes/service-mesh/README.md) - Network traffic management
-      * [Istio](pages/should-learn/kubernetes/service-mesh/istio.md) - Istio
-      * [Linkerd](pages/should-learn/kubernetes/service-mesh/linkerd.md) - Linkerd
     * [Tips](pages/should-learn/kubernetes/tips/README.md) - Tips for Kubernets
       * [Status in Pods](pages/should-learn/kubernetes/tips/k8s-troubleshooting-pod-in-container-creating-status.md) - Status in Pods
       * [Resource handling](pages/should-learn/kubernetes/tips/kubernetes-resources-for-pods-and-containers.md) - Resource handling

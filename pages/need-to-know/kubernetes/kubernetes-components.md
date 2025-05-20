@@ -2,22 +2,67 @@
 
 A Kubernetes cluster has several control plane components used to control the cluster, as well as node components that run on each worker node. Let’s get to know all these components and how they work together.
 
-#### Control plane components <a href="#_idparadest-47" id="_idparadest-47"></a>
+---
 
-The control plane components can all run on one node, but in a highly available setup or a very large cluster, they may be spread across multiple nodes.
+## Control Plane Components <a href="#_idparadest-47" id="_idparadest-47"></a>
 
-**API server**
+The control plane is responsible for the global decisions about the cluster (scheduling, scaling, health) and for detecting/responding to cluster events. In production, these components are often run on dedicated nodes for high availability.
 
-The Kubernetes API server exposes the Kubernetes REST API. It can easily scale horizontally as it is stateless and stores all the data in the etcd cluster (or another data store in Kubernetes distributions like k3s). The API server is the embodiment of the Kubernetes control plane.
+### API Server
+- **Role:** The API server is the front end for the Kubernetes control plane. All communication (kubectl, CI/CD, controllers, cloud integrations) goes through the API server.
+- **How it works:** Stateless, can be scaled horizontally. Persists all cluster data in etcd.
+- **Real-life tip:** In cloud-managed Kubernetes (EKS, AKS, GKE), the API server is managed by the provider. In self-managed clusters, always secure the API server with RBAC and network policies.
 
-**etcd**
+### etcd
+- **Role:** Distributed, consistent key-value store for all cluster data (state, config, secrets).
+- **How it works:** All control plane components read/write cluster state to etcd. Supports clustering for HA.
+- **Best practice:** Always back up etcd regularly. For production, use an odd number of etcd nodes (3 or 5) for quorum and resilience.
 
-etcd is a highly reliable distributed data store. Kubernetes uses it to store the entire cluster state. In small, transient clusters a single instance of etcd can run on the same node with all the other control plane components. But, for more substantial clusters, it is typical to have a 3-node or even 5-node etcd cluster for redundancy and high availability.
+### Kube Controller Manager
+- **Role:** Runs controllers that regulate the state of the cluster (replicas, endpoints, jobs, nodes, etc.).
+- **How it works:** Each controller watches the API server for changes and takes action to drive the cluster toward the desired state (e.g., scaling pods, replacing failed nodes).
+- **Example:** If a node goes down, the node controller removes it from the cluster and reschedules pods.
 
-**Kube controller manager**
+### Cloud Controller Manager
+- **Role:** Integrates Kubernetes with cloud provider APIs for managing cloud resources (load balancers, volumes, routes, etc.).
+- **How it works:** Runs cloud-specific controllers. When enabled, set `--cloud-provider=external` on the kube-controller-manager to delegate cloud-specific logic.
+- **Real-life scenario:** In AWS, the cloud controller manager provisions ELBs for Services of type LoadBalancer. In Azure, it manages Azure Disks for PersistentVolumes.
 
-The Kube controller manager is a collection of various managers rolled up into one binary. It contains the replica set controller, the pod controller, the service controller, the endpoints controller, and others. All these managers watch over the state of the cluster via the API, and their job is to steer the cluster into the desired state.
+---
 
-**Cloud controller manager**
+## Node Components
 
-When running in the cloud, Kubernetes allows cloud providers to integrate their platform for the purpose of managing nodes, routes, services, and volumes. The cloud provider code interacts with Kubernetes code. It replaces some of the functionality of the Kube controller manager. When running Kubernetes with a cloud controller manager you must set the Kube controller manager flag `--cloud-provider` to `external`. This will disable the control loops that the cloud controller manager is taking over.
+Node components run on every worker node and maintain running pods, provide the Kubernetes runtime environment, and report node status to the control plane.
+
+### Kubelet
+- **Role:** Agent that runs on each node. Ensures containers are running as specified in PodSpecs.
+- **How it works:** Watches the API server for assigned pods, manages container lifecycle, reports node and pod status.
+- **Best practice:** Monitor kubelet health and logs for troubleshooting node or pod issues.
+
+### Kube Proxy
+- **Role:** Maintains network rules on nodes for pod-to-pod and pod-to-service communication.
+- **How it works:** Implements service discovery and load balancing using iptables, IPVS, or eBPF.
+- **Real-life tip:** In cloud environments, kube-proxy may be replaced or supplemented by cloud-native networking plugins (e.g., AWS VPC CNI, Azure CNI).
+
+### Container Runtime
+- **Role:** Software responsible for running containers (e.g., containerd, CRI-O, Docker).
+- **How it works:** Kubelet interacts with the container runtime via the Container Runtime Interface (CRI) to start/stop containers.
+- **Best practice:** Use a supported, production-grade runtime (containerd is the default in most modern clusters).
+
+---
+
+## Real-Life Example: Cluster Startup Sequence
+1. **API server** starts and connects to etcd.
+2. **Controller managers** and **scheduler** start, connect to the API server.
+3. **Cloud controller manager** (if enabled) provisions cloud resources.
+4. **Worker nodes** start kubelet, kube-proxy, and container runtime.
+5. Nodes register with the API server and are ready to run pods.
+
+---
+
+## References
+- [Kubernetes Official Docs: Components](https://kubernetes.io/docs/concepts/overview/components/)
+- [Kubernetes Control Plane](https://kubernetes.io/docs/concepts/architecture/control-plane-node/)
+- [Kubernetes Node Components](https://kubernetes.io/docs/concepts/architecture/nodes/)
+
+> **Tip:** For production, always secure the control plane, use HA etcd, monitor node health, and automate backups. For cloud clusters, understand which components are managed by your provider and which you must operate yourself.
