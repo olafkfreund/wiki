@@ -9,6 +9,7 @@ Creating and managing Kubernetes YAML files is a core DevOps and SRE skill. YAML
 When starting out, avoid over-relying on generators. Instead, copy-paste from [Kubernetes docs](https://kubernetes.io/) and experiment. This builds foundational knowledge. Once you find writing YAML repetitive, introduce tools to automate and scale your workflow.
 
 **Best Practice:**
+
 - Learn the structure of core resources (Pod, Deployment, Service, ConfigMap, Secret).
 - Use generators only after you understand the basics.
 
@@ -23,6 +24,7 @@ yq e '.spec.template.spec.containers[0].image' deployment.yaml
 ```
 
 **Use Cases:**
+
 - Extracting image names for vulnerability scanning
 - Bulk updating resource limits across manifests
 - Merging multiple YAML files for GitOps pipelines
@@ -40,6 +42,7 @@ kubectl run nginx --image=nginx --port=8080 --env=env=DEV --labels=app=nginx,own
 **Tip:** Clean up the generated YAML before using in production. Remove unnecessary fields and add comments for clarity.
 
 **Real-Life Example:**
+
 - Use `kubectl create deployment my-dep --image=nginx --dry-run=client -o yaml > deployment.yaml`
 - Use `yq` to merge or update fields as needed for automation.
 
@@ -54,6 +57,7 @@ kompose convert -f docker-compose.yaml -o k8s-manifests/
 ```
 
 **Best Practice:**
+
 - Review and adjust generated manifests for production readiness (resource requests, probes, labels).
 
 ---
@@ -64,6 +68,7 @@ kompose convert -f docker-compose.yaml -o k8s-manifests/
 - [YAML by Red Hat](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml): Adds schema validation and smart completion.
 
 **Setup:**
+
 ```json
 "yaml.schemas": {
   "Kubernetes": "*.yaml"
@@ -77,6 +82,7 @@ kompose convert -f docker-compose.yaml -o k8s-manifests/
 [CDK8s](https://cdk8s.io/) lets you define Kubernetes manifests using Python, TypeScript, Java, or Go. This is ideal for large, repeatable, or parameterized deployments.
 
 **Example (Python):**
+
 ```python
 from constructs import Construct
 from cdk8s import App, Chart
@@ -112,6 +118,7 @@ app.synth()
 ---
 
 ## Best Practices (2025)
+
 - Use version control (Git) for all YAML files
 - Validate YAML with `kubectl apply --dry-run=client -f file.yaml`
 - Use comments and clear labels/annotations
@@ -119,12 +126,14 @@ app.synth()
 - Integrate YAML linting in CI/CD pipelines
 
 ## Common Pitfalls
+
 - Blindly using generated YAML without review
 - Not specifying resource requests/limits
 - Hardcoding secrets in YAML (use Kubernetes Secrets or external vaults)
 - Ignoring schema validation errors
 
 ## References
+
 - [Kubernetes Official Docs](https://kubernetes.io/docs/)
 - [yq Documentation](https://mikefarah.gitbook.io/yq/)
 - [Kompose Docs](https://kompose.io/)

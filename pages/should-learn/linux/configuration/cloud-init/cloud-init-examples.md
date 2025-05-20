@@ -1,160 +1,82 @@
-# Cloud-init examples
+# Cloud-init Examples
 
-## loud config examples
+Cloud-init is the industry-standard tool for automating the initial configuration of cloud instances across AWS, Azure, GCP, and other platforms. It enables declarative provisioning of users, groups, packages, files, disks, and more, using simple YAML syntax. This page provides real-world, production-ready cloud-init examples for DevOps engineers.
 
-### Including users and groups
+---
 
-```plaintext
-  1#cloud-config
-  2# Add groups to the system
-  3# The following example adds the 'admingroup' group with members 'root' and 'sys'
-  4# and the empty group cloud-users.
-  5groups:
-  6  - admingroup: [root,sys]
-  7  - cloud-users
-  8
-  9# Add users to the system. Users are added after groups are added.
- 10# Note: Most of these configuration options will not be honored if the user
- 11#       already exists. Following options are the exceptions and they are
- 12#       applicable on already-existing users:
- 13#       - 'plain_text_passwd', 'hashed_passwd', 'lock_passwd', 'sudo',
- 14#         'ssh_authorized_keys', 'ssh_redirect_user'.
- 15users:
- 16  - default
- 17  - name: foobar
- 18    gecos: Foo B. Bar
- 19    primary_group: foobar
- 20    groups: users
- 21    selinux_user: staff_u
- 22    expiredate: '2032-09-01'
- 23    ssh_import_id:
- 24      - lp:falcojr
- 25      - gh:TheRealFalcon
- 26    lock_passwd: false
- 27    passwd: $6$j212wezy$7H/1LT4f9/N3wpgNunhsIqtMj62OKiS3nyNwuizouQc3u7MbYCarYeAHWYPYb2FT.lbioDm2RrkJPb9BZMN1O/
- 28  - name: barfoo
- 29    gecos: Bar B. Foo
- 30    sudo: ALL=(ALL) NOPASSWD:ALL
- 31    groups: users, admin
- 32    ssh_import_id:
- 33      - lp:falcojr
- 34      - gh:TheRealFalcon
- 35    lock_passwd: true
- 36    ssh_authorized_keys:
- 37      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSL7uWGj8cgWyIOaspgKdVy0cKJ+UTjfv7jBOjG2H/GN8bJVXy72XAvnhM0dUM+CCs8FOf0YlPX+Frvz2hKInrmRhZVwRSL129PasD12MlI3l44u6IwS1o/W86Q+tkQYEljtqDOo0a+cOsaZkvUNzUyEXUwz/lmYa6G4hMKZH4NBj7nbAAF96wsMCoyNwbWryBnDYUr6wMbjRR1J9Pw7Xh7WRC73wy4Va2YuOgbD3V/5ZrFPLbWZW/7TFXVrql04QVbyei4aiFR5n//GvoqwQDNe58LmbzX/xvxyKJYdny2zXmdAhMxbrpFQsfpkJ9E/H5w0yOdSvnWbUoG5xNGoOB csmith@fringe
- 38  - name: cloudy
- 39    gecos: Magic Cloud App Daemon User
- 40    inactive: '5'
- 41    system: true
- 42  - name: fizzbuzz
- 43    sudo: false
- 44    shell: /bin/bash
- 45    ssh_authorized_keys:
- 46      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSL7uWGj8cgWyIOaspgKdVy0cKJ+UTjfv7jBOjG2H/GN8bJVXy72XAvnhM0dUM+CCs8FOf0YlPX+Frvz2hKInrmRhZVwRSL129PasD12MlI3l44u6IwS1o/W86Q+tkQYEljtqDOo0a+cOsaZkvUNzUyEXUwz/lmYa6G4hMKZH4NBj7nbAAF96wsMCoyNwbWryBnDYUr6wMbjRR1J9Pw7Xh7WRC73wy4Va2YuOgbD3V/5ZrFPLbWZW/7TFXVrql04QVbyei4aiFR5n//GvoqwQDNe58LmbzX/xvxyKJYdny2zXmdAhMxbrpFQsfpkJ9E/H5w0yOdSvnWbUoG5xNGoOB csmith@fringe
- 47  - snapuser: joe@joeuser.io
- 48  - name: nosshlogins
- 49    ssh_redirect_user: true
- 50
- 51# Valid Values:
- 52#   name: The user's login name
- 53#   expiredate: Date on which the user's account will be disabled.
- 54#   gecos: The user name's real name, i.e. "Bob B. Smith"
- 55#   homedir: Optional. Set to the local path you want to use. Defaults to
- 56#           /home/<username>
- 57#   primary_group: define the primary group. Defaults to a new group created
- 58#           named after the user.
- 59#   groups:  Optional. Additional groups to add the user to. Defaults to none
- 60#   selinux_user:  Optional. The SELinux user for the user's login, such as
- 61#           "staff_u". When this is omitted the system will select the default
- 62#           SELinux user.
- 63#   lock_passwd: Defaults to true. Lock the password to disable password login
- 64#   inactive: Number of days after password expires until account is disabled
- 65#   passwd: The hash -- not the password itself -- of the password you want
- 66#           to use for this user. You can generate a hash via:
- 67#               mkpasswd --method=SHA-512 --rounds=4096
- 68#           (the above command would create from stdin an SHA-512 password hash
- 69#           with 4096 salt rounds)
- 70#
- 71#           Please note: while the use of a hashed password is better than
- 72#               plain text, the use of this feature is not ideal. Also,
- 73#               using a high number of salting rounds will help, but it should
- 74#               not be relied upon.
- 75#
- 76#               To highlight this risk, running John the Ripper against the
- 77#               example hash above, with a readily available wordlist, revealed
- 78#               the true password in 12 seconds on a i7-2620QM.
- 79#
- 80#               In other words, this feature is a potential security risk and is
- 81#               provided for your convenience only. If you do not fully trust the
- 82#               medium over which your cloud-config will be transmitted, then you
- 83#               should not use this feature.
- 84#
- 85#   no_create_home: When set to true, do not create home directory.
- 86#   no_user_group: When set to true, do not create a group named after the user.
- 87#   no_log_init: When set to true, do not initialize lastlog and faillog database.
- 88#   ssh_import_id: Optional. Import SSH ids
- 89#   ssh_authorized_keys: Optional. [list] Add keys to user's authorized keys file
- 90#                        An error will be raised if no_create_home or system is
- 91#                        also set.
- 92#   ssh_redirect_user: Optional. [bool] Set true to block ssh logins for cloud
- 93#       ssh public keys and emit a message redirecting logins to
- 94#       use <default_username> instead. This option only disables cloud
- 95#       provided public-keys. An error will be raised if ssh_authorized_keys
- 96#       or ssh_import_id is provided for the same user.
- 97#
- 98#   sudo: Defaults to none. Accepts a sudo rule string, a list of sudo rule
- 99#         strings or False to explicitly deny sudo usage. Examples:
-100#
-101#         Allow a user unrestricted sudo access.
-102#             sudo:  ALL=(ALL) NOPASSWD:ALL
-103#
-104#         Adding multiple sudo rule strings.
-105#             sudo:
-106#               - ALL=(ALL) NOPASSWD:/bin/mysql
-107#               - ALL=(ALL) ALL
-108#
-109#         Prevent sudo access for a user.
-110#             sudo: False
-111#
-112#         Note: Please double check your syntax and make sure it is valid.
-113#               cloud-init does not parse/check the syntax of the sudo
-114#               directive.
-115#   system: Create the user as a system user. This means no home directory.
-116#   snapuser: Create a Snappy (Ubuntu-Core) user via the snap create-user
-117#             command available on Ubuntu systems.  If the user has an account
-118#             on the Ubuntu SSO, specifying the email will allow snap to
-119#             request a username and any public ssh keys and will import
-120#             these into the system with username specified by SSO account.
-121#             If 'username' is not set in SSO, then username will be the
-122#             shortname before the email domain.
-123#
-124
-125# Default user creation:
-126#
-127# Unless you define users, you will get a 'ubuntu' user on Ubuntu systems with the
-128# legacy permission (no password sudo, locked user, etc). If however, you want
-129# to have the 'ubuntu' user in addition to other users, you need to instruct
-130# cloud-init that you also want the default user. To do this use the following
-131# syntax:
-132#   users:
-133#     - default
-134#     - bob
-135#     - ....
-136#  foobar: ...
-137#
-138# users[0] (the first user in users) overrides the user directive.
-139#
-140# The 'default' user above references the distro's config:
-141# system_info:
-142#   default_user:
-143#     name: Ubuntu
-144#     plain_text_passwd: 'ubuntu'
-145#     home: /home/ubuntu
-146#     shell: /bin/bash
-147#     lock_passwd: True
-148#     gecos: Ubuntu
-149#     groups: [adm, audio, cdrom, dialout, floppy, video, plugdev, dip, netdev]
-```plaintext
+## What is Cloud-init?
+
+Cloud-init is an open-source tool that automates the early initialization of cloud servers. It reads user data (YAML or shell scripts) provided at instance launch and applies configuration such as:
+- Creating users and groups
+- Installing packages
+- Writing files and templates
+- Configuring SSH keys and access
+- Setting up disks, filesystems, and mounts
+- Running custom commands or scripts
+
+Cloud-init is supported by all major cloud providers (AWS EC2, Azure VMs, GCP Compute Engine, OpenStack, etc.) and is essential for repeatable, automated infrastructure provisioning.
+
+---
+
+## Best Practices
+- Always validate your YAML with a linter before deploying.
+- Use version control (Git) for your cloud-init templates.
+- Avoid hardcoding secrets; use cloud provider secrets managers or encrypted values.
+- Test cloud-init scripts in a staging environment before production.
+- Use modules (e.g., `users`, `write_files`, `runcmd`) for clarity and maintainability.
+
+---
+
+## Example: Including Users and Groups
+
+```yaml
+#cloud-config
+# Add groups to the system
+# The following example adds the 'admingroup' group with members 'root' and 'sys'
+# and the empty group cloud-users.
+groups:
+  - admingroup: [root,sys]
+  - cloud-users
+
+# Add users to the system. Users are added after groups are added.
+users:
+  - default
+  - name: foobar
+    gecos: Foo B. Bar
+    primary_group: foobar
+    groups: users
+    selinux_user: staff_u
+    expiredate: '2032-09-01'
+    ssh_import_id:
+      - lp:falcojr
+      - gh:TheRealFalcon
+    lock_passwd: false
+    passwd: $6$j212wezy$7H/1LT4f9/N3wpgNunhsIqtMj62OKiS3nyNwuizouQc3u7MbYCarYeAHWYPYb2FT.lbioDm2RrkJPb9BZMN1O/
+  - name: barfoo
+    gecos: Bar B. Foo
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    ssh_import_id:
+      - lp:falcojr
+      - gh:TheRealFalcon
+    lock_passwd: true
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSL7uWGj8cgWyIOaspgKdVy0cKJ+UTjfv7jBOjG2H/GN8bJVXy72XAvnhM0dUM+CCs8FOf0YlPX+Frvz2hKInrmRhZVwRSL129PasD12MlI3l44u6IwS1o/W86Q+tkQYEljtqDOo0a+cOsaZkvUNzUyEXUwz/lmYa6G4hMKZH4NBj7nbAAF96wsMCoyNwbWryBnDYUr6wMbjRR1J9Pw7Xh7WRC73wy4Va2YuOgbD3V/5ZrFPLbWZW/7TFXVrql04QVbyei4aiFR5n//GvoqwQDNe58LmbzX/xvxyKJYdny2zXmdAhMxbrpFQsfpkJ9E/H5w0yOdSvnWbUoG5xNGoOB csmith@fringe
+  - name: cloudy
+    gecos: Magic Cloud App Daemon User
+    inactive: '5'
+    system: true
+  - name: fizzbuzz
+    sudo: false
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSL7uWGj8cgWyIOaspgKdVy0cKJ+UTjfv7jBOjG2H/GN8bJVXy72XAvnhM0dUM+CCs8FOf0YlPX+Frvz2hKInrmRhZVwRSL129PasD12MlI3l44u6IwS1o/W86Q+tkQYEljtqDOo0a+cOsaZkvUNzUyEXUwz/lmYa6G4hMKZH4NBj7nbAAF96wsMCoyNwbWryBnDYUr6wMbjRR1J9Pw7Xh7WRC73wy4Va2YuOgbD3V/5ZrFPLbWZW/7TFXVrql04QVbyei4aiFR5n//GvoqwQDNe58LmbzX/xvxyKJYdny2zXmdAhMxbrpFQsfpkJ9E/H5w0yOdSvnWbUoG5xNGoOB csmith@fringe
+  - snapuser: joe@joeuser.io
+  - name: nosshlogins
+    ssh_redirect_user: true
+```
+
+---
 
 ### Writing out arbitrary files
 
@@ -1825,5 +1747,3 @@
 266# Behavior Caveat: The default behavior is to _check_ if the filesystem exists.
 267
 ```plaintext
-
-\

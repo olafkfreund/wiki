@@ -3,6 +3,7 @@
 yq is a lightweight, portable command-line YAML, JSON, and XML processor. It is essential for DevOps and SRE engineers working with Kubernetes, Terraform, Ansible, and CI/CD pipelines across AWS, Azure, GCP, Linux, NixOS, and WSL environments.
 
 ## Why Use yq in DevOps & SRE?
+
 - **Automate YAML/JSON edits**: Update Kubernetes manifests, Terraform variables, and CI/CD configs programmatically.
 - **Bulk Operations**: Apply changes across multiple files for GitOps, policy enforcement, or compliance.
 - **CI/CD Integration**: Use yq in GitHub Actions, Azure Pipelines, or GitLab CI/CD for validation, patching, and templating.
@@ -11,33 +12,39 @@ yq is a lightweight, portable command-line YAML, JSON, and XML processor. It is 
 ## Real-Life Examples
 
 ### 1. Update Image Tag in All Kubernetes Deployments
+
 ```sh
 grep -rl 'image:' ./k8s | xargs -I{} yq -i '.spec.template.spec.containers[0].image = "nginx:1.25.0"' {}
 ```
 
 ### 2. Extract All Resource Limits for Audit
+
 ```sh
 find ./manifests -name '*.yaml' | xargs -I{} yq '.spec.template.spec.containers[].resources.limits' {}
 ```
 
 ### 3. Patch a Value in a CI/CD Pipeline (GitHub Actions)
+
 ```yaml
 - name: Patch image tag in deployment
   run: yq -i '.spec.template.spec.containers[0].image = "myrepo/app:${{ github.sha }}"' k8s/deployment.yaml
 ```
 
 ### 4. Merge Multiple YAML Files for GitOps
+
 ```sh
 yq ea '. as $item ireduce ({}; . * $item )' overlays/*.yml > merged.yaml
 ```
 
 ### 5. Use Environment Variables for Dynamic Values
+
 ```sh
 export VERSION=1.2.3
 yq -i '.app.version = strenv(VERSION)' values.yaml
 ```
 
 ## Best Practices (2025)
+
 - Always validate YAML after edits: `kubectl apply --dry-run=client -f file.yaml`
 - Use yq in CI/CD for repeatable, automated changes
 - Document yq commands in README or pipeline logs
@@ -45,6 +52,7 @@ yq -i '.app.version = strenv(VERSION)' values.yaml
 - Use yq with version control for traceability
 
 ## Common Pitfalls
+
 - Overwriting files without backup (`-i` is destructive)
 - Not validating YAML after bulk edits
 - Using ambiguous paths (be specific to avoid wrong fields)

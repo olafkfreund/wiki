@@ -391,7 +391,15 @@
     * [Azure CLI](pages/should-learn/az-cli/README.md) - Azure resource management
     * [PowerShell](pages/devops/tools-to-install/powershell/README.md) - Cross-platform automation shell
     * [Linux Commands](pages/should-learn/linux/commands/README.md) - Essential command-line operations
+      * [SSH](pages/should-learn/linux/ssh/README.md) - Secure Shell)
+        * [SSH Config](pages/should-learn/linux/commands/ssh/how-to-use-ssh-config.md) - Configuration file
+        * [SSH Port Forwarding](pages/should-learn/linux/commands/ssh/port-forwarding-and-proxying-using-openssh.md) - Port forwarding and proxy
+    * [Linux Fundametals](pages/should-learn/linux/os/README.md) - Core Linux concepts
+    * [Cloud init](pages/should-learn/linux/configuration/cloud-init/README.md) - Cloud init as a tool
+      * [Cloud init examples](pages/should-learn/linux/configuration/cloud-init/cloud-init-examples.md) - Cloud init examples
     * [YAML Tools](pages/should-learn/yaml/README.md) - Configuration file manipulation
+      * [How to create a k8s yaml file](pages/should-learn/yaml/how-to-create-a-k8s-yaml-file.md) - How to create YAML config
+      * [YQ the tool](pages/should-learn/yaml/yq.md) - YQ the tool that saves you ass
 
 ## 📚 Programming Languages
 

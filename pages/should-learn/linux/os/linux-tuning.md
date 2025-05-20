@@ -1,10 +1,41 @@
-# Linux  Tuning
+# Linux Tuning
 
-You can use the Linux sysctl command to modify default system network parameters that are set by the operating system.
+Linux system tuning is essential for optimizing performance, reliability, and security, especially in cloud and containerized environments. This guide covers practical sysctl tuning, kernel parameter adjustments, and automation best practices for DevOps engineers.
 
-Example use:
+---
+
+## Why Tune Linux?
+
+- **Improve network throughput and latency** for cloud workloads (AWS, Azure, GCP)
+- **Optimize resource usage** for containers (Kubernetes, Docker)
+- **Enhance security** by hardening kernel and network parameters
+- **Reduce downtime** and prevent resource exhaustion
+
+---
+
+## How to Apply Kernel and Network Tuning
+
+### 1. Using sysctl
+
+`sysctl` allows you to view and modify kernel parameters at runtime.
+
+**Example:**
 
 ```sh
+# View current value
+sudo sysctl net.core.somaxconn
+# Set a value temporarily
+sudo sysctl -w net.core.somaxconn=65535
+# Persist changes (add to /etc/sysctl.conf or /etc/sysctl.d/*.conf)
+echo 'net.core.somaxconn=65535' | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+```
+
+---
+
+### 2. Example sysctl.conf for High-Performance Servers
+
+```conf
 ### KERNEL TUNING ###
 
 # Increase size of file handles and inode cache
@@ -15,7 +46,7 @@ vm.swappiness = 10
 vm.dirty_ratio = 60
 vm.dirty_background_ratio = 2
 
-# Sets the time before the kernel considers migrating a proccess to another core
+# Sets the time before the kernel considers migrating a process to another core
 kernel.sched_migration_cost_ns = 5000000
 
 # Group tasks by TTY
@@ -83,42 +114,58 @@ net.ipv4.udp_wmem_min = 16384
 net.ipv4.tcp_max_tw_buckets = 1440000
 net.ipv4.tcp_tw_recycle = 1
 net.ipv4.tcp_tw_reuse = 1
-```plaintext
+```
 
-**Use **_**TuneD**_** to configure kernel settings**
+---
 
-For Red Hat Enterprise Linux (RHEL) users, the [TuneD](https://tuned-project.org/) throughput-performance profile configures some kernel and CPU settings automatically (except for C-States). Starting with RHEL 8.0, a TuneD profile named `mssql` was codeveloped with Red Hat and offers finer Linux performance-related tunings for SQL Server workloads. This profile includes the RHEL throughput-performance profile, and we present its definitions below for your review with other Linux distributions and RHEL releases without this profile.
+### 3. Using TuneD (RHEL/CentOS/Fedora)
+
+[TuneD](https://tuned-project.org/) provides profiles for automated tuning. For SQL Server or high-throughput workloads, use the `throughput-performance` or `mssql` profile.
+
+**Example:**
 
 ```sh
-#
-# A TuneD configuration for SQL Server on Linux
-#
+sudo dnf install tuned
+sudo tuned-adm profile throughput-performance
+# For SQL workloads:
+sudo tuned-adm profile mssql
+```
 
-[main]
-summary=Optimize for Microsoft SQL Server
-include=throughput-performance
+---
 
-[cpu]
-force_latency=5
+## Cloud & Container Best Practices
 
-[sysctl]
-vm.swappiness = 1
-vm.dirty_background_ratio = 3
-vm.dirty_ratio = 80
-vm.dirty_expire_centisecs = 500
-vm.dirty_writeback_centisecs = 100
-vm.transparent_hugepages=always
-# For multi-instance SQL deployments, use
-# vm.transparent_hugepages=madvise
-vm.max_map_count=1600000
-net.core.rmem_default = 262144
-net.core.rmem_max = 4194304
-net.core.wmem_default = 262144
-net.core.wmem_max = 1048576
-kernel.numa_balancing=0
-#Note: If you are using Linux distributions with kernel versions greater than 4.18, please comment the following options as shown; otherwise, uncomment the following options if you are using distributions with kernel versions less than 4.18.
-# kernel.sched_latency_ns = 60000000
-# kernel.sched_migration_cost_ns = 500000
-# kernel.sched_min_granularity_ns = 15000000
-# kernel.sched_wakeup_granularity_ns = 2000000
-```plaintext
+- **AWS EC2:** Use [user data scripts](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) or [Ansible](https://docs.ansible.com/) to automate sysctl settings.
+- **Azure VMs:** Use [Custom Script Extensions](https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-linux) or [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/) for automation.
+- **Kubernetes:** Use [initContainers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) or [DaemonSets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) to apply sysctl settings cluster-wide.
+- **Terraform:** Use [remote-exec provisioners](https://developer.hashicorp.com/terraform/language/resources/provisioners/remote-exec) to apply tuning at deployment.
+
+---
+
+## Real-World Example: Automate sysctl with Ansible
+
+```yaml
+- name: Apply sysctl tuning
+  hosts: all
+  become: yes
+  tasks:
+    - name: Set sysctl params
+      sysctl:
+        name: net.core.somaxconn
+        value: 65535
+        state: present
+        reload: yes
+```
+
+---
+
+## References
+
+- [Linux sysctl Documentation](https://www.kernel.org/doc/html/latest/admin-guide/sysctl/index.html)
+- [TuneD Project](https://tuned-project.org/)
+- [AWS EC2 User Data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
+- [Kubernetes sysctl docs](https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/)
+
+---
+
+> **Tip:** Always test tuning changes in a staging environment before applying to production. Monitor system metrics (CPU, memory, network) after changes.

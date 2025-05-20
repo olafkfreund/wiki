@@ -1,103 +1,135 @@
 # How to Use SSH Config
 
-## Connecting via SSH Config file <a href="#cf41" id="cf41"></a>
+Efficient SSH configuration is essential for DevOps engineers managing cloud infrastructure (AWS, Azure, GCP) and automating secure connections. This guide covers practical SSH config usage, real-world examples, and best practices.
 
-By default, the ssh config file is located inside `~/.ssh` directory.
+---
 
-If the file is not present, you can create one using:
+## What is the SSH Config File?
+- Located at `~/.ssh/config`
+- Allows you to define connection settings for multiple hosts
+- Simplifies SSH commands and enables advanced features (jump hosts, key management, etc.)
+
+If the file does not exist, create it:
 
 ```bash
 touch ~/.ssh/config
-```plaintext
+chmod 600 ~/.ssh/config  # Secure the config file
+```
 
-Now the format for writing a remote host configuration inside a config file is as follows:
+---
 
-```bash
-Host <server-alias>
-  HostName <server IP or url>
+## Basic SSH Config Structure
+
+```ssh-config
+Host <alias>
+  HostName <server_ip_or_dns>
   User <username>
-  IdentityFile <location of private key>
-```plaintext
+  IdentityFile <path_to_private_key>
+```
 
-The space provided from the second line is not compulsory but helps in making the file more readable.
+**Example: Connect to an AWS EC2 instance**
 
-For our use case the configuration to connect to our AWS EC2 instance would be as follows:
-
-```bash
+```ssh-config
 Host nano-server
   HostName 174.129.141.81
   User ubuntu
   IdentityFile ~/t3_nano_ssh_aws_keys.pem
-```plaintext
+```
 
-After saving the following configuration we can now ssh directly with the host name provided above.
+Now connect with:
 
 ```bash
 ssh nano-server
-```plaintext
+```
 
-Running the above command lets us connect to the EC2 instance directly.
+---
 
-<figure><img src="https://miro.medium.com/v2/resize:fit:700/1*8MznGgnS9Jl6EvXVWtaqPQ.png" alt="" height="389" width="700"><figcaption></figcaption></figure>
+## Multiple Hosts and Wildcards
 
-## SSH config file syntax <a href="#2461" id="2461"></a>
+You can define multiple hosts and use wildcards for bulk configuration.
 
-A single ssh config file can have multiple ssh configurations. For example:
-
-```bash
-Host HOST_NAME_1
-  HostName IP_1
-  User USER_1
-  IdentityFile LOCATION_1Host HOST_NAME_2
-  HostName IP_1Host HOST_NAME_3
-  HostName Ifull list above the parameters like User IdentityFile are not mandatory and their presence can vary from one configuration to another.
-```plaintext
-
-The entire list of parameters can be found [here](https://www.ssh.com/academy/ssh/config)
-
-Along with having multiple configurations we can also use a lot of wildcards while creating out configuration files
-
-* ( \* ) Can be used as a substitute for one or more characters. For example, in case there is a common `IdentityFile` for all dev servers, we can add the following line in config file:
-
-```bash
+```ssh-config
 Host dev-*
-  IdentityFile <location to identity file>
-```plaintext
+  User devuser
+  IdentityFile ~/.ssh/dev.pem
 
-* ( ? ) Can be used as a substitute for a single character. For example, in case we want to write configuration for all servers, with same prefix we can write:
-
-```bash
-Host ????-server
-  HostName 174.129.141.81
-  User ubuntu
-```plaintext
-
-We can connect to this server via command like `ssh nano-server` `tall-server` `omni-server` but not via `dev-server` as `dev` only contains 3 characters.
-
-* ( ! ) Can be used to negate the matches to the expression that is written after it
-
-```bash
-Host !prod-server
-  User low-priority-user
-```plaintext
-
-The above configuration file would mean that until the host is `prod-server` set value of user field to `low-priority-user`
-
-Based on these wildcards, we can write a sample configuration file as follows:
-
-```bash
 Host prod-server
-  HostName xxx.xxx.xxx.xx
+  HostName 10.0.0.10
   User ubuntu
-  IdentityFile ~/prod.pemHost stag-server
-  HostName xxx.xxx.xxx.xx
-  User ubuntu
-  IdentityFile ~/stag.pemHost dev-server
-  HostName xxx.xxx.xxx.xxHost !prod-server
-  LogLevel DEBUGHost *-server
-  IdentityFile ~/low-security.pem
-```plaintext
+  IdentityFile ~/.ssh/prod.pem
 
-In the above file we have defined separate configurations for `prod-server` and `stag-server` with their separate IdentityFile. While for `dev-server` and any other possible server, there is a default `pem`file.
+Host ?-server
+  User generic
 
-Also for all servers except `prod-server` the LogLevel is set to `DEBUG`:
+Host !prod-server
+  LogLevel DEBUG
+
+Host *-server
+  IdentityFile ~/.ssh/low-security.pem
+```
+
+- `*` matches any number of characters (e.g., `dev-*` for all dev servers)
+- `?` matches a single character (e.g., `?-server`)
+- `!` negates a match (e.g., `!prod-server`)
+
+---
+
+## Real-World DevOps Examples
+
+### 1. Use a Jump Host (Bastion)
+```ssh-config
+Host private-server
+  HostName 10.0.1.5
+  User ec2-user
+  ProxyJump bastion-host
+
+Host bastion-host
+  HostName 54.12.34.56
+  User ec2-user
+  IdentityFile ~/.ssh/bastion.pem
+```
+
+### 2. Use Different Keys for Different Clouds
+```ssh-config
+Host aws-*
+  IdentityFile ~/.ssh/aws.pem
+Host azure-*
+  IdentityFile ~/.ssh/azure.pem
+Host gcp-*
+  IdentityFile ~/.ssh/gcp.pem
+```
+
+### 3. Forward SSH Agent for Git Operations
+```ssh-config
+Host github.com
+  User git
+  ForwardAgent yes
+```
+
+---
+
+## Best Practices
+- Always set permissions: `chmod 600 ~/.ssh/config`
+- Use descriptive aliases for hosts
+- Use wildcards to avoid repetition
+- Never commit private keys or sensitive config to version control
+- Use `ProxyJump` for secure access to private networks
+- Document your config for team use
+
+---
+
+## References
+- [SSH Config File Documentation](https://man.openbsd.org/ssh_config)
+- [SSH Wildcards and Patterns](https://www.ssh.com/academy/ssh/config)
+
+---
+
+> **Tip:** Use SSH config to simplify Ansible, Terraform, and cloud CLI workflows by referencing host aliases instead of full connection strings.
+
+---
+
+## Add to SUMMARY.md
+
+```markdown
+- [How to Use SSH Config](pages/should-learn/linux/commands/ssh/how-to-use-ssh-config.md)
+```

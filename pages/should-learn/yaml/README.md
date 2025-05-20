@@ -1,11 +1,30 @@
+| Tool         | Purpose                | Example Usage                                 | Documentation                                      |
+|--------------|------------------------|------------------------------------------------|----------------------------------------------------|
+| yamllint     | Linting & validation   | `yamllint config.yaml`                         | [yamllint](https://yamllint.readthedocs.io/)        |
+| yq           | Formatting & querying  | `yq e '.spec.replicas = 3' file.yaml -i`       | [yq](https://mikefarah.gitbook.io/yq/)              |
+| kubeval      | Kubernetes validation  | `kubeval deployment.yaml`                      | [kubeval](https://www.kubeval.com/)                 |
+| kubeconform  | K8s schema validation  | `kubeconform -strict deployment.yaml`           | [kubeconform](https://github.com/yannh/kubeconform) |
+| VS Code YAML | Editor validation      | YAML extension for schema validation/autocomplete | [VS Code YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) |
+
 # YAML for DevOps & SRE (2025)
 
-YAML ("Yet Another Markup Language") is the de facto standard for configuration in Kubernetes, cloud-native deployments, and DevOps automation. Mastery of YAML is essential for engineers working with AWS, Azure, GCP, Linux, NixOS, and WSL environments.
+YAML ("YAML Ain't Markup Language") is the de facto standard for configuration in Kubernetes, cloud-native deployments, and DevOps automation. Mastery of YAML is essential for engineers working with AWS, Azure, GCP, Linux, NixOS, and WSL environments.
 
 ## Why YAML Matters in DevOps & SRE
+
 - **Declarative Infrastructure**: Define desired state for Kubernetes, Terraform, Ansible, and CI/CD pipelines.
 - **Cloud-Native**: All major cloud providers and tools (Helm, Kustomize, ArgoCD) use YAML for configuration.
 - **Human-Readable**: Easier to read and write than JSON or XML, but indentation is critical.
+
+## Who Uses YAML in the Cloud?
+
+YAML is the primary configuration language for cloud-native and DevOps workflows across all major providers:
+
+- **AWS**: CloudFormation (YAML/JSON), EKS, ECS, CodePipeline, and Lambda use YAML for infrastructure and pipeline definitions.
+- **Azure**: Azure Pipelines, AKS, Bicep, and ARM templates support YAML for CI/CD and infrastructure as code.
+- **GCP**: Google Cloud Build, GKE, and Deployment Manager use YAML for resource and pipeline configuration.
+- **Kubernetes**: All clusters (on any cloud or on-prem) use YAML for manifests, Helm charts, and Kustomize overlays.
+- **CI/CD**: GitHub Actions, GitLab CI, and Azure Pipelines all use YAML for pipeline definitions.
 
 ## Declarative vs Imperative <a href="#43b6" id="43b6"></a>
 
@@ -60,35 +79,45 @@ I won’t go into detail about YAML language, you can refer to its official webs
   ```
 
 ### 2. Generate Boilerplate YAML with `kubectl`
+
 - Scaffold manifests for Pods, Deployments, Services, etc.:
+
   ```bash
   kubectl create deployment myapp --image=nginx --dry-run=client -o yaml > deployment.yaml
   ```
+
 - Always review and clean up generated YAML before using in production.
 
 ### 3. Edit and Query YAML with `yq`
+
 - Extract, update, and merge YAML fields programmatically:
+
   ```bash
   yq e '.spec.replicas = 3' deployment.yaml -i
   yq e '.spec.template.spec.containers[0].image' deployment.yaml
   ```
 
 ### 4. Validate YAML Before Applying
+
 - Use `kubectl apply --dry-run=client -f file.yaml` to catch errors early.
 - Integrate YAML linting in CI/CD pipelines (e.g., with `yamllint`).
 
 ### 5. Use VS Code YAML Plugins
+
 - [YAML by Red Hat](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) for schema validation and autocompletion.
 - [Kubernetes Templates](https://marketplace.visualstudio.com/items?itemName=lunuan.kubernetes-templates) for quick scaffolding.
 
 ### 6. Parameterize with Helm or Kustomize
+
 - Use Helm charts or Kustomize overlays for multi-environment deployments and DRY (Don't Repeat Yourself) YAML.
 
 ### 7. LLM Integration for YAML Generation
+
 - Use LLMs (like OpenAI, Azure OpenAI) to generate or review YAML for complex resources.
 - Example prompt: "Generate a Kubernetes Deployment YAML for a Python app with 3 replicas and resource limits."
 
 ## Best Practices (2025)
+
 - Always use version control (Git) for YAML files
 - Add comments and clear labels/annotations
 - Never hardcode secrets—use Kubernetes Secrets or external vaults
@@ -96,6 +125,7 @@ I won’t go into detail about YAML language, you can refer to its official webs
 - Keep YAML DRY with Helm/Kustomize
 
 ## Common Pitfalls
+
 - Indentation errors (spaces, not tabs!)
 - Blindly copying YAML without understanding
 - Not specifying resource requests/limits
@@ -103,6 +133,7 @@ I won’t go into detail about YAML language, you can refer to its official webs
 - Ignoring schema validation errors
 
 ## References
+
 - [Kubernetes API Reference](https://kubernetes.io/docs/reference/kubernetes-api/)
 - [YAML Official Site](https://yaml.org/)
 - [yq Documentation](https://mikefarah.gitbook.io/yq/)
