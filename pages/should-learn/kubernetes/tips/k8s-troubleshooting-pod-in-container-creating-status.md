@@ -32,66 +32,123 @@ If a pod is stuck in ContainerCreating status for a long time, it generally indi
 You can use the `kubectl describe pod <pod-name>` command to check the events of the pod.
 
 ```sh
-$ kubectl describe pod my-pod
-```plaintext
+kubectl describe pod my-pod
+```
 
-Look for “Failed to pull image” or “ImagePullBackOff” events. These would indicate issues with pulling the Docker image.
+Look for “Failed to pull image” or “ImagePullBackOff” events. These indicate issues with pulling the container image. If you see authentication errors, check your imagePullSecrets and registry credentials.
 
-### Insufficient Resources <a href="#5622" id="5622"></a>
+**Real-life example:**
+
+```sh
+kubectl describe pod my-pod | grep -A5 Events
+# Look for lines like:
+# Failed to pull image "myrepo/myimage:tag": rpc error: ...
+```
+
+### Insufficient Resources <a href="#5622" id="#5622"></a>
 
 Use the `kubectl describe node <node-name>` command to check the resources on your node.
 
 ```sh
-$ kubectl describe node my-node
-```plaintext
+kubectl describe node my-node
+```
 
-### Issues with Persistent Volumes <a href="#3e3b" id="3e3b"></a>
+Check the Allocatable and Capacity sections, and look for events about resource pressure (e.g., OutOfcpu, OutOfmemory).
 
-You can check Pod status use `kubectl` command:
+**Real-life example:**
 
 ```sh
-$ kubectl describe pod my-pod
-```plaintext
+kubectl get pods -o wide
+kubectl describe node <node-name> | grep -i allocatable -A5
+```
 
-Looking for errors like:
+### Issues with Persistent Volumes <a href="#3e3b" id="#3e3b"></a>
+
+You can check Pod status using `kubectl`:
+
+```sh
+kubectl describe pod my-pod
+```
+
+Look for errors like:
 
 ```sh
 Kubelet(k8s-node2) Error syncing pod, skipping: timeout expired waiting 
-for volumes toattach/mount for pod "my-pod"/"default". 
+for volumes to attach/mount for pod "my-pod"/"default". 
 list of unattached/unmounted volumes=[ceph-pv]
-```plaintext
+```
 
 Then check the PVC status:
 
 ```sh
-$ kubectl get pvc
-```plaintext
+kubectl get pvc
+```
 
-If the STATUS of a PVC is not “Bound”, there might be issues with storage provisioning.
+If the STATUS of a PVC is not “Bound”, there might be issues with storage provisioning. For cloud providers, check your storage class and cloud disk quotas.
 
-### Network Issues <a href="#6cbb" id="6cbb"></a>
+**Real-life example:**
+
+```sh
+kubectl get pvc -A
+kubectl describe pvc <pvc-name>
+```
+
+### Network Issues <a href="#6cbb" id="#6cbb"></a>
 
 Network issues can be a bit harder to diagnose. You can check the logs of your CNI plugin (which depends on the specific CNI you are using). For example, if you’re using Calico, you can check the logs of the Calico pods:
 
 ```sh
-$ kubectl -n kube-system logs -l k8s-app=calico-node
-```plaintext
+kubectl -n kube-system logs -l k8s-app=calico-node
+```
 
-### Security Context Issues <a href="#6841" id="6841"></a>
+For AWS EKS, Azure AKS, or GCP GKE, check the cloud provider’s CNI documentation and ensure your VPC/subnet/network policies allow pod networking.
+
+### Security Context Issues <a href="#6841" id="#6841"></a>
 
 Check the security context of your Pod using the `kubectl get pod <pod-name> -o yaml` command.
 
 ```sh
-$ kubectl get pod my-pod -o yaml
-```plaintext
+kubectl get pod my-pod -o yaml
+```
 
-### Docker or Runtime Issues <a href="#0eef" id="0eef"></a>
+Look for fields like `runAsUser`, `fsGroup`, or `privileged`. Ensure the user/group exists in the container image and that the node allows the requested privileges.
+
+### Docker or Runtime Issues <a href="#0eef" id="#0eef"></a>
 
 Check the logs on your node. The way to do this depends on your node’s operating system and your container runtime. For Docker on a system using `systemd`, you can use:
 
 ```sh
-$ journalctl -u docker
-```plaintext
+journalctl -u docker
+```
+
+For containerd:
+
+```sh
+journalctl -u containerd
+```
+
+On managed Kubernetes (EKS, AKS, GKE), use the cloud provider’s node troubleshooting tools or review logs in the cloud console.
+
+---
+
+## Additional Troubleshooting Tips
+
+- Use `kubectl get events --sort-by=.metadata.creationTimestamp` to see recent cluster events.
+- Use `kubectl logs <pod> -c <init-container>` to check init container logs if present.
+- For multi-cloud: Check IAM roles, disk quotas, and network security groups in AWS, Azure, or GCP.
+- Use [kubectl-debug](https://github.com/aylei/kubectl-debug) or [stern](https://github.com/stern/stern) for advanced debugging.
+
+---
+
+## References
+
+- [Kubernetes Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
+- [Kubernetes Troubleshooting Pods](https://kubernetes.io/docs/tasks/debug/debug-application/debug-pod-replication-controller/)
+- [AWS EKS Troubleshooting](https://docs.aws.amazon.com/eks/latest/userguide/troubleshooting.html)
+- [Azure AKS Troubleshooting](https://learn.microsoft.com/en-us/azure/aks/troubleshooting/)
+- [GCP GKE Troubleshooting](https://cloud.google.com/kubernetes-engine/docs/troubleshooting)
+
+> **Tip:** Always check `kubectl describe pod`, node status, PVCs, and CNI logs. For cloud clusters, use provider-specific troubleshooting docs and dashboards.
 
 ## Conclusion <a href="#e963" id="e963"></a>
 
