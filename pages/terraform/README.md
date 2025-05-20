@@ -42,11 +42,9 @@ Add Terraform to your system configuration (`configuration.nix`):
 
 ```nix
 { config, pkgs, ... }:
-
 {
   environment.systemPackages = with pkgs; [
     terraform
-    # Optional but recommended tools
     terraform-ls  # Language server for IDE integration
     terraform-docs  # Documentation generator
     tflint  # Terraform linter
@@ -58,7 +56,6 @@ Or for a project-specific environment using `shell.nix`:
 
 ```nix
 { pkgs ? import <nixpkgs> {} }:
-
 pkgs.mkShell {
   buildInputs = with pkgs; [
     terraform
@@ -68,6 +65,75 @@ pkgs.mkShell {
   ];
 }
 ```
+
+---
+
+## NixOS Real-Life Scenarios for Terraform
+
+### 1. Reproducible Multi-Cloud Dev Environments
+
+Use NixOS to ensure every engineer and CI runner has the same Terraform, provider plugins, and linters:
+
+```nix
+# configuration.nix
+{
+  environment.systemPackages = with pkgs; [ terraform awscli azure-cli google-cloud-sdk tflint ];
+}
+```
+
+### 2. Project-Specific Flake for Terraform + Providers
+
+Use a Nix flake to pin Terraform and provider versions for a project:
+
+```nix
+# flake.nix
+{
+  description = "Terraform dev shell with AWS, Azure, GCP providers";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+  outputs = { self, nixpkgs }: {
+    devShells.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux.mkShell {
+      buildInputs = with nixpkgs.legacyPackages.x86_64-linux; [ terraform awscli azure-cli google-cloud-sdk tflint ];
+    };
+  };
+}
+```
+
+Start the shell:
+```bash
+nix develop
+```
+
+### 3. Declarative Secrets Management for Provider Credentials
+
+Store cloud credentials in a NixOS module or use [agenix](https://github.com/ryantm/agenix) for encrypted secrets:
+
+```nix
+# Example: Pass environment variables to Terraform from NixOS
+{
+  environment.variables = {
+    ARM_CLIENT_ID = "...";
+    ARM_CLIENT_SECRET = "...";
+    AWS_ACCESS_KEY_ID = "...";
+    AWS_SECRET_ACCESS_KEY = "...";
+  };
+}
+```
+
+### 4. CI/CD with Nix and Terraform
+
+Use Nix to build a Docker image or CI environment with pinned Terraform and providers for GitHub Actions, GitLab CI, or self-hosted runners:
+
+```nix
+# docker.nix
+{ pkgs ? import <nixpkgs> {} }:
+pkgs.dockerTools.buildImage {
+  name = "terraform-nix-ci";
+  tag = "latest";
+  contents = [ pkgs.terraform pkgs.tflint pkgs.awscli pkgs.azure-cli pkgs.google-cloud-sdk ];
+}
+```
+
+---
 
 ## Modern Terraform Features (2025)
 

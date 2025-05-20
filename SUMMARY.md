@@ -48,7 +48,6 @@
 ## 🛠️ Infrastructure as Code (IaC)
 
 * [Terraform](pages/terraform/README.md) - HashiCorp's multi-cloud infrastructure automation
-  * [Getting Started](pages/terraform/install.md) - Installation and initial setup [BEGINNER]
   * [Cloud Integrations](pages/terraform/) - Provider-specific implementations
     * [Azure Scenarios](pages/terraform/azure-scenarios.md) - Azure resource management patterns
       * [Azure Authetication](pages/terraform/authenticate-terraform-to-azure/README.md) - Authentication
@@ -56,8 +55,9 @@
         * [Service Principal in  block](pages/terraform/authenticate-terraform-to-azure/specify-service-principal-credentials-in-a-terraform-provider-block.md) - Provider block
         * [Service Principal in env](pages/terraform/authenticate-terraform-to-azure/specify-service-principal-credentials-in-environment-variables.md) - Environment variables for authentication
     * [AWS Scenarios](pages/terraform/aws-scenarios.md) - AWS resource management patterns
-    * [AWS Scenarios](pages/terraform/aws-scenarios.md) - AWS deployment strategies
+      * [AWS Authentication](pages/terraform/aws/aws_auth_terraform.md) - Authentication
     * [GCP Scenarios](pages/terraform/gcp-scenarios.md) - Google Cloud automation patterns
+      * [GCP Authentication](pages/terraform/gcp/gpc_auth_terraform.md) - Authentication
   * [Testing and Validation](pages/terraform/testing/) - Ensuring infrastructure quality
     * [Unit Testing](pages/terraform/testing/unit-testing.md) - Testing individual resources
     * [Integration Testing](pages/terraform/testing/integration-testing.md) - Testing resource interactions
