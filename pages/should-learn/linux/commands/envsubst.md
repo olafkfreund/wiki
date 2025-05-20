@@ -1,49 +1,66 @@
 # envsubst
 
-`envsubst` is a Unix-based command-line tool that replaces environment variables in text files. It is designed to simplify the process of substituting environment variables in configuration files and other text documents. In this wiki page, we will provide an introduction to `envsubst` and how it can be used in Azure deployment pipelines.
+`envsubst` is a lightweight Unix command-line tool for substituting environment variables in text files. It's essential for DevOps workflows, especially when templating configuration files for cloud deployments (AWS, Azure, GCP) and Kubernetes manifests.
 
-### Introduction to envsubst
+## What is envsubst?
 
-`envsubst` is a tool that replaces environment variables in text files with their values. It is particularly useful when working with configuration files, where environment variables are commonly used to store configuration values. `envsubst` reads input text from standard input or a file and replaces any occurrences of environment variables in the text with their values.
+`envsubst` reads input from standard input or a file, replaces environment variable references (e.g., `$VAR` or `${VAR}`) with their current values, and outputs the result. This is invaluable for generating environment-specific configuration files during CI/CD pipelines.
 
-`envsubst` is a lightweight tool that is easy to use and does not require any complex configuration. It is often used in shell scripts and other automation tools to simplify the process of substituting environment variables in configuration files.
+**Official documentation:** [GNU gettext utilities - envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html)
 
-### Using envsubst in Azure Deployment Pipelines
+## Practical Use Cases
 
-`envsubst` can be used in Azure deployment pipelines to replace environment variables in configuration files and other text documents. For example, you can use `envsubst` to replace environment variables in a Kubernetes deployment file or a configuration file for a web application.
+### 1. Templating Configuration Files
 
-Here are some examples of how to use `envsubst` in Azure deployment pipelines:
-
-#### Example 1: Replacing Environment Variables in a File
-
-Suppose you have a configuration file that contains environment variables that need to be replaced with their values. You can use `envsubst` to replace the environment variables in the configuration file:
+Replace variables in a template and output to a config file:
 
 ```bash
 envsubst < config.ini.template > config.ini
-```plaintext
+```
 
-This command reads the contents of the `config.ini.template` file, replaces any environment variables in the text with their values, and writes the result to the `config.ini` file.
+**Best Practice:**
+- Store secrets in environment variables, not in templates.
+- Use `.template` suffix for files requiring substitution.
 
-#### Example 2: Replacing Environment Variables in a Kubernetes Deployment File
+### 2. Kubernetes Manifests in CI/CD
 
-Suppose you have a Kubernetes deployment file that contains environment variables that need to be replaced with their values. You can use `envsubst` to replace the environment variables in the deployment file:
+Inject environment variables into Kubernetes YAML before applying:
 
 ```bash
 envsubst < deployment.yaml.template | kubectl apply -f -
-```plaintext
+```
 
-This command reads the contents of the `deployment.yaml.template` file, replaces any environment variables in the text with their values, and applies the resulting deployment configuration to the Kubernetes cluster.
+**Common Pitfall:**
+- Only variables present in the environment will be replaced. Unset variables remain as-is.
 
-#### Example 3: Replacing Environment Variables in a Web Application Configuration File
+### 3. Selective Variable Substitution
 
-Suppose you have a configuration file for a web application that contains environment variables that need to be replaced with their values. You can use `envsubst` to replace the environment variables in the configuration file:
+Limit substitution to specific variables:
 
 ```bash
-envsubst < app.config.template > app.config
-```plaintext
+export DB_USER=admin DB_PASS=secret
+envsubst '$DB_USER $DB_PASS' < db.yaml.template > db.yaml
+```
 
-This command reads the contents of the `app.config.template` file, replaces any environment variables in the text with their values, and writes the result to the `app.config` file.
+**Tip:**
+- This prevents accidental replacement of unrelated variables.
 
-### Conclusion
+### 4. Using envsubst in Azure Pipelines
 
-`envsubst` is a lightweight and easy-to-use tool that can simplify the process of replacing environment variables in text files. It is particularly useful when working with configuration files and other text documents. By using `envsubst` in your Azure deployment pipelines, you can automate the process of substituting environment variables in configuration files and make your deployments more efficient.
+Add a script step to your Azure Pipeline YAML:
+
+```yaml
+- script: |
+    envsubst < appsettings.json.template > appsettings.json
+  displayName: 'Substitute environment variables in appsettings.json'
+```
+
+**Reference:** [Azure Pipelines - Bash task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/bash)
+
+## Security Considerations
+- Never commit secrets to templates or source control.
+- Use secure pipeline variables or secret stores (Azure Key Vault, AWS Secrets Manager, GCP Secret Manager).
+
+## Conclusion
+
+`envsubst` is a must-have tool for DevOps engineers working with cloud-native and containerized applications. It streamlines configuration management, reduces manual errors, and integrates seamlessly with CI/CD pipelines across AWS, Azure, and GCP.
