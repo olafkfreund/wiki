@@ -58,12 +58,12 @@
       * [AWS Authentication](pages/terraform/aws/aws_auth_terraform.md) - Authentication
     * [GCP Scenarios](pages/terraform/gcp-scenarios.md) - Google Cloud automation patterns
       * [GCP Authentication](pages/terraform/gcp/gpc_auth_terraform.md) - Authentication
-  * [Testing and Validation](pages/terraform/testing/) - Ensuring infrastructure quality
+  * [Testing and Validation](pages/terraform/testing/README.md) - Ensuring infrastructure quality
     * [Unit Testing](pages/terraform/testing/unit-testing.md) - Testing individual resources
     * [Integration Testing](pages/terraform/testing/integration-testing.md) - Testing resource interactions
     * [End-to-End Testing](pages/terraform/testing/e2e-testing.md) - Testing complete infrastructure
     * [Terratest Guide](pages/terraform/testing/terratest.md) - Go-based testing framework
-  * [Best Practices](pages/terraform/best-practices/) - Production-ready implementation strategies
+  * [Best Practices](pages/terraform/best-practices/README.md) - Production-ready implementation strategies
     * [State Management](pages/terraform/best-practices/state-management.md) - Remote state and locking [ADVANCED]
     * [Security](pages/terraform/best-practices/security.md) - Securing infrastructure code
     * [Code Organization](pages/terraform/best-practices/code-organization.md) - Project structure and modules

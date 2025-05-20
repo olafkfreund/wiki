@@ -27,6 +27,7 @@ Our testing approach follows a pyramid structure:
 ## Testing Framework
 
 We recommend using Terratest as the primary testing framework for Terraform:
+
 - Mature and widely adopted
 - Strong community support
 - Comprehensive feature set
@@ -36,24 +37,28 @@ We recommend using Terratest as the primary testing framework for Terraform:
 ## Best Practices
 
 ### 1. Test Environment Management
+
 - Use separate state files for tests
 - Implement proper cleanup procedures
 - Use unique identifiers for test resources
 - Implement proper access controls
 
 ### 2. Test Data Handling
+
 - Use mock data when possible
 - Implement data cleanup procedures
 - Handle sensitive information properly
 - Use environment variables for credentials
 
 ### 3. Continuous Integration
+
 - Automate test execution
 - Implement proper test reporting
 - Set up notifications for failures
 - Track test coverage
 
 ### 4. Security Considerations
+
 - Test security configurations
 - Validate access controls
 - Check for compliance requirements
@@ -65,4 +70,3 @@ We recommend using Terratest as the primary testing framework for Terraform:
 - AWS/Azure/GCP testing tools
 - CI/CD platforms (GitHub Actions, Azure DevOps)
 - Monitoring and logging tools
-
