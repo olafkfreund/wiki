@@ -327,6 +327,8 @@
 
 * [Observability Fundamentals](pages/devops/observability/README.md) - Unified monitoring approach
   * [Logging](pages/devops/observability/logging/README.md) - Log collection and analysis strategies
+    * [Grafana, Loki & Prometheus](pages/devops/observability/grafana/README.md) - Cloud-native observability stack
+    * [ELK/Opensearch](pages/devops/observability/elk/README.md) - Enterprise log analytics and search
   * [Metrics](pages/devops/observability/metrics.md) - Quantitative system measurements
   * [Tracing](pages/devops/observability/tracing.md) - Distributed transaction monitoring
   * [Dashboards](pages/devops/observability/dashboard.md) - Visualization and reporting
