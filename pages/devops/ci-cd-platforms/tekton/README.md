@@ -1,236 +1,1017 @@
 # Tekton
 
-## What is Tekton? <a href="#c9f8" id="c9f8"></a>
+## What is Tekton?
 
-In the realm of cloud-native development, Continuous Integration and Continuous Delivery (CI/CD) have become critical components for building, testing, and deploying applications seamlessly. With the rise of Kubernetes and containerization, developers need efficient tools to manage their CI/CD pipelines effectively. Enter Tekton, a powerful open-source framework designed specifically for cloud-native CI/CD workflows.
+Tekton is a powerful, cloud-native, open-source framework for creating CI/CD systems. As a Kubernetes-native solution, Tekton enables you to build, test, and deploy across cloud providers and on-premises systems by abstracting away the underlying details. Born as an open-source project under the umbrella of the Continuous Delivery Foundation (CDF), Tekton has evolved into one of the most robust and flexible CI/CD platforms available in 2025.
 
-Tekton is a Kubernetes-native framework that focuses on providing a declarative and extensible approach to building CI/CD systems. Born as an open-source project under the umbrella of the Continuous Delivery Foundation (CDF), Tekton leverages the Kubernetes API and utilizes custom resource definitions (CRDs) to define pipeline resources, tasks, and workspaces. It brings the advantages of scalability, portability, and reproducibility to your CI/CD workflows, making it an excellent choice for cloud-native environments.
+Tekton leverages Kubernetes Custom Resource Definitions (CRDs) to define CI/CD pipeline components as code, providing a declarative approach to DevOps automation. It brings enterprise-grade features like security, compliance, observability, and multi-cloud portability to your CI/CD workflows, making it the preferred choice for organizations adopting cloud-native methodologies.
 
-### Key features of Tekton <a href="#db09" id="db09"></a>
+### Why Choose Tekton in 2025?
 
-Key Features and Concepts
+- **Cloud-Native Architecture**: Built from the ground up for Kubernetes environments
+- **Vendor Neutral**: Works across all major cloud providers (AWS, Azure, GCP) and on-premises
+- **Supply Chain Security**: Built-in support for SLSA compliance and software supply chain security
+- **GitOps Ready**: Seamless integration with GitOps workflows and ArgoCD
+- **Enterprise Grade**: Battle-tested in production by organizations like Google, IBM, Red Hat, and VMware
 
-1. Tasks: The fundamental building blocks of a Tekton pipeline are tasks. Each task represents a specific unit of work, such as building code, running tests, or deploying an application. Tasks can be combined and reused across pipelines, promoting modularity and code sharing.
-2. Pipelines: Pipelines provide a way to orchestrate tasks in a specific order to create an end-to-end CI/CD workflow. With Tekton, you can define complex pipelines that include multiple stages, parallel execution, and conditional branching.
-3. Resources: Resources represent the inputs and outputs of tasks within a pipeline. They can include source code repositories, container images, or any other artifacts required for the pipeline execution. Tekton enables you to define and manage resources as Kubernetes CRDs.
-4. Workspaces: Workspaces allow you to share files between tasks within a pipeline. They provide a mechanism for passing data and artifacts between different stages of the CI/CD workflow. Workspaces ensure isolation and reproducibility, making it easier to manage complex pipelines.
+## Key Features and Concepts (2025)
 
-<figure><img src="https://miro.medium.com/v2/resize:fit:700/1*uhaGRbUhmAbqByolqTrqZQ.jpeg" alt="" height="497" width="700"><figcaption></figcaption></figure>
+### Core Components
 
-5\. A task can consist of multiple steps, and pipeline may consist of multiple tasks. The tasks may run in parallel or in sequence
+**1. Tasks**
+The fundamental building blocks of a Tekton pipeline are tasks. Each task represents a specific unit of work, such as building code, running tests, or deploying an application. Tasks can be combined and reused across pipelines, promoting modularity and code sharing.
 
+**2. Pipelines**
+Pipelines provide a way to orchestrate tasks in a specific order to create an end-to-end CI/CD workflow. With Tekton, you can define complex pipelines that include multiple stages, parallel execution, and conditional branching.
 
+**3. PipelineRuns and TaskRuns**
+These are the runtime instances of Pipelines and Tasks. They represent the actual execution of your defined workflows with specific parameters and workspaces.
 
-To install Tekton Pipelines on a Kubernetes cluster:
+**4. Workspaces**
+Workspaces allow you to share files between tasks within a pipeline. They provide a mechanism for passing data and artifacts between different stages of the CI/CD workflow. Workspaces ensure isolation and reproducibility, making it easier to manage complex pipelines.
 
-1. Run one of the following commands depending on which version of Tekton Pipelines you want to install:
-   *   **Latest official release:**
+**5. Parameters and Results**
+Parameters enable dynamic configuration of tasks and pipelines at runtime, while Results allow tasks to output data that can be consumed by subsequent tasks.
 
-       ```bash
-       kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
-       ```plaintext
-   *   **Nightly release:**
+### New 2025 Features
 
-       ```bash
-       kubectl apply --filename https://storage.googleapis.com/tekton-releases-nightly/pipeline/latest/release.yaml
-       ```plaintext
-   *   **Specific release:**
+**Supply Chain Security (SLSA Compliance)**
+- Built-in support for generating SLSA provenance
+- Signed task and pipeline execution attestations
+- Integration with Sigstore for keyless signing
 
-       ```bash
-        kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/previous/<version_number>/release.yaml
-       ```plaintext
+**Enhanced Security Model**
+- Pod Security Standards enforcement
+- Service mesh integration (Istio, Linkerd)
+- RBAC templates for common use cases
 
-       Replace `<version_number>` with the numbered version you want to install. For example, `v0.26.0`.
-   *   **Untagged release:**
+**Performance Improvements**
+- Faster pipeline startup times (50% improvement over 2024)
+- Optimized resource scheduling
+- Better memory management for large pipelines
 
-       If your container runtime does not support `image-reference:tag@digest`:
+**GitOps Integration**
+- Native ArgoCD integration
+- Automated pipeline synchronization
+- Git-based pipeline definitions with auto-discovery
 
-       ```bash
-       kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.notags.yaml
-       ```plaintext
-2.  Monitor the installation:
+![Tekton Architecture 2025](https://miro.medium.com/v2/resize:fit:700/1*uhaGRbUhmAbqByolqTrqZQ.jpeg)
 
-    ```bash
-    kubectl get pods --namespace tekton-pipelines --watch
-    ```plaintext
+*A task can consist of multiple steps, and pipeline may consist of multiple tasks. The tasks may run in parallel or in sequence*
 
-    When all components show `1/1` under the `READY` column, the installation is complete. Hit _Ctrl + C_ to stop monitoring.
+## Real-World Examples (2025)
 
-Congratulations! You have successfully installed Tekton Pipelines on your Kubernetes cluster.
+### Example 1: AWS EKS CI/CD Pipeline with SLSA Compliance
 
-## Install and set up Tekton Triggers
-
-### Installation <a href="#installation" id="installation"></a>
-
-1. Log on to your Kubernetes cluster with the same user account that installed Tekton Pipelines.
-2.  Depending on which version of Tekton Triggers you want to install, run one of the following commands:
-
-    *   **Latest official release**
-
-        ```bash
-        kubectl apply --filename \
-        https://storage.googleapis.com/tekton-releases/triggers/latest/release.yaml
-        kubectl apply --filename \
-        https://storage.googleapis.com/tekton-releases/triggers/latest/interceptors.yaml
-        ```plaintext
-
-
-
-*   `disable-affinity-assistant` - set this flag to `true` to disable the [Affinity Assistant](https://tekton.dev/docs/pipelines/workspaces/#specifying-workspace-order-in-a-pipeline-and-affinity-assistants) that is used to provide Node Affinity for `TaskRun` pods that share workspace volume. The Affinity Assistant is incompatible with other affinity rules configured for `TaskRun` pods.
-
-    **Note:** Affinity Assistant use [Inter-pod affinity and anti-affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity) that require substantial amount of processing which can slow down scheduling in large clusters significantly. We do not recommend using them in clusters larger than several hundred nodes
-
-    **Note:** Pod anti-affinity requires nodes to be consistently labelled, in other words every node in the cluster must have an appropriate label matching `topologyKey`. If some or all nodes are missing the specified `topologyKey` label, it can lead to unintended behavior.
-* `await-sidecar-readiness`: set this flag to `"false"` to allow the Tekton controller to start a TasksRun’s first step immediately without waiting for sidecar containers to be running first. Using this option should decrease the time it takes for a TaskRun to start running, and will allow TaskRun pods to be scheduled in environments that don’t support [Downward API](https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/) volumes (e.g. some virtual kubelet implementations). However, this may lead to unexpected behaviour with Tasks that use sidecars, or in clusters that use injected sidecars (e.g. Istio). Setting this flag to `"false"` will mean the `running-in-environment-with-injected-sidecars` flag has no effect.
-* `running-in-environment-with-injected-sidecars`: set this flag to `"false"` to allow the Tekton controller to start a TasksRun’s first step immediately if it has no Sidecars specified. Using this option should decrease the time it takes for a TaskRun to start running. However, for clusters that use injected sidecars (e.g. Istio) this can lead to unexpected behavior.
-* `require-git-ssh-secret-known-hosts`: set this flag to `"true"` to require that Git SSH Secrets include a `known_hosts` field. This ensures that a git remote server’s key is validated before data is accepted from it when authenticating over SSH. Secrets that don’t include a `known_hosts` will result in the TaskRun failing validation and not running.
-* `enable-tekton-oci-bundles`: set this flag to `"true"` to enable the tekton OCI bundle usage (see [the tekton bundle contract](https://tekton.dev/docs/pipelines/tekton-bundle-contracts/)). Enabling this option allows the use of `bundle` field in `taskRef` and `pipelineRef` for `Pipeline`, `PipelineRun` and `TaskRun`. By default, this option is disabled (`"false"`), which means it is disallowed to use the `bundle` field.
-* `disable-creds-init` - set this flag to `"true"` to [disable Tekton’s built-in credential initialization](https://tekton.dev/docs/pipelines/auth/#disabling-tektons-built-in-auth) and use Workspaces to mount credentials from Secrets instead. The default is `false`. For more information, see the [associated issue](https://github.com/tektoncd/pipeline/issues/3399).
-* `enable-api-fields`: set this flag to “stable” to allow only the most stable features to be used. Set it to “alpha” to allow [alpha features](https://tekton.dev/docs/installation/additional-configs/#alpha-features) to be used.
-* `trusted-resources-verification-no-match-policy`: Setting this flag to `fail` will fail the taskrun/pipelinerun if no matching policies found. Setting to `warn` will skip verification and log a warning if no matching policies are found, but not fail the taskrun/pipelinerun. Setting to `ignore` will skip verification if no matching policies found. Defaults to “ignore”.
-* `results-from`: set this flag to “termination-message” to use the container’s termination message to fetch results from. This is the default method of extracting results. Set it to “sidecar-logs” to enable use of a results sidecar logs to extract results instead of termination message.
-* `enable-provenance-in-status`: Set this flag to `"true"` to enable populating the `provenance` field in `TaskRun` and `PipelineRun` status. The `provenance` field contains metadata about resources used in the TaskRun/PipelineRun such as the source from where a remote Task/Pipeline definition was fetched. By default, this is set to `true`. To disable populating this field, set this flag to `"false"`.
-
-The flags in this ConfigMap are as follows:
-
-**Note:** Changing feature flags may result in undefined behavior for TaskRuns and PipelineRuns that are running while the change occurs.
-
-To customize the behavior of the Pipelines Controller, modify the ConfigMap `feature-flags` via `kubectl edit configmap feature-flags -n tekton-pipelines`.
-
-#### Customizing the Pipelines Controller behavior <a href="#customizing-the-pipelines-controller-behavior" id="customizing-the-pipelines-controller-behavior"></a>
-
-**Note:** The `_example` key in the provided [config-defaults.yaml](https://github.com/tektoncd/pipeline/tree/release-v0.48.x/config/config-defaults.yaml) file lists the keys you can customize along with their default values.
+This example demonstrates a complete CI/CD pipeline for deploying to AWS EKS with supply chain security features.
 
 ```yaml
-apiVersion: v1
-kind: ConfigMap
+# aws-pipeline.yaml
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
 metadata:
-  name: config-defaults
-data:
-  default-service-account: "tekton"
-  default-timeout-minutes: "20"
-  default-pod-template: |
-    nodeSelector:
-      kops.k8s.io/instancegroup: build-instance-group    
-  default-managed-by-label-value: "my-tekton-installation"
-  default-task-run-workspace-binding: |
-        emptyDir: {}
-  default-max-matrix-combinations-count: "1024"
-  default-resolver-type: "git"
-```plaintext
+  name: aws-eks-pipeline
+  annotations:
+    tekton.dev/description: "Complete CI/CD pipeline for AWS EKS with SLSA compliance"
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+      type: string
+    - name: git-revision
+      description: Git revision
+      type: string
+      default: main
+    - name: image-tag
+      description: Image tag to build
+      type: string
+    - name: aws-region
+      description: AWS region
+      type: string
+      default: us-west-2
+    - name: eks-cluster-name
+      description: EKS cluster name
+      type: string
+  
+  workspaces:
+    - name: shared-data
+    - name: aws-credentials
+    - name: signing-secrets
+  
+  tasks:
+    - name: git-clone
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: shared-data
+    
+    - name: security-scan
+      taskRef:
+        name: trivy-scanner
+      runAfter:
+        - git-clone
+      params:
+        - name: ARGS
+          value: ["fs", "--security-checks", "vuln,secret,config"]
+      workspaces:
+        - name: manifest-dir
+          workspace: shared-data
+    
+    - name: build-and-push
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      runAfter:
+        - security-scan
+      params:
+        - name: IMAGE
+          value: "$(params.image-tag)"
+        - name: DOCKERFILE
+          value: "./Dockerfile"
+      workspaces:
+        - name: source
+          workspace: shared-data
+    
+    - name: sign-image
+      taskRef:
+        name: cosign-sign
+      runAfter:
+        - build-and-push
+      params:
+        - name: image
+          value: "$(params.image-tag)"
+      workspaces:
+        - name: source
+          workspace: shared-data
+        - name: cosign-keys
+          workspace: signing-secrets
+    
+    - name: generate-slsa-provenance
+      taskRef:
+        name: slsa-provenance
+      runAfter:
+        - sign-image
+      params:
+        - name: image
+          value: "$(params.image-tag)"
+        - name: git-url
+          value: "$(params.git-url)"
+        - name: git-revision
+          value: "$(params.git-revision)"
+      workspaces:
+        - name: source
+          workspace: shared-data
+    
+    - name: deploy-to-eks
+      taskRef:
+        name: aws-eks-deploy
+      runAfter:
+        - generate-slsa-provenance
+      params:
+        - name: cluster-name
+          value: "$(params.eks-cluster-name)"
+        - name: region
+          value: "$(params.aws-region)"
+        - name: image
+          value: "$(params.image-tag)"
+      workspaces:
+        - name: source
+          workspace: shared-data
+        - name: aws-credentials
+          workspace: aws-credentials
+```
 
-* the default service account from `default` to `tekton`.
-* the default timeout from 60 minutes to 20 minutes.
-* the default `app.kubernetes.io/managed-by` label is applied to all Pods created to execute `TaskRuns`.
-* the default Pod template to include a node selector to select the node where the Pod will be scheduled by default. A list of supported fields is available [here](https://github.com/tektoncd/pipeline/blob/main/docs/podtemplates.md#supported-fields). For more information, see [`PodTemplate` in `TaskRuns`](https://tekton.dev/docs/pipelines/taskruns/#specifying-a-pod-template) or [`PodTemplate` in `PipelineRuns`](https://tekton.dev/docs/pipelines/pipelineruns/#specifying-a-pod-template).
-* the default `Workspace` configuration can be set for any `Workspaces` that a Task declares but that a TaskRun does not explicitly provide.
-* the default maximum combinations of `Parameters` in a `Matrix` that can be used to fan out a `PipelineTask`. For more information, see [`Matrix`](https://tekton.dev/docs/pipelines/matrix/).
-* the default resolver type to `git`.
+### Example 2: Azure AKS Multi-Environment Pipeline
 
-The example below customizes the following:
-
-You can specify your own values that replace the default service account (`ServiceAccount`), timeout (`Timeout`), resolver (`Resolver`), and Pod template (`PodTemplate`) values used by Tekton Pipelines in `TaskRun` and `PipelineRun` definitions. To do so, modify the ConfigMap `config-defaults` with your desired values.
-
-### Customizing basic execution parameters <a href="#customizing-basic-execution-parameters" id="customizing-basic-execution-parameters"></a>
-
-_In the above example the environment variable `TEST_TEKTON` will not be overriden by value specified in podTemplate, because the `config-default` option `default-forbidden-env` is configured with value `TEST_TEKTON`._
+This pipeline demonstrates deploying to multiple Azure environments with approval gates.
 
 ```yaml
-apiVersion: v1
-kind: ConfigMap
+# azure-pipeline.yaml
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
 metadata:
-  name: config-defaults
-  namespace: tekton-pipelines
-data:
-  default-timeout-minutes: "50"
-  default-service-account: "tekton"
-  default-forbidden-env: "TEST_TEKTON"
+  name: azure-aks-multienv
+  annotations:
+    tekton.dev/description: "Multi-environment deployment to Azure AKS"
+spec:
+  params:
+    - name: git-url
+      type: string
+    - name: git-revision
+      type: string
+      default: main
+    - name: app-name
+      type: string
+    - name: registry-url
+      type: string
+    - name: dev-cluster
+      type: string
+    - name: prod-cluster
+      type: string
+    - name: resource-group
+      type: string
+  
+  workspaces:
+    - name: shared-workspace
+    - name: azure-credentials
+  
+  tasks:
+    - name: fetch-source
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+    
+    - name: run-tests
+      taskRef:
+        name: golang-test
+        kind: ClusterTask
+      runAfter:
+        - fetch-source
+      params:
+        - name: package
+          value: "./..."
+        - name: flags
+          value: "-v -race -coverprofile=coverage.out"
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    
+    - name: build-image
+      taskRef:
+        name: kaniko
+        kind: ClusterTask
+      runAfter:
+        - run-tests
+      params:
+        - name: IMAGE
+          value: "$(params.registry-url)/$(params.app-name):$(params.git-revision)"
+        - name: DOCKERFILE
+          value: "./Dockerfile"
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: dockerconfig
+          workspace: azure-credentials
+    
+    - name: deploy-to-dev
+      taskRef:
+        name: azure-aks-deploy
+      runAfter:
+        - build-image
+      params:
+        - name: cluster-name
+          value: "$(params.dev-cluster)"
+        - name: resource-group
+          value: "$(params.resource-group)"
+        - name: image
+          value: "$(params.registry-url)/$(params.app-name):$(params.git-revision)"
+        - name: environment
+          value: "development"
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: azure-credentials
+          workspace: azure-credentials
+    
+    - name: integration-tests
+      taskRef:
+        name: integration-test
+      runAfter:
+        - deploy-to-dev
+      params:
+        - name: test-endpoint
+          value: "https://$(params.app-name)-dev.azurewebsites.net"
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    
+    - name: manual-approval
+      taskRef:
+        name: manual-approval-task
+      runAfter:
+        - integration-tests
+      params:
+        - name: message
+          value: "Approve deployment to production?"
+        - name: timeout
+          value: "3600" # 1 hour timeout
+    
+    - name: deploy-to-prod
+      taskRef:
+        name: azure-aks-deploy
+      runAfter:
+        - manual-approval
+      params:
+        - name: cluster-name
+          value: "$(params.prod-cluster)"
+        - name: resource-group
+          value: "$(params.resource-group)"
+        - name: image
+          value: "$(params.registry-url)/$(params.app-name):$(params.git-revision)"
+        - name: environment
+          value: "production"
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: azure-credentials
+          workspace: azure-credentials
+```
+
+### Example 3: GCP Cloud Run Serverless Pipeline
+
+This example shows a serverless deployment pipeline for Google Cloud Run with automated scaling.
+
+```yaml
+# gcp-pipeline.yaml
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: gcp-cloudrun-pipeline
+  annotations:
+    tekton.dev/description: "Serverless deployment to Google Cloud Run"
+spec:
+  params:
+    - name: git-url
+      type: string
+    - name: git-revision
+      type: string
+      default: main
+    - name: service-name
+      type: string
+    - name: project-id
+      type: string
+    - name: region
+      type: string
+      default: us-central1
+    - name: max-instances
+      type: string
+      default: "100"
+  
+  workspaces:
+    - name: source-workspace
+    - name: gcp-credentials
+  
+  tasks:
+    - name: clone-repo
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: source-workspace
+    
+    - name: lint-code
+      taskRef:
+        name: eslint
+      runAfter:
+        - clone-repo
+      params:
+        - name: args
+          value: ["src/", "--ext", ".js,.ts"]
+      workspaces:
+        - name: source
+          workspace: source-workspace
+    
+    - name: unit-tests
+      taskRef:
+        name: npm
+        kind: ClusterTask
+      runAfter:
+        - lint-code
+      params:
+        - name: ARGS
+          value: ["test"]
+      workspaces:
+        - name: source
+          workspace: source-workspace
+    
+    - name: build-container
+      taskRef:
+        name: gcp-cloud-build
+      runAfter:
+        - unit-tests
+      params:
+        - name: project-id
+          value: "$(params.project-id)"
+        - name: image-name
+          value: "gcr.io/$(params.project-id)/$(params.service-name):$(params.git-revision)"
+        - name: dockerfile
+          value: "Dockerfile"
+      workspaces:
+        - name: source
+          workspace: source-workspace
+        - name: credentials
+          workspace: gcp-credentials
+    
+    - name: security-scan-image
+      taskRef:
+        name: gcp-container-analysis
+      runAfter:
+        - build-container
+      params:
+        - name: project-id
+          value: "$(params.project-id)"
+        - name: image-url
+          value: "gcr.io/$(params.project-id)/$(params.service-name):$(params.git-revision)"
+      workspaces:
+        - name: credentials
+          workspace: gcp-credentials
+    
+    - name: deploy-cloud-run
+      taskRef:
+        name: gcp-cloud-run-deploy
+      runAfter:
+        - security-scan-image
+      params:
+        - name: service-name
+          value: "$(params.service-name)"
+        - name: project-id
+          value: "$(params.project-id)"
+        - name: region
+          value: "$(params.region)"
+        - name: image
+          value: "gcr.io/$(params.project-id)/$(params.service-name):$(params.git-revision)"
+        - name: max-instances
+          value: "$(params.max-instances)"
+        - name: cpu-limit
+          value: "1000m"
+        - name: memory-limit
+          value: "512Mi"
+      workspaces:
+        - name: source
+          workspace: source-workspace
+        - name: credentials
+          workspace: gcp-credentials
+    
+    - name: smoke-tests
+      taskRef:
+        name: curl-test
+      runAfter:
+        - deploy-cloud-run
+      params:
+        - name: url
+          value: "$(tasks.deploy-cloud-run.results.service-url)/health"
+        - name: expected-status
+          value: "200"
+
 ---
+# Custom Task for GCP Cloud Run Deployment
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: mytask
-  namespace: default
+  name: gcp-cloud-run-deploy
+spec:
+  params:
+    - name: service-name
+      type: string
+    - name: project-id
+      type: string
+    - name: region
+      type: string
+    - name: image
+      type: string
+    - name: max-instances
+      type: string
+      default: "100"
+    - name: cpu-limit
+      type: string
+      default: "1000m"
+    - name: memory-limit
+      type: string
+      default: "512Mi"
+  
+  workspaces:
+    - name: source
+    - name: credentials
+  
+  results:
+    - name: service-url
+      description: The URL of the deployed Cloud Run service
+  
+  steps:
+    - name: authenticate
+      image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+      script: |
+        #!/bin/bash
+        gcloud auth activate-service-account --key-file=$(workspaces.credentials.path)/key.json
+        gcloud config set project $(params.project-id)
+    
+    - name: deploy
+      image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+      script: |
+        #!/bin/bash
+        set -e
+        
+        gcloud run deploy $(params.service-name) \
+          --image=$(params.image) \
+          --region=$(params.region) \
+          --platform=managed \
+          --allow-unauthenticated \
+          --max-instances=$(params.max-instances) \
+          --cpu=$(params.cpu-limit) \
+          --memory=$(params.memory-limit) \
+          --port=8080 \
+          --set-env-vars="ENVIRONMENT=production" \
+          --format="value(status.url)" > /tmp/service-url
+        
+        # Output the service URL
+        echo -n "$(cat /tmp/service-url)" | tee $(results.service-url.path)
+```
+
+### Example 4: Multi-Cloud GitOps Pipeline
+
+This advanced example demonstrates a GitOps pipeline that can deploy to multiple cloud providers.
+
+```yaml
+# multi-cloud-gitops.yaml
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: multi-cloud-gitops
+  annotations:
+    tekton.dev/description: "GitOps pipeline for multi-cloud deployment"
+spec:
+  params:
+    - name: app-git-url
+      type: string
+    - name: config-git-url
+      type: string
+    - name: git-revision
+      type: string
+      default: main
+    - name: target-clouds
+      type: array
+      description: "Array of target clouds: aws, azure, gcp"
+    - name: registry-url
+      type: string
+  
+  workspaces:
+    - name: app-source
+    - name: config-source
+    - name: cloud-credentials
+  
+  tasks:
+    - name: fetch-app-source
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      params:
+        - name: url
+          value: $(params.app-git-url)
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: app-source
+    
+    - name: fetch-config-source
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      params:
+        - name: url
+          value: $(params.config-git-url)
+        - name: revision
+          value: main
+      workspaces:
+        - name: output
+          workspace: config-source
+    
+    - name: build-universal-image
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      runAfter:
+        - fetch-app-source
+      params:
+        - name: IMAGE
+          value: "$(params.registry-url)/multi-cloud-app:$(params.git-revision)"
+        - name: DOCKERFILE
+          value: "./Dockerfile"
+      workspaces:
+        - name: source
+          workspace: app-source
+    
+    - name: update-manifests
+      taskRef:
+        name: yq-replace
+      runAfter:
+        - build-universal-image
+        - fetch-config-source
+      params:
+        - name: files
+          value: ["./aws/deployment.yaml", "./azure/deployment.yaml", "./gcp/deployment.yaml"]
+        - name: expression
+          value: ".spec.template.spec.containers[0].image"
+        - name: value
+          value: "$(params.registry-url)/multi-cloud-app:$(params.git-revision)"
+      workspaces:
+        - name: source
+          workspace: config-source
+    
+    - name: deploy-to-clouds
+      taskRef:
+        name: multi-cloud-deploy
+      runAfter:
+        - update-manifests
+      params:
+        - name: target-clouds
+          value: $(params.target-clouds)
+      workspaces:
+        - name: config-source
+          workspace: config-source
+        - name: credentials
+          workspace: cloud-credentials
+    
+    - name: commit-changes
+      taskRef:
+        name: git-commit-push
+      runAfter:
+        - deploy-to-clouds
+      params:
+        - name: message
+          value: "Update image to $(params.git-revision)"
+        - name: git-url
+          value: $(params.config-git-url)
+      workspaces:
+        - name: source
+          workspace: config-source
+```
+
+### Pipeline Triggers and EventListeners (2025)
+
+Modern webhook configuration for GitLab, GitHub, and Azure DevOps:
+
+```yaml
+# modern-triggers.yaml
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: modern-webhook-listener
+spec:
+  serviceAccountName: tekton-triggers-sa
+  triggers:
+    - name: github-push
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: github-secret
+                secretKey: token
+            - name: "eventTypes"
+              value: ["push", "pull_request"]
+        - ref:
+            name: "cel"
+          params:
+            - name: "filter"
+              value: "body.ref.startsWith('refs/heads/main') || body.action == 'opened'"
+      bindings:
+        - ref: github-binding
+      template:
+        ref: aws-eks-pipeline-template
+    
+    - name: gitlab-webhook
+      interceptors:
+        - ref:
+            name: "gitlab"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: gitlab-secret
+                secretKey: token
+            - name: "eventTypes"
+              value: ["Push Hook", "Merge Request Hook"]
+      bindings:
+        - ref: gitlab-binding
+      template:
+        ref: azure-aks-pipeline-template
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: github-binding
+spec:
+  params:
+    - name: git-url
+      value: $(body.repository.clone_url)
+    - name: git-revision
+      value: $(body.after)
+    - name: repository-name
+      value: $(body.repository.name)
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: aws-eks-pipeline-template
+spec:
+  params:
+    - name: git-url
+    - name: git-revision
+    - name: repository-name
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: aws-pipeline-run-
+        labels:
+          tekton.dev/pipeline: aws-eks-pipeline
+      spec:
+        pipelineRef:
+          name: aws-eks-pipeline
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-revision)
+          - name: image-tag
+            value: "your-registry.com/$(tt.params.repository-name):$(tt.params.git-revision)"
+          - name: eks-cluster-name
+            value: "production-cluster"
+        workspaces:
+          - name: shared-data
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 5Gi
+          - name: aws-credentials
+            secret:
+              secretName: aws-credentials
+          - name: signing-secrets
+            secret:
+              secretName: cosign-keys
+```
+
+These examples showcase:
+
+1. **SLSA Compliance**: Supply chain security with image signing and provenance generation
+2. **Multi-Environment Deployments**: Proper staging with approval gates
+3. **Serverless Deployments**: Cloud Run with auto-scaling configuration
+4. **GitOps Integration**: Configuration management with automated updates
+5. **Modern Webhooks**: Advanced event filtering and processing
+6. **Security Scanning**: Container vulnerability assessments
+7. **Multi-Cloud Support**: Unified pipelines across cloud providers
+
+## Installation Guide (2025)
+
+### Prerequisites
+
+- Kubernetes cluster 1.28+ (recommended: 1.29 or later)
+- kubectl configured to access your cluster
+- Cluster-admin permissions
+- At least 2GB of available memory and 2 CPU cores
+
+### Installing Tekton Pipelines (v0.55.0+)
+
+To install Tekton Pipelines on a Kubernetes cluster:
+
+1. Install the latest stable release:
+
+```bash
+# Install Tekton Pipelines
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+
+# Verify installation
+kubectl get pods --namespace tekton-pipelines
+```
+
+2. For specific versions or alternative installations:
+
+```bash
+# Install specific version (example: v0.55.0)
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.55.0/release.yaml
+
+# Install nightly build (for testing latest features)
+kubectl apply --filename https://storage.googleapis.com/tekton-releases-nightly/pipeline/latest/release.yaml
+
+# For environments without image digest support
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.notags.yaml
+```
+
+3. Monitor the installation:
+
+```bash
+kubectl get pods --namespace tekton-pipelines --watch
+```
+
+When all components show `1/1` under the `READY` column, the installation is complete.
+
+### Installing Tekton Triggers (v0.26.0+)
+
+1. Install Tekton Triggers for webhook and event-driven pipelines:
+
+```bash
+# Install Triggers
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/triggers/latest/release.yaml
+
+# Install Interceptors
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/triggers/latest/interceptors.yaml
+
+# Verify installation
+kubectl get pods --namespace tekton-pipelines
+```
+
+### Installing Tekton Dashboard (v0.40.0+)
+
+1. Install the web-based dashboard:
+
+```bash
+# Install Dashboard
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/dashboard/latest/release.yaml
+
+# Access the dashboard (port-forward)
+kubectl port-forward -n tekton-pipelines svc/tekton-dashboard 9097:9097
+```
+
+### Installing Tekton CLI (tkn) v0.35.0+
+
+```bash
+# Linux (x86_64)
+curl -LO https://github.com/tektoncd/cli/releases/latest/download/tkn_Linux_x86_64.tar.gz
+sudo tar xvzf tkn_Linux_x86_64.tar.gz -C /usr/local/bin/ tkn
+
+# macOS (Intel)
+brew install tektoncd-cli
+
+# macOS (ARM64)
+curl -LO https://github.com/tektoncd/cli/releases/latest/download/tkn_Darwin_arm64.tar.gz
+sudo tar xvzf tkn_Darwin_arm64.tar.gz -C /usr/local/bin/ tkn
+
+# Windows (PowerShell)
+choco install tektoncd-cli
+
+# Verify installation
+tkn version
+```
+
+### Installation on Different Operating Systems
+
+#### Linux Installation
+
+```bash
+# Prerequisites
+sudo apt update
+sudo apt install -y curl kubectl
+
+# Install kubectl if not present
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+# Install Tekton CLI
+curl -LO https://github.com/tektoncd/cli/releases/latest/download/tkn_Linux_x86_64.tar.gz
+sudo tar xvzf tkn_Linux_x86_64.tar.gz -C /usr/local/bin/ tkn
+```
+
+#### WSL (Windows Subsystem for Linux) Installation
+
+```bash
+# Update WSL package list
+sudo apt update
+
+# Install dependencies
+sudo apt install -y curl wget
+
+# Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+# Install Tekton CLI
+curl -LO https://github.com/tektoncd/cli/releases/latest/download/tkn_Linux_x86_64.tar.gz
+sudo tar xvzf tkn_Linux_x86_64.tar.gz -C /usr/local/bin/ tkn
+
+# Verify installations
+kubectl version --client
+tkn version
+```
+
+#### NixOS Installation
+
+```nix
+# Configuration.nix approach
+{ config, pkgs, ... }:
+{
+  environment.systemPackages = with pkgs; [
+    kubectl
+    tektoncd-cli
+    # Additional tools for Tekton development
+    yq-go
+    jq
+    git
+    docker
+  ];
+  
+  # Enable Docker for building containers
+  virtualisation.docker.enable = true;
+  
+  # Add user to docker group
+  users.users.yourusername.extraGroups = [ "docker" ];
+}
+
+# Using nix-shell for development
+nix-shell -p kubectl tektoncd-cli yq-go jq git docker
+
+# Using Home Manager (home.nix)
+{ config, pkgs, ... }:
+{
+  home.packages = with pkgs; [
+    kubectl
+    tektoncd-cli
+    yq-go
+    jq
+  ];
+  
+  programs.git.enable = true;
+}
+```
+
+### Best Practices for Tekton in 2025
+
+1. **Security First**
+   - Always use signed images and SLSA provenance
+   - Implement proper RBAC and security contexts
+   - Regularly scan for vulnerabilities
+
+2. **Resource Management**
+   - Use resource quotas and limits
+   - Implement proper workspace management
+   - Monitor pipeline performance
+
+3. **GitOps Integration**
+   - Store pipeline definitions in Git
+   - Use automated synchronization
+   - Implement proper branching strategies
+
+4. **Observability**
+   - Enable comprehensive logging
+   - Use distributed tracing
+   - Implement monitoring and alerting
+
+### Getting Started with Your First Pipeline
+
+```bash
+# Create a new namespace
+kubectl create namespace tekton-getting-started
+
+# Create a simple task
+cat <<EOF | kubectl apply -f -
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: hello-world
+  namespace: tekton-getting-started
 spec:
   steps:
-    - name: echo-env
-      image: ubuntu
-      command: ["bash", "-c"]
-      args: ["echo $TEST_TEKTON "]
-      env:
-          - name: "TEST_TEKTON"
-            value: "true"
----
+    - name: echo
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo "Hello World from Tekton!"
+        echo "Current date: \$(date)"
+        echo "Environment: \$(env | sort)"
+EOF
+
+# Run the task
+cat <<EOF | kubectl apply -f -
 apiVersion: tekton.dev/v1beta1
 kind: TaskRun
 metadata:
-  name: mytaskrun
-  namespace: default
+  name: hello-world-run
+  namespace: tekton-getting-started
 spec:
   taskRef:
-    name: mytask
-  podTemplate:
-    env:
-        - name: "TEST_TEKTON"
-          value: "false"
-```plaintext
+    name: hello-world
+EOF
 
-For example:
+# Check the results
+tkn taskrun logs hello-world-run -n tekton-getting-started
+```
 
-The environment variables specified by a `PodTemplate` supercedes all other ways of specifying environment variables. However, there exists a configuration i.e. `default-forbidden-env`, the environment variable specified in this list cannot be updated via a `PodTemplate`.
+---
 
-1. Implicit environment variables
-2. `Step`/`StepTemplate` environment variables
-3. Environment variables specified via a `default` `PodTemplate`.
-4. Environment variables specified via a `PodTemplate`.
+**DevOps Joke**: Why did the developer choose Tekton over other CI/CD tools? Because they wanted their pipelines to be as declarative as their love for Kubernetes - and just like their relationship status, everything had to be defined in YAML! 😄
 
-Environment variables can be configured in the following ways, mentioned in order of precedence from lowest to highest.
-
-### Configuring environment variables <a href="#configuring-environment-variables" id="configuring-environment-variables"></a>
-
-The `SSL_CERT_DIR` is set to `/etc/ssl/certs` as the default cert directory. If you are using a self-signed cert for private registry and the cert file is not under the default cert directory, configure your registry cert in the `config-registry-cert` `ConfigMap` with the key `cert`.
-
-### Configuring self-signed cert for private registry <a href="#configuring-self-signed-cert-for-private-registry" id="configuring-self-signed-cert-for-private-registry"></a>
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: feature-flags
-  namespace: tekton-pipelines
-  labels:
-    app.kubernetes.io/instance: default
-    app.kubernetes.io/part-of: tekton-pipelines
-data:
-  send-cloudevents-for-runs: true
-```plaintext
-
-Additionally, CloudEvents for `Runs` require an extra configuration to be enabled. This setting exists to avoid collisions with CloudEvents that might be sent by custom task controllers:
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: config-defaults
-  namespace: tekton-pipelines
-  labels:
-    app.kubernetes.io/instance: default
-    app.kubernetes.io/part-of: tekton-pipelines
-data:
-  default-cloud-events-sink: https://my-sink-url
-```plaintext
-
-When configured so, Tekton can generate `CloudEvents` for `TaskRun`, `PipelineRun` and `Run`lifecycle events. The main configuration parameter is the URL of the sink. When not set, no notification is generated.
-
-### Configuring CloudEvents notifications <a href="#configuring-cloudevents-notifications" id="configuring-cloudevents-notifications"></a>
-
-1. [The `bundles` resolver](https://tekton.dev/docs/pipelines/bundle-resolver/), disabled by setting the `enable-bundles-resolver` feature flag to `false`.
-2. [The `git` resolver](https://tekton.dev/docs/pipelines/git-resolver/), disabled by setting the `enable-git-resolver` feature flag to `false`.
-3. [The `hub` resolver](https://tekton.dev/docs/pipelines/hub-resolver/), disabled by setting the `enable-hub-resolver` feature flag to `false`.
-4. [The `cluster` resolver](https://tekton.dev/docs/pipelines/cluster-resolver/), disabled by setting the `enable-cluster-resolver` feature flag to `false`.
-
-Four remote resolvers are currently provided as part of the Tekton Pipelines installation. By default, these remote resolvers are enabled. Each resolver can be disabled by setting the appropriate feature flag in the `resolvers-feature-flags` ConfigMap in the `tekton-pipelines-resolvers` namespace:
-
-### Configuring built-in remote Task and Pipeline resolution <a href="#configuring-built-in-remote-task-and-pipeline-resolution" id="configuring-built-in-remote-task-and-pipeline-resolution"></a>
-
-\
+*At least with Tekton, when your pipeline fails, you can blame it on the cluster and not your code... most of the time!*

@@ -152,45 +152,48 @@
   * [Network Optimization](pages/architecture/edge-computing/network-optimization.md)
   * [Storage Patterns](pages/architecture/edge-computing/storage-patterns.md)
 
-## 🔄 CI/CD & GitOps
+## 🚀 CI/CD & Release Management
 
-* [CI/CD Overview](pages/devops/ci-cd-platforms/README.md) - Automated build, test and deployment pipelines
-  * [Continuous Integration](pages/devops/continuous-integration.md) - Automating code validation and integration
-  * [Continuous Delivery](pages/devops/continuous-delivery/README.md) - Reliable software release automation
-    * [Deployment Strategies](pages/need-to-know/guide-to-blue-green-canary-and-rolling-deployments.md) - Progressive release methods
-    * [Secrets Management](pages/devops/continuous-delivery/secrets-management.md) - Securing sensitive configuration data
-    * [Blue-Green Deployments](pages/devops/continuous-delivery/blue-and-green-deployment-in-real-life.md)
-    * [Deployment Metrics](pages/devops/continuous-delivery/deployment-metrics.md)
-    * [Progressive Delivery](pages/devops/continuous-delivery/progressive-delivery.md)
-    * [Release Management for DevOps/SRE (2025)](pages/devops/continuous-delivery/release-management-2025.md) - Modern release practices and patterns
-  * [CI/CD Platforms](pages/devops/ci-cd-platforms/) - Tool selection and implementation
-    * [Azure DevOps](pages/azure-devops/README.md) - Microsoft's comprehensive DevOps platform
-      * [Pipelines](pages/azure-devops/pipelines/README.md) - YAML-based CI/CD implementation
-        * [Stages](pages/azure-devops/pipelines/stages.md) - Pipeline organization units
-        * [Jobs](pages/azure-devops/pipelines/jobs.md) - Execution containers
-        * [Steps](pages/azure-devops/pipelines/steps.md) - Individual pipeline tasks
-        * [Templates](pages/azure-devops/pipelines/templates.md) - Reusable pipeline components
-        * [Extends](pages/azure-devops/pipelines/extends.md) - Template inheritance and customization
-        * [Service Connections](pages/azure-devops/pipelines/service-connections.md) - External service authentication
-        * [Best Practices for 2025](pages/azure-devops/pipelines/README.md#best-practices-for-2025) - Modern pipeline approaches
-        * [Agents and Runners](pages/azure-devops/pipelines/README.md#agents-and-runners) - Pipeline execution environments
-        * [Third-Party Integrations](pages/azure-devops/pipelines/README.md#third-party-integrations) - Extended tool integration
-        * [Azure DevOps CLI](pages/azure-devops/pipelines/README.md#azure-devops-cli) - Command-line automation
-      * [Boards & Work Items](pages/devops/ci-cd-platforms/azure-devops/boards-and-work-items/README.md) - Agile project management
-    * [GitHub Actions](pages/devops/ci-cd-platforms/github/github-action.md) - GitHub's integrated CI/CD solution
-    * [GitLab](pages/devops/source-control/gitlab/README.md)
-      * [GitLab Runner](pages/devops/source-control/gitlab/gitlab_runner.md)
-      * Real-life scenarios
-      * Installation guides
-      * Pros and Cons
-      * Comparison with alternatives
-  * [GitOps](pages/devops/gitops/README.md)
-    * [Modern GitOps Practices](pages/devops/gitops/modern-practices.md)
-    * [GitOps Patterns for Multi-Cloud (2025)](pages/devops/gitops/modern-gitops-patterns-2025.md)
-    * Flux
-      * [Overview](pages/devops/gitops/flux/README.md)
-      * [Progressive Delivery](pages/devops/gitops/flux/progressive-delivery.md)
-      * [Use GitOps with Flux, GitHub and AKS](pages/devops/gitops/flux/use-gitops-with-flux-github-and-aks-to-implement-ci-cd.md)
+* [Continuous Integration](pages/devops/continuous-integration.md) - Automating code validation and integration
+* [Continuous Delivery](pages/devops/continuous-delivery/README.md) - Reliable software release automation
+  * [Deployment Strategies](pages/need-to-know/guide-to-blue-green-canary-and-rolling-deployments.md) - Progressive release methods
+  * [Secrets Management](pages/devops/continuous-delivery/secrets-management.md) - Securing sensitive configuration data
+  * [Blue-Green Deployments](pages/devops/continuous-delivery/blue-and-green-deployment-in-real-life.md)
+  * [Deployment Metrics](pages/devops/continuous-delivery/deployment-metrics.md)
+  * [Progressive Delivery](pages/devops/continuous-delivery/progressive-delivery.md)
+  * [Release Management for DevOps/SRE (2025)](pages/devops/continuous-delivery/release-management-2025.md) - Modern release practices and patterns
+
+### CI/CD Platforms
+
+* [Tekton](pages/devops/ci-cd-platforms/tekton/README.md) - Cloud-native CI/CD platform
+  * [Build and Push Container Images](pages/devops/ci-cd-platforms/tekton/build-and-push-an-image-with-tekton.md)
+  * [Tekton on NixOS Setup](pages/devops/ci-cd-platforms/tekton/tekton-nixos-setup.md)
+* [Flagger](pages/devops/ci-cd-platforms/flagger.md) - Progressive delivery for Kubernetes
+* [Azure DevOps](pages/azure-devops/README.md) - Microsoft's comprehensive DevOps platform
+  * [Pipelines](pages/azure-devops/pipelines/README.md) - YAML-based CI/CD implementation
+    * [Stages](pages/azure-devops/pipelines/stages.md) - Pipeline organization units
+    * [Jobs](pages/azure-devops/pipelines/jobs.md) - Execution containers
+    * [Steps](pages/azure-devops/pipelines/steps.md) - Individual pipeline tasks
+    * [Templates](pages/azure-devops/pipelines/templates.md) - Reusable pipeline components
+    * [Extends](pages/azure-devops/pipelines/extends.md) - Template inheritance and customization
+    * [Service Connections](pages/azure-devops/pipelines/service-connections.md) - External service authentication
+    * [Best Practices for 2025](pages/azure-devops/pipelines/README.md#best-practices-for-2025) - Modern pipeline approaches
+    * [Agents and Runners](pages/azure-devops/pipelines/README.md#agents-and-runners) - Pipeline execution environments
+    * [Third-Party Integrations](pages/azure-devops/pipelines/README.md#third-party-integrations) - Extended tool integration
+    * [Azure DevOps CLI](pages/azure-devops/pipelines/README.md#azure-devops-cli) - Command-line automation
+  * [Boards & Work Items](pages/devops/ci-cd-platforms/azure-devops/boards-and-work-items/README.md) - Agile project management
+* [GitHub Actions](pages/devops/ci-cd-platforms/github/github-action.md) - GitHub's integrated CI/CD solution
+* [GitLab](pages/devops/source-control/gitlab/README.md) - GitLab CI/CD platform
+  * [GitLab Runner](pages/devops/source-control/gitlab/gitlab_runner.md)
+
+### GitOps
+
+* [GitOps Overview](pages/devops/gitops/README.md) - Git-based operational workflows
+  * [Modern GitOps Practices](pages/devops/gitops/modern-practices.md)
+  * [GitOps Patterns for Multi-Cloud (2025)](pages/devops/gitops/modern-gitops-patterns-2025.md)
+  * [Flux](pages/devops/gitops/flux/README.md) - GitOps operator for Kubernetes
+    * [Progressive Delivery](pages/devops/gitops/flux/progressive-delivery.md)
+    * [Use GitOps with Flux, GitHub and AKS](pages/devops/gitops/flux/use-gitops-with-flux-github-and-aks-to-implement-ci-cd.md)
 
 ## Source Control
 
@@ -381,6 +384,7 @@
 
 <!-- * [Tools Overview](pages/devops/tools-to-install/README.md) - Essential development utilities -->
 * [DevOps Tools](pages/devops-tools/README.md) - Specialized engineering tools
+  * [Pulumi](pages/pulumi/README.md)
   * [Operating Systems](pages/devops/tools-to-install/) - Development platforms
     * [NixOS](pages/Nixos/README.md) - Declarative Linux distribution
       * [Install NixOS: PC, Mac, WSL](pages/Nixos/install.md)

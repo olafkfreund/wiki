@@ -1,379 +1,555 @@
-# Flagger
+# Flagger: Progressive Delivery for Kubernetes (2025)
 
-[Flagger](https://github.com/fluxcd/flagger) is a progressive delivery tool that automates the release process for applications running on Kubernetes. It reduces the risk of introducing a new software version in production by gradually shifting traffic to the new version while measuring metrics and running conformance tests.
+[Flagger](https://github.com/fluxcd/flagger) is a cloud-native progressive delivery tool that automates the release process for applications running on Kubernetes. It significantly reduces the risk of introducing new software versions in production by implementing sophisticated traffic management, automated rollback mechanisms, and comprehensive observability.
 
-Flagger implements several deployment strategies (Canary releases, A/B testing, Blue/Green mirroring) using a service mesh (App Mesh, Istio, Linkerd, Kuma, Open Service Mesh) or an ingress controller (Contour, Gloo, NGINX, Skipper, Traefik, APISIX) for traffic routing. For release analysis, Flagger can query Prometheus, InfluxDB, Datadog, New Relic, CloudWatch, Stackdriver or Graphite and for alerting it uses Slack, MS Teams, Discord and Rocket.
+## Key Features (2025)
+
+- **Advanced Deployment Strategies**: Canary releases, A/B testing, Blue/Green deployments, and traffic mirroring
+- **Multi-Provider Support**: Works with service meshes (Istio, Linkerd, Consul Connect, Open Service Mesh) and ingress controllers (NGINX, Traefik, Gateway API, Contour, Ambassador, Gloo)
+- **Comprehensive Observability**: Integration with Prometheus, Grafana, Datadog, New Relic, CloudWatch, and custom metrics
+- **Enhanced Security**: Built-in security scanning, policy enforcement, and compliance validation
+- **GitOps Ready**: Native integration with Flux v2, ArgoCD, and other GitOps tools
+- **Multi-Cloud**: Support for AWS EKS, Azure AKS, Google GKE, and on-premises clusters
 
 ![Flagger overview diagram](https://fluxcd.io/img/diagrams/flagger-overview.png)
 
-Flagger can be configured with Kubernetes custom resources and is compatible with any CI/CD solutions made for Kubernetes. Since Flagger is declarative and reacts to Kubernetes events, it can be used in **GitOps** pipelines together with tools like Flux, JenkinsX, Carvel, Argo, etc.
+## Modern Architecture Benefits
 
-## Traefik Canary Deployments
+### 2025 Enhancements
 
-This guide shows you how to use the [Traefik](https://doc.traefik.io/traefik/) and Flagger to automate canary deployments.
+1. **Gateway API Support**: Native support for Kubernetes Gateway API standard
+2. **Enhanced Security**: Integration with OPA Gatekeeper, Falco, and policy engines
+3. **Cost Optimization**: Traffic-based cost analysis and optimization recommendations
+4. **ML-Powered Analysis**: Machine learning-based anomaly detection for canary analysis
+5. **Multi-Cluster Deployments**: Support for progressive delivery across multiple clusters
 
-![Flagger Traefik Overview](https://fluxcd.io/img/diagrams/flagger-traefik-overview.png)
+### Integration Ecosystem
 
-### Prerequisites <a href="#prerequisites" id="prerequisites"></a>
+Flagger seamlessly integrates with modern cloud-native tools:
 
-Flagger requires a Kubernetes cluster **v1.16** or newer and Traefik **v2.3** or newer.
+- **CI/CD Platforms**: Tekton, GitHub Actions, Azure Pipelines, GitLab CI/CD
+- **GitOps Tools**: Flux v2, ArgoCD, Rancher Fleet
+- **Service Meshes**: Istio 1.20+, Linkerd 2.14+, Consul Connect 1.17+
+- **Monitoring**: Prometheus, Grafana, Jaeger, OpenTelemetry
+- **Security**: OPA Gatekeeper, Falco, Twistlock, Aqua Security
 
-Install Traefik with Helm v3:
+## Gateway API Integration (2025)
 
-```bash
-helm repo add traefik https://helm.traefik.io/traefik
-kubectl create ns traefik
+Flagger v1.37+ provides native support for Kubernetes Gateway API, offering a more standardized approach to traffic management.
 
-cat <<EOF | helm upgrade -i traefik traefik/traefik --namespace traefik -f -
-deployment:
-  podAnnotations:
-    prometheus.io/port: "9100"
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "/metrics"
-metrics:
-  prometheus:
-    entryPoint: metrics
-EOF
-```plaintext
+### Gateway API Setup
 
-Install Flagger and the Prometheus add-on in the same namespace as Traefik:
+Install Gateway API CRDs and configure Istio for Gateway API:
 
 ```bash
-helm repo add flagger https://flagger.app
+# Install Gateway API CRDs
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
 
-helm upgrade -i flagger flagger/flagger \
---namespace traefik \
---set prometheus.install=true \
---set meshProvider=traefik
-```plaintext
-
-### Bootstrap <a href="#bootstrap" id="bootstrap"></a>
-
-Flagger takes a Kubernetes deployment and optionally a horizontal pod autoscaler (HPA), then creates a series of objects (Kubernetes deployments, ClusterIP services and TraefikService). These objects expose the application outside the cluster and drive the canary analysis and promotion.
-
-Create a test namespace:
-
-```bash
-kubectl create ns test
-```plaintext
-
-Create a deployment and a horizontal pod autoscaler:
-
-```bash
-kubectl apply -k https://github.com/fluxcd/flagger//kustomize/podinfo?ref=main
-```plaintext
-
-Deploy the load testing service to generate traffic during the canary analysis:
-
-```bash
-helm upgrade -i flagger-loadtester flagger/loadtester \
---namespace=test
-```plaintext
-
-Create Traefik IngressRoute that references TraefikService generated by Flagger (replace `app.example.com` with your own domain):
-
-```yaml
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
+# Configure Istio for Gateway API (if using Istio)
+kubectl apply -f - <<EOF
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
 metadata:
-  name: podinfo
-  namespace: test
+  name: control-plane
 spec:
-  entryPoints:
-    - web
-  routes:
-    - match: Host(`app.example.com`)
-      kind: Rule
-      services:
-        - name: podinfo
-          kind: TraefikService
-          port: 80
-```plaintext
+  values:
+    pilot:
+      env:
+        EXTERNAL_ISTIOD: false
+        PILOT_ENABLE_GATEWAY_API: true
+        PILOT_ENABLE_GATEWAY_API_STATUS: true
+        PILOT_ENABLE_GATEWAY_API_DEPLOYMENT_CONTROLLER: true
+EOF
+```
 
-Save the above resource as podinfo-ingressroute.yaml and then apply it:
-
-```bash
-kubectl apply -f ./podinfo-ingressroute.yaml
-```plaintext
-
-Create a canary custom resource (replace `app.example.com` with your own domain):
+### Gateway API Canary Configuration
 
 ```yaml
 apiVersion: flagger.app/v1beta1
 kind: Canary
 metadata:
-  name: podinfo
+  name: podinfo-gateway
   namespace: test
 spec:
-  provider: traefik
-  # deployment reference
+  provider: gatewayapi:v1.0.0
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: podinfo
-  # HPA reference (optional)
-  autoscalerRef:
-    apiVersion: autoscaling/v2beta2
-    kind: HorizontalPodAutoscaler
-    name: podinfo
-  # the maximum time in seconds for the canary deployment
-  # to make progress before it is rollback (default 600s)
-  progressDeadlineSeconds: 60
   service:
-    # ClusterIP port number
     port: 80
-    # container port number or name
     targetPort: 9898
+    gatewayRefs:
+    - name: gateway
+      namespace: istio-system
   analysis:
-    # schedule interval (default 60s)
-    interval: 10s
-    # max number of failed metric checks before rollback
-    threshold: 10
-    # max traffic percentage routed to canary
-    # percentage (0-100)
+    interval: 30s
+    threshold: 5
     maxWeight: 50
-    # canary increment step
-    # percentage (0-100)
-    stepWeight: 5
-    # Traefik Prometheus checks
+    stepWeight: 10
     metrics:
     - name: request-success-rate
-      interval: 1m
-      # minimum req success rate (non 5xx responses)
-      # percentage (0-100)
       thresholdRange:
         min: 99
-    - name: request-duration
       interval: 1m
-      # maximum req duration P99
-      # milliseconds
+    - name: request-duration
       thresholdRange:
         max: 500
+      interval: 1m
     webhooks:
-      - name: acceptance-test
-        type: pre-rollout
-        url: http://flagger-loadtester.test/
-        timeout: 10s
-        metadata:
-          type: bash
-          cmd: "curl -sd 'test' http://podinfo-canary.test/token | grep token"
-      - name: load-test
-        type: rollout
-        url: http://flagger-loadtester.test/
-        timeout: 5s
-        metadata:
-          type: cmd
-          cmd: "hey -z 10m -q 10 -c 2 -host app.example.com http://traefik.traefik"
-          logCmdOutput: "true"
-```plaintext
+    - name: security-gate
+      type: pre-rollout
+      url: http://security-scanner.default/
+      timeout: 30s
+      metadata:
+        type: bash
+        cmd: "security-scan --image=$(params.image) --severity=HIGH,CRITICAL"
+```
 
-Save the above resource as podinfo-canary.yaml and then apply it:
+## Istio Service Mesh Integration (2025)
+
+### Enhanced Istio Setup
+
+Install Istio with modern security and observability features:
 
 ```bash
-kubectl apply -f ./podinfo-canary.yaml
-```plaintext
+# Download Istio 1.20+
+curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.20.0 sh -
+cd istio-1.20.0
+export PATH=$PWD/bin:$PATH
 
-After a couple of seconds Flagger will create the canary objects:
+# Install Istio with security features
+istioctl install --set values.pilot.env.EXTERNAL_ISTIOD=false \
+  --set values.global.meshID=mesh1 \
+  --set values.global.network=network1 \
+  --set values.global.meshConfig.defaultConfig.proxyStatsMatcher.inclusionRegexps=".*outlier_detection.*" \
+  --set values.telemetry.v2.prometheus.configOverride.metric_relabeling_configs[0].source_labels[0]="__name__" \
+  --set values.telemetry.v2.prometheus.configOverride.metric_relabeling_configs[0].regex=".*_bucket" \
+  --set values.telemetry.v2.prometheus.configOverride.metric_relabeling_configs[0].target_label="le" \
+  --set values.telemetry.v2.prometheus.configOverride.metric_relabeling_configs[0].replacement="$1"
 
-```bash
-# applied 
-deployment.apps/podinfo
-horizontalpodautoscaler.autoscaling/podinfo
-canary.flagger.app/podinfo
+# Enable sidecar injection
+kubectl label namespace test istio-injection=enabled
 
-# generated 
-deployment.apps/podinfo-primary
-horizontalpodautoscaler.autoscaling/podinfo-primary
-service/podinfo
-service/podinfo-canary
-service/podinfo-primary
-traefikservice.traefik.containo.us/podinfo
-```plaintext
+# Install Flagger for Istio
+helm upgrade -i flagger flagger/flagger \
+  --namespace istio-system \
+  --set meshProvider=istio \
+  --set metricsServer=http://prometheus:9090 \
+  --set slack.url=$SLACK_URL \
+  --set slack.channel=alerts
+```
 
-### Automated canary promotion <a href="#automated-canary-promotion" id="automated-canary-promotion"></a>
-
-Flagger implements a control loop that gradually shifts traffic to the canary while measuring key performance indicators like HTTP requests success rate, requests average duration and pod health. Based on analysis of the KPIs a canary is promoted or aborted, and the analysis result is published to Slack or MS Teams.
-
-![Flagger Canary Stages](https://fluxcd.io/img/diagrams/flagger-canary-steps.png)
-
-Trigger a canary deployment by updating the container image:
-
-```bash
-kubectl -n test set image deployment/podinfo \
-podinfod=stefanprodan/podinfo:4.0.6
-```plaintext
-
-Flagger detects that the deployment revision changed and starts a new rollout:
-
-```sh
-kubectl -n test describe canary/podinfo
-
-Status:
-  Canary Weight:         0
-  Failed Checks:         0
-  Phase:                 Succeeded
-Events:
- New revision detected! Scaling up podinfo.test
- Waiting for podinfo.test rollout to finish: 0 of 1 updated replicas are available
- Pre-rollout check acceptance-test passed
- Advance podinfo.test canary weight 5
- Advance podinfo.test canary weight 10
- Advance podinfo.test canary weight 15
- Advance podinfo.test canary weight 20
- Advance podinfo.test canary weight 25
- Advance podinfo.test canary weight 30
- Advance podinfo.test canary weight 35
- Advance podinfo.test canary weight 40
- Advance podinfo.test canary weight 45
- Advance podinfo.test canary weight 50
- Copying podinfo.test template spec to podinfo-primary.test
- Waiting for podinfo-primary.test rollout to finish: 1 of 2 updated replicas are available
- Routing all traffic to primary
- Promotion completed! Scaling down podinfo.test
-```plaintext
-
-**Note** that if you apply new changes to the deployment during the canary analysis, Flagger will restart the analysis.
-
-You can monitor all canaries with:
-
-```bash
-watch kubectl get canaries --all-namespaces
-
-NAMESPACE   NAME        STATUS        WEIGHT   LASTTRANSITIONTIME
-test        podinfo-2   Progressing   30       2020-08-14T12:32:12Z
-test        podinfo     Succeeded     0        2020-08-14T11:23:88Z
-```plaintext
-
-### Automated rollback <a href="#automated-rollback" id="automated-rollback"></a>
-
-During the canary analysis you can generate HTTP 500 errors to test if Flagger pauses and rolls back the faulted version.
-
-Trigger another canary deployment:
-
-```bash
-kubectl -n test set image deployment/podinfo \
-podinfod=stefanprodan/podinfo:4.0.6
-```plaintext
-
-Exec into the load tester pod with:
-
-```bash
-kubectl -n test exec -it deploy/flagger-loadtester bash
-```plaintext
-
-Generate HTTP 500 errors:
-
-```bash
-hey -z 1m -c 5 -q 5 http://app.example.com/status/500
-```plaintext
-
-Generate latency:
-
-```bash
-watch -n 1 curl http://app.example.com/delay/1
-```plaintext
-
-When the number of failed checks reaches the canary analysis threshold, the traffic is routed back to the primary, the canary is scaled to zero and the rollout is marked as failed.
-
-```sh
-kubectl -n traefik logs deploy/flagger -f | jq .msg
-
-New revision detected! Scaling up podinfo.test
-Canary deployment podinfo.test not ready: waiting for rollout to finish: 0 of 1 updated replicas are available
-Starting canary analysis for podinfo.test
-Pre-rollout check acceptance-test passed
-Advance podinfo.test canary weight 5
-Advance podinfo.test canary weight 10
-Advance podinfo.test canary weight 15
-Advance podinfo.test canary weight 20
-Halt podinfo.test advancement success rate 53.42% < 99%
-Halt podinfo.test advancement success rate 53.19% < 99%
-Halt podinfo.test advancement success rate 48.05% < 99%
-Rolling back podinfo.test failed checks threshold reached 3
-Canary failed! Scaling down podinfo.test
-```plaintext
-
-### Custom metrics <a href="#custom-metrics" id="custom-metrics"></a>
-
-The canary analysis can be extended with Prometheus queries.
-
-Create a metric template and apply it on the cluster:
+### Advanced Istio Canary with Security
 
 ```yaml
 apiVersion: flagger.app/v1beta1
-kind: MetricTemplate
+kind: Canary
 metadata:
-  name: not-found-percentage
+  name: podinfo-istio
   namespace: test
 spec:
-  provider:
-    type: prometheus
-    address: http://flagger-prometheus.traefik:9090
-  query: |
-    sum(
-      rate(
-        traefik_service_request_duration_seconds_bucket{
-          service=~"{{ namespace }}-{{ target }}-canary-[0-9a-zA-Z-]+@kubernetescrd",
-          code!="404",
-        }[{{ interval }}]
-      )
-    )
-    /
-    sum(
-      rate(
-        traefik_service_request_duration_seconds_bucket{
-          service=~"{{ namespace }}-{{ target }}-canary-[0-9a-zA-Z-]+@kubernetescrd",
-        }[{{ interval }}]
-      )
-    ) * 100    
-```plaintext
+  provider: istio
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: podinfo
+  service:
+    port: 80
+    targetPort: 9898
+    gateways:
+    - public-gateway.istio-system.svc.cluster.local
+    hosts:
+    - app.example.com
+    trafficPolicy:
+      tls:
+        mode: ISTIO_MUTUAL
+    retries:
+      attempts: 3
+      perTryTimeout: 1s
+  analysis:
+    interval: 30s
+    threshold: 5
+    maxWeight: 50
+    stepWeight: 10
+    # Enhanced metrics for Istio
+    metrics:
+    - name: request-success-rate
+      templateRef:
+        name: success-rate
+        namespace: istio-system
+      thresholdRange:
+        min: 99
+      interval: 1m
+    - name: request-duration
+      templateRef:
+        name: latency
+        namespace: istio-system
+      thresholdRange:
+        max: 500
+      interval: 1m
+    - name: error-rate
+      templateRef:
+        name: error-rate
+        namespace: istio-system
+      thresholdRange:
+        max: 1
+      interval: 1m
+    webhooks:
+    - name: security-scan
+      type: pre-rollout
+      url: http://security-scanner.security-system/
+      timeout: 30s
+      metadata:
+        type: bash
+        cmd: "trivy image --severity HIGH,CRITICAL $(params.image)"
+    - name: load-test
+      type: rollout
+      url: http://flagger-loadtester.test/
+      timeout: 5s
+      metadata:
+        type: cmd
+        cmd: "hey -z 1m -q 10 -c 2 -H 'Host: app.example.com' http://istio-ingressgateway.istio-system"
+```
 
-Edit the canary analysis and add the not found error rate check:
+## Security and Compliance (2025)
+
+### OPA Gatekeeper Integration
+
+Configure policy enforcement for canary deployments:
 
 ```yaml
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: canarydeploymentsecurity
+spec:
+  crd:
+    spec:
+      names:
+        kind: CanaryDeploymentSecurity
+      validation:
+        properties:
+          requiredSecurityContext:
+            type: object
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package canarydeploymentsecurity
+        
+        violation[{"msg": msg}] {
+          input.review.object.kind == "Canary"
+          not input.review.object.spec.analysis.webhooks[_].name == "security-scan"
+          msg := "Canary deployments must include security scanning webhook"
+        }
+        
+        violation[{"msg": msg}] {
+          input.review.object.kind == "Canary"
+          input.review.object.spec.analysis.threshold > 10
+          msg := "Canary failure threshold must not exceed 10"
+        }
+---
+apiVersion: config.gatekeeper.sh/v1alpha1
+kind: CanaryDeploymentSecurity
+metadata:
+  name: canary-security-requirements
+spec:
+  match:
+    - apiGroups: ["flagger.app"]
+      kinds: ["Canary"]
+```
+
+### Falco Integration for Runtime Security
+
+Create a Falco rule for monitoring canary deployments:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: falco-canary-rules
+  namespace: falco-system
+data:
+  canary_rules.yaml: |
+    - rule: Suspicious Canary Network Activity
+      desc: Detect unusual network activity during canary deployment
+      condition: >
+        k8s_audit and ka.verb in (create, update, patch) and
+        ka.target.resource=canaries and
+        outbound and not fd.sport in (80, 443, 9090, 8080)
+      output: >
+        Suspicious network activity during canary deployment
+        (user=%ka.user.name verb=%ka.verb resource=%ka.target.resource 
+         canary=%ka.target.name namespace=%ka.target.namespace
+         connection=%fd.rip:%fd.rport)
+      priority: WARNING
+      tags: [network, k8s, canary]
+    
+    - rule: Canary Pod Security Violation
+      desc: Detect security violations in canary pods
+      condition: >
+        spawned_process and container and
+        k8s.pod.label[app] contains "canary" and
+        (proc.name in (curl, wget, nc) or
+         proc.cmdline contains "chmod +x")
+      output: >
+        Security violation in canary pod
+        (user=%user.name command=%proc.cmdline pod=%k8s.pod.name
+         namespace=%k8s.ns.name image=%container.image.repository)
+      priority: HIGH
+      tags: [process, k8s, canary, security]
+```
+
+## Multi-Cluster Progressive Delivery
+
+### Cross-Cluster Canary Configuration
+
+```yaml
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: podinfo-multi-cluster
+  namespace: test
+spec:
+  provider: istio
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: podinfo
+  service:
+    port: 80
+    targetPort: 9898
+    gateways:
+    - mesh
   analysis:
+    interval: 30s
+    threshold: 5
+    maxWeight: 50
+    stepWeight: 10
+    # Multi-cluster metrics
     metrics:
-      - name: "404s percentage"
-        templateRef:
-          name: not-found-percentage
-        thresholdRange:
-          max: 5
-        interval: 1m
-```plaintext
+    - name: cross-cluster-success-rate
+      templateRef:
+        name: multi-cluster-success-rate
+        namespace: istio-system
+      thresholdRange:
+        min: 99
+      interval: 1m
+    sessionAffinity:
+      cookieName: flagger-canary
+      maxAge: 3600
+    webhooks:
+    - name: cluster-validation
+      type: pre-rollout
+      url: http://cluster-validator.fleet-system/validate
+      timeout: 30s
+      metadata:
+        clusters: ["production-us", "production-eu"]
+        regions: ["us-west-2", "eu-west-1"]
+```
 
-The above configuration validates the canary by checking if the HTTP 404 req/sec percentage is below 5 percent of the total traffic. If the 404s rate reaches the 5% threshold, then the canary fails.
+## Observability and Monitoring (2025)
 
-Trigger a canary deployment by updating the container image:
+### Enhanced Grafana Dashboards
+
+Import Flagger dashboards with modern visualizations:
 
 ```bash
-kubectl -n test set image deployment/podinfo \
-podinfod=stefanprodan/podinfo:4.0.6
-```plaintext
+# Import Flagger dashboards
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flagger-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  flagger-canary.json: |
+    {
+      "dashboard": {
+        "title": "Flagger Canary Analysis (2025)",
+        "panels": [
+          {
+            "title": "Canary Success Rate",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "histogram_quantile(0.99, sum(rate(flagger_canary_duration_seconds_bucket[5m])) by (le))",
+                "legendFormat": "P99 Duration"
+              }
+            ]
+          },
+          {
+            "title": "Active Canaries",
+            "type": "table",
+            "targets": [
+              {
+                "expr": "flagger_canary_total",
+                "legendFormat": "{{name}}.{{namespace}}"
+              }
+            ]
+          }
+        ]
+      }
+    }
+EOF
+```
 
-Generate 404s:
+### OpenTelemetry Integration
+
+Configure distributed tracing for canary deployments:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-config
+  namespace: istio-system
+data:
+  config.yaml: |
+    receivers:
+      jaeger:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:14250
+          thrift_http:
+            endpoint: 0.0.0.0:14268
+      prometheus:
+        config:
+          scrape_configs:
+          - job_name: 'flagger'
+            static_configs:
+            - targets: ['flagger.istio-system:8080']
+            metrics_path: /metrics
+            scrape_interval: 15s
+    
+    processors:
+      batch:
+        timeout: 1s
+        send_batch_size: 1024
+      resource:
+        attributes:
+        - key: service.name
+          value: flagger-canary
+          action: upsert
+    
+    exporters:
+      jaeger:
+        endpoint: jaeger-collector.monitoring:14250
+        tls:
+          insecure: true
+      prometheus:
+        endpoint: "0.0.0.0:8889"
+        namespace: flagger
+        const_labels:
+          component: canary
+    
+    service:
+      pipelines:
+        traces:
+          receivers: [jaeger]
+          processors: [batch, resource]
+          exporters: [jaeger]
+        metrics:
+          receivers: [prometheus]
+          processors: [batch]
+          exporters: [prometheus]
+```
+
+## Production Best Practices (2025)
+
+### Resource Management
+
+Configure appropriate resource limits and requests:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flagger
+  namespace: istio-system
+spec:
+  template:
+    spec:
+      containers:
+      - name: flagger
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 10001
+          capabilities:
+            drop:
+            - ALL
+```
+
+### High Availability Configuration
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flagger
+  namespace: istio-system
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: flagger
+              topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: flagger
+```
+
+### Backup and Disaster Recovery
+
+Implement backup strategies for Flagger configurations:
 
 ```bash
-watch curl http://app.example.com/status/400
-```plaintext
+#!/bin/bash
+# Flagger backup script
 
-Watch Flagger logs:
+BACKUP_DIR="/backup/flagger/$(date +%Y%m%d-%H%M%S)"
+mkdir -p "$BACKUP_DIR"
 
-```sh
-kubectl -n traefik logs deployment/flagger -f | jq .msg
+# Backup Canary resources
+kubectl get canaries -A -o yaml > "$BACKUP_DIR/canaries.yaml"
 
-Starting canary deployment for podinfo.test
-Advance podinfo.test canary weight 5
-Advance podinfo.test canary weight 10
-Advance podinfo.test canary weight 15
-Halt podinfo.test advancement 404s percentage 6.20 > 5
-Halt podinfo.test advancement 404s percentage 6.45 > 5
-Halt podinfo.test advancement 404s percentage 7.60 > 5
-Halt podinfo.test advancement 404s percentage 8.69 > 5
-Halt podinfo.test advancement 404s percentage 9.70 > 5
-Rolling back podinfo.test failed checks threshold reached 5
-Canary failed! Scaling down podinfo.test
-```plaintext
+# Backup MetricTemplates
+kubectl get metrictemplates -A -o yaml > "$BACKUP_DIR/metrictemplates.yaml"
 
-If you have [alerting](https://fluxcd.io/flagger/usage/alerting/) configured, Flagger will send a notification with the reason why the canary failed.
+# Backup AlertProviders
+kubectl get alertproviders -A -o yaml > "$BACKUP_DIR/alertproviders.yaml"
+
+# Backup Flagger configuration
+kubectl get configmap flagger-config -n istio-system -o yaml > "$BACKUP_DIR/flagger-config.yaml"
+
+echo "Backup completed: $BACKUP_DIR"
+```
 
 For an in-depth look at the analysis process read the [usage docs](https://fluxcd.io/flagger/usage/how-it-works/).

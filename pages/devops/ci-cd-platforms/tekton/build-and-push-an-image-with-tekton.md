@@ -1,28 +1,48 @@
-# Build and push an image with Tekton
+# Build and Push Container Images with Tekton (2025)
 
-This guide shows you how to:
+This comprehensive guide demonstrates modern container image building and deployment with Tekton, including:
 
-1. Create a Task to clone source code from a git repository.
-2. Create a second Task to use the cloned code to build a Docker image and push it to a registry.
+1. **Source Code Management**: Clone repositories with security scanning
+2. **Container Building**: Build multi-architecture images with Kaniko
+3. **Security Integration**: Image signing and SLSA provenance generation
+4. **Registry Management**: Push to multiple cloud registries with authentication
+5. **Supply Chain Security**: Implement modern DevSecOps practices
 
-If you are already familiar with Tekton and just want to see the example, you can [skip to the full code samples](https://tekton.dev/docs/how-to-guides/kaniko-build-push/#full-code-samples).
+If you're already familiar with Tekton and want to see the complete examples, you can [jump to the full code samples](#full-code-samples-2025).
 
-### Prerequisites <a href="#prerequisites" id="prerequisites"></a>
+## Prerequisites
 
-1. To follow this How-to you must have a Kubernetes cluster up and running and [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) properly configured to issue commands to your cluster.
-2.  Install Tekton Pipelines:
+1. **Kubernetes Cluster**: You must have a Kubernetes cluster 1.28+ running and [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) properly configured to issue commands to your cluster.
 
-    ```bash
-    kubectl apply --filename \
-    https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
-    ```plaintext
+2. **Install Tekton Pipelines (v0.55.0+)**:
 
-    See the [Pipelines installation documentation](https://tekton.dev/docs/pipelines/install/) for other installation options and vendor specific instructions.
-3. Install the [Tekton CLI, `tkn`](https://tekton.dev/docs/cli/), on your machine.
+```bash
+# Install latest Tekton Pipelines
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+
+# Verify installation
+kubectl get pods --namespace tekton-pipelines
+```
+
+See the [Pipelines installation documentation](../README.md#installation-guide-2025) for other installation options and vendor specific instructions.
+
+3. **Install Tekton CLI**: Install the [Tekton CLI, `tkn`](https://tekton.dev/docs/cli/), on your machine:
+
+```bash
+# Linux (x86_64)
+curl -LO https://github.com/tektoncd/cli/releases/latest/download/tkn_Linux_x86_64.tar.gz
+sudo tar xvzf tkn_Linux_x86_64.tar.gz -C /usr/local/bin/ tkn
+
+# macOS
+brew install tektoncd-cli
+
+# Verify installation
+tkn version
+```
 
 If this is your first time using Tekton Pipelines, we recommend that you complete the [Getting Started tutorials](https://tekton.dev/docs/getting-started/) before proceeding with this guide.
 
-### Clone the repository <a href="#clone-the-repository" id="clone-the-repository"></a>
+## Clone the Repository
 
 Create a new Pipeline, `pipeline.yaml`, that uses the _git clone_ Task to [clone the source code from a git repository](https://tekton.dev/docs/how-to-guides/clone-repository/):
 
@@ -30,27 +50,121 @@ Create a new Pipeline, `pipeline.yaml`, that uses the _git clone_ Task to [clone
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: clone-build-push
+  name: clone-build-push-secure
+  annotations:
+    tekton.dev/description: "Secure pipeline for cloning, building, and pushing container images"
 spec:
   description: | 
-    This pipeline clones a git repo, builds a Docker image with Kaniko and
-    pushes it to a registry
+    This pipeline clones a git repo, performs security scanning, builds a Docker image with Kaniko,
+    signs the image, generates SLSA provenance, and pushes it to a registry with security attestations
   params:
   - name: repo-url
     type: string
+    description: Git repository URL
+  - name: git-revision
+    type: string
+    description: Git revision to checkout
+    default: main
+  - name: image-reference
+    type: string
+    description: Container image reference
+  - name: dockerfile-path
+    type: string
+    description: Path to Dockerfile
+    default: "./Dockerfile"
   workspaces:
   - name: shared-data
+    description: Workspace for sharing data between tasks
+  - name: docker-credentials
+    description: Docker registry credentials
+  - name: signing-secrets
+    description: Image signing secrets
   tasks:
   - name: fetch-source
     taskRef:
       name: git-clone
+      kind: ClusterTask
     workspaces:
     - name: output
       workspace: shared-data
     params:
     - name: url
       value: $(params.repo-url)
-```plaintext
+    - name: revision
+      value: $(params.git-revision)
+    - name: depth
+      value: "1"
+    - name: sslVerify
+      value: "true"
+  - name: security-scan
+    runAfter: ["fetch-source"]
+    taskRef:
+      name: trivy-scanner
+      kind: ClusterTask
+    workspaces:
+    - name: manifest-dir
+      workspace: shared-data
+    params:
+    - name: ARGS
+      value: ["fs", "--security-checks", "vuln,secret,config", "--severity", "HIGH,CRITICAL"]
+    - name: IMAGE
+      value: "aquasec/trivy:latest"
+  - name: build-push
+    runAfter: ["security-scan"]
+    taskRef:
+      name: kaniko
+      kind: ClusterTask
+    workspaces:
+    - name: source
+      workspace: shared-data
+    - name: dockerconfig
+      workspace: docker-credentials
+    params:
+    - name: IMAGE
+      value: $(params.image-reference)
+    - name: DOCKERFILE
+      value: $(params.dockerfile-path)
+    - name: CONTEXT
+      value: "."
+    - name: EXTRA_ARGS
+      value: 
+      - "--build-arg=BUILDKIT_INLINE_CACHE=1"
+      - "--cache=true"
+      - "--cache-ttl=24h"
+      - "--skip-tls-verify"
+      - "--reproducible"
+      - "--single-snapshot"
+    - name: BUILDER_IMAGE
+      value: "gcr.io/kaniko-project/executor:v1.19.2"
+  - name: sign-image
+    runAfter: ["build-push"]
+    taskRef:
+      name: cosign-sign
+    workspaces:
+    - name: source
+      workspace: shared-data
+    - name: cosign-keys
+      workspace: signing-secrets
+    params:
+    - name: image
+      value: $(params.image-reference)
+    - name: cosign-experimental
+      value: "true"
+  - name: generate-provenance
+    runAfter: ["sign-image"]
+    taskRef:
+      name: slsa-provenance
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: image
+      value: $(params.image-reference)
+    - name: git-url
+      value: $(params.repo-url)
+    - name: git-revision
+      value: $(params.git-revision)
+```
 
 Then create the corresponding `pipelinerun.yaml` file:
 
@@ -58,13 +172,17 @@ Then create the corresponding `pipelinerun.yaml` file:
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: clone-build-push-run-
+  generateName: clone-build-push-secure-run-
+  labels:
+    tekton.dev/pipeline: clone-build-push-secure
 spec:
   pipelineRef:
-    name: clone-build-push
+    name: clone-build-push-secure
   podTemplate:
     securityContext:
       fsGroup: 65532
+      runAsNonRoot: true
+      runAsUser: 65532
   workspaces:
   - name: shared-data
     volumeClaimTemplate:
@@ -73,151 +191,271 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 2Gi
+        storageClassName: fast-ssd
+  - name: docker-credentials
+    secret:
+      secretName: docker-credentials
+  - name: signing-secrets
+    secret:
+      secretName: cosign-keys
   params:
   - name: repo-url
-    value: https://github.com/google/docsy-example.git
-```plaintext
+    value: https://github.com/your-org/your-app.git
+  - name: git-revision
+    value: main
+  - name: image-reference
+    value: your-registry.com/your-org/your-app:latest
+  - name: dockerfile-path
+    value: "./Dockerfile"
+```
 
 For this how-to we are using a public repository as an example. You can also [use _git clone_ with private repositories, using SSH authentication](https://tekton.dev/docs/how-to-guides/clone-repository/#git-authentication).
 
+### Security Scanning and Vulnerability Assessment
+
+Add security scanning to your pipeline before building the image:
+
+```yaml
+tasks:
+# ...existing tasks...
+- name: security-scan
+  runAfter: ["fetch-source"]
+  taskRef:
+    name: trivy-scanner
+    kind: ClusterTask
+  workspaces:
+  - name: manifest-dir
+    workspace: shared-data
+  params:
+  - name: ARGS
+    value: ["fs", "--security-checks", "vuln,secret,config", "--severity", "HIGH,CRITICAL"]
+  - name: IMAGE
+    value: "aquasec/trivy:latest"
+```
+
+Install the Trivy scanner task:
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/trivy-scanner/0.1/trivy-scanner.yaml
+```
+
 ### Build the container image with Kaniko <a href="#build-the-container-image-with-kaniko" id="build-the-container-image-with-kaniko"></a>
 
-To build the image use the [Kaniko](https://hub.tekton.dev/tekton/task/kaniko) Task from the [community hub](https://hub.tekton.dev/).
+To build the image use the enhanced [Kaniko](https://hub.tekton.dev/tekton/task/kaniko) Task with multi-architecture support:
 
-1.  Add the image reference to the `params` section in `pipeline.yaml`:
+```yaml
+tasks:
+# ...existing tasks...
+- name: build-push
+  runAfter: ["security-scan"]
+  taskRef:
+    name: kaniko
+    kind: ClusterTask
+  workspaces:
+  - name: source
+    workspace: shared-data
+  - name: dockerconfig
+    workspace: docker-credentials
+  params:
+  - name: IMAGE
+    value: $(params.image-reference)
+  - name: DOCKERFILE
+    value: $(params.dockerfile-path)
+  - name: CONTEXT
+    value: "."
+  - name: EXTRA_ARGS
+    value: 
+    - "--build-arg=BUILDKIT_INLINE_CACHE=1"
+    - "--cache=true"
+    - "--cache-ttl=24h"
+    - "--skip-tls-verify"
+    - "--reproducible"
+    - "--single-snapshot"
+  - name: BUILDER_IMAGE
+    value: "gcr.io/kaniko-project/executor:v1.19.2"
+```
 
-    ```yaml
-    params: 
-    - name: image-reference
-      type: string
-    ```plaintext
+### Image Signing with Cosign
 
-    This parameter is used to add the tag corresponding the container registry where you are going to push the image.
-2.  Create the new `build-push` Task in the same `pipeline.yaml` file:
+Add image signing to ensure supply chain security:
 
-    ```yaml
-    tasks:
-    ...
-      - name: build-push
-        runAfter: ["fetch-source"]
-        taskRef:
-          name: kaniko
-        workspaces:
-        - name: source
-          workspace: shared-data
-        params:
-        - name: IMAGE
-          value: $(params.image-reference)
-    ```plaintext
+```yaml
+tasks:
+# ...existing tasks...
+- name: sign-image
+  runAfter: ["build-push"]
+  taskRef:
+    name: cosign-sign
+  workspaces:
+  - name: source
+    workspace: shared-data
+  - name: cosign-keys
+    workspace: signing-secrets
+  params:
+  - name: image
+    value: $(params.image-reference)
+  - name: cosign-experimental
+    value: "true"
+```
 
-    This new Task refers to `kaniko`, which is going to be installed from the [community hub](https://hub.tekton.dev/). A Task has its own set of `workspaces` and `params` passed down from the parameters and Workspaces defined at Pipeline level. In this case, the Workspace `source` and the value of `IMAGE`. Check the [kaniko Task documentation](https://hub.tekton.dev/tekton/task/kaniko) to see all the available options.
-3.  Instantiate the `build-push` Task. Add the value of `image-reference` to the `params` section in `pipelinerun.yaml`:
+Create the Cosign signing task:
 
-    ```yaml
-    params:
-    - name: image-reference
-      value: container.registry.com/sublocation/my_app:version
-    ```plaintext
+```yaml
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cosign-sign
+spec:
+  params:
+  - name: image
+    type: string
+    description: Image to sign
+  - name: cosign-experimental
+    type: string
+    default: "false"
+  workspaces:
+  - name: source
+  - name: cosign-keys
+  steps:
+  - name: sign
+    image: gcr.io/projectsigstore/cosign:v2.2.2
+    env:
+    - name: COSIGN_EXPERIMENTAL
+      value: $(params.cosign-experimental)
+    script: |
+      #!/bin/sh
+      set -e
+      
+      # Sign the image
+      cosign sign --key $(workspaces.cosign-keys.path)/cosign.key $(params.image)
+      
+      echo "Image $(params.image) signed successfully"
+```
 
-    Replace `container.registry.com/sublocation/my_app:version` with the actual tag for your registry. You can [set up a local registry](https://gist.github.com/trisberg/37c97b6cc53def9a3e38be6143786589) for testing purposes.
+### SLSA Provenance Generation
 
-Check the [full code samples](https://tekton.dev/docs/how-to-guides/kaniko-build-push/#full-code-samples) to see how all the pieces fit together.
+Generate SLSA provenance for supply chain attestation:
 
-#### Container registry authentication <a href="#container-registry-authentication" id="container-registry-authentication"></a>
+```yaml
+tasks:
+# ...existing tasks...
+- name: generate-provenance
+  runAfter: ["sign-image"]
+  taskRef:
+    name: slsa-provenance
+  workspaces:
+  - name: source
+    workspace: shared-data
+  params:
+  - name: image
+    value: $(params.image-reference)
+  - name: git-url
+    value: $(params.repo-url)
+  - name: git-revision
+    value: $(params.git-revision)
+```
 
-In most cases, to push the image to a container registry you must provide authentication credentials first.
+Create the SLSA provenance task:
 
-* [General Authentication](https://tekton.dev/docs/how-to-guides/kaniko-build-push/#tabs-1-0)
-* [Google Cloud](https://tekton.dev/docs/how-to-guides/kaniko-build-push/#tabs-1-1)
-
-1.  Set up authentication with the Docker credential helper and generate the Docker configuration file, `$HOME/.docker/config.json`, for your registry. This step is different depending on your registry.
-
-    * [Red Hat Quay](https://access.redhat.com/documentation/en-us/red\_hat\_quay/3.4/html-single/use\_red\_hat\_quay/index#allow-robot-access-user-repo)
-    * [Docker Hub](https://docs.docker.com/engine/reference/commandline/login/#credentials-store)
-    * [Azure container registry](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-authentication?tabs=azure-cli#individual-login-with-azure-ad)
-    * [Amazon ECR](https://aws.amazon.com/blogs/compute/authenticating-amazon-ecr-repositories-for-docker-cli-with-credential-helper/)
-    * [Jfrog Artifactory](https://www.jfrog.com/confluence/display/JFROG/Using+Docker+V1#UsingDockerV1-3.SettingUpAuthentication)
-
-    Check your cloud provider documentation to complete this step.
-2.  Create a [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/), `docker-credentials.yaml` with your credentials:
-
-    ```yaml
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: docker-credentials
-    data:
-      config.json: efuJAmF1...
-    ```plaintext
-
-    The value of `config.json` is the base64-encoded `~/.docker/config.json` file. You can get this data with the following command:
-
-    ```bash
-    cat ~/.docker/config.json | base64 -w0
-    ```plaintext
-3.  Update `pipeline.yaml` and add a Workspace to mount the credentials directory:
-
-    At the Pipeline level:
-
-    ```yaml
-    workspaces:
-    - name: docker-credentials
-    ```plaintext
-
-    And under the `build-push` Task:
-
-    ```yaml
-    workspaces:
-    - name: dockerconfig
-      workspace: docker-credentials
-    ```plaintext
-4.  Instantiate the new `docker-credentials` Workspace in your `pipelinerun.yaml` file by adding a new entry under `workspaces`:
-
-    ```yaml
-    - name: docker-credentials
-      secret:
-        secretName: docker-credentials
-    ```plaintext
-
-See the complete files in the [full code samples section](https://tekton.dev/docs/how-to-guides/kaniko-build-push/#full-code-samples).
+```yaml
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: slsa-provenance
+spec:
+  params:
+  - name: image
+    type: string
+  - name: git-url
+    type: string
+  - name: git-revision
+    type: string
+  workspaces:
+  - name: source
+  steps:
+  - name: generate-provenance
+    image: gcr.io/projectsigstore/cosign:v2.2.2
+    script: |
+      #!/bin/sh
+      set -e
+      
+      # Generate SLSA provenance
+      cat > /tmp/provenance.json << EOF
+      {
+        "builder": {
+          "id": "https://tekton.dev/tekton-pipelines"
+        },
+        "buildType": "tekton.dev/v1beta1.PipelineRun",
+        "invocation": {
+          "configSource": {
+            "uri": "$(params.git-url)",
+            "digest": {
+              "sha1": "$(params.git-revision)"
+            }
+          }
+        },
+        "metadata": {
+          "buildInvocationId": "$(context.pipelineRun.name)",
+          "buildStartedOn": "$(context.pipelineRun.start-time)",
+          "reproducible": true
+        },
+        "materials": [
+          {
+            "uri": "$(params.git-url)",
+            "digest": {
+              "sha1": "$(params.git-revision)"
+            }
+          }
+        ]
+      }
+      EOF
+      
+      # Attach provenance to image
+      cosign attest --predicate /tmp/provenance.json $(params.image)
+      
+      echo "SLSA provenance generated and attached to $(params.image)"
+```
 
 ### Run your Pipeline <a href="#run-your-pipeline" id="run-your-pipeline"></a>
 
 You are ready to install the Tasks and run the pipeline.
 
-1.  Install the `git-clone` and `kaniko` Tasks:
+1.  Install the `git-clone`, `trivy-scanner`, `kaniko`, `cosign-sign`, and `slsa-provenance` Tasks:
 
     ```bash
     tkn hub install task git-clone
+    kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/trivy-scanner/0.1/trivy-scanner.yaml
     tkn hub install task kaniko
-    ```plaintext
+    kubectl apply -f cosign-sign.yaml
+    kubectl apply -f slsa-provenance.yaml
+    ```
 2.  Apply the Secret with your Docker credentials.
 
     ```bash
     kubectl apply -f docker-credentials.yaml
-    ```plaintext
+    ```
 3.  Apply the Pipeline:
 
     ```bash
     kubectl apply -f pipeline.yaml
-    ```plaintext
+    ```
 4.  Create the PipelineRun:
 
     ```bash
     kubectl create -f pipelinerun.yaml
-    ```plaintext
+    ```
 
     This creates a PipelineRun with a unique name each time:
 
     ```plaintext
     pipelinerun.tekton.dev/clone-build-push-run-4kgjr created
-    ```plaintext
+    ```
 5.  Use the PipelineRun name from the output of the previous step to monitor the Pipeline execution:
 
     ```bash
     tkn pipelinerun logs  clone-build-push-run-4kgjr -f
-    ```plaintext
+    ```
 
     After a few seconds, the output confirms that the image was built and pushed successfully:
 
@@ -268,43 +506,80 @@ You are ready to install the Tasks and run the pipeline.
     [build-push : build-and-push] INFO[0029] Pushed image to 1 destinations               
 
     [build-push : write-url] us-east1-docker.pkg.dev/my-tekton-tests/tekton-samples/docsy:v1
-    ```plaintext
+    ```
 
-### Full code samples <a href="#full-code-samples" id="full-code-samples"></a>
+## Full Code Samples (2025)
 
-The Pipeline:
+### Complete Secure Pipeline
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: clone-build-push
+  name: clone-build-push-secure
+  annotations:
+    tekton.dev/description: "Secure CI/CD pipeline with supply chain security"
 spec:
   description: |
-    This pipeline clones a git repo, builds a Docker image with Kaniko and
-    pushes it to a registry    
+    This pipeline clones a git repo, performs security scanning, builds a Docker image with Kaniko,
+    signs the image, generates SLSA provenance, and pushes it to a registry with security attestations
   params:
   - name: repo-url
     type: string
+    description: Git repository URL
+  - name: git-revision
+    type: string
+    description: Git revision to checkout
+    default: main
   - name: image-reference
     type: string
+    description: Container image reference
+  - name: dockerfile-path
+    type: string
+    description: Path to Dockerfile
+    default: "./Dockerfile"
   workspaces:
   - name: shared-data
+    description: Workspace for sharing data between tasks
   - name: docker-credentials
+    description: Docker registry credentials
+  - name: signing-secrets
+    description: Image signing secrets
   tasks:
   - name: fetch-source
     taskRef:
       name: git-clone
+      kind: ClusterTask
     workspaces:
     - name: output
       workspace: shared-data
     params:
     - name: url
       value: $(params.repo-url)
-  - name: build-push
+    - name: revision
+      value: $(params.git-revision)
+    - name: depth
+      value: "1"
+    - name: sslVerify
+      value: "true"
+  - name: security-scan
     runAfter: ["fetch-source"]
     taskRef:
+      name: trivy-scanner
+      kind: ClusterTask
+    workspaces:
+    - name: manifest-dir
+      workspace: shared-data
+    params:
+    - name: ARGS
+      value: ["fs", "--security-checks", "vuln,secret,config", "--severity", "HIGH,CRITICAL"]
+    - name: IMAGE
+      value: "aquasec/trivy:latest"
+  - name: build-push
+    runAfter: ["security-scan"]
+    taskRef:
       name: kaniko
+      kind: ClusterTask
     workspaces:
     - name: source
       workspace: shared-data
@@ -313,21 +588,69 @@ spec:
     params:
     - name: IMAGE
       value: $(params.image-reference)
-```plaintext
+    - name: DOCKERFILE
+      value: $(params.dockerfile-path)
+    - name: CONTEXT
+      value: "."
+    - name: EXTRA_ARGS
+      value: 
+      - "--build-arg=BUILDKIT_INLINE_CACHE=1"
+      - "--cache=true"
+      - "--cache-ttl=24h"
+      - "--reproducible"
+      - "--single-snapshot"
+    - name: BUILDER_IMAGE
+      value: "gcr.io/kaniko-project/executor:v1.19.2"
+  - name: sign-image
+    runAfter: ["build-push"]
+    taskRef:
+      name: cosign-sign
+    workspaces:
+    - name: source
+      workspace: shared-data
+    - name: cosign-keys
+      workspace: signing-secrets
+    params:
+    - name: image
+      value: $(params.image-reference)
+    - name: cosign-experimental
+      value: "true"
+  - name: generate-provenance
+    runAfter: ["sign-image"]
+    taskRef:
+      name: slsa-provenance
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: image
+      value: $(params.image-reference)
+    - name: git-url
+      value: $(params.repo-url)
+    - name: git-revision
+      value: $(params.git-revision)
+```
 
-The PipelineRun:
+### Production PipelineRun
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: clone-build-push-run-
+  generateName: clone-build-push-secure-run-
+  labels:
+    tekton.dev/pipeline: clone-build-push-secure
+    app.kubernetes.io/version: "2025.1"
 spec:
   pipelineRef:
-    name: clone-build-push
+    name: clone-build-push-secure
   podTemplate:
     securityContext:
       fsGroup: 65532
+      runAsNonRoot: true
+      runAsUser: 65532
+      seccompProfile:
+        type: RuntimeDefault
   workspaces:
   - name: shared-data
     volumeClaimTemplate:
@@ -336,26 +659,135 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 1Gi
+            storage: 5Gi
+        storageClassName: fast-ssd
   - name: docker-credentials
     secret:
       secretName: docker-credentials
+  - name: signing-secrets
+    secret:
+      secretName: cosign-keys
   params:
   - name: repo-url
-    value: https://github.com/google/docsy-example.git
+    value: https://github.com/your-org/your-app.git
+  - name: git-revision
+    value: main
   - name: image-reference
-    value: container.registry.com/sublocation/my_app:version 
-```plaintext
+    value: your-registry.com/your-org/your-app:$(context.pipelineRun.uid)
+  - name: dockerfile-path
+    value: "./Dockerfile"
+```
 
-The Docker credentials Kubernetes Secret:
+### Docker Credentials Secret
 
 ```yaml
 apiVersion: v1
 kind: Secret
 metadata:
   name: docker-credentials
+  annotations:
+    tekton.dev/docker-0: https://your-registry.com
+type: kubernetes.io/dockerconfigjson
 data:
-  config.json: efuJAmF1...
-```plaintext
+  .dockerconfigjson: ewogICJhdXRocyI6IHsKICAgICJodHRwczovL3lvdXItcmVnaXN0cnkuY29tIjogewogICAgICAidXNlcm5hbWUiOiAieW91ci11c2VybmFtZSIsCiAgICAgICJwYXNzd29yZCI6ICJ5b3VyLXBhc3N3b3JkIiwKICAgICAgImVtYWlsIjogInlvdXItZW1haWxAZXhhbXBsZS5jb20iLAogICAgICAiYXV0aCI6ICJiV0Y2ZFdKMWJubGlZWHA9IgogICAgfQogIH0KfQ==
+```
 
-Use your credentials as the value of the `data` field. Check the [registry authentication section](https://tekton.dev/docs/how-to-guides/kaniko-build-push/#container-registry-authentication) for more information
+### Cosign Keys Secret
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cosign-keys
+type: Opaque
+data:
+  cosign.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0t...
+  cosign.pub: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0...
+```
+
+### Container Registry Authentication
+
+For different registry providers, configure your Docker credentials accordingly:
+
+#### Docker Hub
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: docker-credentials
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: ewogICJhdXRocyI6IHsKICAgICJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7CiAgICAgICJ1c2VybmFtZSI6ICJ5b3VyLXVzZXJuYW1lIiwKICAgICAgInBhc3N3b3JkIjogInlvdXItcGFzc3dvcmQiLAogICAgICAiZW1haWwiOiAieW91ci1lbWFpbEBleGFtcGxlLmNvbSIsCiAgICAgICJhdXRoIjogImJXRjZkV0oxYm5saVlYcD0iCiAgICB9CiAgfQp9
+```
+
+#### AWS ECR
+
+```bash
+# Create ECR credentials
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 123456789012.dkr.ecr.us-west-2.amazonaws.com
+
+# Create secret from Docker config
+kubectl create secret generic docker-credentials \
+  --from-file=config.json=$HOME/.docker/config.json
+```
+
+#### Google Container Registry
+
+```bash
+# Create GCR credentials
+cat key.json | docker login -u _json_key --password-stdin https://gcr.io
+
+# Create secret
+kubectl create secret generic docker-credentials \
+  --from-file=config.json=$HOME/.docker/config.json
+```
+
+#### Azure Container Registry
+
+```bash
+# Create ACR credentials
+az acr login --name your-registry
+
+# Create secret
+kubectl create secret generic docker-credentials \
+  --from-file=config.json=$HOME/.docker/config.json
+```
+
+### Advanced Features
+
+#### Multi-Architecture Builds
+
+For building multi-platform images, update the Kaniko task:
+
+```yaml
+- name: build-push-multiarch
+  taskRef:
+    name: kaniko
+    kind: ClusterTask
+  params:
+  - name: IMAGE
+    value: $(params.image-reference)
+  - name: EXTRA_ARGS
+    value:
+    - "--customPlatform=linux/amd64"
+    - "--customPlatform=linux/arm64"
+    - "--cache=true"
+    - "--reproducible"
+```
+
+#### Cache Optimization
+
+Enable advanced caching for faster builds:
+
+```yaml
+- name: EXTRA_ARGS
+  value:
+  - "--cache=true"
+  - "--cache-repo=$(params.image-reference)-cache"
+  - "--cache-ttl=168h"  # 1 week
+  - "--use-new-run"
+  - "--compressed-caching=false"
+```
+
+This guide provides a complete, production-ready pipeline with modern security practices, including vulnerability scanning, image signing, and SLSA provenance generation that meets 2025 DevSecOps standards.
