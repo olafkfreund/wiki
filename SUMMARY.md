@@ -217,6 +217,10 @@
   * [GCP to Azure](pages/cloud-migration/gcp-azure.md)
   * [AWS to GCP](pages/cloud-migration/aws-gcp.md)
   * [GCP to AWS](pages/cloud-migration/gcp-aws.md)
+* [Landing Zones in Public Clouds](pages/public-clouds/landing_zones/README.md)
+  * [AWS Landing Zone](pages/public-clouds/landing_zones/aws-landing_zone/README.md)
+  * [GCP Landing Zone](pages/public-clouds/landing_zones/gcp-landing_zone/README.md)
+  * [Azure Landing Zones](pages/public-clouds/landing_zones/azure-landing-zone/README.md) - Enterprise-scale foundation architecture
 * [Azure](pages/public-clouds/azure/README.md) - Microsoft's cloud computing platform
   * [Best Practices](pages/public-clouds/azure/best-practise/README.md) - Architecture and implementation guidelines
     * [Azure Best Practices Overview](pages/public-clouds/azure/best-practise/README.md)
@@ -224,7 +228,6 @@
     * [Azure Naming Standards](pages/public-clouds/azure/best-practise/azure-naming-standards.md)
     * [Azure Tags](pages/public-clouds/azure/best-practise/azure-tags.md)
     * [Azure Security Best Practices](pages/public-clouds/azure/best-practise/security-best-practise.md)
-  * [Landing Zones](pages/public-clouds/azure/azure-landing-zone/README.md) - Enterprise-scale foundation architecture
   * [Services](pages/public-clouds/azure/services/README.md) - Key platform capabilities
     * [Azure Active Directory (AAD)](pages/public-clouds/azure/services/aad.md)
     * [Azure Monitor](pages/public-clouds/azure/services/monitor.md)
