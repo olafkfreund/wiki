@@ -36,7 +36,7 @@
 
 * [Platform Engineering](pages/devops/platform-engineering.md)
 * [FinOps](pages/devops/finops.md)
-* [Observability](pages/devops/observability/)
+* [Observability](pages/devops/observability/README.md)
   * [Modern Practices](pages/devops/observability/modern-practices.md)
 
 ## 🚀 Modern DevOps Practices
@@ -183,6 +183,7 @@
     * [Azure DevOps CLI](pages/azure-devops/pipelines/README.md#azure-devops-cli) - Command-line automation
   * [Boards & Work Items](pages/devops/ci-cd-platforms/azure-devops/boards-and-work-items/README.md) - Agile project management
 * [GitHub Actions](pages/devops/ci-cd-platforms/github/github-action.md) - GitHub's integrated CI/CD solution
+  * [GitHub SecOps: DevSecOps Pipeline](pages/devops/ci-cd-platforms/github/github-secops.md) - Security automation example
 * [GitLab](pages/devops/source-control/gitlab/README.md) - GitLab CI/CD platform
   * [GitLab Runner](pages/devops/source-control/gitlab/gitlab_runner.md)
 
