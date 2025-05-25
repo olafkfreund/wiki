@@ -40,3 +40,19 @@ My leadership approach centers on:
 I'm passionate about solving complex infrastructure challenges and helping organizations embrace modern cloud-native practices. Whether it's optimizing cloud costs, implementing zero-trust security, or building reliable platforms - I bring decades of hands-on experience combined with current best practices to every project.
 
 Feel free to connect with me to discuss cloud architecture, DevOps transformation, or share infrastructure war stories!
+
+## Recent Projects
+
+Here are some of my most recent open-source proof of concept projects demonstrating modern DevOps and cloud-native practices:
+
+### AI & LLM Integration
+
+- **[Ollama Skill CV RAG](https://github.com/olafkfreund/ollama-skill-cv-rag)** - AI-powered CV and skill analysis using Retrieval-Augmented Generation (RAG) with Ollama
+- **[SOW Generator](https://github.com/olafkfreund/SOW-generator)** - Automated Statement of Work generation using LLMs for DevOps consulting projects
+
+### NixOS & Cloud Infrastructure
+
+- **[Nix Local Cloud](https://github.com/olaffreund/nix-local-cloud)** - Local cloud infrastructure setup using NixOS for development and testing
+- **[K8s Local Clouds](https://github.com/olaffreund/k8s-local-clouds)** - Kubernetes local development environments across multiple cloud providers
+- **[K3s NixOS VMs](https://github.com/olaffreund/ks3-nixos-vms)** - Lightweight Kubernetes clusters on NixOS virtual machines
+- **[Nix LLM VMs](https://github.com/olaffreund/nix-llm-vms)** - NixOS-based virtual machines optimized for running Large Language Models
