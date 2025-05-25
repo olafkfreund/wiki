@@ -5,6 +5,7 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
 ---
 
 ## Key Principles
+
 1. **Detect Failures**: Use monitoring, health checks, and alerts.
 2. **Respond Gracefully**: Automate recovery actions (restart, failover, scale).
 3. **Log & Monitor**: Capture metrics and logs for operational insight.
@@ -14,7 +15,9 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
 ## Step-by-Step: Implementing Self-Healing
 
 ### 1. Health Checks & Monitoring
+
 - Use readiness and liveness probes in Kubernetes:
+
   ```yaml
   livenessProbe:
     httpGet:
@@ -23,10 +26,12 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
     initialDelaySeconds: 10
     periodSeconds: 5
   ```
+
 - Enable cloud-native monitoring (CloudWatch, Azure Monitor, GCP Operations Suite).
 - Set up alerts for critical metrics (CPU, memory, error rates).
 
 ### 2. Automated Recovery
+
 - **Kubernetes:**
   - Pods are automatically restarted on failure.
   - Use Deployments/StatefulSets for self-healing workloads.
@@ -36,9 +41,11 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
   - Functions are retried automatically on failure (configurable in AWS Lambda, Azure Functions, GCP Cloud Functions).
 
 ### 3. Resiliency Patterns
+
 - **Retry Logic:**
   - Implement exponential backoff for transient errors.
   - Example (Python):
+
     ```python
     import time
     for i in range(5):
@@ -48,6 +55,7 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
         except Exception:
             time.sleep(2 ** i)
     ```
+
 - **Circuit Breaker:**
   - Use libraries like Polly (.NET), Resilience4j (Java), or Hystrix (legacy) to prevent cascading failures.
 - **Bulkhead:**
@@ -56,16 +64,19 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
   - Use message queues (SQS, Azure Service Bus, Pub/Sub) to buffer spikes.
 
 ### 4. Failover & Redundancy
+
 - Deploy across multiple zones/regions.
 - Use managed databases with automatic failover (RDS, Cosmos DB, Cloud SQL).
 - For stateless services, use load balancers (ALB, Azure Load Balancer, GCP Load Balancer).
 
 ### 5. Chaos Engineering & Fault Injection
+
 - Test failure scenarios using tools like:
   - [Chaos Mesh](https://chaos-mesh.org/) (Kubernetes)
   - [AWS Fault Injection Simulator](https://aws.amazon.com/fis/)
   - [Azure Chaos Studio](https://learn.microsoft.com/en-us/azure/chaos-studio/)
 - Example: Simulate pod failure in Kubernetes:
+
   ```sh
   kubectl delete pod <pod-name> -n <namespace>
   ```
@@ -73,6 +84,7 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
 ---
 
 ## Real-Life Example: Self-Healing Web App on Kubernetes
+
 1. Deploy app with liveness/readiness probes.
 2. Set up HPA (Horizontal Pod Autoscaler) to scale on CPU/memory.
 3. Use Prometheus + Alertmanager for monitoring and alerting.
@@ -81,6 +93,7 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
 ---
 
 ## Best Practices
+
 - Always automate detection and recovery—avoid manual intervention.
 - Store all configuration as code (GitOps).
 - Regularly test failure scenarios in lower environments.
@@ -88,6 +101,7 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
 - Use LLMs (Copilot, Claude) to generate runbooks or analyze logs for root cause.
 
 ## Common Pitfalls
+
 - Relying only on manual monitoring or intervention.
 - Not testing failure and recovery paths.
 - Ignoring resource limits, leading to OOMKilled pods.
@@ -96,6 +110,7 @@ Designing for self-healing ensures your cloud-native applications (AWS, Azure, G
 ---
 
 ## References
+
 - [Kubernetes Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
 - [AWS Auto Healing](https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html)
 - [Azure VMSS Health](https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-health)

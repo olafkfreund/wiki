@@ -1,4 +1,4 @@
-# Understanding SLI,SLO and SLA
+# Understanding SLI, SLO, and SLA
 
 ### Service Level Indicator (**SLI)**: <a href="#c0e1" id="c0e1"></a>
 
@@ -35,3 +35,110 @@ If some "agreement" mentioned above is broken, a value, price, or touchable must
 * Uptime falls below 99.9% in a Black Friday week. As a result, the provider will issue a discount of 40% to the customer.
 * Support requests will be responded to within 1 hour.
 * Maintenance will be scheduled outside of business hours.
+
+---
+
+## Real-World SLI, SLO, and SLA Examples in Public Clouds
+
+### AWS Example
+
+* **SLI:** API Gateway average latency (measured via CloudWatch):
+
+  * `SLI = Percentage of requests with latency < 200ms`
+
+* **SLO:** 99.5% of API requests must have latency < 200ms over a rolling 30-day window.
+* **SLA:** If monthly API uptime drops below 99.9%, the customer receives a 10% service credit.
+
+**Implementation:**
+
+* Use CloudWatch metrics and alarms to monitor latency and availability.
+* Define SLOs in documentation and dashboards.
+* Reference: [AWS Service Level Agreements](https://aws.amazon.com/legal/service-level-agreements/)
+
+### Azure Example
+
+* **SLI:** Azure App Service HTTP 5xx error rate (measured via Azure Monitor):
+
+  * `SLI = Percentage of successful HTTP requests`
+
+* **SLO:** 99.95% of requests must succeed each month.
+* **SLA:** If uptime falls below 99.95%, a service credit is issued per [Azure SLA](https://azure.microsoft.com/en-us/support/legal/sla/).
+
+**Implementation:**
+
+* Use Azure Monitor and Application Insights for real-time tracking.
+* Set up alerts and dashboards for SLO compliance.
+
+### GCP Example
+
+* **SLI:** Google Cloud Storage availability (measured via Stackdriver Monitoring):
+
+  * `SLI = Percentage of successful object retrievals`
+
+* **SLO:** 99.99% monthly availability for object retrievals.
+* **SLA:** If availability drops below 99.99%, customers receive credits as per [GCP SLA](https://cloud.google.com/storage/sla).
+
+**Implementation:**
+
+* Use Cloud Monitoring to track and alert on SLI breaches.
+* Document SLOs and SLAs in internal and customer-facing docs.
+
+---
+
+## How a Private Company Defines and Follows SLI, SLO, and SLA
+
+### 1. Define SLIs (What to Measure)
+
+* Identify key user journeys (e.g., login, checkout, API call).
+* Choose measurable indicators (latency, error rate, availability, throughput).
+* Example: `SLI = Percentage of checkout requests completed in < 1s`.
+
+### 2. Set SLOs (Targets for SLIs)
+
+* Set realistic, customer-focused targets (e.g., 99.9% of checkouts < 1s).
+* Involve product, engineering, and business teams.
+* Document SLOs in runbooks and dashboards.
+
+### 3. Establish SLAs (External Commitments)
+
+* Define contractual obligations (e.g., 99.9% uptime per month, 1-hour support response).
+* Specify remedies for breaches (service credits, penalties).
+* Communicate SLAs to customers and stakeholders.
+
+### 4. Monitor and Enforce
+
+* Use cloud-native tools (CloudWatch, Azure Monitor, GCP Monitoring) to track SLIs.
+* Automate alerting for SLO breaches.
+* Review SLO/SLA performance in regular ops meetings.
+
+### 5. Iterate and Improve
+
+* Analyze incidents and error budgets.
+* Adjust SLOs as business needs evolve.
+* Share learnings with engineering and product teams.
+
+---
+
+## Example: SLI/SLO/SLA Table for a SaaS API
+
+| Metric         | SLI Definition                        | SLO Target         | SLA Commitment         |
+|---------------|---------------------------------------|--------------------|-----------------------|
+| Latency       | % requests < 300ms (API Gateway)      | 99.5% per month    | 99.0% per month, 10% credit if breached |
+| Error Rate    | % HTTP 5xx errors (App Service)       | <0.5% per month    | <1% per month, 5% credit if breached   |
+| Availability  | % successful requests (Cloud Storage) | 99.99% per month   | 99.9% per month, 10% credit if breached|
+
+---
+
+**Best Practices:**
+
+* Use Infrastructure as Code (Terraform, ARM, Deployment Manager) to automate monitoring setup.
+* Store SLO definitions in version control and keep them visible to all teams.
+* Regularly review and update SLOs/SLA as your product and customer needs change.
+
+---
+
+For more, see:
+
+* [Google SRE Workbook: SLOs](https://sre.google/workbook/slo/)
+* [AWS Well-Architected Reliability Pillar](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html)
+* [Azure Monitor Documentation](https://learn.microsoft.com/en-us/azure/azure-monitor/overview)

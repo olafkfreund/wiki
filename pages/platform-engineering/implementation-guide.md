@@ -3,6 +3,7 @@
 ## Self-Service Portal
 
 ### Crossplane Configuration
+
 ```yaml
 apiVersion: pkg.crossplane.io/v1
 kind: Configuration
@@ -32,6 +33,7 @@ spec:
 ## Internal Developer Platform
 
 ### Backstage Implementation
+
 ```yaml
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -61,6 +63,7 @@ spec:
 ## Developer Experience
 
 ### Backstage Implementation
+
 ```yaml
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -100,6 +103,7 @@ spec:
 ## Service Catalog
 
 ### Resource Templates
+
 ```yaml
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
@@ -137,6 +141,7 @@ spec:
 ## Infrastructure Automation
 
 ### Terraform Controller
+
 ```yaml
 apiVersion: infra.contrib.fluxcd.io/v1alpha2
 kind: Terraform
@@ -158,6 +163,7 @@ spec:
 ## Service Mesh Integration
 
 ### Linkerd Configuration
+
 ```yaml
 apiVersion: linkerd.io/v1alpha2
 kind: ServiceProfile
