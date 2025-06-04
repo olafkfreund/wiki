@@ -49,6 +49,7 @@ Here are some of my most recent open-source proof of concept projects demonstrat
 
 - **[Ollama Skill CV RAG](https://github.com/olafkfreund/ollama-skill-cv-rag)** - AI-powered CV and skill analysis using Retrieval-Augmented Generation (RAG) with Ollama
 - **[SOW Generator](https://github.com/olafkfreund/SOW-generator)** - Automated Statement of Work generation using LLMs for DevOps consulting projects
+- **[Nix AI Help](https://github.com/olafkfreund/nix-ai-help)** - NixOS-based environment for running and experimenting with open-source LLMs and AI tools
 
 ### NixOS & Cloud Infrastructure
 
