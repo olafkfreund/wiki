@@ -4,8 +4,6 @@
 
 **Container Image Lifecycle Management & Security Framework**
 
-**Version 1.0**\
-&#xNAN;_&#x4F;ctober 2025_
 
 ***
 
@@ -6957,7 +6955,7 @@ The program demonstrated clear value through improved security posture, operatio
 
 | Version | Date         | Author                    | Changes                                                                                 |
 | ------- | ------------ | ------------------------- | --------------------------------------------------------------------------------------- |
-| 1.0     | October 2025 | Platform Engineering Team | Initial comprehensive policy release with technical details and implementation guidance |
+| 1.0     |  | Platform Engineering Team | Initial comprehensive policy release with technical details and implementation guidance |
 
 #### Review and Approval
 
@@ -6975,7 +6973,7 @@ This policy will be reviewed and updated:
 * **Annual Review:** Complete policy review including governance and processes
 * **Event-Driven Review:** When significant security incidents occur or new threats emerge
 
-**Next Scheduled Review:** January 2026
+**Next Scheduled Review:** 
 
 ***
 
