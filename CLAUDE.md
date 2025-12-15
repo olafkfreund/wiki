@@ -59,6 +59,7 @@ nix-shell
 # Available custom commands (created by shell.nix):
 setup         # Clone and setup GitBook repository
 setup-force   # Force setup (removes existing gitbook directory)
+setup-hooks   # Install Git pre-commit hooks for automatic linting
 update        # Update existing GitBook repository
 dev           # Start development server (http://localhost:3000/url/docs.gitbook.com)
 gformat       # Format GitBook codebase
@@ -66,6 +67,7 @@ glint         # Lint GitBook codebase
 fmt           # Format Markdown files (prettier)
 lint          # Lint Markdown files (markdownlint)
 check         # Check formatting
+publish       # Format, lint, commit, and push changes (interactive)
 ```
 
 ### Development Dependencies
@@ -187,10 +189,43 @@ This guide covers:
 
 ## Git Workflow
 
-Standard Git workflow applies:
+### Standard Workflow
+
 - Create feature branches for new content
 - Commit with descriptive messages
 - GitBook syncs with GitHub (configured for bidirectional or gitbook-to-github sync)
+
+### Automated Publishing with Pre-commit Hooks
+
+**Recommended setup:**
+
+1. **Install pre-commit hooks** (run once):
+   ```bash
+   setup-hooks
+   ```
+
+   This installs a Git pre-commit hook that automatically:
+   - Formats staged markdown files with prettier
+   - Lints staged markdown files with markdownlint
+   - Prevents commits if linting fails
+
+2. **Use the publish command** for quick commits:
+   ```bash
+   publish
+   ```
+
+   The `publish` command:
+   - ✅ Formats all markdown files
+   - ✅ Lints all markdown files
+   - ✅ Shows changed files
+   - ✅ Prompts for commit message
+   - ✅ Commits with standardized format
+   - ✅ Pushes to remote repository
+
+**Bypassing hooks** (not recommended):
+```bash
+git commit --no-verify
+```
 
 ## Testing Content
 

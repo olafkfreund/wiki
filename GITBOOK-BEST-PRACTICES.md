@@ -317,9 +317,46 @@ markdownlint --config .markdownlint.json '**/*.md'
 
 ### Integration with Development Workflow
 
-#### Pre-commit Hooks
+#### Pre-commit Hooks (This Project)
 
-Use **Husky** and **lint-staged** to lint on commit:
+This project uses **native Git hooks** configured via NixOS shell.nix:
+
+**Setup (run once):**
+```bash
+# Enter nix-shell first
+nix-shell
+
+# Install pre-commit hooks
+setup-hooks
+```
+
+This creates `.git/hooks/pre-commit` that automatically:
+- Formats staged markdown files with prettier
+- Lints staged markdown files with markdownlint
+- Prevents commits if linting fails
+
+**Publish command:**
+```bash
+# Format, lint, commit, and push in one command
+publish
+```
+
+The `publish` command workflow:
+1. Formats all markdown files with prettier
+2. Lints all markdown files with markdownlint
+3. Shows changed files
+4. Prompts for commit message
+5. Commits with standardized format (includes Claude co-author)
+6. Pushes to remote repository
+
+**Bypass hook (not recommended):**
+```bash
+git commit --no-verify
+```
+
+#### Alternative: Husky and lint-staged
+
+For projects not using NixOS, use **Husky** and **lint-staged**:
 
 **Install:**
 ```bash
