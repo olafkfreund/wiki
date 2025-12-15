@@ -157,6 +157,25 @@ Content covers beginner to advanced topics:
 - `SUMMARY.md` - Navigation structure (critical for GitBook)
 - Root is `./` with README.md as main landing page
 
+## GitBook Best Practices
+
+For comprehensive guidance on GitBook-specific features, see **[GITBOOK-BEST-PRACTICES.md](./GITBOOK-BEST-PRACTICES.md)**
+
+This guide covers:
+- GitBook-specific markdown features (hints, tabs, code blocks, API blocks, math)
+- Markdown linting with markdownlint (configuration, rules, CI/CD integration)
+- File and folder structure best practices
+- Content organization using Diátaxis framework
+- Common patterns and quality checklists
+- Troubleshooting common issues
+
+**Key highlights:**
+- Use hint blocks for important information: `{% hint style="info" %}...{% endhint %}`
+- Use tabs for multi-platform examples: `{% tabs %}...{% endtabs %}`
+- Configure markdownlint to allow GitBook HTML tags (MD033: false)
+- Follow entity-based folder organization (not generic names like "utils")
+- Always add YAML front matter (description, keywords) to pages
+
 ## Important Notes
 
 - This is a **documentation project**, not application code
