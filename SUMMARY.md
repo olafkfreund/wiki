@@ -164,6 +164,23 @@
   * [Progressive Delivery](pages/devops/continuous-delivery/progressive-delivery.md)
   * [Release Management for DevOps/SRE (2025)](pages/devops/continuous-delivery/release-management-2025.md)
 
+### DevOps Governance & ITSM
+
+* [DevOps Governance Overview](pages/devops/governance/README.md) - Change management and compliance automation
+* [ServiceNow](pages/devops/governance/servicenow/README.md) - IT Service Management and change control
+  * [CI/CD Integration Overview](pages/devops/governance/servicenow/cicd-integration-overview.md) - Platform-agnostic integration patterns
+  * [GitLab Integration](pages/devops/governance/servicenow/gitlab-integration.md) - GitLab CI/CD integration guide
+  * [GitHub Actions Integration](pages/devops/governance/servicenow/github-integration.md) - GitHub Actions integration guide
+  * [Azure DevOps Integration](pages/devops/governance/servicenow/azure-devops-integration.md) - Azure Pipelines integration guide
+  * [Best Practices](pages/devops/governance/servicenow/best-practices.md) - ServiceNow DevOps best practices
+* [Kosli](pages/devops/governance/kosli/README.md) - Automated change tracking and compliance
+  * [Getting Started](pages/devops/governance/kosli/getting-started.md) - Install and configure Kosli
+  * [GitHub Actions Integration](pages/devops/governance/kosli/github-actions.md) - GitHub Actions integration guide
+  * [GitLab CI Integration](pages/devops/governance/kosli/gitlab-ci.md) - GitLab CI/CD integration guide
+  * [Azure DevOps Integration](pages/devops/governance/kosli/azure-devops.md) - Azure Pipelines integration guide
+  * [CLI Reference](pages/devops/governance/kosli/cli-reference.md) - Complete CLI command reference
+  * [Best Practices](pages/devops/governance/kosli/best-practices.md) - Kosli implementation best practices
+
 ## CI/CD Platforms
 
 * [Tekton](pages/devops/ci-cd-platforms/tekton/README.md)
