@@ -1,9 +1,0 @@
-{
-  "variables": {
-    "kubernetesVersion": "1.28",
-    "azureCLIVersion": "2.55.0",
-    "terraformVersion": "1.7.2",
-    "fluxVersion": "2.2.0",
-    "helmVersion": "3.14.0"
-  }
-}

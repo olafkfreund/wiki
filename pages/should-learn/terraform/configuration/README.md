@@ -144,5 +144,5 @@ terraform {
 
 ## Current Terraform Version
 
-This documentation assumes Terraform version {{ book.terraformVersion }} or higher.
+This documentation assumes Terraform version 1.10 or higher.
 

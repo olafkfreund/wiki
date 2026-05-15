@@ -2,7 +2,7 @@
 
 Before proceeding, ensure you have the following:
 
-- Kubernetes cluster (version {{ book.kubernetesVersion }} or higher)
+- Kubernetes cluster (version 1.32 or higher)
 - `kubectl` command-line tool installed and configured
 - Proper RBAC permissions to deploy resources
 

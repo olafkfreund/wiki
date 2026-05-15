@@ -43,7 +43,6 @@ From `.github/copilot-instructions.md`, all content must:
 The project uses advanced GitBook features:
 - **Reusable snippets**: `{% include "/_snippets/snippet-name.md" %}`
 - **Tabs for multi-option content**: `{% tabs %}` / `{% tab %}` / `{% endtabs %}`
-- **Variables**: Reference with `{{ book.variableName }}`
 - **Front matter metadata**: YAML headers with `description:` and `keywords:`
 
 ## Development Environment

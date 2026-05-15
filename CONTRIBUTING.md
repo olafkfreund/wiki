@@ -34,14 +34,6 @@ keywords: keyword1, keyword2, keyword3
 
 ## Advanced GitBook Features
 
-### Using Variables
-
-Reference global variables defined in `book.json` using:
-
-```markdown
-Kubernetes version: {{ book.kubernetesVersion }}
-```plaintext
-
 ### Including Reusable Snippets
 
 To include reusable content:
