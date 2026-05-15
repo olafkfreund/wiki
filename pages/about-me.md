@@ -43,6 +43,12 @@ Feel free to connect with me to discuss cloud architecture, DevOps transformatio
 
 ## Recent Projects
 
+### Featured
+
+- **[Synechron ARC — Multi-Cloud Compliance Pipeline](showcase/synechron-arc.md)** — A customer demo platform wiring ServiceNow + Kosli + GitLab / GitHub / Azure DevOps into one auditable pipeline, deployable to AWS, Azure, GCP, or local k3d with a single `TARGET_CLOUD` switch. Ships with a Next.js DevSecOps control plane (37+ surfaces — DORA, SBOMs, control mapping, CMDB IRE sync, multi-cluster ArgoCD/Tekton, AI Governance, agent-dispatch automation). Full architecture write-up with screenshots in the [showcase](showcase/synechron-arc.md).
+
+### Open-source proofs of concept
+
 Here are some of my most recent open-source proof of concept projects demonstrating modern DevOps and cloud-native practices:
 
 ### AI & LLM Integration
