@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Lint all markdown files with markdownlint.
+set -euo pipefail
+
+markdownlint "**/*.md"

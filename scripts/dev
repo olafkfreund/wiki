@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Start the GitBook v2 dev server.
+set -euo pipefail
+
+cd gitbook
+bun dev:v2

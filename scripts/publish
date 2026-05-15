@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Format, lint, commit, and push markdown changes.
+set -euo pipefail
+
+echo "Publishing changes..."
+echo ""
+
+echo "1/6  Formatting markdown files..."
+if ! prettier --write "**/*.md"; then
+  echo "Formatting failed"
+  exit 1
+fi
+echo "Formatting complete"
+echo ""
+
+echo "2/6  Linting markdown files..."
+if ! markdownlint "**/*.md"; then
+  echo "Linting failed - please fix errors above"
+  exit 1
+fi
+echo "Linting complete"
+echo ""
+
+if [ -z "$(git status --porcelain)" ]; then
+  echo "No changes to commit"
+  exit 0
+fi
+
+echo "3/6  Changed files:"
+git status --short
+echo ""
+
+echo "4/6  Enter commit message (or press Ctrl+C to cancel):"
+read -r commit_message
+
+if [ -z "$commit_message" ]; then
+  echo "Commit message cannot be empty"
+  exit 1
+fi
+
+echo ""
+echo "5/6  Committing changes..."
+git add -A
+git commit -m "$commit_message
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+echo "Changes committed"
+echo ""
+
+echo "6/6  Pushing to remote..."
+if ! git push; then
+  echo "Push failed - you may need to pull first"
+  exit 1
+fi
+echo "Changes pushed successfully"
+echo ""
+echo "Publish complete"

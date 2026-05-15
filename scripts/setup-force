@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Force-reset the GitBook clone.
+set -euo pipefail
+
+echo "Force setting up GitBook development environment..."
+if [ -d "gitbook" ]; then
+  echo "Removing existing GitBook directory..."
+  rm -rf gitbook
+fi
+git clone https://github.com/gitbookIO/gitbook.git
+cd gitbook
+bun install
+echo "GitBook setup complete"

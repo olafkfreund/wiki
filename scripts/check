@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Check markdown formatting without modifying files.
+set -euo pipefail
+
+prettier --check "**/*.md"

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Format all markdown files with prettier.
+set -euo pipefail
+
+prettier --write "**/*.md"

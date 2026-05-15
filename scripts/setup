@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Clone the GitBook repository and install dependencies.
+set -euo pipefail
+
+echo "Setting up GitBook development environment..."
+git clone https://github.com/gitbookIO/gitbook.git
+cd gitbook
+bun install
+echo "GitBook setup complete"

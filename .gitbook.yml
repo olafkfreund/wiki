@@ -7,25 +7,9 @@ structure:
 gitbook:
   spaceID: FTk8pBcGEQwB11SlngkL
 
-redirects:
-  previous/page: new-folder/page.md
-
-# Configure integration settings
 github:
-  enforceCodeOwners: true
   sync:
-    direction: gitbook-to-github # or github-to-gitbook or bidirectional
+    direction: gitbook-to-github
   pull:
-    automatic: true  # Auto-merge updates from GitBook
-    features: true   # Enable GitHub pull request features
-    
-# Handle private content
-private:
-  indicator: private/  # All content under private/ is private
-  
-# Global styles
-styles:
-  website: styles/website.css
-  
-# Configure plugins from book.json
-# (These will merge with your book.json configuration)
+    automatic: true
+    features: true

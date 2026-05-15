@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Pull the latest GitBook source and reinstall dependencies.
+set -euo pipefail
+
+echo "Updating GitBook development environment..."
+if [ -d "gitbook" ] && [ -d "gitbook/.git" ]; then
+  cd gitbook
+  git pull
+  bun install
+  echo "GitBook update complete"
+else
+  echo "GitBook directory not properly initialized."
+  echo "Run 'setup-force' to reinitialize."
+  exit 1
+fi
