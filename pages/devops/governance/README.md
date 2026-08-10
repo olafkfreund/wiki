@@ -61,6 +61,23 @@ Kosli acts as a "flight data recorder" for DevOps pipelines, automatically colle
 
 [Learn more about Kosli →](kosli/README.md)
 
+### Fides
+
+**Purpose**: Self-hosted compliance, provenance and evidence tracking
+
+Fides records and evaluates every state change in the software delivery lifecycle in real time, acting as an audit-ready single source of truth. It solves the same shape of problem as Kosli, but runs entirely inside your own infrastructure — which is the deciding factor for estates that cannot let delivery metadata egress.
+
+It ships control catalogs for SOC 2, ISO 27001, NIST 800-53, PCI-DSS, DORA, PSD2, SOX and SLSA, a change gate that produces a 0–100 risk score written back to ServiceNow, four-eyes segregation-of-duties evidence, and an LLM audit gateway that works against local models.
+
+**Best For**:
+- Regulated or air-gapped estates where delivery data cannot leave the network
+- Teams that need per-framework, control-by-control audit reports out of the box
+- Proving segregation of duties (PCI-DSS 4.0, SOX ITGC) with real evidence
+- Supply-chain provenance — cosign/Sigstore verification, SLSA in-toto, SBOM component search
+- Detecting shadow deployments and configuration drift against a recorded baseline
+
+[Learn more about Fides →](fides/README.md)
+
 ## Governance Patterns
 
 ### Pattern 1: Automated Change Creation

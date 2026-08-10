@@ -185,6 +185,13 @@
   - [Azure DevOps Integration](pages/devops/governance/kosli/azure-devops.md)
   - [CLI Reference](pages/devops/governance/kosli/cli-reference.md)
   - [Best Practices](pages/devops/governance/kosli/best-practices.md)
+- [Fides](pages/devops/governance/fides/README.md)
+  - [Getting Started](pages/devops/governance/fides/getting-started.md)
+  - [GitHub Actions Integration](pages/devops/governance/fides/github-actions.md)
+  - [GitLab CI Integration](pages/devops/governance/fides/gitlab-ci.md)
+  - [Azure DevOps Integration](pages/devops/governance/fides/azure-devops.md)
+  - [CLI Reference](pages/devops/governance/fides/cli-reference.md)
+  - [Best Practices](pages/devops/governance/fides/best-practices.md)
 
 ## CI/CD Platforms
 
