@@ -2,7 +2,7 @@
 
 When working with cluster components, or building custom resources, that are deployed in Kubernetes, it is often necessary to run full end-to-end tests to ensure all aspects of your solutions work as intended.
 
-> Project e2e-framework [sigs.k8s.io/e2e-framework](http://sigs.k8s.io/e2e-framework)
+> Project e2e-framework [sigs.k8s.io/e2e-framework](https://sigs.k8s.io/e2e-framework)
 
 Project [e2e-framework](https://github.com/kubernetes-sigs/e2e-framework), from Kubernetes-SIGs, makes it easy to create and run end-to-end tests using the standard Go test tool. Some high-level goals of the project includes:
 

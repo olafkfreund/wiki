@@ -41,18 +41,19 @@ Covers the DORA-4 canon (deployment frequency, lead time for changes, change fai
 
 ## Governed AI delivery
 
-### The Factory suite — PFactory · AIFactory · TFactory · CFactory
+### The Factory suite — PFactory · AIFactory · TFactory · CFactory · RFactory
 
-84% of developers use AI coding tools; only 29% trust the output. The Factory suite is the trust layer for that gap — four products around one idea: **AI can write the code, but someone still has to be accountable for it**. They are built on the **PARR pipeline** — Prepare · Act · Reflect · Review — with a human gate at every seam rather than one "trust me" big bang.
+84% of developers use AI coding tools; only 29% trust the output. The Factory suite is the trust layer for that gap — five products around one idea: **AI can write the code, but someone still has to be accountable for it**. Four of them are the stages of the **PARR pipeline** — Prepare · Act · Reflect · Review — with a human gate at every seam rather than one "trust me" big bang. The fifth, RFactory, brings that pipeline into the team's calls.
 
 - **PFactory (Prepare)** — plans work grounded in live cloud and Backstage context, runs architecture, security, feasibility and best-practice gates *with citations*, and only emits governed GitHub epics and issues once a human has signed the plan.
 - **AIFactory (Act)** — turns specs into code and QA in isolated git worktrees, model-agnostic across Claude, Gemini, OpenAI and local Ollama, and can delegate sub-tasks to other coding agents.
 - **TFactory (Reflect)** — autonomously generates and runs tests in ephemeral sandboxes, grading each run on five signals (coverage delta, stability, mutation testing, lint, semantic relevance) and reporting back on the pull request.
 - **CFactory (Review)** — the control-tower cockpit: a live dependency graph across plan → code → test, an advise-and-confirm copilot, and per-task and per-worker cost and token tracking.
+- **RFactory (the meeting room)** — an AI bot that joins your Meet, Zoom, Teams or Slack calls, runs the standup straight from the CFactory board, and turns what the team agrees into changes through the other four, each one waiting on a named approver.
 
-The spine that makes four products cohere is deliberately boring plumbing: a shared correlation key, a normalized completion-event schema and a canonical port map, so every product emits the same audit trail — HMAC-anchored logs and completion records of the kind the EU AI Act is about to ask for.
+The spine that makes the four PARR products cohere is deliberately boring plumbing: a shared correlation key, a normalized completion-event schema and a canonical port map, so each of them emits the same audit trail — HMAC-anchored logs and completion records of the kind the EU AI Act is about to ask for.
 
-[AIFactory](https://olafkfreund.github.io/AIFactory/) · [TFactory](https://olafkfreund.github.io/TFactory/) · [PFactory](https://github.com/olafkfreund/PFactory) · [CFactory](https://github.com/olafkfreund/CFactory) · [meta-repo](https://github.com/olafkfreund/Factory)
+[AIFactory](https://olafkfreund.github.io/AIFactory/) · [TFactory](https://olafkfreund.github.io/TFactory/) · [PFactory](https://github.com/olafkfreund/PFactory) · [CFactory](https://github.com/olafkfreund/CFactory) · [RFactory](https://github.com/olafkfreund/RFactory) · [meta-repo](https://github.com/olafkfreund/Factory)
 
 ### Bifrost — Azure DevOps → GitHub Actions at portfolio scale
 

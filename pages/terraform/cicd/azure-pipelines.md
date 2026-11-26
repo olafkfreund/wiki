@@ -154,9 +154,3 @@ steps:
 - [Terraform in GitLab CI/CD](https://docs.gitlab.com/ee/ci/examples/terraform.html)
 
 > **Tip:** For cloud-agnostic, secure, and auditable IaC, use Azure DevOps Pipelines with Service Principals, Key Vault, and remote state. For open source or hybrid teams, consider GitHub Actions or GitLab CI/CD.
-
----
-
-```markdown
-- [Terraform in Azure DevOps Pipelines](pages/terraform/cicd/azure-pipelines.md)
-```

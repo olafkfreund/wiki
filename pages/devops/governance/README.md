@@ -241,7 +241,7 @@ It ships control catalogs for SOC 2, ISO 27001, NIST 800-53, PCI-DSS, DORA, PSD2
 
 - [ServiceNow Integration Guide](servicenow/README.md) - Set up ServiceNow for DevOps
 - [Kosli Getting Started](kosli/getting-started.md) - Begin tracking changes with Kosli
-- [Compare Tools](../../../reference/tool-comparison.md) - Detailed feature comparison
+- [Compare Tools](../../reference/tool-comparison.md) - Detailed feature comparison
 
 ## Additional Resources
 

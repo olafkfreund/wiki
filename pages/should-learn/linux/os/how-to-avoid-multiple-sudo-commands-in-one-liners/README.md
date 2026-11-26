@@ -99,11 +99,3 @@ initContainers:
 ---
 
 > **Tip:** For persistent root shells, use `sudo -i` or `sudo su -`, but be cautious with interactive sessions in automation.
-
----
-
-## Add to SUMMARY.md
-
-```markdown
-- [How to Avoid Multiple sudo Commands in One-Liners](pages/should-learn/linux/os/how-to-avoid-multiple-sudo-commands-in-one-liners/README.md)
-```

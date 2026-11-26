@@ -99,11 +99,3 @@ jobs:
 ---
 
 > **Tip:** For passwordless authentication in CI/CD, consider using OIDC with GitHub Actions or Azure Pipelines.
-
----
-
-## Add to SUMMARY.md
-
-```markdown
-- [Specify Service Principal Credentials in a Terraform Provider Block](pages/terraform/authenticate-terraform-to-azure/specify-service-principal-credentials-in-a-terraform-provider-block.md)
-```

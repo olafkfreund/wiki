@@ -2,7 +2,7 @@
 
 ![Diagram that shows various aspects of Agile feeding into each other, such as collaboration, development, and automated version control and deployment.](https://learn.microsoft.com/en-us/devops/_img/whatisagile_600x300.png)
 
-Agile is a term that describes approaches to software development that emphasize incremental delivery, team collaboration, continual planning, and continual learning. The term _Agile_ was coined in 2001 in the [Agile Manifesto](http://agilemanifesto.org/). The manifesto set out to establish principles to guide a better approach to software development. At its core, the manifesto declares four value statements that represent the foundation of the Agile movement. As written, the manifesto states:
+Agile is a term that describes approaches to software development that emphasize incremental delivery, team collaboration, continual planning, and continual learning. The term _Agile_ was coined in 2001 in the [Agile Manifesto](https://agilemanifesto.org/). The manifesto set out to establish principles to guide a better approach to software development. At its core, the manifesto declares four value statements that represent the foundation of the Agile movement. As written, the manifesto states:
 
 We have come to value:
 
@@ -206,7 +206,7 @@ Netflix employs deliberate system testing in production as part of their Agile a
 
 ## Resources
 
-- [Agile Manifesto](http://agilemanifesto.org/)
+- [Agile Manifesto](https://agilemanifesto.org/)
 - [The Scrum Guide](https://scrumguides.org/)
 - [Azure DevOps Agile Tools](https://learn.microsoft.com/en-us/azure/devops/boards/get-started/what-is-azure-boards)
 - [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)

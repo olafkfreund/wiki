@@ -45,7 +45,7 @@ kubectl describe pod my-pod | grep -A5 Events
 # Failed to pull image "myrepo/myimage:tag": rpc error: ...
 ```
 
-### Insufficient Resources <a href="#5622" id="#5622"></a>
+### Insufficient Resources
 
 Use the `kubectl describe node <node-name>` command to check the resources on your node.
 
@@ -62,7 +62,7 @@ kubectl get pods -o wide
 kubectl describe node <node-name> | grep -i allocatable -A5
 ```
 
-### Issues with Persistent Volumes <a href="#3e3b" id="#3e3b"></a>
+### Issues with Persistent Volumes
 
 You can check Pod status using `kubectl`:
 
@@ -93,7 +93,7 @@ kubectl get pvc -A
 kubectl describe pvc <pvc-name>
 ```
 
-### Network Issues <a href="#6cbb" id="#6cbb"></a>
+### Network Issues
 
 Network issues can be a bit harder to diagnose. You can check the logs of your CNI plugin (which depends on the specific CNI you are using). For example, if you’re using Calico, you can check the logs of the Calico pods:
 
@@ -103,7 +103,7 @@ kubectl -n kube-system logs -l k8s-app=calico-node
 
 For AWS EKS, Azure AKS, or GCP GKE, check the cloud provider’s CNI documentation and ensure your VPC/subnet/network policies allow pod networking.
 
-### Security Context Issues <a href="#6841" id="#6841"></a>
+### Security Context Issues
 
 Check the security context of your Pod using the `kubectl get pod <pod-name> -o yaml` command.
 
@@ -113,7 +113,7 @@ kubectl get pod my-pod -o yaml
 
 Look for fields like `runAsUser`, `fsGroup`, or `privileged`. Ensure the user/group exists in the container image and that the node allows the requested privileges.
 
-### Docker or Runtime Issues <a href="#0eef" id="#0eef"></a>
+### Docker or Runtime Issues
 
 Check the logs on your node. The way to do this depends on your node’s operating system and your container runtime. For Docker on a system using `systemd`, you can use:
 

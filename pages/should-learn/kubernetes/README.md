@@ -6,7 +6,15 @@ tags: [kubernetes, containers, orchestration, devops]
 
 # Kubernetes
 
-{% include "/_snippets/kubernetes-prerequisites.md" %}
+## Prerequisites
+
+Before proceeding, ensure you have the following:
+
+- Kubernetes cluster (version 1.32 or higher)
+- `kubectl` command-line tool installed and configured
+- Proper RBAC permissions to deploy resources
+
+> **Note:** If you're using AKS, make sure you have the Azure CLI installed and are logged in to your subscription.
 
 Kubernetes is an open-source platform for automating deployment, scaling, and operations of application containers across clusters of hosts. It groups containers that make up an application into logical units for easy management and discovery.
 

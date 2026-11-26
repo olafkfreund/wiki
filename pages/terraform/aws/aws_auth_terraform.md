@@ -164,9 +164,3 @@ Or use [agenix](https://github.com/ryantm/agenix) for encrypted secrets.
 - [Terraform in Azure DevOps](https://learn.microsoft.com/en-us/azure/developer/terraform/overview)
 
 > **Tip:** For cloud-native, secure, and auditable deployments, always use roles and secret managers instead of hardcoded credentials.
-
----
-
-```markdown
-- [Authenticating Terraform with AWS](pages/terraform/aws/aws_auth_terraform.md)
-```

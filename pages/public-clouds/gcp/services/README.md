@@ -27,8 +27,8 @@ This section contains detailed guides for deploying and managing common GCP serv
 ## Database Services
 
 - [Cloud SQL](cloud-sql.md) - Managed relational databases
-- [Cloud Spanner](cloud-spanner.md) - Globally distributed SQL database
-- [Firestore](firestore.md) - NoSQL document database
+- Cloud Spanner - Globally distributed SQL database
+- Firestore - NoSQL document database
 - [Bigtable](bigtable.md) - Wide-column NoSQL database
 - [BigQuery](bigquery.md) - Serverless data warehouse
 

@@ -94,10 +94,3 @@ kill $(pgrep sleep)   # Kill all sleep processes
 ---
 
 > **Tip:** Mastering Bash shortcuts is essential for productivity in cloud shells, CI/CD runners, and remote Linux servers.
-
----
-
-## Add to SUMMARY.md
-
-```markdown
-- [Bash Shortcuts Every Linux User Needs to Know](pages/should-learn/linux/os/how-to-avoid-multiple-sudo-commands-in-one-liners/bash-shortcuts-every-linux-user-needs-to-know.md)

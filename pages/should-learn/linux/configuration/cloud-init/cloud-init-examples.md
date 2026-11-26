@@ -176,7 +176,7 @@ users:
 31   -----END CERTIFICATE-----
 ```plaintext
 
-### Install and run [chef](http://www.chef.io/chef/) recipes
+### Install and run [chef](https://www.chef.io/chef/) recipes
 
 ```plaintext
   1#cloud-config

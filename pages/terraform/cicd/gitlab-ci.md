@@ -149,8 +149,3 @@ Register the runner with this shell for reproducible builds.
 - [Terraform in Azure DevOps Pipelines](https://learn.microsoft.com/en-us/azure/developer/terraform/overview)
 
 > **Tip:** Use GitLab CI/CD for secure, reproducible, and auditable Terraform deployments—especially if you need custom runners, DevSecOps, or self-hosted control.
-
----
-
-```markdown
-- [Terraform in GitLab CI/CD Pipelines](pages/terraform/cicd/gitlab-ci.md)

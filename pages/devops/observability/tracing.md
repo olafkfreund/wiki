@@ -562,6 +562,6 @@ In 2025, distributed tracing has matured into an essential pillar of observabili
 - [Metrics](metrics.md) - Quantitative system measurements
 - [Logging](logging/README.md) - Textual event records
 - [Dashboards](dashboard.md) - Visualizing observability data
-- [OpenTelemetry](../../should-learn/open-telemetry.md) - Unified observability framework
+- OpenTelemetry - Unified observability framework
 - [SLOs and SLAs](../../need-to-know/understanding-sli-slo-and-sla.md) - Performance objectives
 - [Service Mesh](../../should-learn/kubernetes/service-mesh/README.md) - Service networking with built-in observability

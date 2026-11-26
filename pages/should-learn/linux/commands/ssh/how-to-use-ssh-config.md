@@ -125,11 +125,3 @@ Host github.com
 ---
 
 > **Tip:** Use SSH config to simplify Ansible, Terraform, and cloud CLI workflows by referencing host aliases instead of full connection strings.
-
----
-
-## Add to SUMMARY.md
-
-```markdown
-- [How to Use SSH Config](pages/should-learn/linux/commands/ssh/how-to-use-ssh-config.md)
-```

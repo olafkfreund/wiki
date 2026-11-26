@@ -88,7 +88,7 @@ kubectl apply -f traefik-argocd-app.yaml
 kubectl port-forward -n traefik-v2 $(kubectl get pods -n traefik-v2 -l app.kubernetes.io/name=traefik -o name | head -n1) 9000:9000
 ```
 
-Access at: [http://127.0.0.1:9000/dashboard/](http://127.0.0.1:9000/dashboard/)
+Access at: `http://127.0.0.1:9000/dashboard/`
 
 **IngressRoute CRD Example:**
 

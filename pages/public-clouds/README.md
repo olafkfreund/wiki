@@ -82,5 +82,5 @@
 - [Infrastructure as Code](../terraform/README.md) - Automating cloud resource provisioning
 - [Cloud Compliance](../need-to-know/cloud-compliance/README.md) - Regulatory considerations
 - [Security Frameworks](../need-to-know/public-cloud-security-frameworks/README.md) - Securing cloud environments
-- [Azure Landing Zones](azure/azure-landing-zone/README.md) - Enterprise-scale Azure foundations
+- [Azure Landing Zones](landing_zones/azure-landing-zone/README.md) - Enterprise-scale Azure foundations
 

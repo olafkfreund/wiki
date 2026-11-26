@@ -87,11 +87,3 @@ jobs:
 - [GitHub Actions: Encrypted Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
 
 > **Tip:** For AWS and GCP, use the respective provider environment variables and credentials in the same workflow pattern.
-
----
-
-## Add to SUMMARY.md
-
-```markdown
-- [Terraform with GitHub Actions](pages/terraform/terraform-with-github-actions.md)
-```
