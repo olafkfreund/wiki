@@ -3,7 +3,7 @@
 ## Related Topics
 
 - [Azure Best Practices](best-practise/README.md) - Recommended implementation patterns
-- [Azure Landing Zones](azure-landing-zone/README.md) - Enterprise-scale foundation architecture
+- [Azure Landing Zones](../landing_zones/azure-landing-zone/README.md) - Enterprise-scale foundation architecture
 - [Azure Services](services/README.md) - Key platform capabilities and features
 - [Azure Monitoring](monitoring/README.md) - Observability solutions for Azure
 - [Azure CLI](../../az-cli/README.md) - Command-line management interface

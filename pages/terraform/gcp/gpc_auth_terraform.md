@@ -163,9 +163,3 @@ Or use [agenix](https://github.com/ryantm/agenix) for encrypted secrets.
 - [Terraform in Azure DevOps](https://learn.microsoft.com/en-us/azure/developer/terraform/overview)
 
 > **Tip:** For secure, auditable, and cloud-native deployments, prefer OIDC-based authentication for CI/CD and never commit service account keys to your repository.
-
----
-
-```markdown
-- [Authenticating Terraform with GCP](pages/terraform/gcp/gpc_auth_terraform.md)
-```

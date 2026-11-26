@@ -87,8 +87,3 @@ jobs:
 - [Selenium E2E Testing](https://www.selenium.dev/documentation/)
 
 > **Tip:** For cloud-native and microservices architectures, combine horizontal and vertical E2E tests for comprehensive coverage.
-
----
-
-```markdown
-- [E2E Testing Methods](pages/testing/e2e-testing/e2e-testing-methods.md)

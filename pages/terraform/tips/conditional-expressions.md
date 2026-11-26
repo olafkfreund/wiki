@@ -81,11 +81,3 @@ locals {
 - [Terraform Count and For Each](https://spacelift.io/blog/terraform-count-for-each)
 
 > **Tip:** Use conditionals to keep your Terraform code DRY and cloud-agnostic—especially in multi-cloud and CI/CD scenarios.
-
----
-
-## Add to SUMMARY.md
-
-```markdown
-- [Conditional Expressions](pages/terraform/tips/conditional-expressions.md)
-```

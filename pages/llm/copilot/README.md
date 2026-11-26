@@ -41,8 +41,8 @@ Explore the following pages to learn how to install, configure, and effectively 
 - [Installation Guide](installation.md) - Set up Copilot on different platforms
 - [VS Code Integration](vscode-integration.md) - Get the most out of Copilot in VS Code
 - [Command Line Usage](cli-usage.md) - Using the GitHub Copilot CLI
-- [Agent Mode & MCP](agent-mode.md) - Advanced usage with MCP servers
-- [Infrastructure Deployment](infrastructure-deployment.md) - Cloud deployment examples
-- [Editor Integration](editor-integration.md) - Setup for Vim, Neovim, and Emacs
-- [Custom Instructions](custom-instructions.md) - Personalize Copilot with custom instructions
-- [Project Roles](project-roles.md) - Optimizing Copilot for specific project types
+- Agent Mode & MCP - Advanced usage with MCP servers
+- Infrastructure Deployment - Cloud deployment examples
+- Editor Integration - Setup for Vim, Neovim, and Emacs
+- Custom Instructions - Personalize Copilot with custom instructions
+- Project Roles - Optimizing Copilot for specific project types

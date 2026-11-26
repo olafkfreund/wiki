@@ -14,23 +14,23 @@ This section contains detailed guides for deploying and managing common AWS serv
 
 ## Compute Services
 
-- [Amazon EC2 (Elastic Compute Cloud)](ec2.md) - Virtual servers in the cloud
-- [AWS Lambda](lambda.md) - Serverless compute service
+- Amazon EC2 (Elastic Compute Cloud) - Virtual servers in the cloud
+- AWS Lambda - Serverless compute service
 
 ## Storage Services
 
 - [Amazon S3 (Simple Storage Service)](s3.md) - Object storage service
-- [Amazon EBS (Elastic Block Store)](ebs.md) - Block storage for EC2
+- Amazon EBS (Elastic Block Store) - Block storage for EC2
 
 ## Database Services
 
-- [Amazon RDS (Relational Database Service)](rds.md) - Managed relational databases
-- [Amazon DynamoDB](dynamodb.md) - Managed NoSQL database
+- Amazon RDS (Relational Database Service) - Managed relational databases
+- Amazon DynamoDB - Managed NoSQL database
 
 ## Networking Services
 
-- [Amazon VPC (Virtual Private Cloud)](vpc.md) - Isolated cloud resources
-- [Amazon CloudFront](cloudfront.md) - Content delivery network
+- Amazon VPC (Virtual Private Cloud) - Isolated cloud resources
+- Amazon CloudFront - Content delivery network
 - [Amazon Route 53](route53.md) - DNS and domain management
 
 ## Security & Identity Services

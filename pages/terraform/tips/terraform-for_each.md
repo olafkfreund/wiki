@@ -131,11 +131,3 @@ resource "azurerm_storage_account" "my_storage" {
 - [Terraform Conditionals](https://developer.hashicorp.com/terraform/language/expressions/conditionals)
 
 > **Tip:** Use these patterns to keep your Terraform code DRY, scalable, and cloud-agnostic—especially in CI/CD and multi-cloud DevOps workflows.
-
----
-
-## Add to SUMMARY.md
-
-```markdown
-- [Terraform for_each, count, and for Expressions](pages/terraform/tips/terraform-for_each.md)
-```

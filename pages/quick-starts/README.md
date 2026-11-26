@@ -22,10 +22,10 @@ This knowledge base contains comprehensive information about cloud architecture,
 
 ## Quick Access Links
 
-- [Cloud Architecture](../cloud-architecture/)
+- Cloud Architecture
 - [DevOps Practices](../devops/)
-- [Platform Engineering](../platform-engineering/)
-- [Infrastructure as Code](../infrastructure/)
+- [Platform Engineering](../platform-engineering/implementation-guide.md)
+- Infrastructure as Code
 - [Security](../security/)
 
 ## Tips for Finding Information

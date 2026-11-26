@@ -206,8 +206,3 @@ Prompt: "Generate Cypress E2E tests for a login and checkout workflow in a React
 - [Selenium E2E Testing](https://www.selenium.dev/documentation/)
 
 > **Tip:** For cloud-native and microservices architectures, combine horizontal and vertical E2E tests for comprehensive coverage. Integrate E2E tests into your CI/CD pipelines for fast feedback and reliability.
-
----
-
-```markdown
-- [E2E Testing](pages/testing/e2e-testing/README.md)

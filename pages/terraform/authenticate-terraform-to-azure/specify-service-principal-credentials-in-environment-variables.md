@@ -97,11 +97,3 @@ jobs:
 - [PowerShell Profiles](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles)
 
 > **Tip:** For passwordless authentication in CI/CD, consider using OIDC with GitHub Actions or Azure Pipelines.
-
----
-
-## Add to SUMMARY.md
-
-```markdown
-- [Specify Service Principal Credentials in Environment Variables](pages/terraform/authenticate-terraform-to-azure/specify-service-principal-credentials-in-environment-variables.md)
-```

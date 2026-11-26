@@ -88,7 +88,7 @@ spec:
 - [Service Mesh](../../should-learn/kubernetes/service-mesh/README.md) - Advanced networking for Kubernetes
 - [Kubernetes Security](../../devops/security/kubernetes/README.md) - Securing your Kubernetes clusters
 - [GitOps with Flux](../../devops/gitops/flux/README.md) - Continuous deployment to Kubernetes
-- [Troubleshooting](../../should-learn/kubernetes/troubleshooting/README.md) - Solving common Kubernetes problems
+- [Troubleshooting](../../should-learn/kubernetes/troubleshooting/kubernetes-pod-troubleshooting-commands.md) - Solving common Kubernetes problems
 
 ## References
 

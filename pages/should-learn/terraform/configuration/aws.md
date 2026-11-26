@@ -86,13 +86,13 @@ provider "aws" {
 
 #### [Container Credentials](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#container-credentials) <a href="#container-credentials" id="container-credentials"></a>
 
-If you're running Terraform on CodeBuild or ECS and have configured an [IAM Task Role](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html), Terraform can use the container's Task Role. This support is based on the underlying `AWS_CONTAINER_CREDENTIALS_RELATIVE_URI` and `AWS_CONTAINER_CREDENTIALS_FULL_URI` environment variables being automatically set by those services or manually for advanced usage.
+If you're running Terraform on CodeBuild or ECS and have configured an [IAM Task Role](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html), Terraform can use the container's Task Role. This support is based on the underlying `AWS_CONTAINER_CREDENTIALS_RELATIVE_URI` and `AWS_CONTAINER_CREDENTIALS_FULL_URI` environment variables being automatically set by those services or manually for advanced usage.
 
 If you're running Terraform on EKS and have configured [IAM Roles for Service Accounts (IRSA)](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html), Terraform can use the pod's role. This support is based on the underlying `AWS_ROLE_ARN` and `AWS_WEB_IDENTITY_TOKEN_FILE` environment variables being automatically set by Kubernetes or manually for advanced usage.
 
 #### [Instance profile credentials and region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#instance-profile-credentials-and-region) <a href="#instance-profile-credentials-and-region" id="instance-profile-credentials-and-region"></a>
 
-When the AWS Provider is running on an EC2 instance with an IAM Instance Profile set, the provider can source credentials from the [EC2 Instance Metadata Service](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#instance-metadata-security-credentials). Both IMDS v1 and IMDS v2 are supported.
+When the AWS Provider is running on an EC2 instance with an IAM Instance Profile set, the provider can source credentials from the [EC2 Instance Metadata Service](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#instance-metadata-security-credentials). Both IMDS v1 and IMDS v2 are supported.
 
 A custom endpoint for the metadata service can be provided using the `ec2_metadata_service_endpoint` parameter or the `AWS_EC2_METADATA_SERVICE_ENDPOINT` environment variable.
 

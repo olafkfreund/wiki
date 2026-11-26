@@ -938,4 +938,4 @@ The most successful SaaS DevOps implementations treat customer experience as a f
 - [Google Cloud SaaS Development Guide](https://cloud.google.com/architecture/saas-development)
 - [Microsoft Azure SaaS Development Best Practices](https://docs.microsoft.com/azure/architecture/example-scenario/saas/)
 - [DevOps for SaaS Startups](https://www.digitalocean.com/community/tutorials/devops-for-startups)
-- [SaaS Metrics 2.0](http://www.forentrepreneurs.com/saas-metrics-2/)
+- [SaaS Metrics 2.0](https://www.forentrepreneurs.com/saas-metrics-2/)
